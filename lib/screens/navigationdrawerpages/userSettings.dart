@@ -1,6 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Preferences/Preferences.dart';
+import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:foodzer_customer_app/widget/navigationDrawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../landingScreen.dart';
+import '../loginScreen.dart';
 
 class UserSettingsScreen extends StatefulWidget {
   static const routeName = "/userSettings";
@@ -11,7 +17,20 @@ class UserSettingsScreen extends StatefulWidget {
 }
 
 class _UserSettingsScreenState extends State<UserSettingsScreen> {
-  bool isSwitched  = true;
+  bool isLoggedIn = false;
+  bool isSwitched = true;
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+  @override
+  void dispose()  {
+    super.dispose();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,11 +129,30 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
             ),
             SizedBox(height: 30,),
             Container(
-              child: Text(
-                'Login',
-                style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600
+              child: isLoggedIn?GestureDetector(
+                onTap: (){
+                  UserPreference().removeUser();
+                  Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                      LandingScreen()), (Route<dynamic> route) => false);
+                },
+                child: Text(
+                  'Logout',
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600
+                  ),
+                ),
+              ):GestureDetector(
+                onTap: (){
+                  Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                      LoginScreen()), (Route<dynamic> route) => false);
+                },
+                child: Text(
+                  'Login',
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600
+                  ),
                 ),
               ),
             )
@@ -122,5 +160,18 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
         ),
       ),
     );
+  }
+  getUserData() async{
+    SharedPreferences prefs= await SharedPreferences.getInstance();
+    var user= prefs.getString('userData');
+    if(null!= user) {
+      setState(() {
+        isLoggedIn = true;
+      });
+    }else{
+      setState(() {
+        isLoggedIn = false;
+      });
+    }
   }
 }

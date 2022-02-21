@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
+import 'package:foodzer_customer_app/Services/geolocator_service.dart';
+import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/home/sections/body.dart';
 import 'package:foodzer_customer_app/screens/search/mainSearch.dart';
 import 'package:foodzer_customer_app/widget/navigationDrawer.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -18,15 +21,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   @override
- void initState()  {
+void initState()  {
+
     super.initState();
-UserPreference().getUserData();
-print(UserPreference().getUserData());
   }
 
   @override
-  void dispose() async {
-   UserPreference().removeUser();
+  void dispose()  {
     super.dispose();
   }
 
@@ -54,7 +55,7 @@ print(UserPreference().getUserData());
             SizedBox(height: 10,),
             Container(
                 child:Text(
-                  "Salwa Road Al Miqab",
+                finalAddress,
                   style: TextStyle(
                       color:Colors.deepOrange,
                       fontSize: 16
@@ -79,6 +80,7 @@ print(UserPreference().getUserData());
       body:Body()
     );
   }
+
 }
 
 

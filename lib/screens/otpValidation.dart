@@ -10,6 +10,7 @@ import 'package:foodzer_customer_app/utils/helper.dart';
 // import 'package:otp_text_field/otp_text_field.dart';
 // import 'package:otp_text_field/style.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'googleMapScreen.dart';
 import 'home/homeScreen.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -61,6 +62,7 @@ bool isLoading = false;
 
   @override
   void dispose() {
+
     _timer.cancel();
     super.dispose();
   }
@@ -86,11 +88,8 @@ bool isLoading = false;
           ),
         ),
       ),
-      body: isLoading?Center(
-        child: CircularProgressIndicator(
-          color: Colors.deepOrangeAccent,
-        ),
-      ):SingleChildScrollView(
+      body:
+      SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 25.0, right: 20.0, left: 20.0),
           child: Column(
@@ -124,7 +123,7 @@ bool isLoading = false;
                 height: 50,
               ),
               Container(
-                width: Helper.getScreenWidth(context),
+
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -193,23 +192,6 @@ bool isLoading = false;
                         return true;
                       },
                     ),
-                    // OTPTextField(
-                    //     otpFieldStyle: OtpFieldStyle(
-                    //         errorBorderColor: Colors.red,
-                    //         enabledBorderColor: Colors.deepOrangeAccent,
-                    //         focusBorderColor: Colors.green),
-                    //     controller: otpController,
-                    //     length: 6,
-                    //     width: MediaQuery.of(context).size.width,
-                    //     style: TextStyle(fontSize: 17),
-                    //     textFieldAlignment: MainAxisAlignment.spaceAround,
-                    //     fieldStyle: FieldStyle.underline,
-                    //     onChanged: (pin) {
-                    //       print("Changed: " + pin);
-                    //     },
-                    //     onCompleted: (pin) {
-                    //       print("Completed: " + pin);
-                    //     }),
                     SizedBox(
                       height: 30,
                     ),
@@ -296,7 +278,7 @@ bool isLoading = false;
             );
             Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) =>
-                    HomeScreen()));
+                    GoogleMapScreen()));
           } else {
             Fluttertoast.showToast(
                 msg: "Something happened. Try again",
@@ -319,6 +301,11 @@ bool isLoading = false;
             fontSize: 16.0
         );
       }
+    }
+    else{
+      setState(() {
+        isLoading=false;
+      });
     }
   }
 }

@@ -1,7 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
+import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../AppProvider.dart';
 
 class loginSection extends StatefulWidget {
   @override
@@ -10,15 +17,30 @@ class loginSection extends StatefulWidget {
 
 class _loginSectionState extends State<loginSection> {
 
-
+  bool isLoggedIn = false;
   @override
   void initState() {
-    super.initState();
 
+    super.initState();
+    UserPreference().getUserData().then((value) => {
+      if(null!= value.userId){
+        setState(() {
+          isLoggedIn = true;
+        })
+      }else{
+        setState(() {
+          isLoggedIn = true;
+        })
+      }
+    });
+  }
+  @override
+  void dispose() {
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return isLoggedIn?Container(
       margin: EdgeInsets.all(20),
       decoration: BoxDecoration(
           color: Colors.deepOrange.shade50,
@@ -77,6 +99,25 @@ class _loginSectionState extends State<loginSection> {
           )
         ],
       ),
+    )
+    :Container(
+     margin: EdgeInsets.only(bottom: 20.0),
     );
   }
+  // getUserData() async{
+  //
+  //   SharedPreferences prefs= await SharedPreferences.getInstance();
+  //   var user= prefs.getString('userData');
+  //   if(null!= user) {
+  //
+  //     setState(() {
+  //       isLoggedIn = true;
+  //     });
+  //   }else{
+  //     setState(() {
+  //       isLoggedIn = false;
+  //     });
+  //   }
+  // }
+
 }

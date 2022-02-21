@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
+import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -16,6 +17,9 @@ import './registerScreen.dart';
 import '../utils/helper.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'home/homeScreen.dart';
+import 'locationGoogle.dart';
 
 class LoginScreen extends StatefulWidget {
   static const routeName = "/loginScreen";
@@ -120,6 +124,9 @@ bool isLoading = false;
               height: 60,
               child: ElevatedButton(
                 onPressed: () {
+                  // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  //     builder: (BuildContext context) =>
+                  //         GoogleMapScreen()));
                   if(mobileController.text.isNotEmpty && mobileController.text.length ==10){
                     checkUserAvailable();
                   } else{
