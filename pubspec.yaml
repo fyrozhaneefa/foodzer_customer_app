@@ -64,7 +64,6 @@ flutter:
   assets:
     - assets/images/real/
     - assets/images/virtual/
-    - lib/Menu/Microfiles/assets/images/-1_orig.jpg
     - lib/Menu/Microfiles/assets/images/
 
 

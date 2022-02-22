@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 class SizedWidget extends StatelessWidget {
-  const SizedWidget({Key? key}) : super(key: key);
+   SizedWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(height: 30);
   }
+
 }

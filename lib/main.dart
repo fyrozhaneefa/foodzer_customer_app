@@ -13,28 +13,21 @@ import 'package:foodzer_customer_app/screens/navigationdrawerpages/userSettings.
 import 'package:foodzer_customer_app/screens/otpValidation.dart';
 import 'package:provider/provider.dart';
 
-
-
-
-
-
 import './screens/splashScreen.dart';
 import './screens/googleMapScreen.dart';
 import './screens/landingScreen.dart';
 import './screens/loginScreen.dart';
 import './screens/registerScreen.dart';
 import './screens/forgotPassword.dart';
+import 'Menu/Microfiles/FiltterSection/filtterhome.dart';
 import 'Menu/Microfiles/PaymentSection/payment_home.dart';
 import 'screens/home/homeScreen.dart';
 import 'screens/search/mainSearch.dart';
 import './screens/innerdetails/restaurantDetails.dart';
 
-
-
 void main() {
   runApp(
-
-      MyApp(),
+    MyApp(),
   );
 }
 
@@ -43,18 +36,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-    create: (context) => ApplicationBloc(),
+      create: (context) => ApplicationBloc(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Foodzer',
         theme: ThemeData(
-          fontFamily: 'Metropolis',
-          scaffoldBackgroundColor: Colors.white,
-          textTheme: TextTheme(
-            bodyText2: TextStyle(color:Colors.black),
-          )
-        ),
-        home: PaymentSection(),
+            fontFamily: 'Metropolis',
+            scaffoldBackgroundColor: Colors.white,
+            textTheme: TextTheme(
+              bodyText2: TextStyle(color: Colors.black),
+            )),
+        home: FiltterSection(),
         // routes:{
         //   LandingScreen.routeName: (context) => LandingScreen(),
         //   GoogleMapScreen.routeName: (context) => GoogleMapScreen(),
@@ -80,5 +72,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-

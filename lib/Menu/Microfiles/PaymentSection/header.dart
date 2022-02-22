@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/Constants/Swidth.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/Constants/images.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/Constants/sizedbox.dart';
 
 
 class HeaderContainer extends StatelessWidget {
@@ -12,7 +14,7 @@ class HeaderContainer extends StatelessWidget {
     double height = MediaQuery.of(context).size.width;
 
     return Container(
-    height: height / 8,
+    height: size.height / 8,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -20,9 +22,25 @@ class HeaderContainer extends StatelessWidget {
           bottomRight: Radius.circular(20),
         ),
       ),
-      child: ListTile(leading: Image(image: AssetImage(bank)),title: Text("Hotel Sarover",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
-      subtitle: Text("Home ",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500,color: Colors.black)),),
-    );
+      child: Column(
+        children: [
+          ListTile(leading: Container(child: Image(image: AssetImage(Track))),title: Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Text("Hotel Sarover",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
+          ),
+          subtitle: Text("Home ",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500,color: Colors.black),
+          ),
+          ),
+          Row(children: [
+            SizedWidth(),
+            Text("Delivery in:", style: TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.w500),),
+            Text("25 mins", style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w600),)
+          ],)
+        ],
+      ),
+
+
+      );
 
   }
 }
