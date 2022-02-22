@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/CuisinesSection/cuisineshome.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/AppProvider.dart';
@@ -46,28 +47,28 @@ class MyApp extends StatelessWidget {
             textTheme: TextTheme(
               bodyText2: TextStyle(color: Colors.black),
             )),
-        home: FiltterSection(),
-        // routes:{
-        //   LandingScreen.routeName: (context) => LandingScreen(),
-        //   GoogleMapScreen.routeName: (context) => GoogleMapScreen(),
-        //   LoginScreen.routeName: (context) => LoginScreen(),
-        //   // OtpScreen.routeName: (context) => OtpScreen(),
-        //   // RegisterScreen.routeName: (context) => RegisterScreen(),
-        //   ForgotPaswwordScreen.routeName: (context) => ForgotPaswwordScreen(),
-        //   // HomeScreen.routeName: (context) => HomeScreen(),
-        //   MainSearchScreen.routeName: (context) => MainSearchScreen(),
-        //   RestaurantDetailsScreen.routeName: (context) => RestaurantDetailsScreen(),
-        //   RestaurantInfoScreen.routeName: (context) => RestaurantInfoScreen(),
-        //   ItemBasketScreen.routeName: (context) => ItemBasketScreen(),
-        //   AllRestaurantsScreen.routeName: (context) => AllRestaurantsScreen(),
-        //   AllGroceriesScreen.routeName: (context) => AllGroceriesScreen(),
-        //   UserSettingsScreen.routeName: (context) => UserSettingsScreen(),
-        //   AllFlowersScreen.routeName: (context) => AllFlowersScreen(),
-        //   UserOrdersScreen.routeName: (context) => UserOrdersScreen(),
-        //   FoodzerPayScreen.routeName: (context) => FoodzerPayScreen(),
-        //
-        //
-        // }
+        home: SplashScreen(),
+        routes:{
+          LandingScreen.routeName: (context) => LandingScreen(),
+          GoogleMapScreen.routeName: (context) => GoogleMapScreen(),
+          LoginScreen.routeName: (context) => LoginScreen(),
+          // OtpScreen.routeName: (context) => OtpScreen(),
+          // RegisterScreen.routeName: (context) => RegisterScreen(),
+          ForgotPaswwordScreen.routeName: (context) => ForgotPaswwordScreen(),
+          // HomeScreen.routeName: (context) => HomeScreen(),
+          MainSearchScreen.routeName: (context) => MainSearchScreen(),
+          RestaurantDetailsScreen.routeName: (context) => RestaurantDetailsScreen(),
+          RestaurantInfoScreen.routeName: (context) => RestaurantInfoScreen(),
+          ItemBasketScreen.routeName: (context) => ItemBasketScreen(),
+          AllRestaurantsScreen.routeName: (context) => AllRestaurantsScreen(),
+          AllGroceriesScreen.routeName: (context) => AllGroceriesScreen(),
+          UserSettingsScreen.routeName: (context) => UserSettingsScreen(),
+          AllFlowersScreen.routeName: (context) => AllFlowersScreen(),
+          UserOrdersScreen.routeName: (context) => UserOrdersScreen(),
+          FoodzerPayScreen.routeName: (context) => FoodzerPayScreen(),
+
+
+        }
       ),
     );
   }

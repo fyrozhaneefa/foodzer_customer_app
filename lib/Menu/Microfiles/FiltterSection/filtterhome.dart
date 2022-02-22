@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/applybutton.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/hedersection.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/sortby.dart';
-
 import 'filtters.dart';
 
 class FiltterSection extends StatelessWidget {
@@ -13,7 +12,7 @@ class FiltterSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-        body: SafeArea(
+        body:SafeArea(
           child: Column(
             children: [
               Padding(
