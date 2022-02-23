@@ -10,6 +10,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # followed by an optional build number separated by a +.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
+
 # In Android, build-name is used as versionName while build-number used as versionCode.
 # Read more about Android versioning at https://developer.android.com/studio/publish/versioning
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
@@ -63,6 +64,7 @@ flutter:
   assets:
     - assets/images/real/
     - assets/images/virtual/
+    - lib/Menu/Microfiles/assets/images/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
