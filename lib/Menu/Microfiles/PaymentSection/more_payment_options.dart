@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/utils/helper.dart';
 import 'Constants/sapperator.dart';
 
 class MorePayment extends StatelessWidget {
@@ -6,13 +7,10 @@ class MorePayment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.width;
     return Padding(
       padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
       child: Container(
-        height: height / 1.2,
+        height:320,
 
 
         decoration: BoxDecoration(

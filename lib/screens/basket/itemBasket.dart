@@ -5,6 +5,8 @@ import 'package:foodzer_customer_app/screens/basket/sections/paymentSummery.dart
 import 'package:foodzer_customer_app/screens/basket/sections/specialRequest.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 
+import '../../Menu/Microfiles/PaymentSection/payment_home.dart';
+
 class ItemBasketScreen extends StatefulWidget {
   static const routeName = "/itemBasket";
 
@@ -101,6 +103,10 @@ class _ItemBasketScreenState extends State<ItemBasketScreen> {
                 ),
                 ElevatedButton(
                   onPressed:(){
+
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            PaymentSection()));
 
                   },
                   child: Padding(

@@ -9,12 +9,8 @@ class HeaderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.width;
-
     return Container(
-    height: size.height / 8,
+    height:100,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(

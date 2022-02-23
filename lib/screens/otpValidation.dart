@@ -18,7 +18,7 @@ class OtpScreen extends StatefulWidget {
 
   OtpScreen(this.mobileNumber);
 
-  // static const routeName = "/otpScreen";
+   static const routeName = "/otpScreen";
   @override
   _OtpScreenState createState() => _OtpScreenState();
 }

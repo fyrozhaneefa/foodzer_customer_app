@@ -14,11 +14,13 @@ class _UpiSectionState extends State<UpiSection> {
   @override
   Widget build(BuildContext context) {
   int  value = 2;
-    final Size size = MediaQuery.of(context).size;
+
+
+
     return Padding(
       padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
       child: Container(
-        height: size.height * 0.180,
+        height: 150,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
@@ -51,13 +53,13 @@ class _UpiSectionState extends State<UpiSection> {
                     ),
                   ),
                   trailing: Radio<int>(
-                    value: 2,
+                    value: 6,
                     groupValue: value,
                     onChanged: (newvalue) {
                       setState(
                             () {
                           value = newvalue!;
-                          
+
                           
                         },
                       );
