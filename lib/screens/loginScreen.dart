@@ -126,7 +126,7 @@ bool isLoading = false;
                 onPressed: () {
                   // Navigator.of(context).pushReplacement(MaterialPageRoute(
                   //     builder: (BuildContext context) =>
-                  //         GoogleMapScreen()));
+                  //         LocationScreen()));
                   if(mobileController.text.isNotEmpty && mobileController.text.length ==10){
                     checkUserAvailable();
                   } else{

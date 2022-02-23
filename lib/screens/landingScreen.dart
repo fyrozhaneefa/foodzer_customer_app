@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import '/screens/loginScreen.dart';
 import '../utils/helper.dart';
 
@@ -73,45 +74,45 @@ class _LandingScreenState extends State<LandingScreen> {
                     SizedBox(
                       height: 30,
                     ),
-                    Container(
-                      width: double.infinity,
-                      height: 60,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Container(
-                                alignment: Alignment.centerLeft,
-                                child: Image.asset(
-                                  Helper.getAssetName("google-logo.png", 'virtual'),
-                                  fit: BoxFit.fill,
-                                  width: 25,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              child:  Text("Continue with Google",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600
-                                ),),
-                            )
-                          ],
-                        ),
-                            style: ElevatedButton.styleFrom(
-                              primary:Color(0xff4285f4),
-                              elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12.0),
-                                        // side: BorderSide(color: Colors.red)
-                                )
-                            ),
-                      ),
-                    ),
+                    // Container(
+                    //   width: double.infinity,
+                    //   height: 60,
+                    //   child: ElevatedButton(
+                    //     onPressed: () {},
+                    //     child: Stack(
+                    //       children: [
+                    //         Padding(
+                    //           padding: const EdgeInsets.all(12.0),
+                    //           child: Container(
+                    //             alignment: Alignment.centerLeft,
+                    //             child: Image.asset(
+                    //               Helper.getAssetName("google-logo.png", 'virtual'),
+                    //               fit: BoxFit.fill,
+                    //               width: 25,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         Container(
+                    //           alignment: Alignment.center,
+                    //           child:  Text("Continue with Google",
+                    //             style: TextStyle(
+                    //               color: Colors.white,
+                    //               fontSize: 16.0,
+                    //               fontWeight: FontWeight.w600
+                    //             ),),
+                    //         )
+                    //       ],
+                    //     ),
+                    //         style: ElevatedButton.styleFrom(
+                    //           primary:Color(0xff4285f4),
+                    //           elevation: 0,
+                    //             shape: RoundedRectangleBorder(
+                    //                     borderRadius: BorderRadius.circular(12.0),
+                    //                     // side: BorderSide(color: Colors.red)
+                    //             )
+                    //         ),
+                    //   ),
+                    // ),
                     SizedBox(
                       height: 20,
                     ),
@@ -119,21 +120,27 @@ class _LandingScreenState extends State<LandingScreen> {
                       width: double.infinity,
                       height: 60,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  HomeScreen()));
+                        },
                         child: Stack(
                           children: [
                             Container(
                               alignment: Alignment.centerLeft,
                               child: IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.facebook,
+                                onPressed: () {
+
+                                },
+                                icon: Icon(Icons.person,
                                 size: 30,
-                                color: Colors.blueAccent,),
+                                color: Colors.deepOrangeAccent,),
                               ),
                             ),
                         Container(
                           alignment: Alignment.center,
-                                child:  Text("Continue with Facebook",
+                                child:  Text("Continue as a Guest",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16.0,
@@ -168,9 +175,9 @@ class _LandingScreenState extends State<LandingScreen> {
                             alignment: Alignment.centerLeft,
                               child:IconButton(
                                 onPressed: () {},
-                                icon: Icon(Icons.send_to_mobile,
+                                icon: Icon(Icons.phone_iphone,
                                   size: 30,
-                                color: Colors.deepOrange,),
+                                color: Colors.deepOrangeAccent,),
                               )
                           ),
                             Container(

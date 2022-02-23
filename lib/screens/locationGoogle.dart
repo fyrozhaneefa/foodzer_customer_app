@@ -274,6 +274,7 @@ class LocationScreenState extends State<LocationScreen> {
                       SizedBox(height: 10,),
                       currentLocationBtn,
                       SizedBox(height: 10,),
+                      searchAddress,
                       // saveLocationBtn,
                       SizedBox(height: 10,),
 
@@ -299,27 +300,27 @@ class LocationScreenState extends State<LocationScreen> {
   @override
   void initState() {
     _controller.addListener(() {
-      // _onChanged();
+      _onChanged();
     });
     _getAddressFromLatLng(0, 0);
 
     super.initState();
   }
 
-  // void _onChanged() {
-  //   if (_sessionToken == null) {
-  //     setState(() {
-  //       _sessionToken = uuid.v4();
-  //     });
-  //   }
-  //   getLocationResults(_controller.text);
-  // }
+  void _onChanged() {
+    // if (_sessionToken == null) {
+    //   setState(() {
+    //     _sessionToken = uuid.v4();
+    //   });
+    // }
+    getLocationResults(_controller.text);
+  }
 
   void getLocationResults(String input) async {
-    String kPLACES_API_KEY = "AIzaSyBDs6JcB5tld5sodZDpLm6-sQx2XaCx6OI";
+    String kPLACES_API_KEY = "AIzaSyDkqhaT1weCdUwCPuUT9OqKsGbCQPGsMM8";
     String type = "(regions)";
     String baseURL = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
-    String request = "$baseURL?input=$input&key=$kPLACES_API_KEY";
+    String request = "$baseURL?input=$input&types=(cities)&key=$kPLACES_API_KEY";
     var response = await http.get(Uri.parse(request));
     if (response.statusCode == 200) {
       print("zzz" + response.body);

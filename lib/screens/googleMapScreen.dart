@@ -12,6 +12,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_geocoder/geocoder.dart' as geoCo;
 // import 'package:flutter_bloc/flutter_bloc.dart';
+import '../Models/place.dart';
 import '../Services/geolocator_service.dart';
 import '../utils/helper.dart';
 
@@ -23,7 +24,9 @@ class GoogleMapScreen extends StatefulWidget {
 
 class _GoogleMapScreenState extends State<GoogleMapScreen> {
   TextEditingController addressController = new TextEditingController();
+  TextEditingController searchController = new TextEditingController();
   Completer<GoogleMapController> mapController = Completer();
+  StreamSubscription? locationSubscription;
   GoogleMapController? _mapController;
   bool isCameraMoving = false;
   bool isPinMoving = false;
@@ -32,16 +35,27 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   LatLng latLong = new LatLng(0, 0);
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
+    mapController.complete(controller);
   }
 @override
   void initState() {
+  final applicationBloc = Provider.of<ApplicationBloc>(context ,listen: false);
 
+  locationSubscription = applicationBloc.selectedLocation.stream.listen((place) {
+    if(place !=null) {
+      _goToPlace(place);
+    }
+  });
     super.initState();
     _getAddressFromLatLng(0, 0);
   }
 @override
   void dispose() {
-    // TODO: implement dispose
+  final applicationBloc = Provider.of<ApplicationBloc>(context ,listen: false);
+  applicationBloc.dispose();
+locationSubscription?.cancel();
+
+
 
     super.dispose();
   }
@@ -50,7 +64,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   @override
   Widget build(BuildContext context) {
 
-  // final applicationBloc = Provider.of<ApplicationBloc>(context);
+  final applicationBloc = Provider.of<ApplicationBloc>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -68,13 +82,14 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
               height: 45,
               child: Container(
                 child: TextField(
+                  controller: searchController,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                       hintText: 'Search for your address...',
                       prefixIcon: Icon(Icons.search,
                       color: Colors.black,),
                       ),
-                  // onChanged: (value) => applicationBloc.searchPlaces(value),
+                  onChanged: (value) => applicationBloc.searchPlaces(value),
                 ),
               ),
               decoration:  BoxDecoration(
@@ -97,7 +112,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
               myLocationEnabled: true,
              compassEnabled: true,
              mapToolbarEnabled: true,
-             myLocationButtonEnabled: true,
              onMapCreated: _onMapCreated,
               mapType: MapType.normal,
               initialCameraPosition: CameraPosition(
@@ -149,33 +163,43 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
 
             ),
           ),
-        // if(applicationBloc.searchResults !=null && applicationBloc.searchResults?.length != 0)
-        //   Container(
-        //     height:MediaQuery.of(context).size.height,
-        //     width: double.infinity,
-        //     decoration: BoxDecoration(
-        //       color: Colors.black.withOpacity(0.6),
-        //       backgroundBlendMode: BlendMode.darken
-        //     ),
-        //   ),
-        //   if(applicationBloc.searchResults !=null && applicationBloc.searchResults?.length != 0)
-        //   Container(
-        //     height:MediaQuery.of(context).size.height,
-        //     child: ListView.builder(
-        //       itemCount: applicationBloc.searchResults?.length,
-        //       itemBuilder: (context, index) {
-        //         return ListTile(
-        //           title: Text(
-        //             'asd',
-        //             style: TextStyle(
-        //               color: Colors.white
-        //             ),
-        //           ),
-        //         );
-        //       },
-        //     ),
-        //   ),
-          isPinMoving?
+        if(applicationBloc.searchResults !=null && applicationBloc.searchResults?.length != 0)
+          Container(
+            height:MediaQuery.of(context).size.height,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.6),
+              backgroundBlendMode: BlendMode.darken
+            ),
+          ),
+          if(applicationBloc.searchResults !=null && applicationBloc.searchResults?.length != 0)
+          Container(
+            height:MediaQuery.of(context).size.height,
+            child: ListView.builder(
+              itemCount: applicationBloc.searchResults?.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(
+                    applicationBloc.searchResults![index].description.toString(),
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
+                  ),
+                  onTap: (){
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    searchController.text = "";
+                    setState(() {
+
+                    });
+                    applicationBloc.setSelectedLocation(
+                      applicationBloc.searchResults![index].place_id.toString()
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+          isPinMoving && searchController.text.length == 0?
        Align(
          alignment: Alignment.bottomCenter,
          child: Container(
@@ -234,6 +258,10 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                        onTap: (){
                          print('clicked reset');
                          _getAddressFromLatLng(0, 0);
+                         isPinMoving = false;
+                         setState(() {
+
+                         });
                        },
                        child: Text(
                          'Reset to my location',
@@ -376,5 +404,16 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
     } catch (e) {
       print(e);
     }
+  }
+  Future<void> _goToPlace(Place place) async{
+    final GoogleMapController controller = await mapController.future;
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+            target:LatLng(place.geometry.location.lat,place.geometry.location.lng),
+          zoom: 14.0
+        ),
+      )
+    );
   }
 }
