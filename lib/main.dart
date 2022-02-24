@@ -27,49 +27,49 @@ import 'screens/search/mainSearch.dart';
 import './screens/innerdetails/restaurantDetails.dart';
 
 void main() {
-  runApp(
-    MyApp(),
-  );
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<ApplicationBloc>(
+        create: (context) => ApplicationBloc())
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ApplicationBloc(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Foodzer',
-        theme: ThemeData(
-            fontFamily: 'Metropolis',
-            scaffoldBackgroundColor: Colors.white,
-            textTheme: TextTheme(
-              bodyText2: TextStyle(color: Colors.black),
-            )),
-        home: SplashScreen(),
-        routes:{
-          LandingScreen.routeName: (context) => LandingScreen(),
-          GoogleMapScreen.routeName: (context) => GoogleMapScreen(),
-          LoginScreen.routeName: (context) => LoginScreen(),
-          // OtpScreen.routeName: (context) => OtpScreen(),
-          // RegisterScreen.routeName: (context) => RegisterScreen(),
-          ForgotPaswwordScreen.routeName: (context) => ForgotPaswwordScreen(),
-          // HomeScreen.routeName: (context) => HomeScreen(),
-          MainSearchScreen.routeName: (context) => MainSearchScreen(),
-          RestaurantDetailsScreen.routeName: (context) => RestaurantDetailsScreen(),
-          RestaurantInfoScreen.routeName: (context) => RestaurantInfoScreen(),
-          ItemBasketScreen.routeName: (context) => ItemBasketScreen(),
-          AllRestaurantsScreen.routeName: (context) => AllRestaurantsScreen(),
-          AllGroceriesScreen.routeName: (context) => AllGroceriesScreen(),
-          UserSettingsScreen.routeName: (context) => UserSettingsScreen(),
-          AllFlowersScreen.routeName: (context) => AllFlowersScreen(),
-          UserOrdersScreen.routeName: (context) => UserOrdersScreen(),
-          FoodzerPayScreen.routeName: (context) => FoodzerPayScreen(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Foodzer',
+      theme: ThemeData(
+          fontFamily: 'Metropolis',
+          scaffoldBackgroundColor: Colors.white,
+          textTheme: TextTheme(
+            bodyText2: TextStyle(color: Colors.black),
+          )),
+      home: SplashScreen(),
+      routes:{
+        LandingScreen.routeName: (context) => LandingScreen(),
+        GoogleMapScreen.routeName: (context) => GoogleMapScreen(),
+        LoginScreen.routeName: (context) => LoginScreen(),
+        // OtpScreen.routeName: (context) => OtpScreen(),
+        // RegisterScreen.routeName: (context) => RegisterScreen(),
+        ForgotPaswwordScreen.routeName: (context) => ForgotPaswwordScreen(),
+        // HomeScreen.routeName: (context) => HomeScreen(),
+        MainSearchScreen.routeName: (context) => MainSearchScreen(),
+        RestaurantDetailsScreen.routeName: (context) => RestaurantDetailsScreen(),
+        RestaurantInfoScreen.routeName: (context) => RestaurantInfoScreen(),
+        ItemBasketScreen.routeName: (context) => ItemBasketScreen(),
+        AllRestaurantsScreen.routeName: (context) => AllRestaurantsScreen(),
+        AllGroceriesScreen.routeName: (context) => AllGroceriesScreen(),
+        UserSettingsScreen.routeName: (context) => UserSettingsScreen(),
+        AllFlowersScreen.routeName: (context) => AllFlowersScreen(),
+        UserOrdersScreen.routeName: (context) => UserOrdersScreen(),
+        FoodzerPayScreen.routeName: (context) => FoodzerPayScreen(),
 
 
-        }
-      ),
+      }
     );
   }
 }

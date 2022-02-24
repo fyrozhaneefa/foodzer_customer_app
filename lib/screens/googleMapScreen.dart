@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
+import 'package:foodzer_customer_app/Services/places_service.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -33,6 +34,8 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   String? _currentAddress;
   LatLng latLongCurrent = LatLng(0, 0);
   LatLng latLong = new LatLng(0, 0);
+  Place selectedLocation = new Place();
+
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     mapController.complete(controller);
@@ -41,18 +44,17 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   void initState() {
   final applicationBloc = Provider.of<ApplicationBloc>(context ,listen: false);
 
-  locationSubscription = applicationBloc.selectedLocation.stream.listen((place) {
-    if(place !=null) {
-      _goToPlace(place);
-    }
-  });
+  // locationSubscription = applicationBloc.selectedLocation.stream.listen((place) {
+  //   if(place !=null) {
+  //     _goToPlace(place);
+  //   }
+  // });
     super.initState();
     _getAddressFromLatLng(0, 0);
   }
 @override
   void dispose() {
-  final applicationBloc = Provider.of<ApplicationBloc>(context ,listen: false);
-  applicationBloc.dispose();
+
 locationSubscription?.cancel();
 
 
@@ -185,15 +187,21 @@ locationSubscription?.cancel();
                       color: Colors.white
                     ),
                   ),
-                  onTap: (){
+                  onTap: () async {
                     FocusScope.of(context).requestFocus(FocusNode());
                     searchController.text = "";
+
+                    await PlacesService().getPlace( applicationBloc.searchResults![index].place_id!).then((value) {
+                      selectedLocation=value;
+                      _getAddressFromLatLng(value.geometry!.location.lat,
+                          value.geometry!.location.lng);
+                      applicationBloc.searchResults!.clear();
+
+                    });
                     setState(() {
 
                     });
-                    applicationBloc.setSelectedLocation(
-                      applicationBloc.searchResults![index].place_id.toString()
-                    );
+
                   },
                 );
               },
@@ -405,15 +413,15 @@ locationSubscription?.cancel();
       print(e);
     }
   }
-  Future<void> _goToPlace(Place place) async{
-    final GoogleMapController controller = await mapController.future;
-    controller.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-            target:LatLng(place.geometry.location.lat,place.geometry.location.lng),
-          zoom: 14.0
-        ),
-      )
-    );
-  }
+  // Future<void> _goToPlace(Place place) async{
+  //   final GoogleMapController controller = await mapController.future;
+  //   controller.animateCamera(
+  //     CameraUpdate.newCameraPosition(
+  //       CameraPosition(
+  //           target:LatLng(place.geometry.location.lat,place.geometry.location.lng),
+  //         zoom: 14.0
+  //       ),
+  //     )
+  //   );
+  // }
 }

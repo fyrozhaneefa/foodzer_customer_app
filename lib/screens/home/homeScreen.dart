@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
@@ -9,6 +10,8 @@ import 'package:foodzer_customer_app/screens/search/mainSearch.dart';
 import 'package:foodzer_customer_app/widget/navigationDrawer.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../blocs/application_bloc.dart';
 
 
 
@@ -23,8 +26,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
 void initState()  {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      final applicationBloc = Provider.of<ApplicationBloc>(context, listen: false);
+      applicationBloc.getDashboardResult();    });
+
 
     super.initState();
+
+
+
   }
 
   @override

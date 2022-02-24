@@ -5,20 +5,20 @@ import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../Models/CategoryModel.dart';
 import '../Models/place.dart';
 import '../Models/place_search.dart';
+import '../Services/dashboardModelService.dart';
 
 class ApplicationBloc with ChangeNotifier{
   final geoLocatorService = GeolocatorService();
 final placesService = PlacesService();
-
+final dashboardService = DashboardModelService();
   //Variables
-
   Position? currentLocation;
   List<PlaceSearch>? searchResults;
   String? currentAddress;
-  StreamController<Place> selectedLocation = StreamController<Place>();
-
+  List<CategoryModel>? dashboardResults;
 
   ApplicationBloc() {
     setCurrentLocation();
@@ -38,15 +38,14 @@ final placesService = PlacesService();
     notifyListeners();
   }
 
-  setSelectedLocation(String placeId) async {
-    selectedLocation.add(await placesService.getPlace(placeId));
-    searchResults = null;
-    notifyListeners();
+
+  getDashboardResult() async{
+   dashboardResults = await dashboardService.getDashboardDetails();
+   notifyListeners();
   }
 
 @override
   void dispose() {
-    selectedLocation.close();
     super.dispose();
   }
 }

@@ -1,11 +1,11 @@
 import 'package:foodzer_customer_app/Models/geometry.dart';
 
 class Place{
-  final Geometry geometry;
-  final String name;
-  final String vicinity;
+  Geometry? geometry;
+  String? name;
+  String? vicinity;
 
-  Place({required this.geometry,required this.name,required this.vicinity});
+  Place({this.geometry, this.name, this.vicinity});
   factory Place.fromJson(Map<String, dynamic> parsedJson) {
     return Place(
       geometry: Geometry.fromJson(parsedJson['geometry']),
