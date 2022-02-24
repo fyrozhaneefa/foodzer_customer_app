@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/utils/helper.dart';
 
 
 import 'Constants/radiobutton.dart';
@@ -12,13 +13,13 @@ class PayonDelivery extends StatefulWidget {
 }
 
 class _PayonDeliveryState extends State<PayonDelivery> {
+  int value =2;
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
       child: Container(
-        height: size.height / 8,
+        height: 100,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
@@ -53,8 +54,23 @@ class _PayonDeliveryState extends State<PayonDelivery> {
 
              trailing: Padding(
                padding: const EdgeInsets.only(bottom:110),
-               child: RadioSection(),
-             ), ),
+               child: Radio<int>(
+                 value: 3,
+                 groupValue: value,
+                 onChanged: (newvalue) {
+                   setState(
+                         () {
+                       value = newvalue!;
+
+                     },
+                   );
+                 },
+                 activeColor: Colors.green,
+               ),
+             ),
+
+              ),
+              // Container(child: ElevatedButton(onPressed: (){},child: Text("hao")),)
             ],
           ),
         ),

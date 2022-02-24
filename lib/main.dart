@@ -22,6 +22,7 @@ import './screens/registerScreen.dart';
 import './screens/forgotPassword.dart';
 import 'Menu/Microfiles/FiltterSection/filtterhome.dart';
 import 'Menu/Microfiles/PaymentSection/payment_home.dart';
+import 'Menu/Microfiles/ReviewSection/review.dart';
 import 'screens/home/homeScreen.dart';
 import 'screens/search/mainSearch.dart';
 import './screens/innerdetails/restaurantDetails.dart';
@@ -54,7 +55,7 @@ class MyApp extends StatelessWidget {
         GoogleMapScreen.routeName: (context) => GoogleMapScreen(),
         LoginScreen.routeName: (context) => LoginScreen(),
         // OtpScreen.routeName: (context) => OtpScreen(),
-        // RegisterScreen.routeName: (context) => RegisterScreen(),
+        // RegisterScreen.routeName: (context) => RegisterScreen(toString()),
         ForgotPaswwordScreen.routeName: (context) => ForgotPaswwordScreen(),
         // HomeScreen.routeName: (context) => HomeScreen(),
         MainSearchScreen.routeName: (context) => MainSearchScreen(),

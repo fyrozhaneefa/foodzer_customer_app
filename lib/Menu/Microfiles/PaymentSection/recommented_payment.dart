@@ -9,7 +9,7 @@ class RecommededPayments extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 10, left: 10, right: 10,bottom: 20),
       child: Container(
-        height: size.height / 8,
+        height: 90,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
@@ -17,7 +17,7 @@ class RecommededPayments extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(top: 15),
+          padding: const EdgeInsets.only(top:7),
           child: Column(children: [
             ListTile(
                 title: Padding(

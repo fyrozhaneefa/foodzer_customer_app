@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/filtterhome.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/popularRestNear.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurantServiceList.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurants.dart';
+
+import '../../Menu/Microfiles/CuisinesSection/cuisineshome.dart';
 
 
 
@@ -71,7 +74,12 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                             Icon(Icons.filter_list,
                             size: 25,),
                             SizedBox(width: 10,),
-                            Text(
+                            InkWell(onTap: (){
+
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      FiltterSection()));
+                            },child:Text(
                               'Filters',
                               style: TextStyle(
                                 fontSize: 16,
@@ -79,7 +87,7 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                                   fontWeight: FontWeight.w400
                               ),
                             ),
-                          ],
+                            )],
                         ),
                       ),
                       VerticalDivider(thickness: 1),
@@ -89,13 +97,19 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                             Icon(Icons.fastfood_outlined,
                               ),
                             SizedBox(width: 10,),
-                            Text(
+                            InkWell(onTap: (){
+
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      Cuisines()));
+                            },child:Text(
                               'Cuisines',
                               style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.black,
                                   fontWeight: FontWeight.w400
                               ),
+                            ),
                             )
                           ],
                         ),

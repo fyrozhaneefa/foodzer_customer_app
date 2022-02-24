@@ -8,13 +8,12 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'home/homeScreen.dart';
 import '../utils/helper.dart';
 import 'otpValidation.dart';
 
 class RegisterScreen extends StatefulWidget {
-  // static const routeName = "/registerScreen";
+  static const routeName = "/registerScreen";
   String mobileNumber;
   RegisterScreen(this.mobileNumber);
 

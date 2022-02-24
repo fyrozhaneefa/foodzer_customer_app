@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
 import '../FiltterSection/constants/sizedbox.dart';
 
 class Headersection extends StatelessWidget {
@@ -11,11 +10,13 @@ class Headersection extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          leading: IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.close_sharp,color: Colors.black),
-          ),
-          title: Text("Cuisines",style: TextStyle(fontWeight: FontWeight.w600)),
+          leading: InkWell(
+              child: Icon(Icons.close_sharp, color: Colors.black),
+              onTap: () {
+                Navigator.pop(context);
+              }),
+          title:
+              Text("Cuisines", style: TextStyle(fontWeight: FontWeight.w600)),
           trailing: TextButton(
             onPressed: () {},
             child: Text(
@@ -33,24 +34,24 @@ class Headersection extends StatelessWidget {
             height: 50,
             child: TextField(
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.withOpacity(0.4),
+                  border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.4),
+                    ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.grey.withOpacity(0.4),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.withOpacity(0.4),
+                    ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: Colors.black.withOpacity(.7),
-                ),
-              hintText:"Search cuisine"),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.black.withOpacity(.7),
+                  ),
+                  hintText: "Search cuisine"),
             ),
           ),
         )

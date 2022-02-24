@@ -92,7 +92,7 @@ class Reviews extends StatelessWidget {
                   subtitle: Text(
                       "is the good food hjvjb sgaskxa gddvwhsd nasv whsazxhiuyfty uga"),
                 ),
-                )
+                ),
               ],
             ),
             DividerSection(),
@@ -106,27 +106,28 @@ class Reviews extends StatelessWidget {
                 ))
               ],
             ),
-            Row(
-              children: [
-                ReviewSection(),
-                Expanded(
-                    child: ListTile(
-                      title: Text("Good",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
-                      subtitle: Text("Great"),
-                    ))
-              ],
-            ),
-            Row(
-              children: [
-                ReviewSection(),
-                Expanded(
-                    child: ListTile(
-                      title: Text("Good",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
-                      subtitle: Text("Great"),
-                    ))
-              ],
-            ),
             DividerSection(),
+            Row(
+              children: [
+                ReviewSection(),
+                Expanded(
+                    child: ListTile(
+                      title: Text("Good",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
+                      subtitle: Text("Great"),
+                    )),
+                DividerSection(),
+              ],
+            ),DividerSection(),
+            Row(
+              children: [
+                ReviewSection(),
+                Expanded(
+                    child: ListTile(
+                      title: Text("Good",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
+                      subtitle: Text("Great"),
+                    ))
+              ],
+            ),
           ],
         )),
       ),

@@ -20,10 +20,6 @@ class _RadioSectionState extends State<RadioSection> {
               () {
                value= newvalue!;
 
-               return Button();
-
-
-
           },
         );
       },
@@ -31,7 +27,4 @@ class _RadioSectionState extends State<RadioSection> {
     );
   }
 
-  Button (){
-    Container(width: 30,height: 30,child: ElevatedButton(onPressed: (){}, child: Text("Hai")));
-  }
 }
