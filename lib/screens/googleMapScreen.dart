@@ -262,7 +262,7 @@ locationSubscription?.cancel();
                  Row(
                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                    children: [
-                     GestureDetector(
+                     InkWell(
                        onTap: (){
                          print('clicked reset');
                          _getAddressFromLatLng(0, 0);
@@ -271,25 +271,29 @@ locationSubscription?.cancel();
 
                          });
                        },
-                       child: Text(
-                         'Reset to my location',
-                         style: TextStyle(
-                           color: Colors.deepOrangeAccent,
-                           fontWeight: FontWeight.w600
+                       child: Container(
+                         child: Text(
+                           'Reset to my location',
+                           style: TextStyle(
+                             color: Colors.deepOrangeAccent,
+                             fontWeight: FontWeight.w600
+                           ),
                          ),
                        ),
                      ),
-                     GestureDetector(
+                     InkWell(
                        onTap: (){
                          Navigator.of(context).pushReplacement(MaterialPageRoute(
                              builder: (BuildContext context) =>
                                  HomeScreen()));
                        },
-                       child: Text(
-                         'Yes, deliver here',
-                         style: TextStyle(
-                             color: Colors.deepOrangeAccent,
-                             fontWeight: FontWeight.w600
+                       child: Container(
+                         child: Text(
+                           'Yes, deliver here',
+                           style: TextStyle(
+                               color: Colors.deepOrangeAccent,
+                               fontWeight: FontWeight.w600
+                           ),
                          ),
                        ),
                      )

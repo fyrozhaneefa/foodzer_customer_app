@@ -26,15 +26,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
 void initState()  {
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      final applicationBloc = Provider.of<ApplicationBloc>(context, listen: false);
-      applicationBloc.getDashboardResult();    });
-
+    // SchedulerBinding.instance!.addPostFrameCallback((_) {
+    //   final applicationBloc = Provider.of<ApplicationBloc>(context, listen: false);
+    //   applicationBloc.getDashboardResult();    });
 
     super.initState();
-
-
-
   }
 
   @override
@@ -44,7 +40,6 @@ void initState()  {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       drawer: NavigationDrawerWidget(),
       appBar: AppBar(
@@ -52,7 +47,7 @@ void initState()  {
         elevation: 3,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
-        title:GestureDetector(
+        title:InkWell(
           onTap: (){
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) =>

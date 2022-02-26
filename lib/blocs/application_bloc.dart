@@ -13,12 +13,12 @@ import '../Services/dashboardModelService.dart';
 class ApplicationBloc with ChangeNotifier{
   final geoLocatorService = GeolocatorService();
 final placesService = PlacesService();
-final dashboardService = DashboardModelService();
+// final dashboardService = DashboardModelService();
   //Variables
   Position? currentLocation;
   List<PlaceSearch>? searchResults;
   String? currentAddress;
-  List<CategoryModel>? dashboardResults;
+  // List<CategoryModel>? dashboardResults;
 
   ApplicationBloc() {
     setCurrentLocation();
@@ -39,10 +39,10 @@ final dashboardService = DashboardModelService();
   }
 
 
-  getDashboardResult() async{
-   dashboardResults = await dashboardService.getDashboardDetails();
-   notifyListeners();
-  }
+  // getDashboardResult() async{
+  //  dashboardResults = await dashboardService.getDashboardDetails();
+  //  notifyListeners();
+  // }
 
 @override
   void dispose() {

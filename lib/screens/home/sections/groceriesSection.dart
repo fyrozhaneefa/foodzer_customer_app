@@ -23,7 +23,7 @@ class GroceriesSection extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    "Groceries and more",
+                    "Popular restaurants near you",
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 19,

@@ -20,17 +20,15 @@ class CategoryItems extends StatefulWidget {
 }
 
 class _CategoryItemsState extends State<CategoryItems> {
-
+  List<CategoryModel> categoryList= [];
   @override
   void initState() {
-    // final applicationBloc = Provider.of<ApplicationBloc>(context);
-    // applicationBloc.getDashboardResult();
-    // getDashboardDetails();
+
+    getCategoryList();
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    final applicationBloc = Provider.of<ApplicationBloc>(context);
     return
      Container(
         padding: const EdgeInsets.only(left: 20.0,right: 10),
@@ -39,82 +37,40 @@ class _CategoryItemsState extends State<CategoryItems> {
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          itemCount: applicationBloc.dashboardResults?.length,
+          itemCount: categoryList.length,
           itemBuilder: (context, index) {
             return CategoryCard(
-                          color: applicationBloc.dashboardResults![index].name == "Food"? Colors.deepOrangeAccent
-                              :applicationBloc.dashboardResults![index].name == "Groceries"? Colors.teal.shade400:Colors.blue,
-                          cardImg: null!=applicationBloc.dashboardResults? applicationBloc.dashboardResults![index].image.toString()
-              :'https://www.freepnglogos.com/uploads/food-png/download-food-png-file-png-image-pngimg-1.png',
-
-                          cardName:null!=applicationBloc.dashboardResults? applicationBloc.dashboardResults![index].name.toString():'food',
+                          color: categoryList[index].name == "Food"? Colors.deepOrangeAccent
+                              :categoryList[index].name == "Groceries"? Colors.teal.shade400:Colors.blue,
+                          cardImg: categoryList[index].image,
+                          cardName:categoryList[index].name,
                           press: (){
                             Navigator.of(context).pushNamed(AllRestaurantsScreen.routeName);
                           },);
           },
         ),
       );
-    //   SingleChildScrollView(
-    //   physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-    //   scrollDirection: Axis.horizontal,
-    //   child: Padding(
-    //     padding: const EdgeInsets.only(left: 20.0,right: 10),
-    //     child: Row(
-    //       children: [
-    //         CategoryCard(
-    //           color: Colors.deepOrange,
-    //           cardImg: 'https://i.pinimg.com/originals/d4/50/aa/d450aa83e974012cc2444cd25cb96ca1.png',
-    //           cardName: 'Food',
-    //           press: (){
-    //             Navigator.of(context).pushNamed(AllRestaurantsScreen.routeName);
-    //           },),
-    //         CategoryCard(
-    //           color: Colors.teal.shade400,
-    //           cardImg: 'https://i.pinimg.com/originals/d4/50/aa/d450aa83e974012cc2444cd25cb96ca1.png',
-    //           cardName: 'Groceries',
-    //           press: (){
-    //             Navigator.of(context).pushNamed(AllGroceriesScreen.routeName);
-    //           },),
-    //         CategoryCard(
-    //           color: Colors.red,
-    //           cardImg: 'https://i.pinimg.com/originals/d4/50/aa/d450aa83e974012cc2444cd25cb96ca1.png',
-    //           cardName: 'Flowers',
-    //           press: (){
-    //             Navigator.of(context).pushNamed(AllFlowersScreen.routeName);
-    //           },),
-    //         CategoryCard(
-    //           color: Colors.blue,
-    //           cardImg: 'https://i.pinimg.com/originals/d4/50/aa/d450aa83e974012cc2444cd25cb96ca1.png',
-    //           cardName: 'Health & wellness',
-    //           press: (){
-    //             print("Health & wellness printed");
-    //           },),
-    //         CategoryCard(
-    //           color: Colors.indigo,
-    //           cardImg: 'https://i.pinimg.com/originals/d4/50/aa/d450aa83e974012cc2444cd25cb96ca1.png',
-    //           cardName: 'More',
-    //           press: (){
-    //             print("more");
-    //           },)
-    //       ],
-    //     ),
-    //   ),
-    // );
+
   }
-  // getDashboardDetails() async {
-  //   // CategoryModel categoryModel = new CategoryModel();
-  //   var map = new Map<String, dynamic>();
-  //   map['lat'] = '10.9760357';
-  //   map['lng'] = '76.22544309999999';
-  //   var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
-  //   var json = convert.jsonDecode(response.body);
-  //     List dataList = json['main_category'];
-  //     if(null!= dataList && dataList.length >0){
-  //       categoryList =dataList.map((spacecraft) => new CategoryModel.fromJson(spacecraft)).toList();
-  //     }
-  //
-  //   // var jsonResults = json['main_category'] as List;
-  //   // return jsonResults.map((category) => CategoryModel.fromJson(category)).toList();
-  //
-  // }
+  getCategoryList() async {
+
+    var map = new Map<String, dynamic>();
+    map['lat'] = '10.9760357';
+    map['lng'] = '76.22544309999999';
+    var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
+    var json = convert.jsonDecode(response.body);
+    if(json['error_code'] == 0){
+      List dataList = json['main_category'];
+      if(null!= dataList && dataList.length >0){
+        categoryList =dataList.map((spacecraft) => new CategoryModel.fromJson(spacecraft)).toList();
+      }
+      setState(() {
+
+      });
+    } else{
+    print("some error occured!!!");
+    }
+
+
+  }
 }

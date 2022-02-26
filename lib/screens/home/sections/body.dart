@@ -21,9 +21,8 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    final applicationBloc = Provider.of<ApplicationBloc>(context);
     return
-     null!= applicationBloc.dashboardResults?SingleChildScrollView(
+   SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -36,7 +35,7 @@ class _BodyState extends State<Body> {
           ViewRestButton()
         ],
       ),
-    ): Center(child: CircularProgressIndicator(color: Colors.deepOrangeAccent,),);;
+    );
   }
 }
 

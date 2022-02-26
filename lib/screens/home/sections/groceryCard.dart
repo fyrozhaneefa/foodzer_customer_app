@@ -2,23 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 
-class GroceryCard extends StatelessWidget {
-  final String cardName,cardTime,cardType,cardSubType,rating,deliveryCharge,bannerName,discount;
+class GroceryCard extends StatefulWidget {
+  final String? cardName,cardTime,cardType,rating,deliveryCharge,bannerName,discount,busy;
   final press;
   const GroceryCard({
     Key? key,
     // required this.cardBanner,
-    required this.cardName,
-    required this.cardTime,
-    required this.cardType,
-    required this.cardSubType,
-    required this.rating,
-    required this.deliveryCharge,
-    required this.bannerName,
-    required this.discount,
-    this.press,
+      this.cardName,
+     this.cardTime,
+     this.cardType,
+     this.rating,
+     this.deliveryCharge,
+     this.bannerName,
+     this.discount,
+     this.press,
+    this.busy
   }) : super(key: key);
 
+  @override
+  State<GroceryCard> createState() => _GroceryCardState();
+}
+
+class _GroceryCardState extends State<GroceryCard> {
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -28,7 +33,7 @@ class GroceryCard extends StatelessWidget {
         hoverColor: Colors.transparent,
       ),
       child: InkWell(
-        onTap: press,
+        onTap: widget.press,
         child: Container(
           margin: EdgeInsets.only(bottom: 30),
           width: Helper.getScreenWidth(context)*0.85,
@@ -40,12 +45,34 @@ class GroceryCard extends StatelessWidget {
                 height: 125,
                 child:ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    bannerName,
-                     fit: BoxFit.cover,
-                    height: double.infinity,
-                    width: double.infinity,
-                    alignment: Alignment.center,
+                  child: Stack(
+                    children: [
+                      Image.network(
+                        widget.bannerName!,
+                        fit: BoxFit.fill,
+                        height: double.infinity,
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                      ),
+                      widget.busy =="1" ?Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        child: Center(
+                          child: Text(
+                            'BUSY',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20.0
+                            ),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.6),
+                            backgroundBlendMode: BlendMode.darken
+                        ),
+                      ): SizedBox()
+                    ],
                   ),
                 ),
               ),
@@ -60,7 +87,7 @@ class GroceryCard extends StatelessWidget {
                         Container(
                           width: Helper.getScreenWidth(context)*0.45,
                           child: Text(
-                            cardName,
+                            widget.cardName!,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -82,7 +109,7 @@ class GroceryCard extends StatelessWidget {
                             size: 20,),
                           SizedBox(width: 5,),
                           Text(
-                            'Within'+' '+cardTime+' ''mins',
+                            'Within'+' '+widget.cardTime!+' ''mins',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500
@@ -97,7 +124,7 @@ class GroceryCard extends StatelessWidget {
               SizedBox(height: 8,),
               Container(
                 child:   Text(
-                    cardType+','+' '+cardSubType
+                    widget.cardType!
                 ),
               ),
               SizedBox(height: 8,),
@@ -106,13 +133,13 @@ class GroceryCard extends StatelessWidget {
                     children: [
                       Icon(Icons.tag_faces_outlined),
                       SizedBox(width: 5,),
-                      Text(rating,
+                      Text(widget.rating!,
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w500
                         ),),
                       SizedBox(width: 25,),
-                      Text('Delivery:'+' '+deliveryCharge,
+                      Text('Delivery:'+' '+widget.deliveryCharge!,
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w500
@@ -128,7 +155,7 @@ class GroceryCard extends StatelessWidget {
                     size: 20,
                     color: Colors.pinkAccent,),
                     SizedBox(width: 5,),
-                    Text(discount+' '+'selected items',
+                    Text(widget.discount! +' '+'selected items',
                       style: TextStyle(
                           color: Colors.pinkAccent,
                           fontWeight: FontWeight.w600
