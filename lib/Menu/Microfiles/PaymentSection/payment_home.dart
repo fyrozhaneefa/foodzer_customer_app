@@ -72,6 +72,7 @@ class PaymentSection extends StatelessWidget {
                 ),
               ),
               RecommededPayments(),
+              
 
             ],
           ),

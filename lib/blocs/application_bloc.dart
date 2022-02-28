@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 
 import '../Models/CategoryModel.dart';
 import '../Models/place.dart';
@@ -44,6 +45,8 @@ final placesService = PlacesService();
   //  notifyListeners();
   // }
 
+  
+  
 @override
   void dispose() {
     super.dispose();

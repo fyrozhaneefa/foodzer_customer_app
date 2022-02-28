@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
+import '../../../Models/restaurentmodel.dart';
 
 class Restaurants extends StatefulWidget {
   const Restaurants({Key? key}) : super(key: key);
@@ -10,10 +15,11 @@ class Restaurants extends StatefulWidget {
 
 class _RestaurantsState extends State<Restaurants> {
   bool isSwitchView = true;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20.0,right: 20.0),
+      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       child: Column(
         children: [
           Row(
@@ -21,10 +27,10 @@ class _RestaurantsState extends State<Restaurants> {
             children: [
               Text(
                 'All restaurants',
-        style: TextStyle(
-            color: Colors.black,
-            fontSize: 19,
-            fontWeight: FontWeight.w700),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 19,
+                    fontWeight: FontWeight.w700),
               ),
               Container(
                 decoration: BoxDecoration(
@@ -35,31 +41,36 @@ class _RestaurantsState extends State<Restaurants> {
                   child: Row(
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(left: 10.0,right: 10,top: 5,bottom: 5),
+                        margin: const EdgeInsets.only(
+                            left: 10.0, right: 10, top: 5, bottom: 5),
                         child: GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             isSwitchView = true;
-                            setState(() {
-
-                            });
+                            setState(() {});
                           },
-                            child: Icon(
-                              Icons.list,
-                              color: isSwitchView ? Colors.deepOrange:Colors.black,)
+                          child: Icon(
+                            Icons.list,
+                            color:
+                                isSwitchView ? Colors.deepOrange : Colors.black,
+                          ),
                         ),
                       ),
-                      VerticalDivider(thickness: 1,color: Colors.grey.shade300),
+                      VerticalDivider(
+                          thickness: 1, color: Colors.grey.shade300),
                       Container(
-                        margin: const EdgeInsets.only(left: 10.0,right: 10,top: 5,bottom: 5),
+                        margin: const EdgeInsets.only(
+                            left: 10.0, right: 10, top: 5, bottom: 5),
                         child: GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               isSwitchView = false;
-                              setState(() {
-
-                              });
+                              setState(() {});
                             },
-                            child: Icon(Icons.view_agenda_outlined,
-                            color: isSwitchView ? Colors.black:Colors.deepOrange,)),
+                            child: Icon(
+                              Icons.view_agenda_outlined,
+                              color: isSwitchView
+                                  ? Colors.black
+                                  : Colors.deepOrange,
+                            )),
                       )
                     ],
                   ),
@@ -67,62 +78,87 @@ class _RestaurantsState extends State<Restaurants> {
               )
             ],
           ),
-          SizedBox(height: 30,),
-          ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-              itemCount: 10,
-              itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
-              onTap: (){
-                print(index);
-              },
-              child: isSwitchView? Container(
-                margin: EdgeInsets.only(bottom: 30),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(12)
-                      ),
-                      width: 70,
-                      height: 60,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 5.0,bottom: 5),
-                        child: Image.network(
-                            'https://cdn.shopify.com/s/files/1/0508/9368/4926/files/TofuHouseLogo_2820x.png?v=1604899681',
-                        fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 15,),
-                    Expanded(child: ProductDesc())
-                  ],
-                ),
-              ):Container(
-                margin: EdgeInsets.only(bottom: 20),
-                child: Column(
-                  children: [
-                      Container(
-                        margin:EdgeInsets.only(bottom: 10),
-                        width: Helper.getScreenWidth(context),
-                        height:150,
-                        child:ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.network(
-                            'https://png.pngtree.com/thumb_back/fh260/back_our/20190620/ourmid/pngtree-food-seasoning-food-banner-image_169169.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ProductDesc()
-                  ],
-                ),
-              ),
-            );
-          })
+          SizedBox(
+            height: 30,
+          ),
+          FutureBuilder(
+              future: AllRestaurent().getRestaurent(),
+              builder: (context, AsyncSnapshot<List<Results>?> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting)
+                  return Center(child: CircularProgressIndicator());
+                else if (snapshot.hasData) {
+                  return ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        Results user = snapshot.data!.elementAt(index);
+                        return GestureDetector(
+                          onTap: () {
+                            print(index);
+                          },
+                          child: isSwitchView
+                              ? Container(
+                                  margin: EdgeInsets.only(bottom: 30),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.grey.shade300),
+                                            borderRadius:
+                                                BorderRadius.circular(12)),
+                                        width: 70,
+                                        height: 60,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 5.0, bottom: 5),
+                                          child: Image.network(
+                                            user.merchantBranchImage!,
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Expanded(
+                                        child: ProductDesc(
+                                          user: user,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Container(
+                                  margin: EdgeInsets.only(bottom: 20),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        width: Helper.getScreenWidth(context),
+                                        height: 150,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Image.network(
+                                            (user.merchantBranchImage!),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      ProductDesc(user: user),
+                                    ],
+                                  ),
+                                ),
+                        );
+                      });
+                } else {
+                  return Center(child: Text('some error occured!!'));
+                }
+              })
         ],
       ),
     );
@@ -130,25 +166,21 @@ class _RestaurantsState extends State<Restaurants> {
 }
 
 class ProductDesc extends StatelessWidget {
-  const ProductDesc({
-    Key? key,
-  }) : super(key: key);
+  Results user;
+
+  ProductDesc({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Healthy Calorie, Zayed Town',
-          style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w500
-          ),
+        Text(user.merchantBranchName!, style: TextStyle(color: Colors.black)),
+        SizedBox(
+          height: 3,
         ),
-        SizedBox(height: 3,),
         Text(
-          'Health, Sandwiches, International',
+          user.cuisines!,
           style: TextStyle(
             fontSize: 12,
             color: Colors.grey,
@@ -164,10 +196,10 @@ class ProductDesc extends StatelessWidget {
               color: Colors.orangeAccent,
               size: 20,
             ),
-            SizedBox(width: 5,),
-            Text(
-                'Amazing'
+            SizedBox(
+              width: 5,
             ),
+            Text(user.avgReview!),
           ],
         ),
         SizedBox(
@@ -176,24 +208,30 @@ class ProductDesc extends StatelessWidget {
         Row(
           children: [
             Icon(
-                Icons.access_time,
+              Icons.access_time,
               size: 20,
             ),
-            SizedBox(width: 5,),
+            SizedBox(
+              width: 5,
+            ),
             Text(
-                'Within 30 mins',
+              'Within ' + user.merchantBranchOrderTime! + " mins",
               style: TextStyle(
                 fontSize: 12,
               ),
             ),
-            SizedBox(width: 5,),
+            SizedBox(
+              width: 5,
+            ),
             Container(
               child: CircleAvatar(
                 radius: 2,
                 backgroundColor: Colors.grey.shade400,
               ),
             ),
-            SizedBox(width: 5,),
+            SizedBox(
+              width: 5,
+            ),
             Icon(
               Icons.delivery_dining,
               color: Colors.grey.shade900,
@@ -209,5 +247,24 @@ class ProductDesc extends StatelessWidget {
         )
       ],
     );
+  }
+}
+
+class AllRestaurent {
+  Future<List<Results>?> getRestaurent() async {
+    final response = await http.post(
+        Uri.parse('https://opine.cloud/foodzer_test/mob_food_new/restaurants'),
+        body: {
+          'lat': '10.9760357',
+          'lng': '76.22544309999999',
+          'delivery_type': 'delivery'
+        },
+        headers: {
+          'Cookie': ' ci_session=445a8129f0edc2b81b72086233c20f2744cc4e92'
+        });
+
+    final jsonData = jsonDecode(response.body);
+    var data = RestaurentModel.fromJson(jsonData).results;
+    return data;
   }
 }
