@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 
 class PopularBrandCard extends StatelessWidget {
-  final String logo,brandName,time;
+  final String? logo,brandName,time;
   final press;
   const PopularBrandCard({
     Key? key,
-    required this.logo,
-    required this.brandName,
-    required this.time,
+     this.logo,
+     this.brandName,
+     this.time,
     this.press,
   }) : super(key: key);
 
@@ -37,7 +37,7 @@ class PopularBrandCard extends StatelessWidget {
                     border:
                     Border.all(width: 1.0, color: Colors.grey.shade200)),
                 child: Image.network(
-                  logo,
+                  logo!,
                   fit: BoxFit.contain,
                   repeat: ImageRepeat.noRepeat,
                 ),
@@ -50,7 +50,7 @@ class PopularBrandCard extends StatelessWidget {
                 width: Helper.getScreenWidth(context)*0.3,
                 alignment: Alignment.topLeft,
                 child: Text(
-                  brandName,
+                  brandName!,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
@@ -61,7 +61,7 @@ class PopularBrandCard extends StatelessWidget {
               ),
               Container(
 
-                  child: Text(time)
+                  child: Text(time!)
               )
             ],
           ),

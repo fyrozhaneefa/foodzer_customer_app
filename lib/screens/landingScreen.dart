@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import '/screens/loginScreen.dart';
 import '../utils/helper.dart';
@@ -123,7 +124,7 @@ class _LandingScreenState extends State<LandingScreen> {
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  HomeScreen()));
+                                  GoogleMapScreen()));
                         },
                         child: Stack(
                           children: [

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -198,7 +198,7 @@ bool isLoading = false;
                     enableResend
                         ? GestureDetector(
                             onTap: () {
-                              startTimer();
+                              resentOTP();
                             },
                             child: Align(
                               alignment: Alignment.centerRight,
@@ -307,5 +307,14 @@ bool isLoading = false;
         isLoading=false;
       });
     }
+  }
+
+  resentOTP() async {
+    var map = new Map<String, dynamic>();
+    map['mobile'] = widget.mobileNumber;
+    var resendResponse= await http.post(Uri.parse(ApiData.RESEND_OTP),body:map);
+    var resendJson = jsonDecode(resendResponse.body);
+    startTimer();
+
   }
 }
