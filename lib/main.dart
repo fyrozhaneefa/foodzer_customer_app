@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/CuisinesSection/cuisineshome.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/splash.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/AppProvider.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
           textTheme: TextTheme(
             bodyText2: TextStyle(color: Colors.black),
           )),
+
       home: SplashScreen(),
       routes:{
         LandingScreen.routeName: (context) => LandingScreen(),
