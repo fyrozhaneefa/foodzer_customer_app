@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'dart:convert';
-import 'dart:io';
+
 import 'package:http/http.dart' as http;
 
+import '../../../Api/ApiData.dart';
 import '../../../Models/restaurentmodel.dart';
 
 class Restaurants extends StatefulWidget {
@@ -114,10 +115,14 @@ class _RestaurantsState extends State<Restaurants> {
                                         height: 60,
                                         child: Padding(
                                           padding: const EdgeInsets.only(
-                                              top: 5.0, bottom: 5),
-                                          child: Image.network(
-                                            user.merchantBranchImage!,
-                                            fit: BoxFit.fill,
+                                              ),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                            BorderRadius.circular(8.0),
+                                            child: Image.network(
+                                              (user.merchantBranchImage!),
+                                              fit: BoxFit.fill,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -251,9 +256,9 @@ class ProductDesc extends StatelessWidget {
 }
 
 class AllRestaurent {
-  Future<List<Results>?> getRestaurent() async {
+  Future<List<Results>?> getRestaurent() async  {
     final response = await http.post(
-        Uri.parse('https://opine.cloud/foodzer_test/mob_food_new/restaurants'),
+        Uri.parse(ApiData.All_Restaurent),
         body: {
           'lat': '10.9760357',
           'lng': '76.22544309999999',

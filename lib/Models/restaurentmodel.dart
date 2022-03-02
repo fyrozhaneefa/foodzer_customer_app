@@ -1,21 +1,10 @@
 
 class RestaurentModel {
   int? errorCode;
-  List<SpecialCategories>? specialCategories;
   List<Results>? results;
 
 
-  RestaurentModel(
-      {this.errorCode, this.specialCategories,});
-
   RestaurentModel.fromJson(Map<String, dynamic> json) {
-    errorCode = json['error_code'];
-    if (json['special_categories'] != null) {
-      specialCategories = <SpecialCategories>[];
-      json['special_categories'].forEach((v) {
-        specialCategories!.add(new SpecialCategories.fromJson(v));
-      });
-    }
     if (json['results'] != null) {
       results = <Results>[];
       json['results'].forEach((v) {
@@ -27,10 +16,6 @@ class RestaurentModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['error_code'] = this.errorCode;
-    if (this.specialCategories != null) {
-      data['special_categories'] =
-          this.specialCategories!.map((v) => v.toJson()).toList();
-    }
     if (this.results != null) {
       data['results'] = this.results!.map((v) => v.toJson()).toList();
     }
@@ -39,54 +24,10 @@ class RestaurentModel {
   }
 }
 
-class SpecialCategories {
-  String? id;
-  String? categoryName;
-  String? categoryImage;
-  String? resturants;
-  String? displayOrder;
-  String? visibility;
-  String? status;
-  String? dateCreated;
-
-  SpecialCategories(
-      {this.id,
-        this.categoryName,
-        this.categoryImage,
-        this.resturants,
-        this.displayOrder,
-        this.visibility,
-        this.status,
-        this.dateCreated});
-
-  SpecialCategories.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    categoryName = json['category_name'];
-    categoryImage = json['category_image'];
-    resturants = json['resturants'];
-    displayOrder = json['display_order'];
-    visibility = json['visibility'];
-    status = json['status'];
-    dateCreated = json['date_created'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['category_name'] = this.categoryName;
-    data['category_image'] = this.categoryImage;
-    data['resturants'] = this.resturants;
-    data['display_order'] = this.displayOrder;
-    data['visibility'] = this.visibility;
-    data['status'] = this.status;
-    data['date_created'] = this.dateCreated;
-    return data;
-  }
-}
 
 class Results {
   String? cuisines;
-  Null? reviewAvgRating;
+  Null reviewAvgRating;
   String? reviewCount;
   String? avgReview;
   String? cuisineName;
