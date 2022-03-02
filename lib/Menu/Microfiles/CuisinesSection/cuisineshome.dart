@@ -1,10 +1,9 @@
-import 'dart:ffi';
+
 
 import 'package:flutter/material.dart';
 
 import '../FiltterSection/applybutton.dart';
 import 'cuisinesitems.dart';
-import 'checkbox.dart';
 import 'cuisinesheader.dart';
 
 class Cuisines extends StatelessWidget {
