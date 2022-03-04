@@ -21,6 +21,7 @@ import './screens/landingScreen.dart';
 import './screens/loginScreen.dart';
 import './screens/registerScreen.dart';
 import './screens/forgotPassword.dart';
+import 'Menu/Microfiles/CuisinesSection/test2.dart';
 import 'Menu/Microfiles/FiltterSection/filtterhome.dart';
 import 'Menu/Microfiles/PaymentSection/payment_home.dart';
 import 'Menu/Microfiles/ReviewSection/review.dart';
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
           textTheme: TextTheme(
             bodyText2: TextStyle(color: Colors.black),
           )),
-
+       // home: RestaurantTest(),
       home: SplashScreen(),
       routes:{
         LandingScreen.routeName: (context) => LandingScreen(),

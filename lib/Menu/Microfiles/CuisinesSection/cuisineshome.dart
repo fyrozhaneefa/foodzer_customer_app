@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import '../FiltterSection/applybutton.dart';
@@ -17,7 +15,7 @@ class Cuisines extends StatelessWidget {
           initialChildSize: 0.9,
           minChildSize: 0.5,
           maxChildSize: 0.9,
-          builder: (context,_) => Container(
+          builder: (context, _) => Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
@@ -37,7 +35,7 @@ class Cuisines extends StatelessWidget {
                   child: Headersection(),
                 ),
                 Expanded(
-                    child:  CuisinesItems(),
+                  child: CuisinesItems(),
                 )
               ],
             ),
@@ -48,4 +46,5 @@ class Cuisines extends StatelessWidget {
       backgroundColor: Colors.grey,
     );
   }
+
 }
