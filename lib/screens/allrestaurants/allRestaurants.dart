@@ -6,9 +6,6 @@ import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurants.
 
 import '../../Menu/Microfiles/CuisinesSection/cuisineshome.dart';
 
-
-
-
 class AllRestaurantsScreen extends StatefulWidget {
   static const routeName = "/allRestaurants";
   const AllRestaurantsScreen({Key? key}) : super(key: key);
@@ -24,46 +21,49 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.of(context).pop();
           },
-          icon: Icon(Icons.arrow_back,
-          color: Colors.black,
-          size: 30,),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+            size: 30,
+          ),
         ),
         centerTitle: true,
-        title:Column(
+        title: Column(
           children: [
             Text(
               'Delivering to',
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: 14
-              ),
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Al Hilal West',
-                  style: TextStyle(
-                      color: Colors.deepOrange,
-                      fontSize: 18
-                  ),
+                  style: TextStyle(color: Colors.deepOrange, fontSize: 18),
                 ),
-                Icon(Icons.keyboard_arrow_down_outlined,
-                color: Colors.deepOrange,)
+                Icon(
+                  Icons.keyboard_arrow_down_outlined,
+                  color: Colors.deepOrange,
+                )
               ],
             )
           ],
         ),
         bottom: PreferredSize(
-          child:Column(
+          child: Column(
             children: [
-              Divider(thickness: 1,),
+              Divider(
+                thickness: 1,
+              ),
               Padding(
-                padding: const EdgeInsets.only(left:15.0,right: 15,bottom: 10),
+                padding:
+                    const EdgeInsets.only(left: 15.0, right: 15, bottom: 10),
                 child: IntrinsicHeight(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,45 +71,53 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                       Container(
                         child: Row(
                           children: [
-                            Icon(Icons.filter_list,
-                            size: 25,),
-                            SizedBox(width: 10,),
-                            InkWell(onTap: (){
-
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      FiltterSection()));
-                            },child:Text(
-                              'Filters',
-                              style: TextStyle(
-                                fontSize: 16,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400
-                              ),
+                            Icon(
+                              Icons.filter_list,
+                              size: 25,
                             ),
-                            )],
+                            SizedBox(
+                              width: 10,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        FiltterSection()));
+                              },
+                              child: Text(
+                                'Filters',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                       VerticalDivider(thickness: 1),
                       Container(
                         child: Row(
                           children: [
-                            Icon(Icons.fastfood_outlined,
-                              ),
-                            SizedBox(width: 10,),
-                            InkWell(onTap: (){
-
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      Cuisines()));
-                            },child:Text(
-                              'Cuisines',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400
-                              ),
+                            Icon(
+                              Icons.fastfood_outlined,
                             ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        Cuisines()));
+                              },
+                              child: Text(
+                                'Cuisines',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400),
+                              ),
                             )
                           ],
                         ),
@@ -119,14 +127,15 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                         child: Row(
                           children: [
                             Icon(Icons.search_outlined),
-                            SizedBox(width: 10,),
+                            SizedBox(
+                              width: 10,
+                            ),
                             Text(
                               'Search',
                               style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.black,
-                                  fontWeight: FontWeight.w400
-                              ),
+                                  fontWeight: FontWeight.w400),
                             )
                           ],
                         ),
@@ -149,8 +158,6 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
           ],
         ),
       ),
-
     );
   }
 }
-

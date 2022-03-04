@@ -86,7 +86,10 @@ class _RestaurantsState extends State<Restaurants> {
               future: AllRestaurent().getRestaurent(),
               builder: (context, AsyncSnapshot<List<Results>?> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting)
-                  return Center(child: CircularProgressIndicator());
+                  return Center(
+                      child: CircularProgressIndicator(
+                    color: Colors.deepOrange,
+                  ));
                 else if (snapshot.hasData) {
                   return ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
@@ -114,11 +117,10 @@ class _RestaurantsState extends State<Restaurants> {
                                         width: 70,
                                         height: 60,
                                         child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              ),
+                                          padding: const EdgeInsets.only(),
                                           child: ClipRRect(
                                             borderRadius:
-                                            BorderRadius.circular(8.0),
+                                                BorderRadius.circular(8.0),
                                             child: Image.network(
                                               (user.merchantBranchImage!),
                                               fit: BoxFit.fill,
@@ -256,17 +258,14 @@ class ProductDesc extends StatelessWidget {
 }
 
 class AllRestaurent {
-  Future<List<Results>?> getRestaurent() async  {
-    final response = await http.post(
-        Uri.parse(ApiData.All_Restaurent),
-        body: {
-          'lat': '10.9760357',
-          'lng': '76.22544309999999',
-          'delivery_type': 'delivery'
-        },
-        headers: {
-          'Cookie': ' ci_session=445a8129f0edc2b81b72086233c20f2744cc4e92'
-        });
+  Future<List<Results>?> getRestaurent() async {
+    final response = await http.post(Uri.parse(ApiData.All_Restaurent), body: {
+      'lat': '10.9760357',
+      'lng': '76.22544309999999',
+      'delivery_type': 'delivery'
+    }, headers: {
+      'Cookie': ' ci_session=445a8129f0edc2b81b72086233c20f2744cc4e92'
+    });
 
     final jsonData = jsonDecode(response.body);
     var data = RestaurentModel.fromJson(jsonData).results;

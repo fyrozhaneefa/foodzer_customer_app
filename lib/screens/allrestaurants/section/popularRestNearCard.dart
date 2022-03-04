@@ -3,7 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 
 class PopularRestNearCard extends StatelessWidget {
-  final String cardName,cardTime,cardType,cardSubType,rating,deliveryCharge,bannerName,discount;
+  final String cardName,
+      cardTime,
+      cardType,
+      cardSubType,
+      rating,
+      deliveryCharge,
+      bannerName,
+      discount;
   final press;
   const PopularRestNearCard({
     Key? key,
@@ -31,14 +38,15 @@ class PopularRestNearCard extends StatelessWidget {
         onTap: press,
         child: Container(
           margin: EdgeInsets.only(bottom: 30),
-          width: Helper.getScreenWidth(context)*0.85,
+          width: Helper.getScreenWidth(context) * 0.85,
+          height: 125,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.only(bottom: 10,right:10),
+                margin: EdgeInsets.only(bottom: 10, right: 10),
                 height: 125,
-                child:ClipRRect(
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.network(
                     bannerName,
@@ -58,7 +66,7 @@ class PopularRestNearCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: Helper.getScreenWidth(context)*0.45,
+                          width: Helper.getScreenWidth(context) * 0.45,
                           child: Text(
                             cardName,
                             maxLines: 2,
@@ -78,16 +86,18 @@ class PopularRestNearCard extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(Icons.access_time_outlined,
+                          Icon(
+                            Icons.access_time_outlined,
                             color: Colors.deepOrange,
-                            size: 20,),
-                          SizedBox(width: 5,),
+                            size: 20,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
                           Text(
-                            'Within'+' '+cardTime+' ''mins',
+                            'Within' + ' ' + cardTime + ' ' 'mins',
                             style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500
-                            ),
+                                fontSize: 14, fontWeight: FontWeight.w500),
                           ),
                         ],
                       ),
@@ -95,32 +105,37 @@ class PopularRestNearCard extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 8,),
-              Container(
-                child:   Text(
-                    cardType+','+' '+cardSubType
-                ),
+              SizedBox(
+                height: 8,
               ),
-              SizedBox(height: 8,),
               Container(
-                  child:  Row(
-                    children: [
-                      Icon(Icons.tag_faces_outlined),
-                      SizedBox(width: 5,),
-                      Text(rating,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500
-                        ),),
-                      SizedBox(width: 25,),
-                      Text('Delivery:'+' '+deliveryCharge,
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500
-                        ),),
-                    ],
-                  )
+                child: Text(cardType + ',' + ' ' + cardSubType),
               ),
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+                  child: Row(
+                children: [
+                  Icon(Icons.tag_faces_outlined),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    rating,
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(
+                    width: 25,
+                  ),
+                  Text(
+                    'Delivery:' + ' ' + deliveryCharge,
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              )),
             ],
           ),
         ),

@@ -24,8 +24,7 @@ class RestaurantServicesList extends StatelessWidget {
                 (context, AsyncSnapshot<List<SpecialCategories>?> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting)
                 return Center(
-                    child: CircularProgressIndicator(
-                  color: Colors.deepOrange,
+                    child: Text("Loading..."
                 ));
               else if (snapshot.hasData) {
                 return Row(children: [
@@ -33,12 +32,11 @@ class RestaurantServicesList extends StatelessWidget {
                       child: ListView.builder(scrollDirection: Axis.horizontal,shrinkWrap: true,
                           itemCount: (snapshot.data!.length),
                           itemBuilder: (BuildContext context, int index) {
-                            SpecialCategories user =
-                                snapshot.data!.elementAt(index);
+                            SpecialCategories restaurentdata = snapshot.data!.elementAt(index);
                             return RestaurantServices(
                               serviceImage:
-                                  user.categoryImage,
-                              serviceName: user.categoryName,
+                                  restaurentdata.categoryImage,
+                              serviceName: restaurentdata.categoryName,
                             );
                           }))
                 ]
