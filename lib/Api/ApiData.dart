@@ -10,5 +10,6 @@ class ApiData{
   static String RESEND_OTP=API_URL+"resend_otp";
   static String SINGLE_REST=API_URL+"restaurant_load";
 
+  static String All_Restaurent=API_URL+"restaurants";
 
 }

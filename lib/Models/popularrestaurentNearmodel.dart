@@ -1,14 +1,15 @@
-
-class RestaurentModel {
+class PopularrestNearModel {
   int? errorCode;
-  List<Results>? results;
+  List<PopularRest>? popularRest;
 
+  PopularrestNearModel({this.errorCode, this.popularRest});
 
-  RestaurentModel.fromJson(Map<String, dynamic> json) {
-    if (json['results'] != null) {
-      results = <Results>[];
-      json['results'].forEach((v) {
-        results!.add(new Results.fromJson(v));
+  PopularrestNearModel.fromJson(Map<String, dynamic> json) {
+    errorCode = json['error_code'];
+    if (json['popular_rest'] != null) {
+      popularRest = <PopularRest>[];
+      json['popular_rest'].forEach((v) {
+        popularRest!.add(new PopularRest.fromJson(v));
       });
     }
   }
@@ -16,21 +17,18 @@ class RestaurentModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['error_code'] = this.errorCode;
-    if (this.results != null) {
-      data['results'] = this.results!.map((v) => v.toJson()).toList();
+    if (this.popularRest != null) {
+      data['popular_rest'] = this.popularRest!.map((v) => v.toJson()).toList();
     }
-
     return data;
   }
 }
 
-
-class Results {
+class PopularRest {
   String? cuisines;
-  Null reviewAvgRating;
+  Null? reviewAvgRating;
   String? reviewCount;
   String? avgReview;
-  String? cuisineName;
   String? merchantBranchId;
   String? merchantBranchStatus;
   String? merchantBranchBusyAddedTime;
@@ -77,16 +75,14 @@ class Results {
   String? merchantBranchStat;
   String? merchantPackChargeType;
   String? merchantPackCharge;
+  String? deliveryAreaDeliveryTime;
   String? distance;
-  String? openStatus;
-  OfferTag? offerTag;
 
-  Results(
+  PopularRest(
       {this.cuisines,
         this.reviewAvgRating,
         this.reviewCount,
         this.avgReview,
-        this.cuisineName,
         this.merchantBranchId,
         this.merchantBranchStatus,
         this.merchantBranchBusyAddedTime,
@@ -133,16 +129,14 @@ class Results {
         this.merchantBranchStat,
         this.merchantPackChargeType,
         this.merchantPackCharge,
-        this.distance,
-        this.openStatus,
-        this.offerTag});
+        this.deliveryAreaDeliveryTime,
+        this.distance});
 
-  Results.fromJson(Map<String, dynamic> json) {
+  PopularRest.fromJson(Map<String, dynamic> json) {
     cuisines = json['cuisines'];
     reviewAvgRating = json['review_avg_rating'];
     reviewCount = json['review_count'];
     avgReview = json['avg_review'];
-    cuisineName = json['cuisine_name'];
     merchantBranchId = json['merchant_branch_id'];
     merchantBranchStatus = json['merchant_branch_status'];
     merchantBranchBusyAddedTime = json['merchant_branch_busy_added_time'];
@@ -190,11 +184,8 @@ class Results {
     merchantBranchStat = json['merchant_branch_stat'];
     merchantPackChargeType = json['merchant_pack_charge_type'];
     merchantPackCharge = json['merchant_pack_charge'];
+    deliveryAreaDeliveryTime = json['delivery_area_delivery_time'];
     distance = json['distance'];
-    openStatus = json['open_status'];
-    offerTag = json['offer_tag'] != null
-        ? new OfferTag.fromJson(json['offer_tag'])
-        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -203,7 +194,6 @@ class Results {
     data['review_avg_rating'] = this.reviewAvgRating;
     data['review_count'] = this.reviewCount;
     data['avg_review'] = this.avgReview;
-    data['cuisine_name'] = this.cuisineName;
     data['merchant_branch_id'] = this.merchantBranchId;
     data['merchant_branch_status'] = this.merchantBranchStatus;
     data['merchant_branch_busy_added_time'] = this.merchantBranchBusyAddedTime;
@@ -251,30 +241,8 @@ class Results {
     data['merchant_branch_stat'] = this.merchantBranchStat;
     data['merchant_pack_charge_type'] = this.merchantPackChargeType;
     data['merchant_pack_charge'] = this.merchantPackCharge;
+    data['delivery_area_delivery_time'] = this.deliveryAreaDeliveryTime;
     data['distance'] = this.distance;
-    data['open_status'] = this.openStatus;
-    if (this.offerTag != null) {
-      data['offer_tag'] = this.offerTag!.toJson();
-    }
-    return data;
-  }
-}
-
-class OfferTag {
-  String? couponTag;
-  String? promoTag;
-
-  OfferTag({this.couponTag, this.promoTag});
-
-  OfferTag.fromJson(Map<String, dynamic> json) {
-    couponTag = json['coupon_tag'];
-    promoTag = json['promo_tag'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['coupon_tag'] = this.couponTag;
-    data['promo_tag'] = this.promoTag;
     return data;
   }
 }

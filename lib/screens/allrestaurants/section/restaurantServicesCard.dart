@@ -13,7 +13,7 @@ class RestaurantServices extends StatelessWidget {
       padding: const EdgeInsets.only(left:20,top: 10),
       child: Container(
         width: Helper.getScreenWidth(context)*0.22,
-        height: Helper.getScreenHeight(context)*0.15,
+
         decoration: BoxDecoration(
           color: Colors.blue.shade50,
           borderRadius: BorderRadius.circular(9),
