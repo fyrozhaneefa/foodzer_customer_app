@@ -71,7 +71,7 @@ void initState()  {
               SizedBox(height: 10,),
               Container(
                   child:Text(
-                    Address.toString(),
+                   null!=Address? Address!:'Select a location',
                     style: TextStyle(
                         color:Colors.deepOrange,
                         fontSize: 16
