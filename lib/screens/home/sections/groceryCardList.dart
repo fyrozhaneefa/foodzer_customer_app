@@ -51,7 +51,7 @@ class _GroceryCardListState extends State<GroceryCardList> {
                  if(item.merchantBranchBusy == "0") {
                    Navigator.of(context).push(MaterialPageRoute(
                        builder: (BuildContext context) =>
-                           RestaurantDetailsScreen()));
+                           RestaurantDetailsScreen(item.merchantBranchId,item.lat,item.lng)));
                    // Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
                  } else {
                    Fluttertoast.showToast(

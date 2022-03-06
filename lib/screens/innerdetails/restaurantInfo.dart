@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 
-class RestaurantInfoScreen extends StatelessWidget {
+class RestaurantInfoScreen extends StatefulWidget {
   static const routeName = "/restaurantInfo";
-  const RestaurantInfoScreen({Key? key}) : super(key: key);
 
+  // RestaurantInfoScreen(BranchDetails branchDetails);
+// BranchDetails _branchDetails = new BranchDetails();
+SingleRestModel _singleRestModel;
+  RestaurantInfoScreen(this._singleRestModel);
+
+  @override
+  State<RestaurantInfoScreen> createState() => _RestaurantInfoScreenState();
+}
+
+class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,8 +45,13 @@ class RestaurantInfoScreen extends StatelessWidget {
                     border: Border.all(color: Colors.grey.shade200),
                     borderRadius: BorderRadius.circular(12.0),
                   ),
-                  child: Image.network('https://www.graphicsprings.com/filestorage/stencils/0ce1371eaa6b98bbc23caf8655fdd713.png?width=500&height=500',
-                  fit: BoxFit.fill,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.0),
+                    child: Image.network(
+                      widget._singleRestModel.branchDetails!.merchantBranchImage!,
+                      // 'https://www.graphicsprings.com/filestorage/stencils/0ce1371eaa6b98bbc23caf8655fdd713.png?width=500&height=500',
+                    fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 SizedBox(width: 15,),
@@ -45,7 +60,8 @@ class RestaurantInfoScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Caribou Coffee',
+                        widget._singleRestModel.branchDetails!.merchantBranchName!,
+                        // 'Caribou Coffee',
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w600
@@ -53,7 +69,7 @@ class RestaurantInfoScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        'Cafe, Sandwiches, Desserts, Grocery'
+                       widget._singleRestModel.branchCuisine!
                       )
                     ],
                   ),
@@ -83,7 +99,7 @@ class RestaurantInfoScreen extends StatelessWidget {
                 ),
                 Container(
                     child: Text(
-                  '80 ratings',
+                  '${widget._singleRestModel.reviews!.numOfRows!} ratings',
                       style: TextStyle(
                         color: Colors.grey.shade700,
                         fontSize: 15
@@ -182,7 +198,7 @@ class RestaurantInfoScreen extends StatelessWidget {
                 ),
                 Container(
                     child: Text(
-                        '27 mins',
+                        '${widget._singleRestModel.branchDetails!.merchantBranchOrderTime} mins',
                       style: TextStyle(
                           color: Colors.grey.shade700,
                           fontSize: 15
@@ -215,7 +231,7 @@ class RestaurantInfoScreen extends StatelessWidget {
                 ),
                 Container(
                     child: Text(
-                        'QR 0.00',
+                        '${widget._singleRestModel.branchDetails!.countryCurrency}.${widget._singleRestModel.branchDetails!.merchantBranchMinOrderAmnt}',
                       style: TextStyle(
                           color: Colors.grey.shade700,
                           fontSize: 15
@@ -248,7 +264,7 @@ class RestaurantInfoScreen extends StatelessWidget {
                 ),
                 Container(
                     child: Text(
-                        'QR 10.00',
+                        '${widget._singleRestModel.branchDetails!.countryCurrency}.${widget._singleRestModel.branchDetails!.merchantPackCharge}',
                       style: TextStyle(
                           color: Colors.grey.shade700,
                           fontSize: 15

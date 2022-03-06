@@ -23,12 +23,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
+  String? userName;
+  String? Address;
   @override
 void initState()  {
-    // SchedulerBinding.instance!.addPostFrameCallback((_) {
-    //   final applicationBloc = Provider.of<ApplicationBloc>(context, listen: false);
-    //   applicationBloc.getDashboardResult();    });
+    getCurrentAddress();
+    UserPreference().getUserData().then((value)=> {
+    userName = value.userName,
+      print("value is $userName")
+    });
+
 
     super.initState();
   }
@@ -67,7 +71,7 @@ void initState()  {
               SizedBox(height: 10,),
               Container(
                   child:Text(
-                  finalAddress,
+                    Address.toString(),
                     style: TextStyle(
                         color:Colors.deepOrange,
                         fontSize: 16
@@ -93,7 +97,13 @@ void initState()  {
       body:Body()
     );
   }
+getCurrentAddress() async{
+  SharedPreferences prefs=await SharedPreferences.getInstance();
+  Address=prefs.getString('currentAddress')!;
+  setState(() {
 
+  });
+}
 }
 
 

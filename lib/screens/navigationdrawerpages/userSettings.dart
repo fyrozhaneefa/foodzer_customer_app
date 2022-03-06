@@ -133,7 +133,10 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                 onTap: (){
                   UserPreference().removeUser();
                   Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                      LandingScreen()), (Route<dynamic> route) => false);
+                      HomeScreen()), (Route<dynamic> route) => false);
+                  setState(() {
+
+                  });
                 },
                 child: Text(
                   'Logout',

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,7 +12,7 @@ import '../Models/place.dart';
 import '../Models/place_search.dart';
 import '../Services/dashboardModelService.dart';
 
-class ApplicationBloc with ChangeNotifier{
+class ApplicationProvider with ChangeNotifier{
   final geoLocatorService = GeolocatorService();
 final placesService = PlacesService();
 // final dashboardService = DashboardModelService();
@@ -20,8 +21,11 @@ final placesService = PlacesService();
   List<PlaceSearch>? searchResults;
   String? currentAddress;
   // List<CategoryModel>? dashboardResults;
-
-  ApplicationBloc() {
+  List<Item> categoryBasedItemList=[];
+  SingleRestModel selectedRestModel= new SingleRestModel();
+int? isSelected;
+String? catName;
+  ApplicationProvider() {
     setCurrentLocation();
   }
 
@@ -29,7 +33,27 @@ final placesService = PlacesService();
     currentLocation = await geoLocatorService.getCurrentLocation();
     notifyListeners();
   }
+  setCurrentRestModel(SingleRestModel restModel) async {
+    this.selectedRestModel = restModel;
+    notifyListeners();
+  }
 
+  filterItems(String categoryId) async {
+
+    categoryBasedItemList = selectedRestModel.items!.where((item) =>
+    item.categoryId == categoryId).toList();
+    // categoryBasedItemList = selectedRestModel.items!.map((spacecraft) => new Item.fromJson(spacecraft)).toList();
+    // this.selectedRestModel = restModel;
+    notifyListeners();
+  }
+  setCategoryName(String categoryName){
+    catName = categoryName;
+    notifyListeners();
+  }
+  currentSelectedCategory(int selectedIndex){
+  isSelected = selectedIndex;
+  notifyListeners();
+  }
   searchPlaces(String searchTerm) async {
     searchResults = await placesService.getAutoComplete(searchTerm);
     notifyListeners();

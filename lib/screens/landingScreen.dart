@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import '/screens/loginScreen.dart';
@@ -15,6 +16,14 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
+
+  String? userName;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -212,4 +221,5 @@ class _LandingScreenState extends State<LandingScreen> {
 
     );
   }
+
 }

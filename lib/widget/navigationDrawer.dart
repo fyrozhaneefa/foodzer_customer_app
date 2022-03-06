@@ -1,11 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:foodzer_customer_app/screens/navigationdrawerpages/foodzerPay.dart';
 import 'package:foodzer_customer_app/screens/navigationdrawerpages/userOrders.dart';
 import 'package:foodzer_customer_app/screens/navigationdrawerpages/userSettings.dart';
 
-class NavigationDrawerWidget extends StatelessWidget {
+class NavigationDrawerWidget extends StatefulWidget {
+  // String? userName;
+  // NavigationDrawerWidget(this.userName);
+
+  @override
+  State<NavigationDrawerWidget> createState() => _NavigationDrawerWidgetState();
+}
+
+class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   final padding = EdgeInsets.symmetric(horizontal: 20);
+
+  String userName= "";
+
+  @override
+  void initState() {
+    getUserName();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -35,8 +52,9 @@ class NavigationDrawerWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            child: Text(
-                              'HI GUEST',
+                            child: Text(userName== ""?
+                              'HI GUEST':'Hi $userName',
+                            // 'Hi ${{widget.userName!}}',
                               style: TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w600
@@ -183,4 +201,12 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
     }
   }
+  getUserName(){
+    UserPreference().getUserData().then((value)=>{
+      userName = value.userName!,
+      setState(() {
+
+      })
+    });
+}
 }

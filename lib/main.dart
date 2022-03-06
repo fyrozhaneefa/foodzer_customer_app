@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/CuisinesSection/cuisineshome.dart';
-import 'package:foodzer_customer_app/Menu/Microfiles/splash.dart';
+import 'package:foodzer_customer_app/Preferences/Preferences.dart';
+// import 'package:foodzer_customer_app/Menu/Microfiles/splash.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/AppProvider.dart';
@@ -32,13 +33,31 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   runApp(MultiProvider(providers: [
-    ChangeNotifierProvider<ApplicationBloc>(
-        create: (context) => ApplicationBloc())
+    ChangeNotifierProvider<ApplicationProvider>(
+        create: (context) => ApplicationProvider())
   ], child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+
+  String? userMobile;
+
+  @override
+  void initState() {
+    UserPreference().getUserData().then((value)=> {
+      if(null!= value.userMobie && value.userMobie!.isNotEmpty){
+        userMobile = value.userMobie,
+      }
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,7 +70,7 @@ class MyApp extends StatelessWidget {
             bodyText2: TextStyle(color: Colors.black),
           )),
 
-      home: SplashScreen(),
+      home: null!=userMobile && userMobile!.isNotEmpty?HomeScreen():SplashScreen(),
       routes:{
         LandingScreen.routeName: (context) => LandingScreen(),
         GoogleMapScreen.routeName: (context) => GoogleMapScreen(),
@@ -61,8 +80,8 @@ class MyApp extends StatelessWidget {
         ForgotPaswwordScreen.routeName: (context) => ForgotPaswwordScreen(),
         // HomeScreen.routeName: (context) => HomeScreen(),
         MainSearchScreen.routeName: (context) => MainSearchScreen(),
-        RestaurantDetailsScreen.routeName: (context) => RestaurantDetailsScreen(),
-        RestaurantInfoScreen.routeName: (context) => RestaurantInfoScreen(),
+        // RestaurantDetailsScreen.routeName: (context) => RestaurantDetailsScreen(),
+        // RestaurantInfoScreen.routeName: (context) => RestaurantInfoScreen(),
         ItemBasketScreen.routeName: (context) => ItemBasketScreen(),
         AllRestaurantsScreen.routeName: (context) => AllRestaurantsScreen(),
         AllGroceriesScreen.routeName: (context) => AllGroceriesScreen(),

@@ -1,66 +1,91 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
+import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
+import 'package:provider/provider.dart';
 
-class RestaurantProductsList extends StatelessWidget {
+class RestaurantProductsList extends StatefulWidget {
   const RestaurantProductsList({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<RestaurantProductsList> createState() => _RestaurantProductsListState();
+}
+
+class _RestaurantProductsListState extends State<RestaurantProductsList> {
+
+  @override
+  void dispose() {
+
+    super.dispose();
+  }
+  @override
 
   Widget build(BuildContext context) {
-    return ListView.separated(
-        separatorBuilder: (context, index) {
-          return Divider();
-        },
-        physics: ScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: 5,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () => singleItemDetails(context),
-            child: Container(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Power Crunch Triple Chocolate Pro',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              height: 1.5)),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text('58 gm, Made in usa. 12 units.',
-                          style: TextStyle(color: Colors.grey.shade700)),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text('QR 192.00',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 16)),
-                    ],
-                  ),
-                  flex: 9,
-                ),
-                Expanded(
+    return  Consumer<ApplicationProvider>(
+        builder: (context, provider, child) {
+          return null!=provider.categoryBasedItemList? ListView.separated(
+              separatorBuilder: (context, index) {
+                return Divider();
+              },
+              physics: ScrollPhysics(),
+              shrinkWrap: true,
+              // itemCount: provider.selectedRestModel.items!.length,
+              itemCount: provider.categoryBasedItemList.length,
+              itemBuilder: (BuildContext context, int index) {
+                // Item itemModel=provider.selectedRestModel.items![index];
+                // String name=itemModel.categoryName!;
+                Item itemModel = provider.categoryBasedItemList[index];
+                return GestureDetector(
+                  onTap: () => singleItemDetails(context),
                   child: Container(
-                    child: Image.network(
-                      'https://i5.peapod.com/c/NY/NYO1E.png',
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  flex: 5,
-                )
-              ],
-            )),
-          );
-        });
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(itemModel.itemName!,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16,
+                                        height: 1.5)),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                              Text(itemModel.itemDescription!,
+                                    style: TextStyle(
+                                        color: Colors.grey.shade700)),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text('INR ${itemModel.itemPrice}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16)),
+                              ],
+                            ),
+                            flex: 9,
+                          ),
+                          Expanded(
+                            child: Container(
+                              child: Image.network(
+                                // 'https://i5.peapod.com/c/NY/NYO1E.png',
+                                itemModel.itemImage!,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            flex: 5,
+                          )
+                        ],
+                      )),
+                );
+              }):Center(child: CircularProgressIndicator(color: Colors.deepOrangeAccent,),);
+        }
+    );
   }
 
   void singleItemDetails(context) {
@@ -286,6 +311,7 @@ class RestaurantProductsList extends StatelessWidget {
          );
         });
   }
+
  void addNote(context) {
    showModalBottomSheet(
        isScrollControlled:true,

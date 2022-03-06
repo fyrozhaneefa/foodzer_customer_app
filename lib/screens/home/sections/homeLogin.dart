@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../AppProvider.dart';
+import '../../loginScreen.dart';
 
 class loginSection extends StatefulWidget {
   @override
@@ -29,9 +30,10 @@ class _loginSectionState extends State<loginSection> {
         })
       }else{
         setState(() {
-          isLoggedIn = true;
+          isLoggedIn = false;
         })
       }
+
     });
   }
   @override
@@ -40,7 +42,7 @@ class _loginSectionState extends State<loginSection> {
   }
   @override
   Widget build(BuildContext context) {
-    return isLoggedIn?Container(
+    return !isLoggedIn?Container(
       margin: EdgeInsets.all(20),
       decoration: BoxDecoration(
           color: Colors.deepOrange.shade50,
@@ -74,7 +76,9 @@ class _loginSectionState extends State<loginSection> {
             height: 50,
             child: ElevatedButton(
               onPressed: () {
-
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        LoginScreen()));
               },
               child: Container(
                 child:  Text("Login",

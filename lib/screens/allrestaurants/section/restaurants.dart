@@ -131,28 +131,28 @@ class _RestaurantsState extends State<Restaurants> {
                                       ),
                                     ],
                                   ),
-                                )
+                          )
                               : Container(
-                                  margin: EdgeInsets.only(bottom: 20),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(bottom: 10),
-                                        width: Helper.getScreenWidth(context),
-                                        height: 150,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          child: Image.network(
-                                            (user.merchantBranchImage!),
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      ProductDesc(user: user),
-                                    ],
+                            margin: EdgeInsets.only(bottom: 20),
+                            child: Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  width: Helper.getScreenWidth(context),
+                                  height: 150,
+                                  child: ClipRRect(
+                                    borderRadius:
+                                    BorderRadius.circular(8.0),
+                                    child: Image.network(
+                                      (user.merchantBranchImage!),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
+                                ProductDesc(user: user),
+                              ],
+                            ),
+                          ),
                         );
                       });
                 } else {

@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
@@ -42,7 +43,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   }
 @override
   void initState() {
-  final applicationBloc = Provider.of<ApplicationBloc>(context ,listen: false);
+  final applicationBloc = Provider.of<ApplicationProvider>(context ,listen: false);
 
   // locationSubscription = applicationBloc.selectedLocation.stream.listen((place) {
   //   if(place !=null) {
@@ -66,7 +67,7 @@ locationSubscription?.cancel();
   @override
   Widget build(BuildContext context) {
 
-  final applicationBloc = Provider.of<ApplicationBloc>(context);
+  final applicationBloc = Provider.of<ApplicationProvider>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -213,7 +214,7 @@ locationSubscription?.cancel();
          child: Container(
            color: Colors.white,
            width: MediaQuery.of(context).size.width,
-           height: MediaQuery.of(context).size.height *.28,
+           height: MediaQuery.of(context).size.height *.29,
            child: Padding(
              padding: const EdgeInsets.all(20.0),
              child: Column(
@@ -256,48 +257,53 @@ locationSubscription?.cancel();
                      height:1.5
                    ),
                  ),
-                 SizedBox(
-                   height:25,
-                 ),
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                     InkWell(
-                       onTap: (){
-                         print('clicked reset');
-                         _getAddressFromLatLng(0, 0);
-                         isPinMoving = false;
-                         setState(() {
+                 // SizedBox(
+                 //   height:25,
+                 // ),
+                 Flexible(
+                   child: Container(
+                     height: double.infinity,
+                     child: Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         InkWell(
+                           onTap: (){
+                             print('clicked reset');
+                             _getAddressFromLatLng(0, 0);
+                             isPinMoving = false;
+                             setState(() {
 
-                         });
-                       },
-                       child: Container(
-                         child: Text(
-                           'Reset to my location',
-                           style: TextStyle(
-                             color: Colors.deepOrangeAccent,
-                             fontWeight: FontWeight.w600
+                             });
+                           },
+                           child: Container(
+                             child: Text(
+                               'Reset to my location',
+                               style: TextStyle(
+                                 color: Colors.deepOrangeAccent,
+                                 fontWeight: FontWeight.w600
+                               ),
+                             ),
                            ),
                          ),
-                       ),
+                         InkWell(
+                           onTap: (){
+                             Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                 builder: (BuildContext context) =>
+                                     HomeScreen()));
+                           },
+                           child: Container(
+                             child: Text(
+                               'Yes, deliver here',
+                               style: TextStyle(
+                                   color: Colors.deepOrangeAccent,
+                                   fontWeight: FontWeight.w600
+                               ),
+                             ),
+                           ),
+                         )
+                       ],
                      ),
-                     InkWell(
-                       onTap: (){
-                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                             builder: (BuildContext context) =>
-                                 HomeScreen()));
-                       },
-                       child: Container(
-                         child: Text(
-                           'Yes, deliver here',
-                           style: TextStyle(
-                               color: Colors.deepOrangeAccent,
-                               fontWeight: FontWeight.w600
-                           ),
-                         ),
-                       ),
-                     )
-                   ],
+                   ),
                  )
 
                ],
@@ -411,7 +417,8 @@ locationSubscription?.cancel();
         //     .country}";
         addressController.text = _currentAddress!;
         print("zzz" + _currentAddress!);
-        finalAddress = _currentAddress!;
+        UserPreference().setCurrentAddress(_currentAddress!);
+        // finalAddress = _currentAddress!;
       });
     } catch (e) {
       print(e);

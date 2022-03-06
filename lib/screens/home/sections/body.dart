@@ -26,8 +26,8 @@ class _BodyState extends State<Body> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // loginSection(),
-          SizedBox(height: 30,),
+          loginSection(),
+          SizedBox(height: 15,),
           ItemCategory(),
           ImageSlider(),
           PopularBrandSection(),
