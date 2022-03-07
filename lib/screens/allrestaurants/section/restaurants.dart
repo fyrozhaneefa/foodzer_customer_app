@@ -108,6 +108,7 @@ class _RestaurantsState extends State<Restaurants> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
+                                      Stack(children: [
                                       Container(
                                         decoration: BoxDecoration(
                                             border: Border.all(
@@ -128,6 +129,61 @@ class _RestaurantsState extends State<Restaurants> {
                                           ),
                                         ),
                                       ),
+                                       user.openStatus == "Closed" ? Container(
+                                          width: 70,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(12),
+                                            color: Colors.black.withOpacity(0.6),
+                                          ),
+                                          child: Center(
+                                              child: Text(
+                                                "Closed",
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12),
+                                              )),
+                                        ):
+                                       user.openStatus == "No-Service" ? Container(
+                                         width: 70,
+                                         height: 60,
+                                         decoration: BoxDecoration(
+                                           borderRadius:
+                                           BorderRadius.circular(12),
+                                           color: Colors.black.withOpacity(0.6),
+                                         ),
+                                         child: Center(
+                                             child: Text(
+                                               "    No\nservice",
+                                               style: TextStyle(
+                                                   color: Colors.white,
+                                                   fontWeight: FontWeight.w600,
+                                                   fontSize: 11),
+                                             )),
+                                       ):
+                                       user.merchantBranchBusy == "1" ? Container(
+                                         width: 70,
+                                         height: 60,
+                                         decoration: BoxDecoration(
+                                           borderRadius:
+                                           BorderRadius.circular(12),
+                                           color: Colors.black.withOpacity(0.6),
+                                         ),
+                                         child: Center(
+                                             child: Text(
+                                               "Busy",
+                                               style: TextStyle(
+                                                   color: Colors.white,
+                                                   fontWeight: FontWeight.w600,
+                                                   fontSize: 12),
+                                             ),
+                                         ),
+                                       ):Container()
+
+                                      ],
+                                      ),
                                       SizedBox(
                                         width: 15,
                                       ),
@@ -138,28 +194,95 @@ class _RestaurantsState extends State<Restaurants> {
                                       ),
                                     ],
                                   ),
-                          )
+                                )
                               : Container(
-                            margin: EdgeInsets.only(bottom: 20),
-                            child: Column(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 10),
-                                  width: Helper.getScreenWidth(context),
-                                  height: 150,
-                                  child: ClipRRect(
-                                    borderRadius:
-                                    BorderRadius.circular(8.0),
-                                    child: Image.network(
-                                      (user.merchantBranchImage!),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                ProductDesc(user: user),
-                              ],
-                            ),
-                          ),
+                                  margin: EdgeInsets.only(bottom: 20),
+                                  child: Column(children: [
+                                    Stack(children: [
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        width: Helper.getScreenWidth(context),
+                                        height: 150,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Image.network(
+                                            (user.merchantBranchImage!),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                     user.openStatus =="Closed" ? Container(
+                                        height: 150,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          color: Colors.black.withOpacity(0.6),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                          "Closed",
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 20),
+                                        )),
+                                      ):user.openStatus =="No-Service" ? Container(
+                                       height: 150,
+                                       decoration: BoxDecoration(
+                                         borderRadius:
+                                         BorderRadius.circular(8.0),
+                                         color: Colors.black.withOpacity(0.6),
+                                       ),
+                                       child: Center(
+                                           child: Text(
+                                             "No Service",
+                                             style: TextStyle(
+                                                 color: Colors.white,
+                                                 fontWeight: FontWeight.w600,
+                                                 fontSize: 20),
+                                           )),
+                                     ):
+                                     user.merchantBranchBusy =="1" ? Container(
+                                       height: 150,
+                                       decoration: BoxDecoration(
+                                         borderRadius:
+                                         BorderRadius.circular(8.0),
+                                         color: Colors.black.withOpacity(0.6),
+                                       ),
+                                       child: Center(
+                                           child: Text(
+                                             "Busy",
+                                             style: TextStyle(
+                                                 color: Colors.white,
+                                                 fontWeight: FontWeight.w600,
+                                                 fontSize: 20),
+                                           )),
+                                     ):Container()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    ]),
+                                    ProductDesc(user: user),
+                                  ])),
                         );
                       });
                 } else {

@@ -43,11 +43,13 @@ dependencies:
   geolocator: ^8.2.0
   flutter_geocoder: ^0.2.2-nullsafety
 
+
 #  flutter_bloc: ^7.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
