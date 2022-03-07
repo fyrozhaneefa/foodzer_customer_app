@@ -14,6 +14,7 @@ class RestaurantServices extends StatelessWidget {
       child: Container(
         width: Helper.getScreenWidth(context)*0.22,
 
+
         decoration: BoxDecoration(
           color: Colors.blue.shade50,
           borderRadius: BorderRadius.circular(9),

@@ -40,13 +40,12 @@ class _CuisinesItemsState extends State<CuisinesItems> {
           }
           else {
             return Center(
-              child: Text("Some errror Occured!!"),
+              child: Text(" Some errror Occured!! "),
             );
           }
         });
   }
 }
-
 class ListCuisines {
   Future<List<CuisineList>?> getCuisines() async {
     final response = await http.post(
