@@ -31,7 +31,8 @@ class PopularBrandsModel {
   String? visibility;
   String? status;
   DateTime? dateCreated;
-  List<Map<String, String>>? restaurantDetails;
+  List<RestaurantDetails>? restaurantDetails;
+  // List<Map<String, String>>? restaurantDetails;
 
   factory PopularBrandsModel.fromJson(Map<String, dynamic> json) => PopularBrandsModel(
     id: json["id"] == null ? null : json["id"],
@@ -43,7 +44,8 @@ class PopularBrandsModel {
     visibility: json["visibility"] == null ? null : json["visibility"],
     status: json["status"] == null ? null : json["status"],
     dateCreated: json["date_created"] == null ? null : DateTime.parse(json["date_created"]),
-    restaurantDetails: json["restaurant_details"] == null ? null : List<Map<String, String>>.from(json["restaurant_details"].map((x) => Map.from(x).map((k, v) => MapEntry<String, String>(k, v == null ? null : v)))),
+    restaurantDetails: List<RestaurantDetails>.from(json["restaurant_details"].map((x) => RestaurantDetails.fromJson(x))),
+    // restaurantDetails: json["restaurant_details"] == null ? null : List<Map<String, String>>.from(json["restaurant_details"].map((x) => Map.from(x).map((k, v) => MapEntry<String, String>(k, v == null ? null : v)))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -56,7 +58,8 @@ class PopularBrandsModel {
     "visibility": visibility == null ? null : visibility,
     "status": status == null ? null : status,
     "date_created": dateCreated == null ? null : dateCreated,
-    "restaurant_details": restaurantDetails == null ? null : List<dynamic>.from(restaurantDetails!.map((x) => Map.from(x).map((k, v) => MapEntry<String, dynamic>(k, v == null ? null : v)))),
+    "restaurantDetails": List<dynamic>.from(restaurantDetails!.map((x) => x.toJson())),
+    // "restaurant_details": restaurantDetails == null ? null : List<dynamic>.from(restaurantDetails!.map((x) => Map.from(x).map((k, v) => MapEntry<String, dynamic>(k, v == null ? null : v)))),
   };
 }
 

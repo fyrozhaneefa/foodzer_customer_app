@@ -21,7 +21,7 @@ class _PopularBrandCardListState extends State<PopularBrandCardList> {
 
   @override
   void initState() {
-    getPopularBrands();
+    // getPopularBrands();
     super.initState();
   }
   @override
@@ -88,30 +88,30 @@ class _PopularBrandCardListState extends State<PopularBrandCardList> {
     );
   }
 
-  getPopularBrands() async {
-
-    var map = new Map<String, dynamic>();
-    map['lat'] = '10.9760357';
-    map['lng'] = '76.22544309999999';
-    var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
-    var json = convert.jsonDecode(response.body);
-    if(json['error_code'] == 0){
-      // List dataList = json['other_categories'];
-      var data = convert.jsonDecode(json['other_categories']);
-      List dataList = data['restaurant_details'];
-      // List BrandList = dataList['restaurant_details'];
-      if(null!= dataList && dataList.length >0){
-        popularBrandList =dataList.map((spacecraft) => new PopularBrandsModel.fromJson(spacecraft)).toList();
-      }
-      setState(() {
-
-      });
-    } else{
-      print("some error occured!!!");
-    }
-
-
-  }
+  // getPopularBrands() async {
+  //
+  //   var map = new Map<String, dynamic>();
+  //   map['lat'] = '10.9760357';
+  //   map['lng'] = '76.22544309999999';
+  //   var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
+  //   var json = convert.jsonDecode(response.body);
+  //   if(json['error_code'] == 0){
+  //     // List dataList = json['other_categories'];
+  //     var data = convert.jsonDecode(json['other_categories']);
+  //     List dataList = data['restaurant_details'];
+  //     // List BrandList = dataList['restaurant_details'];
+  //     if(null!= dataList && dataList.length >0){
+  //       popularBrandList =dataList.map((spacecraft) => new PopularBrandsModel.fromJson(spacecraft)).toList();
+  //     }
+  //     setState(() {
+  //
+  //     });
+  //   } else{
+  //     print("some error occured!!!");
+  //   }
+  //
+  //
+  // }
 }
 
 
