@@ -35,13 +35,14 @@ dependencies:
   carousel_slider: ^4.0.0
   http: ^0.13.4
   otp_text_field: ^1.1.2
-  fluttertoast: ^8.0.8
+  fluttertoast: ^8.0.9
   dio: ^4.0.4
   pin_code_fields: ^7.3.0
   shared_preferences: ^2.0.13
   provider: ^6.0.2
   geolocator: ^8.2.0
   flutter_geocoder: ^0.2.2-nullsafety
+
 
 
 #  flutter_bloc: ^7.3.0
