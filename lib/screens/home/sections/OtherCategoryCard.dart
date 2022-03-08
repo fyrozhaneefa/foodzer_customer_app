@@ -123,8 +123,8 @@ class _OtherCategoryCardState extends State<OtherCategoryCard> {
               ),
               SizedBox(height: 8,),
               Container(
-                child:   Text(
-                    widget.cardType!
+                child:   Text(null!=widget.cardType?
+                    widget.cardType.toString():""
                 ),
               ),
               SizedBox(height: 8,),

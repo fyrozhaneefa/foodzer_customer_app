@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/PopularRestModel.dart';
-import 'package:foodzer_customer_app/Models/popularBrandModel.dart';
+import 'package:foodzer_customer_app/Models/otherCategoryModel.dart';
 import 'package:foodzer_customer_app/screens/home/sections/OtherCategoryCard.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +14,7 @@ import 'groceryCard.dart';
 
 class OtherCategoryCardList extends StatefulWidget {
 
-  PopularBrandsModel categoryItem;
+  OtherCategoryModel categoryItem;
   OtherCategoryCardList(this.categoryItem);
 
 

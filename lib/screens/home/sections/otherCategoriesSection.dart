@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
-import 'package:foodzer_customer_app/Models/popularBrandModel.dart';
+import 'package:foodzer_customer_app/Models/otherCategoryModel.dart';
 import 'package:foodzer_customer_app/screens/home/sections/OtherCategoryCardList.dart';
 
 import 'package:http/http.dart' as http;
@@ -19,7 +19,7 @@ class OtherCategoriesSection extends StatefulWidget {
 
 class _OtherCategoriesSectionState extends State<OtherCategoriesSection> {
 
-  List<PopularBrandsModel> popularBrandModelList = [];
+  List<OtherCategoryModel> popularBrandModelList = [];
 
 
   @override
@@ -35,7 +35,7 @@ class _OtherCategoriesSectionState extends State<OtherCategoriesSection> {
         shrinkWrap: true,
         itemCount: popularBrandModelList.length,
           itemBuilder: (context, index) {
-            PopularBrandsModel categoryItem= popularBrandModelList[index];
+            OtherCategoryModel categoryItem= popularBrandModelList[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -69,7 +69,7 @@ getOtherCategories() async {
   if(json['error_code'] == 0){
     List dataList = json['other_categories'];
     if(null!= dataList && dataList.length >0){
-      popularBrandModelList =dataList.map((spacecraft) => new PopularBrandsModel.fromJson(spacecraft)).toList();
+      popularBrandModelList =dataList.map((spacecraft) => new OtherCategoryModel.fromJson(spacecraft)).toList();
     }
     setState(() {
 
