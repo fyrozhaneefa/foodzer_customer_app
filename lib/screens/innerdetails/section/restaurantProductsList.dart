@@ -37,9 +37,11 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                 // Item itemModel=provider.selectedRestModel.items![index];
                 // String name=itemModel.categoryName!;
                 Item itemModel = provider.categoryBasedItemList[index];
-                return GestureDetector(
-                  onTap: () => singleItemDetails(context),
+                return InkWell(
+
+                  onTap: () => singleItemDetails(context,itemModel),
                   child: Container(
+                    margin: EdgeInsets.only(top:15,bottom: 15),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +90,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
     );
   }
 
-  void singleItemDetails(context) {
+  void singleItemDetails(context, Item itemModel) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -98,16 +100,20 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
         ),
         isScrollControlled: true,
         context: context,
+
         builder: (context) {
 
           int itemCount = 1;
-          double itemPrice = 18.14;
-          double totalPrice =18.14;
-         return StatefulBuilder(
+          dynamic itemPrice = itemModel.itemPrice!;
+          dynamic totalPrice =itemModel.itemPrice!;
+          bool valuefirst = false;
+          return StatefulBuilder(
            builder: (BuildContext context, setState) {
-             return Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               mainAxisSize: MainAxisSize.min,
+             return ListView(
+               physics: ScrollPhysics(),
+               shrinkWrap: true,
+               // crossAxisAlignment: CrossAxisAlignment.start,
+               // mainAxisSize: MainAxisSize.min,
                children: [
                  Stack(
                    children: [
@@ -120,7 +126,8 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                            topRight: Radius.circular(14),
                          ),
                          child: Image.network(
-                           'https://mumbaimirror.indiatimes.com/photo/76424716.cms',
+                           itemModel.itemImage!,
+                           // 'https://mumbaimirror.indiatimes.com/photo/76424716.cms',
                            fit: BoxFit.fill,
                            height: double.infinity,
                            width: double.infinity,
@@ -148,7 +155,8 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                          crossAxisAlignment: CrossAxisAlignment.start,
                          children: [
                            Text(
-                             'Pani Puri',
+                             // 'Pani Puri',
+                             itemModel.itemName!,
                              style: TextStyle(
                                  fontWeight: FontWeight.w700,
                                  fontSize: 20
@@ -156,7 +164,8 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                            ),
                            SizedBox(height: 10,),
                            Text(
-                             'Fried puff pastry balls, filled with spiced mashed potatoes and boondi. Served with spiced water and sweet tamarind sauce',
+                           itemModel.itemDescription!,
+                             // 'Fried puff pastry balls, filled with spiced mashed potatoes and boondi. Served with spiced water and sweet tamarind sauce',
                              style: TextStyle(
                                  color: Colors.grey.shade600,
                                  height: 1.5,
@@ -164,12 +173,12 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                  fontWeight: FontWeight.w500
                              ),
                            ),
-                           SizedBox(height: 20,),
+                           null!=itemModel.itemDescription?SizedBox(height: 20,):SizedBox(),
                            Row(
                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                              children: [
                                Text(
-                                   'QR 18.00',
+                                   'INR ${itemModel.itemPrice}',
                                    style:TextStyle(
                                        fontWeight: FontWeight.w700,
                                        fontSize: 18
@@ -234,6 +243,76 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                  Divider(height: 15,thickness: 6,color: Colors.grey.shade300),
                  Padding(
                    padding: const EdgeInsets.all(15.0),
+                   child: Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       Row(
+                         children: [
+                           Text("Add On's:",
+                               style: TextStyle(
+                                   fontWeight: FontWeight.w600,
+                                   fontSize: 16
+                               )
+                           ),
+                           Text(
+                             '(optional)',
+                               style: TextStyle(
+                                 color: Colors.grey,
+
+                               )
+                           )
+                         ],
+                       ),
+                       SizedBox(
+                         height: 10,),
+                        Text(
+                           'Choose items from the list',
+                             style: TextStyle(
+                               fontWeight: FontWeight.w600,
+                               color: Colors.grey,
+                               fontSize: 14
+                             )
+                       ),
+                       SizedBox(height: 30,),
+                       ListView.separated(
+                           separatorBuilder: (context, index) {
+                             return Divider();
+                           },
+                           physics: ScrollPhysics(),
+                           shrinkWrap: true,
+                         itemCount: 4,
+                           itemBuilder: (context, index) {
+                             return Row(
+                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               children: [
+                                 Text(
+                                   'ashdgasjhdgas'
+                                 ),
+                                 Row(
+                                   children: [
+                                     Text(
+                                       'asjkdhasd'
+                                     ),
+                                     Checkbox(
+                                       checkColor: Colors.greenAccent,
+                                       activeColor: Colors.red,
+                                       value: valuefirst,
+                                     onChanged: (bool){
+                                       setState(() {
+                                         valuefirst = true;
+                                       });
+                                     },
+                                     ),
+                                   ],
+                                 )
+                               ],
+                             );
+                           })
+                     ],
+                   ),
+                 ),
+                 Padding(
+                   padding: const EdgeInsets.all(15.0),
                    child: Row(
                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                      children: [
@@ -286,7 +365,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                              ),
                            ),
                            Text(
-                             'QR '+ totalPrice.toStringAsFixed(2),
+                             'INR '+ totalPrice.toStringAsFixed(2),
                              style: TextStyle(
                                  fontSize: 16,
                                  fontWeight: FontWeight.w700

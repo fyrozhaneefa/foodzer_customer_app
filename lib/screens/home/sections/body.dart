@@ -6,6 +6,7 @@ import 'package:foodzer_customer_app/screens/home/components/viewrestButton.dart
 
 import 'package:foodzer_customer_app/screens/home/sections/homeLogin.dart';
 import 'package:foodzer_customer_app/screens/home/sections/itemCategory.dart';
+import 'package:foodzer_customer_app/screens/home/sections/otherCategoriesSection.dart';
 import 'package:foodzer_customer_app/screens/home/sections/popularBrandSection.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,7 @@ class _BodyState extends State<Body> {
           ImageSlider(),
           PopularBrandSection(),
           GroceriesSection(),
+          OtherCategoriesSection(),
           ViewRestButton()
         ],
       ),

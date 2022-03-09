@@ -4,12 +4,12 @@
 
 import 'dart:convert';
 
-PopularBrandsModel popularBrandsModelFromJson(String str) => PopularBrandsModel.fromJson(json.decode(str));
+OtherCategoryModel popularBrandsModelFromJson(String str) => OtherCategoryModel.fromJson(json.decode(str));
 
+String popularBrandsModelToJson(OtherCategoryModel data) => json.encode(data.toJson());
 
-
-class PopularBrandsModel {
-  PopularBrandsModel({
+class OtherCategoryModel {
+  OtherCategoryModel({
     this.id,
     this.categoryName,
     this.availTimeFrom,
@@ -31,10 +31,10 @@ class PopularBrandsModel {
   String? visibility;
   String? status;
   DateTime? dateCreated;
-  List<PopularBrandDetails>? restaurantDetails;
+  List<RestaurantDetails>? restaurantDetails;
   // List<Map<String, String>>? restaurantDetails;
 
-  factory PopularBrandsModel.fromJson(Map<String, dynamic> json) => PopularBrandsModel(
+  factory OtherCategoryModel.fromJson(Map<String, dynamic> json) => OtherCategoryModel(
     id: json["id"] == null ? null : json["id"],
     categoryName: json["category_name"] == null ? null : json["category_name"],
     availTimeFrom: json["avail_time_from"] == null ? null : json["avail_time_from"],
@@ -44,7 +44,7 @@ class PopularBrandsModel {
     visibility: json["visibility"] == null ? null : json["visibility"],
     status: json["status"] == null ? null : json["status"],
     dateCreated: json["date_created"] == null ? null : DateTime.parse(json["date_created"]),
-    restaurantDetails: List<PopularBrandDetails>.from(json["restaurant_details"].map((x) => PopularBrandDetails.fromJson(x))),
+    restaurantDetails: List<RestaurantDetails>.from(json["restaurant_details"].map((x) => RestaurantDetails.fromJson(x))),
     // restaurantDetails: json["restaurant_details"] == null ? null : List<Map<String, String>>.from(json["restaurant_details"].map((x) => Map.from(x).map((k, v) => MapEntry<String, String>(k, v == null ? null : v)))),
   );
 
@@ -64,8 +64,8 @@ class PopularBrandsModel {
 }
 
 
-class PopularBrandDetails {
-  PopularBrandDetails({
+class RestaurantDetails {
+  RestaurantDetails({
     this.cuisines,
     this.reviewAvgRating,
     this.reviewCount,
@@ -167,7 +167,7 @@ class PopularBrandDetails {
   String? merchantPackCharge;
   String? distance;
 
-  factory PopularBrandDetails.fromJson(Map<String, dynamic> json) => PopularBrandDetails(
+  factory RestaurantDetails.fromJson(Map<String, dynamic> json) => RestaurantDetails(
     cuisines: json["cuisines"] == null ? null : json["cuisines"],
     reviewAvgRating: json["review_avg_rating"],
     reviewCount: json["review_count"] == null ? null : json["review_count"],
