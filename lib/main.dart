@@ -25,6 +25,7 @@ import './screens/forgotPassword.dart';
 import 'Menu/Microfiles/FiltterSection/filtterhome.dart';
 import 'Menu/Microfiles/PaymentSection/payment_home.dart';
 import 'Menu/Microfiles/ReviewSection/review.dart';
+import 'Menu/Microfiles/splash.dart';
 import 'screens/home/homeScreen.dart';
 import 'screens/search/mainSearch.dart';
 import './screens/innerdetails/restaurantDetails.dart';

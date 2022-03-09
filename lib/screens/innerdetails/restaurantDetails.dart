@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/ReviewSection/review_section.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/basket/itemBasket.dart';
@@ -11,6 +12,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 import 'package:provider/provider.dart';
+
+import '../../Menu/Microfiles/ReviewSection/review.dart';
 
 class RestaurantDetailsScreen extends StatefulWidget {
   static const routeName = "/restaurantDetails";
@@ -167,7 +170,14 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                             ),
                             Expanded(
                               child: InkWell(
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                      ReviewRestaurent()));
+
+
+
+                                },
                                 child: Text(
                                   'Reviews',
                                   style: TextStyle(

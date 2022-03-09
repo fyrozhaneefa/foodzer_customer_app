@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/ReviewSection/review_section.dart';
 import 'dividersection.dart';
@@ -5,8 +6,8 @@ import 'imagesection.dart';
 import 'midlisttile_section.dart';
 
 
-class Reviews extends StatelessWidget {
-  const Reviews({Key? key}) : super(key: key);
+class ReviewRestaurent extends StatelessWidget {
+  const ReviewRestaurent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,68 +69,78 @@ class Reviews extends StatelessWidget {
                     fontFamily: "RobotoMono"),
               ),
             ),
-            Row(
-              children: [
+
+
                 ReviewSection(),
-                Expanded(
-                  child: ListTile(
-                    title: Text("Amazing",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
-                    subtitle: Text("Great"),
-                  ),
-                ),
-              ],
-            ),
-            DividerSection(),
-            Row(
-              children: [
-                ReviewSection(),
-                Expanded(
-                    child: ListTile(
-                  title: Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Text("Very good",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
-                  ),
-                  subtitle: Text(
-                      "is the good food hjvjb sgaskxa gddvwhsd nasv whsazxhiuyfty uga"),
-                ),
-                ),
-              ],
-            ),
-            DividerSection(),
-            Row(
-              children: [
-                ReviewSection(),
-                Expanded(
-                    child: ListTile(
-                  title: Text("Good",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
-                  subtitle: Text("Great"),
-                ))
-              ],
-            ),
-            DividerSection(),
-            Row(
-              children: [
-                ReviewSection(),
-                Expanded(
-                    child: ListTile(
-                      title: Text("Good",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
-                      subtitle: Text("Great"),
-                    )),
+                Padding(padding: EdgeInsets.only(left: 72),child:Align(child: Text("Hamden,14 February 2022",style: TextStyle(color: Colors.grey)),alignment: Alignment.bottomLeft),),
                 DividerSection(),
-              ],
-            ),DividerSection(),
-            Row(
-              children: [
-                ReviewSection(),
-                Expanded(
-                    child: ListTile(
-                      title: Text("Good",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
-                      subtitle: Text("Great"),
-                    ))
-              ],
-            ),
+            ReviewSection(),
+            Padding(padding: EdgeInsets.only(left: 72),child:Align(child: Text("Ahmed,14 February 2022",style: TextStyle(color: Colors.grey)),alignment: Alignment.bottomLeft),),
+            DividerSection(),
+            ReviewSection(),
+            Padding(padding: EdgeInsets.only(left: 72),child:Align(child: Text("shaima,13 February 2022",style: TextStyle(color: Colors.grey)),alignment: Alignment.bottomLeft),),
+            DividerSection(),
+            ReviewSection(),
+            Padding(padding: EdgeInsets.only(left: 72),child:Align(child: Text("Hamden,14 February 2022",style: TextStyle(color: Colors.grey)),alignment: Alignment.bottomLeft),),
+            DividerSection(),
+
+
+
+
+      // Row(
+            //   children: [
+            //     ReviewSection(),
+            //     Expanded(
+            //         child: ListTile(
+            //       title: Padding(
+            //         padding: const EdgeInsets.only(bottom: 10),
+            //         child: Text("Very good",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
+            //       ),
+            //       subtitle: Text(
+            //           "is the good food hjvjb sgaskxa gddvwhsd nasv whsazxhiuyfty uga"),
+            //     ),
+            //     ),
+            //
+            //   ],
+            // ),
+            // DividerSection(),
+            // Row(
+            //   children: [
+            //     ReviewSection(),
+            //     Expanded(
+            //         child: ListTile(
+            //       title: Text("Good",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
+            //       subtitle: Text("Great"),
+            //     )),
+            //
+            //   ],
+            // ),
+            // DividerSection(),
+            // Row(
+            //   children: [
+            //     ReviewSection(),
+            //     Expanded(
+            //         child: ListTile(
+            //           title: Text("Good",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
+            //           subtitle: Text("Great"),
+            //         )),
+            //     DividerSection(),
+            //   ],
+            // ),DividerSection(),
+            // Row(
+            //   children: [
+            //     ReviewSection(),
+            //     Expanded(
+            //         child: ListTile(
+            //           title: Text("Good",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
+            //           subtitle: Text("Great"),
+            //         ))
+            //   ],
+            // ),
+
           ],
-        )),
+        ),
+        ),
       ),
     );
   }

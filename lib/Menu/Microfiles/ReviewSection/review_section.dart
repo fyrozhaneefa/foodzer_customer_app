@@ -10,10 +10,10 @@ class ReviewSection extends StatefulWidget {
 class _ReviewSectionState extends State<ReviewSection> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 8),
-      child: Icon(Icons.emoji_emotions_outlined),
-    );
+    return  ListTile(
+    title: Text("Amazing",style: TextStyle(fontFamily: "RobotoMono",fontSize: 15,fontWeight: FontWeight.w400),),
+    subtitle: Text("Great",style: TextStyle(color: Colors.black)),
+   leading: Icon(Icons.emoji_emotions_outlined), );
 
   }
 }

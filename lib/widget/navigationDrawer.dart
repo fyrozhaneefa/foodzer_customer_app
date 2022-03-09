@@ -106,7 +106,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         ),
                       ),
                     )
-                  ])),
+                  ]),
+              ),
             ),
             buildMenuItem(
                 text: 'Home',

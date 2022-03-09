@@ -95,7 +95,7 @@ class _RestaurantsState extends State<Restaurants> {
                   return ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: snapshot.data!.length,
+                      itemCount:null != snapshot.data? snapshot.data!.length : 0,
                       itemBuilder: (BuildContext context, int index) {
                         Results user = snapshot.data!.elementAt(index);
                         return InkWell(
@@ -107,7 +107,7 @@ class _RestaurantsState extends State<Restaurants> {
                                 msg: "Closed",
                                 toastLength: Toast.LENGTH_LONG,
                                 fontSize: 14,
-                                backgroundColor: Colors.white,
+                                backgroundColor: Colors.grey.shade300,
                               textColor: Colors.red
                             ): user.openStatus == "No-Service" ?
 
@@ -140,7 +140,7 @@ class _RestaurantsState extends State<Restaurants> {
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
-                                                border: Border.all(
+                                                 border: Border.all(
                                                     color:
                                                         Colors.grey.shade300),
                                                 borderRadius:
@@ -240,6 +240,7 @@ class _RestaurantsState extends State<Restaurants> {
                                           user: user,
                                         ),
                                       ),
+
                                     ],
                                   ),
                                 )
@@ -334,7 +335,17 @@ class _RestaurantsState extends State<Restaurants> {
   }
 }
 
-class ProductDesc extends StatelessWidget {
+class
+
+
+
+
+
+
+
+
+
+ProductDesc extends StatelessWidget {
   Results user;
 
   ProductDesc({Key? key, required this.user}) : super(key: key);
