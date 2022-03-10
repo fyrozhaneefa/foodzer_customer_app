@@ -8,7 +8,6 @@ import 'package:foodzer_customer_app/screens/AppProvider.dart';
 import 'package:foodzer_customer_app/screens/allFlowers/AllFlowersScreen.dart';
 import 'package:foodzer_customer_app/screens/allgroceries/AllGroceries.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/allRestaurants.dart';
-import 'package:foodzer_customer_app/screens/basket/itemBasket.dart';
 import 'package:foodzer_customer_app/screens/basket/section/itemBasketHome.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantInfo.dart';
 import 'package:foodzer_customer_app/screens/navigationdrawerpages/foodzerPay.dart';
@@ -23,10 +22,10 @@ import './screens/landingScreen.dart';
 import './screens/loginScreen.dart';
 import './screens/registerScreen.dart';
 import './screens/forgotPassword.dart';
+import 'Menu/Microfiles/EditAccountSection/editaccount.dart';
 import 'Menu/Microfiles/FiltterSection/filtterhome.dart';
 import 'Menu/Microfiles/PaymentSection/payment_home.dart';
 import 'Menu/Microfiles/ReviewSection/review.dart';
-import 'Menu/Microfiles/splash.dart';
 import 'screens/home/homeScreen.dart';
 import 'screens/search/mainSearch.dart';
 import './screens/innerdetails/restaurantDetails.dart';
@@ -84,7 +83,6 @@ class _MyAppState extends State<MyApp> {
         MainSearchScreen.routeName: (context) => MainSearchScreen(),
         // RestaurantDetailsScreen.routeName: (context) => RestaurantDetailsScreen(),
         // RestaurantInfoScreen.routeName: (context) => RestaurantInfoScreen(),
-        ItemBasketScreen.routeName: (context) => ItemBasketScreen(),
         AllRestaurantsScreen.routeName: (context) => AllRestaurantsScreen(),
         AllGroceriesScreen.routeName: (context) => AllGroceriesScreen(),
         UserSettingsScreen.routeName: (context) => UserSettingsScreen(),
