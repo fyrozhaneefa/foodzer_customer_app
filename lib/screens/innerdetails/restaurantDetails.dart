@@ -3,7 +3,6 @@ import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/ReviewSection/review_section.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
-import 'package:foodzer_customer_app/screens/basket/itemBasket.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantInfo.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/section/productCategoryItem.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/section/restaurantProductsList.dart';
@@ -14,6 +13,7 @@ import 'dart:convert' as convert;
 import 'package:provider/provider.dart';
 
 import '../../Menu/Microfiles/ReviewSection/review.dart';
+import '../basket/Section/itemBasketHome.dart';
 
 class RestaurantDetailsScreen extends StatefulWidget {
   static const routeName = "/restaurantDetails";
@@ -288,8 +288,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
               width: double.infinity,
               child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context)
-                        .pushNamed(ItemBasketScreen.routeName);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                        ItemBaskethome()));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
