@@ -8,7 +8,7 @@ import 'package:foodzer_customer_app/screens/AppProvider.dart';
 import 'package:foodzer_customer_app/screens/allFlowers/AllFlowersScreen.dart';
 import 'package:foodzer_customer_app/screens/allgroceries/AllGroceries.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/allRestaurants.dart';
-import 'package:foodzer_customer_app/screens/basket/itemBasket.dart';
+// import 'package:foodzer_customer_app/screens/basket/itemBasket.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantInfo.dart';
 import 'package:foodzer_customer_app/screens/navigationdrawerpages/foodzerPay.dart';
 import 'package:foodzer_customer_app/screens/navigationdrawerpages/userOrders.dart';
@@ -89,7 +89,7 @@ getUserDetails() {
         MainSearchScreen.routeName: (context) => MainSearchScreen(),
         // RestaurantDetailsScreen.routeName: (context) => RestaurantDetailsScreen(),
         // RestaurantInfoScreen.routeName: (context) => RestaurantInfoScreen(),
-        ItemBasketScreen.routeName: (context) => ItemBasketScreen(),
+        // ItemBaskethome.routeName: (context) => ItemBasketScreen(),
         AllRestaurantsScreen.routeName: (context) => AllRestaurantsScreen(),
         AllGroceriesScreen.routeName: (context) => AllGroceriesScreen(),
         UserSettingsScreen.routeName: (context) => UserSettingsScreen(),

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
 class TextSection extends StatelessWidget {
-  TextSection({Key? key, required this.label, required this.onpressed})
+  TextSection({Key? key, required this.label, required this.onpressed,this.ontap})
       : super(key: key);
   String label;
   final onpressed;
+  final ontap;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(10),
-      child: TextField(
+      child: TextField(onTap:ontap,
         decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(color: Colors.grey,fontSize: 14),

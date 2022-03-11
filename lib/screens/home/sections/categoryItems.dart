@@ -10,6 +10,7 @@ import 'dart:convert' as convert;
 import '../../../Api/ApiData.dart';
 import '../../../Models/CategoryModel.dart';
 import 'categoryCard.dart';
+import 'package:shimmer/shimmer.dart';
 class CategoryItems extends StatefulWidget {
   const CategoryItems({
     Key? key,
@@ -20,6 +21,8 @@ class CategoryItems extends StatefulWidget {
 }
 
 class _CategoryItemsState extends State<CategoryItems> {
+
+
   List<CategoryModel> categoryList= [];
   @override
   void initState() {
@@ -52,7 +55,33 @@ class _CategoryItemsState extends State<CategoryItems> {
       );
 
   }
+  Widget loadingShimmer() {
+    return Container(
+      child: Shimmer.fromColors(
+          baseColor: Colors.grey.shade300,
+          highlightColor: Colors.grey.shade100,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(5, (index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.all(8),
+                    child: const Text("zzz"),
+                    color: Colors.teal[100],
+                  ),
+                );
+              }),
+            ),
+          )),
+    );
+  }
   getCategoryList() async {
+
 
     var map = new Map<String, dynamic>();
     map['lat'] = '10.9760357';
@@ -60,6 +89,7 @@ class _CategoryItemsState extends State<CategoryItems> {
     var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
     var json = convert.jsonDecode(response.body);
     if(json['error_code'] == 0){
+
       List dataList = json['main_category'];
       if(null!= dataList && dataList.length >0){
         categoryList =dataList.map((spacecraft) => new CategoryModel.fromJson(spacecraft)).toList();
@@ -68,6 +98,7 @@ class _CategoryItemsState extends State<CategoryItems> {
 
       });
     } else{
+
     print("some error occured!!!");
     }
 

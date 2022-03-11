@@ -42,7 +42,7 @@ dependencies:
   provider: ^6.0.2
   geolocator: ^8.2.0
   flutter_geocoder: ^0.2.2-nullsafety
-
+  shimmer:
 
 
 #  flutter_bloc: ^7.3.0
@@ -68,6 +68,7 @@ flutter:
     - assets/images/real/
     - assets/images/virtual/
     - lib/Menu/Microfiles/assets/images/
+    - lib/Menu/Microfiles/assets/images/swiggyone.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

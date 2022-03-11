@@ -9,7 +9,9 @@ import '../../../Models/restaurentmodel.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Restaurants extends StatefulWidget {
-  const Restaurants({Key? key}) : super(key: key);
+  const
+
+  Restaurants({Key? key}) : super(key: key);
 
   @override
   _RestaurantsState createState() => _RestaurantsState();
