@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/EditAccountSection/editaccount.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:foodzer_customer_app/screens/navigationdrawerpages/foodzerPay.dart';
@@ -48,7 +49,13 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                         )),
                     Positioned(
                       left: 65.0,
-                      child:Column(
+                      child:InkWell(onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditAccount()));
+
+                      }
+
+
+                      ,child:Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
@@ -89,7 +96,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                             ],
                           ),
                         ],
-                      )
+                      ),
+                      ),
                     ),
                     Positioned(
                       bottom: 5,

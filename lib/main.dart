@@ -22,6 +22,7 @@ import './screens/landingScreen.dart';
 import './screens/loginScreen.dart';
 import './screens/registerScreen.dart';
 import './screens/forgotPassword.dart';
+import 'Menu/Microfiles/CuisinesSection/alert.dart';
 import 'Menu/Microfiles/EditAccountSection/editaccount.dart';
 import 'Menu/Microfiles/FiltterSection/filtterhome.dart';
 import 'Menu/Microfiles/PaymentSection/payment_home.dart';
@@ -70,14 +71,14 @@ class _MyAppState extends State<MyApp> {
           textTheme: TextTheme(
             bodyText2: TextStyle(color: Colors.black),
           )),
-
+       // home: EditAccount()
       home: null!=userMobile && userMobile!.isNotEmpty?HomeScreen():SplashScreen(),
       routes:{
         LandingScreen.routeName: (context) => LandingScreen(),
         GoogleMapScreen.routeName: (context) => GoogleMapScreen(),
         LoginScreen.routeName: (context) => LoginScreen(),
         // OtpScreen.routeName: (context) => OtpScreen(),
-        // RegisterScreen.routeName: (context) => RegisterScreen(toString()),
+          // RegisterScreen.routeName: (context) => RegisterScreen(toString()),
         ForgotPaswwordScreen.routeName: (context) => ForgotPaswwordScreen(),
         // HomeScreen.routeName: (context) => HomeScreen(),
         MainSearchScreen.routeName: (context) => MainSearchScreen(),

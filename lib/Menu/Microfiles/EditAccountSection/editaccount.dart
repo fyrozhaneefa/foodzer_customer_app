@@ -15,6 +15,16 @@ class _EditAccountState extends State<EditAccount> {
   bool isname = true;
   bool isphone = true;
   bool isemail = true;
+  @override
+  void initState() {
+
+    isname= false;
+    isphone = false;
+    isemail = false;
+
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +33,9 @@ class _EditAccountState extends State<EditAccount> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-            onPressed: () {}, icon: Icon(Icons.keyboard_backspace_outlined,color: Colors.black,size: 30,)),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }, icon: Icon(Icons.keyboard_backspace_outlined,color: Colors.black,size: 30,)),
         title: Text("EDIT ACCOUNT",
             style: TextStyle(
                 color: Colors.black,
