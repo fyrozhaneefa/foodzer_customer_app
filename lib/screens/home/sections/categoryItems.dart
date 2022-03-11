@@ -32,7 +32,7 @@ class _CategoryItemsState extends State<CategoryItems> {
     return
      Container(
         padding: const EdgeInsets.only(left: 20.0,right: 10),
-        height: 160,
+        height: 140,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,

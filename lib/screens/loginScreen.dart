@@ -190,11 +190,18 @@ bool isLoading = false;
 
         final resData = responsebody['data'];
         String userJson = jsonEncode(resData);
-        userData userModel = userData.fromJson(jsonDecode(userJson));
+        // userData userModel = userData.fromJson(jsonDecode(userJson));
         UserPreference().setUserData(userJson);
-        Navigator.of(context).push(MaterialPageRoute(
+        UserPreference().getUserData().then((value)=>{
+          if(null!=value.userMobie && value.userMobie!.isNotEmpty){
+            Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) =>
-                OtpScreen(mobileController.text)));
+                OtpScreen(value.userMobie.toString())))
+          } else{
+            print("user data is not stored")
+          }
+        });
+
       }
     }
   }

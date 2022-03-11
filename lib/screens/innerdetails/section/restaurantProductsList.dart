@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
+import 'package:foodzer_customer_app/Models/itemAddonModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class RestaurantProductsList extends StatefulWidget {
   const RestaurantProductsList({
@@ -15,9 +19,13 @@ class RestaurantProductsList extends StatefulWidget {
 
 class _RestaurantProductsListState extends State<RestaurantProductsList> {
 
+  List<AddonModel> addonModelList=[];
+  @override
+  void initState() {
+    super.initState();
+  }
   @override
   void dispose() {
-
     super.dispose();
   }
   @override
@@ -39,7 +47,13 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                 Item itemModel = provider.categoryBasedItemList[index];
                 return InkWell(
 
-                  onTap: () => singleItemDetails(context,itemModel),
+                  onTap: () {
+                    singleItemDetails(context,itemModel);
+                    provider.getItemId(itemModel.itemId!);
+                    if(itemModel.isAddon == 1){
+                      getAddons();
+                    }
+                  },
                   child: Container(
                     margin: EdgeInsets.only(top:15,bottom: 15),
                       child: Row(
@@ -50,11 +64,23 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(itemModel.itemName!,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        height: 1.5)),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    itemModel.itemVegNonveg=="1"?Image.asset(Helper.getAssetName("veg.png", "virtual"),
+                                    height: 15,)
+                                        :Image.asset(Helper.getAssetName("non-veg.png", "virtual"),
+                                      height: 15,),
+                                    SizedBox(width: 5,),
+                                    Expanded(
+                                      child: Text(itemModel.itemName!,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 15,
+                                              height: 1.3)),
+                                    ),
+                                  ],
+                                ),
                                 SizedBox(
                                   height: 10,
                                 ),
@@ -80,7 +106,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                 fit: BoxFit.fill,
                               ),
                             ),
-                            flex: 5,
+                            flex: 4,
                           )
                         ],
                       )),
@@ -102,13 +128,14 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
         context: context,
 
         builder: (context) {
-
+          bool valueFirst = true;
           int itemCount = 1;
           dynamic itemPrice = itemModel.itemPrice!;
           dynamic totalPrice =itemModel.itemPrice!;
-          bool valuefirst = false;
+
           return StatefulBuilder(
            builder: (BuildContext context, setState) {
+
              return ListView(
                physics: ScrollPhysics(),
                shrinkWrap: true,
@@ -155,11 +182,11 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                          crossAxisAlignment: CrossAxisAlignment.start,
                          children: [
                            Text(
-                             // 'Pani Puri',
+
                              itemModel.itemName!,
                              style: TextStyle(
-                                 fontWeight: FontWeight.w700,
-                                 fontSize: 20
+                                 fontWeight: FontWeight.w600,
+                                 fontSize: 18
                              ),
                            ),
                            SizedBox(height: 10,),
@@ -169,7 +196,6 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                              style: TextStyle(
                                  color: Colors.grey.shade600,
                                  height: 1.5,
-                                 fontSize: 14,
                                  fontWeight: FontWeight.w500
                              ),
                            ),
@@ -180,8 +206,8 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                Text(
                                    'INR ${itemModel.itemPrice}',
                                    style:TextStyle(
-                                       fontWeight: FontWeight.w700,
-                                       fontSize: 18
+                                       fontWeight: FontWeight.w600,
+                                       fontSize: 16
                                    )
                                ),
                                Container(
@@ -216,7 +242,6 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                      Text(
                                        itemCount.toString(),
                                        style: TextStyle(
-                                           fontSize: 15,
                                            fontWeight: FontWeight.w600
                                        ),
                                      ),
@@ -241,6 +266,8 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                    ),
                  ),
                  Divider(height: 15,thickness: 6,color: Colors.grey.shade300),
+
+                 null!=Provider.of<ApplicationProvider>(context ,listen: false).addonModelList && Provider.of<ApplicationProvider>(context ,listen: false).addonModelList.length>0?
                  Padding(
                    padding: const EdgeInsets.all(15.0),
                    child: Column(
@@ -280,26 +307,26 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                            },
                            physics: ScrollPhysics(),
                            shrinkWrap: true,
-                         itemCount: 4,
+                         itemCount: Provider.of<ApplicationProvider>(context ,listen: false).addonModelList.length,
                            itemBuilder: (context, index) {
-                             return Row(
+                                                        return Row(
                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                children: [
                                  Text(
-                                   'ashdgasjhdgas'
+                                     Provider.of<ApplicationProvider>(context ,listen: false).addonModelList[index].addonsSubTitleName.toString()
                                  ),
                                  Row(
                                    children: [
                                      Text(
-                                       'asjkdhasd'
+                                       '(+ INR ${Provider.of<ApplicationProvider>(context ,listen: false).addonModelList[index].addonsSubTitlePrice})'
                                      ),
                                      Checkbox(
                                        checkColor: Colors.greenAccent,
                                        activeColor: Colors.red,
-                                       value: valuefirst,
-                                     onChanged: (bool){
+                                       value: Provider.of<ApplicationProvider>(context ,listen: false).addonModelList[index].isSelected,
+                                     onChanged: (bool? value){
                                        setState(() {
-                                         valuefirst = true;
+                                         Provider.of<ApplicationProvider>(context ,listen: false).addonModelList[index].isSelected = !value!;
                                        });
                                      },
                                      ),
@@ -310,7 +337,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                            })
                      ],
                    ),
-                 ),
+                 ):Container(),
                  Padding(
                    padding: const EdgeInsets.all(15.0),
                    child: Row(
@@ -451,4 +478,21 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
        }
        );
  }
+
+  getAddons() async {
+    var map = new Map<String, dynamic>();
+    map['item_id'] = Provider.of<ApplicationProvider>(context ,listen: false).itemId;
+    var response= await http.post(Uri.parse(ApiData.GET_ITEM_ADDONS),body:map);
+    var json = convert.jsonDecode(response.body);
+    List dataList = json['addons'];
+    if(null!= dataList && dataList.length >0){
+      addonModelList =dataList.map((spacecraft) => new AddonModel.fromJson(spacecraft)).toList();
+      Provider.of<ApplicationProvider>(context ,listen: false).setItemAddons(addonModelList);
+      setState(() {
+
+      });
+    }
+
+
+  }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
+import 'package:foodzer_customer_app/Models/itemAddonModel.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
 import 'package:geolocator/geolocator.dart';
@@ -23,8 +24,10 @@ final placesService = PlacesService();
   // List<CategoryModel>? dashboardResults;
   List<Item> categoryBasedItemList=[];
   SingleRestModel selectedRestModel= new SingleRestModel();
+  List<AddonModel> addonModelList =[];
 int? isSelected;
 String? catName;
+String? itemId;
   ApplicationProvider() {
     setCurrentLocation();
   }
@@ -33,6 +36,7 @@ String? catName;
     currentLocation = await geoLocatorService.getCurrentLocation();
     notifyListeners();
   }
+
   setCurrentRestModel(SingleRestModel restModel) async {
     this.selectedRestModel = restModel;
     notifyListeners();
@@ -62,8 +66,14 @@ String? catName;
     currentAddress = await geoLocatorService.getCurrentAddress();
     notifyListeners();
   }
-
-
+  getItemId(String addonItemId){
+    itemId = addonItemId;
+    notifyListeners();
+  }
+  setItemAddons(List<AddonModel> itemAddonModel) {
+    addonModelList = itemAddonModel;
+    notifyListeners();
+  }
   // getDashboardResult() async{
   //  dashboardResults = await dashboardService.getDashboardDetails();
   //  notifyListeners();

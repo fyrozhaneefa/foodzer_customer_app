@@ -25,7 +25,7 @@ import './screens/forgotPassword.dart';
 import 'Menu/Microfiles/FiltterSection/filtterhome.dart';
 import 'Menu/Microfiles/PaymentSection/payment_home.dart';
 import 'Menu/Microfiles/ReviewSection/review.dart';
-import 'Menu/Microfiles/splash.dart';
+// import 'Menu/Microfiles/splash.dart';
 import 'screens/home/homeScreen.dart';
 import 'screens/search/mainSearch.dart';
 import './screens/innerdetails/restaurantDetails.dart';
@@ -49,14 +49,20 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
 
   String? userMobile;
+getUserDetails() {
+  UserPreference().getUserData().then((value)=> {
+    if(null!= value.userMobie && value.userMobie!.isNotEmpty){
+      userMobile = value.userMobie,
+    }
 
+  });
+  setState(() {
+
+  });
+}
   @override
   void initState() {
-    UserPreference().getUserData().then((value)=> {
-      if(null!= value.userMobie && value.userMobie!.isNotEmpty){
-        userMobile = value.userMobie,
-      }
-    });
+    getUserDetails();
     super.initState();
   }
   @override
@@ -71,7 +77,7 @@ class _MyAppState extends State<MyApp> {
             bodyText2: TextStyle(color: Colors.black),
           )),
 
-      home: null!=userMobile && userMobile!.isNotEmpty?HomeScreen():SplashScreen(),
+      home: null!=userMobile?HomeScreen():SplashScreen(),
       routes:{
         LandingScreen.routeName: (context) => LandingScreen(),
         GoogleMapScreen.routeName: (context) => GoogleMapScreen(),

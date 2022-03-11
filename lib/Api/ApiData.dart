@@ -11,5 +11,6 @@ class ApiData{
   static String SINGLE_REST=API_URL+"restaurant_load";
 
   static String All_Restaurent=API_URL+"restaurants";
+  static String GET_ITEM_ADDONS = API_URL+"addon_popup";
 
 }

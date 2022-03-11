@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/filtterhome.dart';
+import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/popularRestNear.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurantServiceList.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurants.dart';
+import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 
 import '../../Menu/Microfiles/CuisinesSection/cuisineshome.dart';
 
@@ -27,33 +29,39 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
           icon: Icon(
             Icons.arrow_back,
             color: Colors.black,
-            size: 30,
+            size: 25,
           ),
         ),
         centerTitle: true,
-        title: Column(
-          children: [
-            Text(
-              'Delivering to',
-              style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Al Hilal West',
-                  style: TextStyle(color: Colors.deepOrange, fontSize: 18),
+        title: InkWell(
+          onTap: (){
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    GoogleMapScreen()));
+          },
+          child: Column(
+            children: [
+              Container(
+                child:Text(
+                  "Delivering to",
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14.0
+                  ),
                 ),
-                Icon(
-                  Icons.keyboard_arrow_down_outlined,
-                  color: Colors.deepOrange,
-                )
-              ],
-            )
-          ],
+              ),
+              SizedBox(height: 10,),
+              Container(
+                  child:Text(
+                    null!=finalAddress? finalAddress:'Select a location',
+                    style: TextStyle(
+                        color:Colors.deepOrange,
+                        fontSize: 16
+                    ),
+                  )
+              )
+            ],
+          ),
         ),
         bottom: PreferredSize(
           child: Column(

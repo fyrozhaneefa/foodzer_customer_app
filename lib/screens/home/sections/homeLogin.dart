@@ -26,15 +26,15 @@ class _loginSectionState extends State<loginSection> {
     UserPreference().getUserData().then((value) => {
       if(null!= value.userId){
         setState(() {
-          isLoggedIn = true;
-        })
+      isLoggedIn = true;
+    })
       }else{
         setState(() {
           isLoggedIn = false;
         })
       }
-
     });
+
   }
   @override
   void dispose() {
@@ -59,13 +59,16 @@ class _loginSectionState extends State<loginSection> {
               children: [
                 CircleAvatar(
                   radius: 25.0,
-                  backgroundImage: NetworkImage('https://mobirise.com/bootstrap-template/profile-template/assets/images/timothy-paul-smith-256424-1200x800.jpg'
-                  ),
+                  backgroundColor: Colors.deepOrange,
+                  child:Icon(Icons.person,color: Colors.white,)
                 ),
                 SizedBox(width: 15,),
                 Expanded(
                   child: Text(
                     "Log in or create an account for a faster ordering experience",
+                    style: TextStyle(
+                      height: 1.5
+                    ),
                   ),
                 ),
               ],
@@ -105,7 +108,7 @@ class _loginSectionState extends State<loginSection> {
       ),
     )
     :Container(
-     margin: EdgeInsets.only(bottom: 20.0),
+     margin: EdgeInsets.only(bottom: 15.0),
     );
   }
   // getUserData() async{

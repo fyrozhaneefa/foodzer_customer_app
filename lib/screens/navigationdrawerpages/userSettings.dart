@@ -23,8 +23,8 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
 
   @override
   void initState() {
-    super.initState();
     getUserData();
+    super.initState();
   }
   @override
   void dispose()  {
@@ -134,9 +134,6 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                   UserPreference().removeUser();
                   Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                       HomeScreen()), (Route<dynamic> route) => false);
-                  setState(() {
-
-                  });
                 },
                 child: Text(
                   'Logout',
@@ -164,17 +161,31 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
       ),
     );
   }
+  // getUserDataa() async{
+  //   SharedPreferences prefs= await SharedPreferences.getInstance();
+  //   var user= prefs.getString('userData');
+  //   if(null!= user) {
+  //     setState(() {
+  //       isLoggedIn = true;
+  //     });
+  //   }else{
+  //     setState(() {
+  //       isLoggedIn = false;
+  //     });
+  //   }
+  // }
   getUserData() async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-    var user= prefs.getString('userData');
-    if(null!= user) {
-      setState(() {
-        isLoggedIn = true;
-      });
-    }else{
-      setState(() {
-        isLoggedIn = false;
-      });
-    }
+   UserPreference().getUserData().then((value)=> {
+     if(value.userMobie != null && value.userMobie!.isNotEmpty){
+       setState(() {
+           isLoggedIn = true;
+         })
+     } else{
+       setState(() {
+         isLoggedIn = false;
+     })
+
+     }
+   });
   }
 }

@@ -132,7 +132,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                 ),
                 Container(
                     child: Text(
-                        'Al Waab',
+                       widget._singleRestModel.branchDetails!.restaurantArea.toString(),
                       style: TextStyle(
                           color: Colors.grey.shade700,
                           fontSize: 15
@@ -331,7 +331,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                 Container(
                     child: Row(
                         children: [
-                          Icon(Icons.payment),
+                          Icon(Icons.money),
                           SizedBox(width: 5,),
                           Icon(Icons.payment),
                           SizedBox(width: 5,),
