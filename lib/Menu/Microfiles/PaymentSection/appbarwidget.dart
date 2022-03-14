@@ -11,8 +11,8 @@ class AppBarWidget extends StatelessWidget {
         padding: const EdgeInsets.only(),
         child: InkWell(
           child: Icon(
-            Icons.arrow_back,
-            size: 28,
+            Icons.keyboard_backspace_outlined,
+            color: Colors.black.withOpacity(.5), size: 30,
           ),
         onTap: (){
           Navigator.pop(context);
