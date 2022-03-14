@@ -25,7 +25,6 @@ import './screens/forgotPassword.dart';
 import 'Menu/Microfiles/CuisinesSection/alert.dart';
 import 'Menu/Microfiles/EditAccountSection/editaccount.dart';
 import 'Menu/Microfiles/FiltterSection/filtterhome.dart';
-import 'Menu/Microfiles/MyOrder/myAccountHome.dart';
 import 'Menu/Microfiles/PaymentSection/payment_home.dart';
 import 'Menu/Microfiles/ReviewSection/review.dart';
 import 'screens/home/homeScreen.dart';
@@ -72,7 +71,7 @@ class _MyAppState extends State<MyApp> {
           textTheme: TextTheme(
             bodyText2: TextStyle(color: Colors.black),
           )),
-
+       // home: EditAccount()
       home: null!=userMobile && userMobile!.isNotEmpty?HomeScreen():SplashScreen(),
       routes:{
         LandingScreen.routeName: (context) => LandingScreen(),

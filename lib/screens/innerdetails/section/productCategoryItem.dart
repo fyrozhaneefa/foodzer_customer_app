@@ -31,7 +31,7 @@ class _ProductCategoryItemState extends State<ProductCategoryItem> {
   @override
   Widget build(BuildContext context) {
     return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(Icons.menu,
               color: Colors.deepOrange),
@@ -49,6 +49,7 @@ class _ProductCategoryItemState extends State<ProductCategoryItem> {
                       title:categoryList[index].categoryName!,
                       // isActive: true,
                       // color:selectedIndex == index ? Colors.deepOrange : null,
+                        textColor:Provider.of<ApplicationProvider>(context ,listen: false).isSelected == index?Colors.white:Colors.black,
                       color: Provider.of<ApplicationProvider>(context ,listen: false).isSelected == index?Colors.deepOrange:null,
                       press: (){
                         Provider.of<ApplicationProvider>(context ,listen: false).filterItems(categoryList[index].categoryId!);

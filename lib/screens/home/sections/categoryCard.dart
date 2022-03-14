@@ -34,20 +34,20 @@ class _CategoryCardState extends State<CategoryCard> {
         child: Container(
           margin: EdgeInsets.only(right: 10),
           width: Helper.getScreenWidth(context) * 0.4,
-
           // padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: widget.color,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
             children: [
               Container(
-                height: 160,
+                color: Colors.white,
+                height: 140,
                   child: Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
+                    borderRadius: BorderRadius.circular(20.0),
                     child: Image.network(widget.cardImg!,
                       fit:BoxFit.fill,
                       height: double.infinity,
@@ -55,6 +55,7 @@ class _CategoryCardState extends State<CategoryCard> {
                   ),
                   Container(
                       decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
                           color: Colors.black.withOpacity(0.1),
                           backgroundBlendMode: BlendMode.darken
                       ),

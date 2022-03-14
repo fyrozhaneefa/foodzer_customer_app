@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
 class ProductCategory extends StatelessWidget {
-  final String title;
-  // final bool isActive;
+  final String? title;
   final  press;
  final dynamic color;
+ final dynamic textColor;
   const ProductCategory({
     Key? key,
-    required this.title,
+   this.title,
     // this.isActive = false,
-    required this.press,
+   this.press,
   this.color,
+    this.textColor
   }) : super(key: key);
 
   @override
@@ -18,27 +19,31 @@ class ProductCategory extends StatelessWidget {
     return
         GestureDetector(
           onTap: press,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(title,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10) ,
+                decoration: BoxDecoration(
+                  color:color,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Text(title.toString(),
                     style:TextStyle(
-                        color: Colors.black,
+                        color:textColor,
                         fontWeight: FontWeight.w600
                     )),
-                // if(isActive)
-                  Container(
-                  margin: EdgeInsets.symmetric(vertical:10 ),
-                  height:3,
-                  width: 100,
-                  decoration: BoxDecoration(
-                      color:color
-                  ),
-                )
-              ],
-            ),
+              ),
+              // if(isActive)
+              //   Container(
+              //   margin: EdgeInsets.symmetric(vertical:10 ),
+              //   height:3,
+              //   width: 100,
+              //   decoration: BoxDecoration(
+              //       color:color
+              //   ),
+              // )
+            ],
           ),
         );
 

@@ -87,7 +87,7 @@ class ProceedToPay extends StatelessWidget {
             ),
             subtitle: Text(
               "View Detailed Bill",
-              style: TextStyle(color: Colors.green.shade500, fontSize: 12,fontWeight: FontWeight.w600),
+              style: TextStyle(color: Colors.deepOrangeAccent, fontSize: 12,fontWeight: FontWeight.w600),
             ),
             trailing: Container(
               child: Padding(
@@ -101,7 +101,7 @@ class ProceedToPay extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
+                    primary: Colors.deepOrange,
                     fixedSize: Size(190, 58),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

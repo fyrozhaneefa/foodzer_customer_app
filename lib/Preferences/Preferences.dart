@@ -17,13 +17,13 @@ class UserPreference{
   }
   getCurrentAddress() async {
     SharedPreferences prefs=await SharedPreferences.getInstance();
-    String selectedAddress=prefs.getString('currentAddress')!;
+    String? selectedAddress=prefs.getString('currentAddress');
     return selectedAddress;
   }
 
   Future<userData> getUserData() async{
     SharedPreferences prefs=await SharedPreferences.getInstance();
-    String jsonSting=prefs.getString('userData')!;
+    String? jsonSting=prefs.getString('userData');
     if(null!=jsonSting && jsonSting.isNotEmpty) {
       return userData.fromJson(jsonDecode(jsonSting));
     }else{

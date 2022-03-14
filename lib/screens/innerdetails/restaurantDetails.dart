@@ -264,11 +264,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                          null!= Provider.of<ApplicationProvider>(context ,listen: false).catName?
                          Provider.of<ApplicationProvider>(context ,listen: false).catName!:'',
                           style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 22),
+                              fontWeight: FontWeight.w600, fontSize: 20),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+
                         RestaurantProductsList(),
                         SizedBox(
                           height: 30,

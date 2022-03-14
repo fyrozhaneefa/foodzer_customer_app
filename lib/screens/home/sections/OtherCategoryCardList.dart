@@ -1,4 +1,5 @@
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -34,106 +35,97 @@ class _OtherCategoryCardListState extends State<OtherCategoryCardList> {
   @override
   Widget build(BuildContext context) {
     return
-      SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20.0,right: 10),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ...widget.categoryItem.restaurantDetails!.map((item) => OtherCategoryCard(
-                cardName: item.merchantBranchName,
-                cardTime: item.merchantBranchOrderTime,
-                cardType: item.cuisines,
-                rating: item.avgReview,
-                deliveryCharge: 'AED 4.00',
-                bannerName: item.merchantBranchImage,
-                discount: '34% off',
-                busy: item.merchantBranchBusy,
-                press: (){
-                  if(item.merchantBranchBusy == "0") {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            RestaurantDetailsScreen(item.merchantBranchId,item.lat,item.lng)));
-                    // Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
-                  } else {
-                    Fluttertoast.showToast(
-                        msg: "Restaurant is busy!! Come back later...",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.SNACKBAR,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.red,
-                        fontSize: 16.0
-                    );
-                  }
-                },
-              )).toList(),
-              // GroceryCard(
-              //   cardName: 'foodzer mart',
-              //   cardTime: '20',
-              //   cardType: 'Grocery',
-              //   rating: 'Amazing',
-              //   deliveryCharge: 'AED 5.00',
-              //   bannerName: 'https://files.muzli.space/30890e1b85267b0ed9a75ff0eb2b2a90.jpeg',
-              //   discount: '45% off',
-              //   press: (){
-              //     Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
-              //   },
-              // ),
-              // GroceryCard(
-              //   cardName: 'Lella, Downtown Burj Khalifa',
-              //   cardTime: '20',
-              //   cardType: 'Grocery',
-              //   rating: 'Amazing',
-              //   deliveryCharge: 'AED 5.00',
-              //   bannerName: 'https://files.muzli.space/30890e1b85267b0ed9a75ff0eb2b2a90.jpeg',
-              //   discount: '30% off',
-              //   press: (){
-              //     Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
-              //   },
-              // ),
-              // GroceryCard(
-              //   cardName: 'foodzer mart',
-              //   cardTime: '20',
-              //   cardType: 'Grocery',
-              //   rating: 'Amazing',
-              //   deliveryCharge: 'AED 5.00',
-              //   bannerName: 'https://files.muzli.space/30890e1b85267b0ed9a75ff0eb2b2a90.jpeg',
-              //   discount: '30% off',
-              //   press: (){
-              //     Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
-              //   },
-              // ),
-              // GroceryCard(
-              //   cardName: 'foodzer mart',
-              //   cardTime: '20',
-              //   cardType: 'Grocery',
-              //   rating: 'Amazing',
-              //   deliveryCharge: 'AED 5.00',
-              //   bannerName: 'https://files.muzli.space/30890e1b85267b0ed9a75ff0eb2b2a90.jpeg',
-              //   discount: '40% off',
-              //   press: (){
-              //     Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
-              //   },
-              // ),
-              // GroceryCard(
-              //   cardName: 'foodzer mart',
-              //   cardTime: '20',
-              //   cardType: 'Grocery',
-              //   rating: 'Amazing',
-              //   deliveryCharge: 'AED 5.00',
-              //   bannerName: 'https://files.muzli.space/30890e1b85267b0ed9a75ff0eb2b2a90.jpeg',
-              //   discount: '50% off',
-              //   press: (){
-              //     Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
-              //   },
-              // ),
-            ],
-          ),
+
+      CarouselSlider(
+        items: widget.categoryItem.restaurantDetails!.map((item) => OtherCategoryCard(
+                  cardName: item.merchantBranchName,
+                  cardTime: item.merchantBranchOrderTime,
+                  cardType: item.cuisines,
+                  rating: item.avgReview,
+                  deliveryCharge: 'AED 4.00',
+                  bannerName: item.merchantBranchImage,
+                  discount: '34% off',
+                  busy: item.merchantBranchBusy,
+                  press: (){
+                    if(item.merchantBranchBusy == "0") {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              RestaurantDetailsScreen(item.merchantBranchId,item.lat,item.lng)));
+                      // Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: "Restaurant is busy!! Come back later...",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.SNACKBAR,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.red,
+                          fontSize: 16.0
+                      );
+                    }
+                  },
+                )).toList(),
+
+        options: CarouselOptions(
+          pageSnapping: true,
+          height: 300,
+          enlargeStrategy: CenterPageEnlargeStrategy.scale,
+          // aspectRatio: 16 / 9,
+          // viewportFraction: 1,
+          initialPage: 0,
+          enableInfiniteScroll: false,
+          reverse: false,
+          autoPlay: true,
+          autoPlayInterval: Duration(seconds: 5),
+          autoPlayAnimationDuration: Duration(milliseconds: 800),
+          autoPlayCurve: Curves.linear,
+          enlargeCenterPage: false,
+          onPageChanged: (int index, CarouselPageChangedReason reason) {},
+          scrollDirection: Axis.horizontal,
         ),
       );
+
+      // SingleChildScrollView(
+      //   scrollDirection: Axis.horizontal,
+      //   child: Padding(
+      //     padding: const EdgeInsets.only(left: 20.0,right: 10),
+      //     child: Row(
+      //       mainAxisSize: MainAxisSize.min,
+      //       crossAxisAlignment: CrossAxisAlignment.start,
+      //       children: [
+      //         ...widget.categoryItem.restaurantDetails!.map((item) => OtherCategoryCard(
+      //           cardName: item.merchantBranchName,
+      //           cardTime: item.merchantBranchOrderTime,
+      //           cardType: item.cuisines,
+      //           rating: item.avgReview,
+      //           deliveryCharge: 'AED 4.00',
+      //           bannerName: item.merchantBranchImage,
+      //           discount: '34% off',
+      //           busy: item.merchantBranchBusy,
+      //           press: (){
+      //             if(item.merchantBranchBusy == "0") {
+      //               Navigator.of(context).push(MaterialPageRoute(
+      //                   builder: (BuildContext context) =>
+      //                       RestaurantDetailsScreen(item.merchantBranchId,item.lat,item.lng)));
+      //               // Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
+      //             } else {
+      //               Fluttertoast.showToast(
+      //                   msg: "Restaurant is busy!! Come back later...",
+      //                   toastLength: Toast.LENGTH_SHORT,
+      //                   gravity: ToastGravity.SNACKBAR,
+      //                   timeInSecForIosWeb: 1,
+      //                   backgroundColor: Colors.red,
+      //                   textColor: Colors.red,
+      //                   fontSize: 16.0
+      //               );
+      //             }
+      //           },
+      //         )).toList(),
+
+      //       ],
+      //     ),
+      //   ),
+      // );
 
   }
 

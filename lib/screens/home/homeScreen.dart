@@ -24,7 +24,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? userName;
-  String? Address;
   @override
 void initState()  {
     getCurrentAddress();
@@ -71,7 +70,7 @@ void initState()  {
               SizedBox(height: 10,),
               Container(
                   child:Text(
-                   null!=Address? Address!:'Select a location',
+                   null!=finalAddress? finalAddress:'Select a location',
                     style: TextStyle(
                         color:Colors.deepOrange,
                         fontSize: 16
@@ -99,7 +98,7 @@ void initState()  {
   }
 getCurrentAddress() async{
   SharedPreferences prefs=await SharedPreferences.getInstance();
-  Address=prefs.getString('currentAddress')!;
+  finalAddress=prefs.getString('currentAddress')!;
   setState(() {
 
   });

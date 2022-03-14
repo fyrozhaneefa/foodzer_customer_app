@@ -28,7 +28,7 @@ class _BasketHeaderState extends State<BasketHeader> {
             padding: EdgeInsets.all(10),
             child: Text("WELCOME50 eligible items ",
                 style: TextStyle(
-                    color: Colors.green[700],
+                    color: Colors.deepOrangeAccent,
                     fontWeight: FontWeight.w500)),
           ),
           Row(

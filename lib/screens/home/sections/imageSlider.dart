@@ -33,7 +33,7 @@ class _ImageSliderState extends State<ImageSlider> {
                   // items: banners(),
                items:  slider
                    .map((item) => Container(
-                 margin: EdgeInsets.only(left: 20,right: 20),
+                 // margin: EdgeInsets.only(left: 20,right: 20),
                  child: ClipRRect(
                      borderRadius: BorderRadius.circular(8.0),
                      child: Image.network(
@@ -46,9 +46,10 @@ class _ImageSliderState extends State<ImageSlider> {
                )).toList(),
                   options: CarouselOptions(
                    pageSnapping: true,
-                    height: 125,
+                    height: 155,
+                    enlargeStrategy: CenterPageEnlargeStrategy.scale,
                     aspectRatio: 16 / 9,
-                    viewportFraction: 1,
+                    // viewportFraction: 1,
                     initialPage: 0,
                     enableInfiniteScroll: true,
                     reverse: false,
@@ -56,7 +57,7 @@ class _ImageSliderState extends State<ImageSlider> {
                     autoPlayInterval: Duration(seconds: 5),
                     autoPlayAnimationDuration: Duration(milliseconds: 800),
                     autoPlayCurve: Curves.linear,
-                    enlargeCenterPage: false,
+                    enlargeCenterPage: true,
                     onPageChanged: (int index, CarouselPageChangedReason reason) {},
                     scrollDirection: Axis.horizontal,
                   )
