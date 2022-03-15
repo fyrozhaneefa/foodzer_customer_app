@@ -105,3 +105,4 @@ class _CategoryItemsState extends State<CategoryItems> {
 
   }
 }
+

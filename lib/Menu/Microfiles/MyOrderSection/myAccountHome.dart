@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/constants/divider.dart';
-import 'package:foodzer_customer_app/Menu/Microfiles/MyOrder/myoders.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/MyOrderSection/myoders.dart';
 
 class MyOrder extends StatelessWidget {
   const MyOrder({Key? key}) : super(key: key);

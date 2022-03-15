@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:foodzer_customer_app/Menu/Microfiles/MyOrder/ratedDelivery.dart';
-import 'package:foodzer_customer_app/Menu/Microfiles/MyOrder/reorder.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/MyOrderSection/ratedDelivery.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/MyOrderSection/reorder.dart';
+
+
 
 import 'divider.dart';
 class MyOrders extends StatelessWidget {

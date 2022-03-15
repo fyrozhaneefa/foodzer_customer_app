@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/CuisinesSection/cuisineshome.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/FavoriteSection/favoriteHome.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 // import 'package:foodzer_customer_app/Menu/Microfiles/splash.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
@@ -22,7 +23,7 @@ import './screens/landingScreen.dart';
 import './screens/loginScreen.dart';
 import './screens/registerScreen.dart';
 import './screens/forgotPassword.dart';
-import 'Menu/Microfiles/CuisinesSection/alert.dart';
+
 import 'Menu/Microfiles/EditAccountSection/editaccount.dart';
 import 'Menu/Microfiles/FiltterSection/filtterhome.dart';
 import 'Menu/Microfiles/PaymentSection/payment_home.dart';
@@ -71,7 +72,10 @@ class _MyAppState extends State<MyApp> {
           textTheme: TextTheme(
             bodyText2: TextStyle(color: Colors.black),
           )),
-       // home: EditAccount()
+
+
+
+
       home: null!=userMobile && userMobile!.isNotEmpty?HomeScreen():SplashScreen(),
       routes:{
         LandingScreen.routeName: (context) => LandingScreen(),
