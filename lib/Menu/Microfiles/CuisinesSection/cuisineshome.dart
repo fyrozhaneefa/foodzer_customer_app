@@ -42,7 +42,7 @@ class Cuisines extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(elevation: 0, child: ApplyButton()),
+      bottomNavigationBar: BottomAppBar(elevation: 0, child: ApplyButton(buttonname: "APPLY",radius: 7,)),
       backgroundColor: Colors.grey,
     );
   }

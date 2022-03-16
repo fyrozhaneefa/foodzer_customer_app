@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/EditAccountSection/editaccount.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/MyOrderSection//myAccountHome.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/OfferSection/offerHome.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:foodzer_customer_app/screens/navigationdrawerpages/foodzerPay.dart';
@@ -135,7 +136,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             buildMenuItem(
                 text: 'Offers',
                 icon: Icons.local_offer_outlined,
-                onClicked:() => selectedItem(context, 2)
+                // onClicked:() => selectedItem(context, 2)
+              onClicked:() => Navigator.of(context).push(MaterialPageRoute(builder: (context) => OfferSection())),
+
             ),
             const SizedBox(height: 16),
             buildMenuItem(

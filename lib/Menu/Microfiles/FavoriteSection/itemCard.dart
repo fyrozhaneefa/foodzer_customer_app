@@ -45,7 +45,7 @@ class ItemCard extends StatelessWidget {
                   boxShadow: [
                     BoxShadow(
                       spreadRadius: 1,
-                      blurRadius: 5,
+                      blurRadius: 1,
                       color: Colors.white,
                     )
                   ],
@@ -147,8 +147,10 @@ class ItemCard extends StatelessWidget {
                 style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
               ),
             ),
+
           ],
         ),
+
       ],
     );
   }
