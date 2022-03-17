@@ -16,7 +16,9 @@ class ViewRestButton extends StatelessWidget {
         height: 50,
         child: ElevatedButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(AllRestaurantsScreen.routeName);
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    AllRestaurantsScreen()));
           },
           child: Container(
             child: Text(

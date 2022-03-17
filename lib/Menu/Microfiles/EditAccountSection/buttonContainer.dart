@@ -21,14 +21,16 @@ class _ButtonContainerState extends State<ButtonContainer> {
               onPressed: () {},
               child: Text(
                 "UPDATE",
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.deepOrange.shade300,
+                elevation: 0,
+                primary: Colors.deepOrangeAccent,
                 fixedSize: Size(155, 50),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(color: Colors.black.withOpacity(.3)), ),
+                  borderRadius: BorderRadius.circular(3),
+                  // side: BorderSide(color: Colors.black.withOpacity(.3)),
+                ),
               ),
             ),
           ),
@@ -38,13 +40,15 @@ class _ButtonContainerState extends State<ButtonContainer> {
               onPressed: () {},
               child: Text(
                 "CANCEL",
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16,color: Colors.deepOrange.shade300),
+                style: TextStyle(fontWeight: FontWeight.w600,color: Colors.deepOrangeAccent),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.grey[200],
+                elevation: 0,
+                primary: Colors.white,
                 fixedSize: Size(155, 50),
-                shape: RoundedRectangleBorder(side: BorderSide(color: Colors.deepOrange.shade300),
-                  borderRadius: BorderRadius.circular(10),
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.deepOrange.shade300),
+                  borderRadius: BorderRadius.circular(3),
                 ),
               ),
             ),

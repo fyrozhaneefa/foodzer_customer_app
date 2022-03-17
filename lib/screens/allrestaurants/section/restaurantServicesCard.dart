@@ -37,6 +37,7 @@ class RestaurantServices extends StatelessWidget {
                 child: Text(
                  serviceName!,
                   style: TextStyle(
+                    fontSize: 12,
                       fontWeight: FontWeight.w500,
                       height: 1.2
                   ),

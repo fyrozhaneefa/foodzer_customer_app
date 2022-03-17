@@ -23,9 +23,13 @@ final placesService = PlacesService();
   String? currentAddress;
   // List<CategoryModel>? dashboardResults;
   List<Item> categoryBasedItemList=[];
+  List<Item> allItemsList=[];
+  List<Item> filteredLoadedProductModelList = [];
+
   SingleRestModel selectedRestModel= new SingleRestModel();
   List<AddonModel> addonModelList =[];
 int? isSelected;
+int? isSelectedCategoryIndex;
 String? catName;
 String? itemId;
   ApplicationProvider() {
@@ -42,14 +46,32 @@ String? itemId;
     notifyListeners();
   }
 
-  filterItems(String categoryId) async {
-
-    categoryBasedItemList = selectedRestModel.items!.where((item) =>
-    item.categoryId == categoryId).toList();
-    // categoryBasedItemList = selectedRestModel.items!.map((spacecraft) => new Item.fromJson(spacecraft)).toList();
-    // this.selectedRestModel = restModel;
+  clearItems() async{
+    filteredLoadedProductModelList.clear();
     notifyListeners();
   }
+  setAllItems() async {
+    allItemsList = selectedRestModel.items!;
+    notifyListeners();
+  }
+
+  // filterItems(String categoryId) async {
+  //   categoryBasedItemList = selectedRestModel.items!.where((item) =>
+  //   item.categoryId == categoryId).toList();
+  //   notifyListeners();
+  // }
+
+  addProductData(
+      List<Item> productList, bool isFilteredList, int position) {
+    isSelectedCategoryIndex = position;
+
+    if (!isFilteredList) {
+      allItemsList = productList;
+    }
+    categoryBasedItemList = productList;
+    notifyListeners();
+  }
+
   setCategoryName(String categoryName){
     catName = categoryName;
     notifyListeners();
@@ -74,11 +96,40 @@ String? itemId;
     addonModelList = itemAddonModel;
     notifyListeners();
   }
-  // getDashboardResult() async{
-  //  dashboardResults = await dashboardService.getDashboardDetails();
-  //  notifyListeners();
-  // }
 
+  // updateProduct(ProductModel product, bool isIncrement) {
+  //   int index = categoryBasedProductModelList.indexOf(product);
+  //
+  //   if (isIncrement) {
+  //     categoryBasedProductModelList[index].enteredQty =
+  //         categoryBasedProductModelList[index].enteredQty + 1;
+  //     if (null != cartModelList && cartModelList.length > 0) {
+  //       if (!cartModelList.contains(product)) {
+  //         cartModelList.add(categoryBasedProductModelList[index]);
+  //       } else {
+  //         int cartIndex = cartModelList.indexOf(product);
+  //         cartModelList[cartIndex].enteredQty =
+  //             categoryBasedProductModelList[index].enteredQty;
+  //       }
+  //     } else {
+  //       cartModelList.add(categoryBasedProductModelList[index]);
+  //     }
+  //   } else {
+  //     int cartIndex = cartModelList.indexOf(product);
+  //
+  //     if (product.enteredQty > 1) {
+  //       categoryBasedProductModelList[index].enteredQty =
+  //           categoryBasedProductModelList[index].enteredQty - 1;
+  //       cartModelList[cartIndex].enteredQty =
+  //           categoryBasedProductModelList[index].enteredQty;
+  //     } else {
+  //       cartModelList.remove(product);
+  //
+  //       categoryBasedProductModelList[index].enteredQty = 0;
+  //     }
+  //   }
+  //   notifyListeners();
+  // }
   
   
 @override

@@ -52,8 +52,9 @@ class PopularRestNearList extends StatelessWidget {
                               bannerName: nearrestaurent.merchantBranchImage!,
                               discount: '34% off',
                               press: () {
-                                Navigator.of(context).pushNamed(
-                                    RestaurantDetailsScreen.routeName);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        RestaurantDetailsScreen(nearrestaurent.merchantBranchId,nearrestaurent.lat,nearrestaurent.lng)));
                               },
                             );
                           }),

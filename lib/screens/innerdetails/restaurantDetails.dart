@@ -28,7 +28,7 @@ class RestaurantDetailsScreen extends StatefulWidget {
 
 class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
-
+  bool isSwitched = false;
   bool isLoading = true;
   @override
   void initState() {
@@ -163,6 +163,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   new TextSpan(
                                     text: 'Based on (${provider.selectedRestModel.reviews!.numOfRows}) ratings ',
                                     style: new TextStyle(
+                                      fontSize: 12,
                                         color: Colors.grey,),
                                   ),
                                 ],
@@ -211,6 +212,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   new TextSpan(
                                     text: '(${provider.selectedRestModel.branchDetails!.countryCurrency} 0.590 delivery) ',
                                     style: new TextStyle(
+                                      fontSize: 12,
                                         color: Colors.grey),
                                   ),
                                 ],
@@ -257,6 +259,29 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           height: 25,
                         ),
                         ProductCategoryItem(widget.merchantBranchId,widget.lat,widget.lng),
+                        // SizedBox(
+                        //   height: 10,
+                        // ),
+                       Row(
+                         children: [
+                           Text(
+                             'VEG',
+                             style: TextStyle(
+                               fontWeight: FontWeight.w600
+                             ),
+                           ),
+                           Switch(
+                             value: isSwitched,
+                             onChanged: (value) {
+                               setState(() {
+                                 isSwitched = value;
+                               });
+                             },
+                             activeTrackColor: Colors.green.shade100,
+                             activeColor: Colors.green.shade300,
+                           ),
+                         ],
+                       ),
                         SizedBox(
                           height: 20,
                         ),
@@ -264,7 +289,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                          null!= Provider.of<ApplicationProvider>(context ,listen: false).catName?
                          Provider.of<ApplicationProvider>(context ,listen: false).catName!:'',
                           style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 20),
+                              fontWeight: FontWeight.w600, fontSize: 18),
                         ),
 
                         RestaurantProductsList(),
@@ -382,7 +407,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
       _singleRestModel = SingleRestModel.fromJson(json);
       Provider.of<ApplicationProvider>(context ,listen: false).setCurrentRestModel(_singleRestModel);
-      Provider.of<ApplicationProvider>(context ,listen: false).filterItems(_singleRestModel.items![0].categoryId!);
+      // Provider.of<ApplicationProvider>(context ,listen: false).filterItems(_singleRestModel.items![0].categoryId!);
       Provider.of<ApplicationProvider>(context ,listen: false).setCategoryName(_singleRestModel.categories![0].categoryName!);
     }else{
       isLoading = false;

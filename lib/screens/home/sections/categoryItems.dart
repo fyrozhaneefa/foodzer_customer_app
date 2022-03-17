@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/allFlowers/AllFlowersScreen.dart';
 import 'package:foodzer_customer_app/screens/allgroceries/AllGroceries.dart';
@@ -48,7 +49,21 @@ class _CategoryItemsState extends State<CategoryItems> {
                           cardImg: categoryList[index].image,
                           cardName:categoryList[index].name,
                           press: (){
-                            Navigator.of(context).pushNamed(AllRestaurantsScreen.routeName);
+                            if(categoryList[index].name == "Food"){
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      AllRestaurantsScreen()));
+                            } else if(categoryList[index].name == "Groceries"){
+                              Fluttertoast.showToast(
+                                  msg: "Groceries are currently not available",
+                                  toastLength: Toast.LENGTH_LONG,
+                                  fontSize: 14,
+                                  gravity: ToastGravity.CENTER,
+                                  backgroundColor: Colors.grey.shade300,
+                                  textColor: Colors.red
+                              );
+                            }
+
                           },);
           },
         ),

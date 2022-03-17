@@ -40,6 +40,19 @@ class _ImageSliderState extends State<ImageSlider> {
                        item.sliderImage!,
                        // 'https://www.pexels.com/photo/1640777/download/',
                        fit: BoxFit.fill,
+                       loadingBuilder: (BuildContext context, Widget child,
+                           ImageChunkEvent? loadingProgress) {
+                         if (loadingProgress == null) return child;
+                         return Center(
+                           child: CircularProgressIndicator(
+                             color: Colors.deepOrangeAccent,
+                             value: loadingProgress.expectedTotalBytes != null
+                                 ? loadingProgress.cumulativeBytesLoaded /
+                                 loadingProgress.expectedTotalBytes!
+                                 : null,
+                           ),
+                         );
+                       },
                        height: double.infinity,
                        width: double.infinity,
                      )),

@@ -26,10 +26,11 @@ class ProductCategory extends StatelessWidget {
                 padding: const EdgeInsets.all(10) ,
                 decoration: BoxDecoration(
                   color:color,
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(title.toString(),
                     style:TextStyle(
+                      fontSize: 12,
                         color:textColor,
                         fontWeight: FontWeight.w600
                     )),

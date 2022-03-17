@@ -20,8 +20,10 @@ class ProductCategoryItem extends StatefulWidget {
 }
 
 class _ProductCategoryItemState extends State<ProductCategoryItem> {
-
+bool isLoading = false;
+int? loadedItemCount;
   List<Category> categoryList=[];
+  List<Item> filteredList = [];
 // int? selectedIndex;
   @override
   void initState() {
@@ -52,44 +54,76 @@ class _ProductCategoryItemState extends State<ProductCategoryItem> {
                         textColor:Provider.of<ApplicationProvider>(context ,listen: false).isSelected == index?Colors.white:Colors.black,
                       color: Provider.of<ApplicationProvider>(context ,listen: false).isSelected == index?Colors.deepOrange:null,
                       press: (){
-                        Provider.of<ApplicationProvider>(context ,listen: false).filterItems(categoryList[index].categoryId!);
-                        setState(() {
-                          Provider.of<ApplicationProvider>(context ,listen: false).currentSelectedCategory(index);
+                        Provider.of<ApplicationProvider>(context ,listen: false).currentSelectedCategory(index);
+
+                        if (Provider.of<ApplicationProvider>(context, listen: false)
+                            .isSelected !=
+                            index) {
+                          setState(() {
+                            if (categoryList[index].categoryId == 0) {
+                              filteredList = Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.items!;
+                              filteredList.sort(
+                                      (a, b) => a.categoryName!.compareTo(b.categoryName!));
+                            } else {
+                              filteredList = Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.items!
+                                  .where((product) => (product.categoryId ==
+                                  categoryList[index].categoryId))
+                                  .toList();
+                              filteredList.sort(
+                                      (a, b) => a.categoryName!.compareTo(b.categoryName!));
+                            }
+                            Provider.of<ApplicationProvider>(context, listen: false).clearItems();
+                            isLoading = true;
+                            loadedItemCount = 0;
+                            _loadData();
+                          });
+                          Provider.of<ApplicationProvider>(context, listen: false)
+                              .addProductData(filteredList, true, index);
+                        }
+                        // Provider.of<ApplicationProvider>(context ,listen: false).filterItems(categoryList[index].categoryId!);
+
+
                           Provider.of<ApplicationProvider>(context ,listen: false).setCategoryName(categoryList[index].categoryName!);
-                        });
+
                         
                       },
                     );
                   }),
             ),
           )
-          // ...categoryList.map((item)=> ProductCategory(
-          //   title:item.categoryName!,
-          //   // isActive: true,
-          //   color: item.,
-          //   press: (){
-          //     Provider.of<ApplicationProvider>(context ,listen: false).filterItems(item.categoryId!);
-          //
-          //       Provider.of<ApplicationProvider>(context ,listen: false).currentSelectedCategory(true);
-          //
-          //   },
-          // )).toList(),
-
-          // ProductCategory(
-          //   title:'Dairy And Beverages',
-          //   press: (){
-          //     print('2');
-          //   },
-          // ),
-          // ProductCategory(
-          //   title:'Fruits And Vegetables',
-          //   press: (){
-          //     print('3');
-          //   },
-          // ),
         ]
     );
   }
+
+  Future _loadData() async {
+    int endIndex = 7;
+    // perform fetching data delay
+    if (isLoading && null != filteredList && filteredList.length > 0) {
+      await new Future.delayed(new Duration(seconds: 1));
+
+      setState(() {
+        if (loadedItemCount! <= filteredList.length) {
+          if (loadedItemCount! + endIndex <= filteredList.length) {
+            Provider.of<ApplicationProvider>(context ,listen: false).filteredLoadedProductModelList.addAll(filteredList.getRange(
+                loadedItemCount!, loadedItemCount! + endIndex));
+            isLoading = false;
+
+            loadedItemCount = loadedItemCount! + endIndex;
+          } else {
+            endIndex = filteredList.length - loadedItemCount!;
+            Provider.of<ApplicationProvider>(context ,listen: false).filteredLoadedProductModelList.addAll(filteredList.getRange(
+                loadedItemCount!, loadedItemCount! + endIndex));
+            isLoading = false;
+
+            loadedItemCount = loadedItemCount! + 7;
+          }
+        } else {
+          isLoading = false;
+        }
+      });
+    }
+  }
+
   getItemCategory() async{
     var map = new Map<String, dynamic>();
     map['merchant_branch_id'] = widget.merchantBranchId;
@@ -102,6 +136,7 @@ class _ProductCategoryItemState extends State<ProductCategoryItem> {
       List dataList = json['categories'];
       if(null!= dataList && dataList.length >0){
         categoryList =dataList.map((spacecraft) => new Category.fromJson(spacecraft)).toList();
+        categoryList.insert(0, new Category(categoryId: "0",categoryName: "All"));
       }
       setState(() {
 

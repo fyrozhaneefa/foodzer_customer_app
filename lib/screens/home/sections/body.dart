@@ -23,21 +23,21 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return
-   SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          loginSection(),
-          SizedBox(height: 15,),
-          ItemCategory(),
-          ImageSlider(),
-          PopularBrandSection(),
-          GroceriesSection(),
-          OtherCategoriesSection(),
-          ViewRestButton()
-        ],
-      ),
-    );
+      SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            loginSection(),
+            SizedBox(height: 15,),
+            ItemCategory(),
+            ImageSlider(),
+            PopularBrandSection(),
+            GroceriesSection(),
+            OtherCategoriesSection(),
+            ViewRestButton()
+          ],
+        ),
+      );
   }
 }
 

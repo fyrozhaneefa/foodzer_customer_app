@@ -109,7 +109,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                            size:30),
                           onPressed: () {
                             Navigator.of(context).pop();
-                            Navigator.of(context).pushNamed(UserSettingsScreen.routeName);
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserSettingsScreen()));
                           },
                         ),
                       ),

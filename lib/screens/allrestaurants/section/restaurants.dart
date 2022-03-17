@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'dart:convert';
 
@@ -54,6 +55,7 @@ class _RestaurantsState extends State<Restaurants> {
                           },
                           child: Icon(
                             Icons.list,
+                            size: 20,
                             color:
                                 isSwitchView ? Colors.deepOrange : Colors.black,
                           ),
@@ -71,6 +73,7 @@ class _RestaurantsState extends State<Restaurants> {
                             },
                             child: Icon(
                               Icons.view_agenda_outlined,
+                              size: 20,
                               color: isSwitchView
                                   ? Colors.black
                                   : Colors.deepOrange,
@@ -102,34 +105,36 @@ class _RestaurantsState extends State<Restaurants> {
                         Results user = snapshot.data!.elementAt(index);
                         return InkWell(
                           onTap: () {
-                            print(index);
-                            user.openStatus == "Closed" ?
-
-                            Fluttertoast.showToast(
-                                msg: "Closed",
-                                toastLength: Toast.LENGTH_LONG,
-                                fontSize: 14,
-                                backgroundColor: Colors.grey.shade300,
-                              textColor: Colors.red
-                            ): user.openStatus == "No-Service" ?
-
-                            Fluttertoast.showToast(
-                                msg: "No Service",
-                                toastLength: Toast.LENGTH_LONG,
-                                fontSize: 14,
-                                backgroundColor: Colors.greenAccent,
-                              textColor: Colors.black
-                            )
-                                : user.merchantBranchBusy == "1" ?
-
-                            Fluttertoast.showToast(
-                                msg: "Busy",
-                                toastLength: Toast.LENGTH_LONG,
-                                fontSize: 14,
-                                backgroundColor: Colors.white,
-                              textColor: Colors.black
-                            ):Container();
-
+                            if(user.openStatus == "Open"){
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      RestaurantDetailsScreen(user.merchantBranchId,user.lat,user.lng)));
+                            } else if(user.openStatus =="Closed"){
+                              Fluttertoast.showToast(
+                                  msg: "Closed",
+                                  toastLength: Toast.LENGTH_LONG,
+                                  fontSize: 14,
+                                  backgroundColor: Colors.grey.shade300,
+                                  textColor: Colors.red
+                              );
+                            }
+                            else if(user.openStatus =="No-Service"){
+                              Fluttertoast.showToast(
+                                  msg: "No Service",
+                                  toastLength: Toast.LENGTH_LONG,
+                                  fontSize: 14,
+                                  backgroundColor: Colors.greenAccent,
+                                textColor: Colors.black
+                              );
+                            } else if(user.merchantBranchBusy == "1" ){
+                              Fluttertoast.showToast(
+                                  msg: "Busy",
+                                  toastLength: Toast.LENGTH_LONG,
+                                  fontSize: 14,
+                                  backgroundColor: Colors.white,
+                                textColor: Colors.black
+                              );
+                            }
                           },
                           child: isSwitchView
                               ? Container(
@@ -155,8 +160,21 @@ class _RestaurantsState extends State<Restaurants> {
                                                 borderRadius:
                                                     BorderRadius.circular(8.0),
                                                 child: Image.network(
-                                                  (user.merchantBranchImage!),
+                                                  user.merchantBranchImage!,
                                                   fit: BoxFit.fill,
+                                                  loadingBuilder: (BuildContext context, Widget child,
+                                                      ImageChunkEvent? loadingProgress) {
+                                                    if (loadingProgress == null) return child;
+                                                    return Center(
+                                                      child: CircularProgressIndicator(
+                                                        color: Colors.deepOrangeAccent,
+                                                        value: loadingProgress.expectedTotalBytes != null
+                                                            ? loadingProgress.cumulativeBytesLoaded /
+                                                            loadingProgress.expectedTotalBytes!
+                                                            : null,
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                               ),
                                             ),
@@ -259,7 +277,20 @@ class _RestaurantsState extends State<Restaurants> {
                                               BorderRadius.circular(8.0),
                                           child: Image.network(
                                             (user.merchantBranchImage!),
-                                            fit: BoxFit.cover,
+                                            fit: BoxFit.fill,
+                                            loadingBuilder: (BuildContext context, Widget child,
+                                                ImageChunkEvent? loadingProgress) {
+                                              if (loadingProgress == null) return child;
+                                              return Center(
+                                                child: CircularProgressIndicator(
+                                                  color: Colors.deepOrangeAccent,
+                                                  value: loadingProgress.expectedTotalBytes != null
+                                                      ? loadingProgress.cumulativeBytesLoaded /
+                                                      loadingProgress.expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              );
+                                            },
                                           ),
                                         ),
                                       ),
@@ -337,17 +368,8 @@ class _RestaurantsState extends State<Restaurants> {
   }
 }
 
-class
 
-
-
-
-
-
-
-
-
-ProductDesc extends StatelessWidget {
+class ProductDesc extends StatelessWidget {
   Results user;
 
   ProductDesc({Key? key, required this.user}) : super(key: key);
@@ -357,12 +379,12 @@ ProductDesc extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(user.merchantBranchName!, style: TextStyle(color: Colors.black)),
+        Text(user.merchantBranchName.toString(), style: TextStyle(color: Colors.black)),
         SizedBox(
           height: 3,
         ),
         Text(
-          user.cuisines!,
+          null!=user.cuisines?user.cuisines.toString():"",
           style: TextStyle(
             fontSize: 12,
             color: Colors.grey,
@@ -381,7 +403,7 @@ ProductDesc extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            Text(user.avgReview!),
+            Text(user.avgReview.toString()),
           ],
         ),
         SizedBox(
@@ -397,7 +419,7 @@ ProductDesc extends StatelessWidget {
               width: 5,
             ),
             Text(
-              'Within ' + user.merchantBranchOrderTime! + " mins",
+              'Within ' + user.merchantBranchOrderTime.toString() + " mins",
               style: TextStyle(
                 fontSize: 12,
               ),

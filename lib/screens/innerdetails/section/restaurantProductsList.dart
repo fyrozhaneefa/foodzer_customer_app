@@ -39,23 +39,22 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
               },
               physics: ScrollPhysics(),
               shrinkWrap: true,
-              // itemCount: provider.selectedRestModel.items!.length,
               itemCount: provider.categoryBasedItemList.length,
               itemBuilder: (BuildContext context, int index) {
-                // Item itemModel=provider.selectedRestModel.items![index];
-                // String name=itemModel.categoryName!;
                 Item itemModel = provider.categoryBasedItemList[index];
                 return InkWell(
-
                   onTap: () {
                     singleItemDetails(context,itemModel);
                     provider.getItemId(itemModel.itemId!);
                     if(itemModel.isAddon == 1){
                       getAddons();
                     }
+                    setState(() {
+
+                    });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(top:15,bottom: 15),
+                    margin: EdgeInsets.only(top:15,bottom: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,7 +64,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     itemModel.itemVegNonveg=="1"?Image.asset(Helper.getAssetName("veg.png", "virtual"),
                                     height: 15,)
@@ -76,7 +75,6 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                       child: Text(itemModel.itemName!,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
-                                              fontSize: 15,
                                               height: 1.3)),
                                     ),
                                   ],
@@ -86,6 +84,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                 ),
                               Text(itemModel.itemDescription!,
                                     style: TextStyle(
+                                      fontSize: 12,
                                         color: Colors.grey.shade700)),
                                 SizedBox(
                                   height: 20,
@@ -104,6 +103,19 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                 // 'https://i5.peapod.com/c/NY/NYO1E.png',
                                 itemModel.itemImage!,
                                 fit: BoxFit.fill,
+                                loadingBuilder: (BuildContext context, Widget child,
+                                    ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.deepOrangeAccent,
+                                      value: loadingProgress.expectedTotalBytes != null
+                                          ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                          : null,
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                             flex: 4,
@@ -117,6 +129,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
   }
 
   void singleItemDetails(context, Item itemModel) {
+
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -166,7 +179,8 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                        padding: const EdgeInsets.all(8.0),
                        child:IconButton(
                          onPressed: (){
-                           Navigator.of(context).pop();
+                           Navigator.pop(context);
+
                          },
                         icon:Icon(Icons.highlight_remove,
                           size: 35,
@@ -312,24 +326,26 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                                         return Row(
                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                children: [
-                                 Text(
-                                     Provider.of<ApplicationProvider>(context ,listen: false).addonModelList[index].addonsSubTitleName.toString()
+                                 Expanded(
+                                   child: Text(
+                                       Provider.of<ApplicationProvider>(context ,listen: false).addonModelList[index].addonsSubTitleName.toString()
+                                   ),
                                  ),
                                  Row(
                                    children: [
                                      Text(
                                        '(+ INR ${Provider.of<ApplicationProvider>(context ,listen: false).addonModelList[index].addonsSubTitlePrice})'
                                      ),
-                                     Checkbox(
-                                       checkColor: Colors.greenAccent,
-                                       activeColor: Colors.red,
-                                       value: Provider.of<ApplicationProvider>(context ,listen: false).addonModelList[index].isSelected,
-                                     onChanged: (bool? value){
-                                       setState(() {
-                                         Provider.of<ApplicationProvider>(context ,listen: false).addonModelList[index].isSelected = !value!;
-                                       });
-                                     },
-                                     ),
+                                     // Checkbox(
+                                     //   checkColor: Colors.greenAccent,
+                                     //   activeColor: Colors.red,
+                                     //   value: Provider.of<ApplicationProvider>(context ,listen: false).addonModelList[index].isSelected,
+                                     // onChanged: (bool? value){
+                                     //   setState(() {
+                                     //     Provider.of<ApplicationProvider>(context ,listen: false).addonModelList[index].isSelected = !value!;
+                                     //   });
+                                     // },
+                                     // ),
                                    ],
                                  )
                                ],
@@ -338,6 +354,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                      ],
                    ),
                  ):Container(),
+                 Divider(height: 15,thickness: 6,color: Colors.grey.shade300),
                  Padding(
                    padding: const EdgeInsets.all(15.0),
                    child: Row(
@@ -488,11 +505,10 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
     if(null!= dataList && dataList.length >0){
       addonModelList =dataList.map((spacecraft) => new AddonModel.fromJson(spacecraft)).toList();
       Provider.of<ApplicationProvider>(context ,listen: false).setItemAddons(addonModelList);
-      setState(() {
-
-      });
     }
+    setState(() {
 
+    });
 
   }
 }

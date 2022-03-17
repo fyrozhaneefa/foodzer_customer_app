@@ -177,7 +177,8 @@ class _LandingScreenState extends State<LandingScreen> {
                       height: 60,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).pushNamed(LoginScreen.routeName);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => LoginScreen()));
                         },
                         child: Stack(
                           children: [

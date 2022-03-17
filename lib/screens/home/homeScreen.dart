@@ -83,7 +83,9 @@ void initState()  {
         actions: [
           IconButton(
             onPressed:(){
-              Navigator.of(context).pushNamed(MainSearchScreen.routeName);
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      MainSearchScreen()));
             },
             icon: Icon(
               Icons.search,

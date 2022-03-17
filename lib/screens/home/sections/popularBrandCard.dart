@@ -41,6 +41,19 @@ class PopularBrandCard extends StatelessWidget {
                   child: Image.network(
                     logo!,
                     fit: BoxFit.contain,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.deepOrangeAccent,
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
                     repeat: ImageRepeat.noRepeat,
                   ),
                 ),

@@ -50,6 +50,19 @@ class _GroceryCardState extends State<GroceryCard> {
                       Image.network(
                         widget.bannerName!,
                         fit: BoxFit.fill,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.deepOrangeAccent,
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
                         height: double.infinity,
                         width: double.infinity,
                         alignment: Alignment.center,
