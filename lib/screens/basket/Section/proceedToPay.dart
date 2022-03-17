@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../Menu/Microfiles/PaymentSection/Constants/sapperator.dart';
+import '../../../Menu/Microfiles/PaymentSection/payment_home.dart';
 import '../../../utils/helper.dart';
 class ProceedToPay extends StatelessWidget {
   const ProceedToPay({Key? key}) : super(key: key);
@@ -92,7 +93,9 @@ class ProceedToPay extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentSection()));
+                  },
                   child: Text(
                     "Proceed to Pay",
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),

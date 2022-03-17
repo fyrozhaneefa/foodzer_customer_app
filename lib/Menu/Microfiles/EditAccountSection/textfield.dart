@@ -7,23 +7,28 @@ class TextSection extends StatelessWidget {
   final onpressed;
   final ontap;
 
+
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(10),
-      child: TextField(onTap:ontap,
+      child: TextField(
         decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(color: Colors.grey,fontSize: 14),
-          suffixIcon: TextButton(
+
+          suffixIcon:  TextButton(
             onPressed: onpressed,
             child: Text(
-              "Edit",
+             "Edit" ,
               style: TextStyle(color: Colors.deepOrangeAccent),
             ),
           ),
+
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.deepOrange.withOpacity(.2)),
+            borderSide: BorderSide(color: Colors.deepOrange.withOpacity(.3)),
           ),
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.grey),
