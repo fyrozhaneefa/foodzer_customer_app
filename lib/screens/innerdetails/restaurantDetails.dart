@@ -255,44 +255,52 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        ProductCategoryItem(widget.merchantBranchId,widget.lat,widget.lng),
-                        // SizedBox(
-                        //   height: 10,
-                        // ),
-                       Row(
-                         children: [
-                           Text(
-                             'VEG',
-                             style: TextStyle(
-                               fontWeight: FontWeight.w600
-                             ),
-                           ),
-                           Switch(
-                             value: isSwitched,
-                             onChanged: (value) {
-                               setState(() {
-                                 isSwitched = value;
-                               });
-                             },
-                             activeTrackColor: Colors.green.shade100,
-                             activeColor: Colors.green.shade300,
-                           ),
-                         ],
-                       ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                         null!= Provider.of<ApplicationProvider>(context ,listen: false).catName?
-                         Provider.of<ApplicationProvider>(context ,listen: false).catName!:'',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 18),
-                        ),
+                        // provider.categoryBasedItemList.isEmpty?Center(heightFactor:10,child: Text(
+                        //   'No items available at the moment'
+                        // )):
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 25,
+                            ),
+                            ProductCategoryItem(widget.merchantBranchId,widget.lat,widget.lng),
+                            // SizedBox(
+                            //   height: 10,
+                            // ),
+                            Row(
+                              children: [
+                                Text(
+                                  'VEG',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600
+                                  ),
+                                ),
+                                Switch(
+                                  value: isSwitched,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isSwitched = value;
+                                    });
+                                  },
+                                  activeTrackColor: Colors.green.shade100,
+                                  activeColor: Colors.green.shade300,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              null!= Provider.of<ApplicationProvider>(context ,listen: false).catName?
+                              Provider.of<ApplicationProvider>(context ,listen: false).catName!:'',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 18),
+                            ),
 
-                        RestaurantProductsList(),
+                            RestaurantProductsList(),
+                          ],
+                        ),
                         SizedBox(
                           height: 30,
                         ),
@@ -303,6 +311,11 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
               ]))
             ],
           ),
+          Align( alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 100.0),
+                child:provider.isItemLoading? CircularProgressIndicator(color: Colors.deepOrangeAccent,):Container(height: 0,),
+              )),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -313,7 +326,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (BuildContext context) =>
-                        ItemBaskethome()));
+                        ItemBasketHome()));
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -332,7 +345,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  "0",
+                                  provider.cartModelList.length.toString(),
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ),
@@ -407,8 +420,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
       _singleRestModel = SingleRestModel.fromJson(json);
       Provider.of<ApplicationProvider>(context ,listen: false).setCurrentRestModel(_singleRestModel);
+      Provider.of<ApplicationProvider>(context ,listen: false).addProductData(_singleRestModel.items!, false, 0);
       // Provider.of<ApplicationProvider>(context ,listen: false).filterItems(_singleRestModel.items![0].categoryId!);
-      Provider.of<ApplicationProvider>(context ,listen: false).setCategoryName(_singleRestModel.categories![0].categoryName!);
+      // Provider.of<ApplicationProvider>(context ,listen: false).setCategoryName(_singleRestModel.categories![0].categoryName!);
     }else{
       isLoading = false;
       setState(() {

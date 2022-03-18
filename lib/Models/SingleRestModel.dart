@@ -260,7 +260,7 @@ class Item {
     this.availableTime,
     this.availableDay,
     this.isPriceon,
-    this.isAddon,
+    this.isAddon,this.enteredQty
   });
 
   String? itemId;
@@ -321,6 +321,7 @@ class Item {
   String? availableDay;
   int? isPriceon;
   int? isAddon;
+  int? enteredQty;
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
     itemId: json["item_id"],

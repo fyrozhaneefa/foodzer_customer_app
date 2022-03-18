@@ -38,7 +38,18 @@ class BillDetails extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 15, top: 15),
-                    child: Text("Delivery Fee | 1.7 kms"),
+                    // child: Text("Delivery Fee | 1.7 kms"),
+                    child:  Tooltip(
+                      preferBelow: false,
+                      message: 'Delivery Fee break up for this order',
+                      triggerMode: TooltipTriggerMode.tap,
+                      child: Text('Delivery Fee',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            color: Colors.deepOrangeAccent,
+                          )),
+                    ),
                   ),
                   Padding(
                     padding:
@@ -83,7 +94,17 @@ class BillDetails extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.only(left: 15, top: 15),
-                child: Text("Taxes and Charges"),
+                child: Tooltip(
+                  preferBelow: false,
+                  message: 'Tax and charges',
+                  triggerMode: TooltipTriggerMode.tap,
+                  child: Text('Tax and Charges',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15,
+                        color: Colors.deepOrangeAccent,
+                      )),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(right: 15, top: 15),

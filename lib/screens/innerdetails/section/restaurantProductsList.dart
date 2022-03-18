@@ -3,6 +3,7 @@ import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Models/itemAddonModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
+import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -39,9 +40,9 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
               },
               physics: ScrollPhysics(),
               shrinkWrap: true,
-              itemCount: provider.categoryBasedItemList.length,
+              itemCount: provider.filteredLoadedProductModelList.length,
               itemBuilder: (BuildContext context, int index) {
-                Item itemModel = provider.categoryBasedItemList[index];
+                Item itemModel = provider.filteredLoadedProductModelList[index];
                 return InkWell(
                   onTap: () {
                     singleItemDetails(context,itemModel);
@@ -54,6 +55,12 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                     });
                   },
                   child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        right: null!=itemModel.enteredQty ?BorderSide(color: Colors.deepOrangeAccent, width: 5):BorderSide.none,
+                      ),
+                      // borderRadius: BorderRadius.only( topRight: Radius.circular(20),bottomRight: Radius.circular(20))
+                    ),
                     margin: EdgeInsets.only(top:15,bottom: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -88,6 +95,10 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                         color: Colors.grey.shade700)),
                                 SizedBox(
                                   height: 20,
+                                ),
+                                Text(
+                                    null!=itemModel.enteredQty ?
+                                    itemModel.enteredQty.toString():""
                                 ),
                                 Text('INR ${itemModel.itemPrice}',
                                     style: TextStyle(
@@ -141,7 +152,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
         context: context,
 
         builder: (context) {
-          bool valueFirst = true;
+          bool isIncrement = false;
           int itemCount = 1;
           dynamic itemPrice = itemModel.itemPrice!;
           dynamic totalPrice =itemModel.itemPrice!;
@@ -183,8 +194,8 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
 
                          },
                         icon:Icon(Icons.highlight_remove,
-                          size: 35,
-                          color: Colors.white,),
+                          size: 25,
+                          color: Colors.black,),
                        )
                      )
                    ],
@@ -254,7 +265,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                      ),
                                      SizedBox(width: 15,),
                                      Text(
-                                       itemCount.toString(),
+                                     null!=itemModel.enteredQty?itemModel.enteredQty.toString():itemCount.toString(),
                                        style: TextStyle(
                                            fontWeight: FontWeight.w600
                                        ),
@@ -396,7 +407,16 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                      height: 60,
                      child: ElevatedButton(
                        onPressed: (){
-
+                         // setState(() {
+                         //   itemCount>itemModel.enteredQty!?
+                         //   isIncrement=true:
+                         //   isIncrement=false;
+                         // });
+                         Provider.of<ApplicationProvider>(context ,listen: false).updateProduct(
+                            itemModel,true,itemCount);
+                         Navigator.of(context).push(MaterialPageRoute(
+                             builder: (BuildContext context) =>
+                                 ItemBasketHome()));
                        },
                        child: Row(
                          mainAxisAlignment: MainAxisAlignment.spaceBetween,

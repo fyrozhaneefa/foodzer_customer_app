@@ -24,20 +24,27 @@ final placesService = PlacesService();
   // List<CategoryModel>? dashboardResults;
   List<Item> categoryBasedItemList=[];
   List<Item> allItemsList=[];
+  List<Item> cartModelList=[];
   List<Item> filteredLoadedProductModelList = [];
 
   SingleRestModel selectedRestModel= new SingleRestModel();
   List<AddonModel> addonModelList =[];
-int? isSelected;
+int? isSelectedIndex;
 int? isSelectedCategoryIndex;
 String? catName;
 String? itemId;
+
+  bool isItemLoading = false;
   ApplicationProvider() {
     setCurrentLocation();
   }
 
   setCurrentLocation() async {
     currentLocation = await geoLocatorService.getCurrentLocation();
+    notifyListeners();
+  }
+  setItemLoading(bool isLoading) async {
+    this.isItemLoading = isLoading;
     notifyListeners();
   }
 
@@ -63,12 +70,12 @@ String? itemId;
 
   addProductData(
       List<Item> productList, bool isFilteredList, int position) {
-    isSelectedCategoryIndex = position;
+    isSelectedIndex = position;
 
     if (!isFilteredList) {
       allItemsList = productList;
     }
-    categoryBasedItemList = productList;
+    filteredLoadedProductModelList = productList;
     notifyListeners();
   }
 
@@ -77,7 +84,7 @@ String? itemId;
     notifyListeners();
   }
   currentSelectedCategory(int selectedIndex){
-  isSelected = selectedIndex;
+  isSelectedIndex = selectedIndex;
   notifyListeners();
   }
   searchPlaces(String searchTerm) async {
@@ -97,39 +104,53 @@ String? itemId;
     notifyListeners();
   }
 
-  // updateProduct(ProductModel product, bool isIncrement) {
-  //   int index = categoryBasedProductModelList.indexOf(product);
-  //
-  //   if (isIncrement) {
-  //     categoryBasedProductModelList[index].enteredQty =
-  //         categoryBasedProductModelList[index].enteredQty + 1;
-  //     if (null != cartModelList && cartModelList.length > 0) {
-  //       if (!cartModelList.contains(product)) {
-  //         cartModelList.add(categoryBasedProductModelList[index]);
-  //       } else {
-  //         int cartIndex = cartModelList.indexOf(product);
-  //         cartModelList[cartIndex].enteredQty =
-  //             categoryBasedProductModelList[index].enteredQty;
-  //       }
-  //     } else {
-  //       cartModelList.add(categoryBasedProductModelList[index]);
-  //     }
-  //   } else {
-  //     int cartIndex = cartModelList.indexOf(product);
-  //
-  //     if (product.enteredQty > 1) {
-  //       categoryBasedProductModelList[index].enteredQty =
-  //           categoryBasedProductModelList[index].enteredQty - 1;
-  //       cartModelList[cartIndex].enteredQty =
-  //           categoryBasedProductModelList[index].enteredQty;
-  //     } else {
-  //       cartModelList.remove(product);
-  //
-  //       categoryBasedProductModelList[index].enteredQty = 0;
-  //     }
-  //   }
-  //   notifyListeners();
-  // }
+  updateProduct(Item product, bool isIncrement,int enteredQty) {
+    int index = filteredLoadedProductModelList.indexOf(product);
+
+    if (isIncrement) {
+      filteredLoadedProductModelList[index].enteredQty =
+          null!=filteredLoadedProductModelList[index].enteredQty?
+          filteredLoadedProductModelList[index].enteredQty! + enteredQty:enteredQty;
+      if (null != cartModelList && cartModelList.length > 0) {
+        if (!cartModelList.contains(product)) {
+          filteredLoadedProductModelList[index].enteredQty=enteredQty;
+          cartModelList.add(filteredLoadedProductModelList[index]);
+        } else {
+          int cartIndex = cartModelList.indexOf(product);
+          cartModelList[cartIndex].enteredQty =
+          null!=filteredLoadedProductModelList[index].enteredQty?
+          filteredLoadedProductModelList[index].enteredQty! + enteredQty:enteredQty;
+        }
+      } else {
+        filteredLoadedProductModelList[index].enteredQty=enteredQty;
+        cartModelList.add(filteredLoadedProductModelList[index]);
+      }
+
+    } else {
+      int cartIndex = cartModelList.indexOf(product);
+
+      if (product.enteredQty! > 1) {
+        filteredLoadedProductModelList[index].enteredQty =
+            filteredLoadedProductModelList[index].enteredQty! - 1;
+        cartModelList[cartIndex].enteredQty =
+            filteredLoadedProductModelList[index].enteredQty;
+      } else {
+        cartModelList.remove(product);
+
+        filteredLoadedProductModelList[index].enteredQty = 0;
+      }
+    }
+    int allItemIndex=selectedRestModel.items!.indexWhere((element) =>
+    element.itemId==product.itemId);
+    if(allItemIndex>-1){
+      // double oldQty=null!=selectedRestModel.items![allItemIndex].enteredQty!?
+      // selectedRestModel.items![allItemIndex].enteredQty!:0;
+      // oldQty=oldQty+enteredQty;
+      selectedRestModel.items![allItemIndex].enteredQty!=filteredLoadedProductModelList[index].enteredQty;
+
+    }
+    notifyListeners();
+  }
   
   
 @override

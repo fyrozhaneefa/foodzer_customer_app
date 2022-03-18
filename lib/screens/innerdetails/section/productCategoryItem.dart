@@ -20,13 +20,14 @@ class ProductCategoryItem extends StatefulWidget {
 }
 
 class _ProductCategoryItemState extends State<ProductCategoryItem> {
-bool isLoading = false;
+
 int? loadedItemCount;
   List<Category> categoryList=[];
   List<Item> filteredList = [];
 // int? selectedIndex;
   @override
   void initState() {
+
     getItemCategory();
     super.initState();
   }
@@ -51,16 +52,13 @@ int? loadedItemCount;
                       title:categoryList[index].categoryName!,
                       // isActive: true,
                       // color:selectedIndex == index ? Colors.deepOrange : null,
-                        textColor:Provider.of<ApplicationProvider>(context ,listen: false).isSelected == index?Colors.white:Colors.black,
-                      color: Provider.of<ApplicationProvider>(context ,listen: false).isSelected == index?Colors.deepOrange:null,
+                        textColor:Provider.of<ApplicationProvider>(context ,listen: false).isSelectedIndex == index?Colors.white:Colors.black,
+                      color:Provider.of<ApplicationProvider>(context ,listen: false).isSelectedIndex == index?Colors.deepOrange:null,
                       press: (){
                         Provider.of<ApplicationProvider>(context ,listen: false).currentSelectedCategory(index);
-
-                        if (Provider.of<ApplicationProvider>(context, listen: false)
-                            .isSelected !=
-                            index) {
+                        if (Provider.of<ApplicationProvider>(context, listen: false).isSelectedIndex ==index) {
                           setState(() {
-                            if (categoryList[index].categoryId == 0) {
+                            if (categoryList[index].categoryId == "0") {
                               filteredList = Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.items!;
                               filteredList.sort(
                                       (a, b) => a.categoryName!.compareTo(b.categoryName!));
@@ -72,8 +70,8 @@ int? loadedItemCount;
                               filteredList.sort(
                                       (a, b) => a.categoryName!.compareTo(b.categoryName!));
                             }
-                            Provider.of<ApplicationProvider>(context, listen: false).clearItems();
-                            isLoading = true;
+                            // Provider.of<ApplicationProvider>(context, listen: false).clearItems();
+                            Provider.of<ApplicationProvider>(context ,listen: false).setItemLoading(true);
                             loadedItemCount = 0;
                             _loadData();
                           });
@@ -98,7 +96,7 @@ int? loadedItemCount;
   Future _loadData() async {
     int endIndex = 7;
     // perform fetching data delay
-    if (isLoading && null != filteredList && filteredList.length > 0) {
+    if (   Provider.of<ApplicationProvider>(context ,listen: false).isItemLoading && null != filteredList && filteredList.length > 0) {
       await new Future.delayed(new Duration(seconds: 1));
 
       setState(() {
@@ -106,19 +104,17 @@ int? loadedItemCount;
           if (loadedItemCount! + endIndex <= filteredList.length) {
             Provider.of<ApplicationProvider>(context ,listen: false).filteredLoadedProductModelList.addAll(filteredList.getRange(
                 loadedItemCount!, loadedItemCount! + endIndex));
-            isLoading = false;
-
+            Provider.of<ApplicationProvider>(context ,listen: false).setItemLoading(false);
             loadedItemCount = loadedItemCount! + endIndex;
           } else {
             endIndex = filteredList.length - loadedItemCount!;
             Provider.of<ApplicationProvider>(context ,listen: false).filteredLoadedProductModelList.addAll(filteredList.getRange(
                 loadedItemCount!, loadedItemCount! + endIndex));
-            isLoading = false;
-
+            Provider.of<ApplicationProvider>(context ,listen: false).setItemLoading(false);
             loadedItemCount = loadedItemCount! + 7;
           }
         } else {
-          isLoading = false;
+          Provider.of<ApplicationProvider>(context ,listen: false).setItemLoading(false);
         }
       });
     }
@@ -138,6 +134,7 @@ int? loadedItemCount;
         categoryList =dataList.map((spacecraft) => new Category.fromJson(spacecraft)).toList();
         categoryList.insert(0, new Category(categoryId: "0",categoryName: "All"));
       }
+      Provider.of<ApplicationProvider>(context ,listen: false).setCategoryName(categoryList.first.categoryName!);
       setState(() {
 
       });
