@@ -3,7 +3,7 @@ import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/pay_on_deliv
 import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/recommented_payment.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/upi.dart';
 import 'Constants/sizedbox.dart';
-import 'appbarwidget.dart';
+
 import 'credit_and_debit.dart';
 import 'header.dart';
 import 'more_payment_options.dart';
@@ -13,15 +13,46 @@ class PaymentSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
-      appBar: AppBar(backgroundColor: Colors.white,actions: [
-        
-        Expanded(child: AppBarWidget())
-        
-      ],
-      elevation: 1,),
+        appBar: AppBar(
+          toolbarHeight: 60,
+          leading: Icon(
+            Icons.keyboard_backspace_outlined,
+            color: Colors.black.withOpacity(.5),
+            size: 30,
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Payment Option",
+                style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                    fontSize: 16),
+              ),
+              Row(
+                children: [
+                  Text(
+                    "1 item ",
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                  Text(
+                    ".",
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                  Text(
+                    "Total:₹212",
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          backgroundColor: Colors.white,
+          actions: [],
+          elevation: .5,
+        ),
         body: SafeArea(
           child: ListView(
             children: [
@@ -61,7 +92,6 @@ class PaymentSection extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                 ),
               ),
-
               MorePayment(),
               SizedWidget(),
               Padding(
@@ -72,8 +102,6 @@ class PaymentSection extends StatelessWidget {
                 ),
               ),
               RecommededPayments(),
-              
-
             ],
           ),
         ),

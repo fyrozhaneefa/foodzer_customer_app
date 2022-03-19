@@ -28,7 +28,7 @@ class RestaurantServicesList extends StatelessWidget {
                 ));
               else if (snapshot.hasData) {
                 return Row(children: [
-                  Container( height: Helper.getScreenHeight(context)*0.15,
+                  Container( height: 140,
                       child: ListView.builder(scrollDirection: Axis.horizontal,shrinkWrap: true,
                           itemCount: (snapshot.data!.length),
                           itemBuilder: (BuildContext context, int index) {

@@ -33,7 +33,7 @@ class _CategoryCardState extends State<CategoryCard> {
         onTap: widget.press,
         child: Container(
           margin: EdgeInsets.only(right: 10),
-          width: Helper.getScreenWidth(context) * 0.4,
+          width: Helper.getScreenWidth(context) * 0.28,
           // padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: widget.color,
@@ -43,7 +43,7 @@ class _CategoryCardState extends State<CategoryCard> {
             children: [
               Container(
                 color: Colors.white,
-                height: 140,
+                height: 115,
                   child: Stack(
                 children: [
                   ClipRRect(

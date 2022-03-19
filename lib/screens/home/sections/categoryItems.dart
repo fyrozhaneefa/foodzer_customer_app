@@ -32,11 +32,13 @@ class _CategoryItemsState extends State<CategoryItems> {
     super.initState();
   }
   @override
+
+
   Widget build(BuildContext context) {
     return
      Container(
         padding: const EdgeInsets.only(left: 20.0,right: 10),
-        height: 140,
+        height: 115,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,

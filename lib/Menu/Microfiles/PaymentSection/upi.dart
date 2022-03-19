@@ -13,7 +13,7 @@ class UpiSection extends StatefulWidget {
 class _UpiSectionState extends State<UpiSection> {
   @override
   Widget build(BuildContext context) {
-  int  value = 2;
+
 
 
 
@@ -54,21 +54,7 @@ class _UpiSectionState extends State<UpiSection> {
                       ),
                     ),
                   ),
-                  trailing: Radio<int>(
-                    value: 6,
-                    groupValue: value,
-                    onChanged: (newvalue) {
-                      setState(
-                            () {
-                          value = newvalue!;
 
-
-                          
-                        },
-                      );
-                    },
-                    activeColor: Colors.green,
-                  ),
 
               ),
               MySeparator(),
