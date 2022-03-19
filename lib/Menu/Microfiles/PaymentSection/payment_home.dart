@@ -16,11 +16,14 @@ class PaymentSection extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 60,
-          leading: Icon(
+          leading: InkWell(child:Icon(
             Icons.keyboard_backspace_outlined,
             color: Colors.black.withOpacity(.5),
             size: 30,
           ),
+          onTap: (){
+            Navigator.pop(context);
+          },),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
