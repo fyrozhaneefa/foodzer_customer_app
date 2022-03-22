@@ -480,7 +480,7 @@ class ProductDesc extends StatelessWidget {
               size: 20,
             ),
             Text(
-              'BD 0.400',
+              'BD 0.40',
               style: TextStyle(
                 fontSize: 12,
               ),
