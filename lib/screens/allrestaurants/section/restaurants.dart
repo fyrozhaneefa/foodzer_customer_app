@@ -404,18 +404,25 @@ class ProductDesc extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 15),
             ),
-
-            Padding(padding: EdgeInsets.only(left: 10),child:
-            Container(
-              height: 22,
-              width: 50,
-              decoration: BoxDecoration(
-                  color: Colors.redAccent.withOpacity(.1), borderRadius: BorderRadius.circular(5)),
-              child:Center(child: Text("New",style: TextStyle(color: Colors.deepOrange,fontWeight: FontWeight.w600),),),
-            )
-            ),
-
-
+            user.newTag == 1
+                ? Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Container(
+                      height: 22,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.redAccent.withOpacity(.1),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Center(
+                        child: Text(
+                          "New",
+                          style: TextStyle(
+                              color: Colors.deepOrange,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ))
+                : Container(),
           ],
         ),
         SizedBox(
@@ -457,7 +464,11 @@ class ProductDesc extends StatelessWidget {
               width: 5,
             ),
             Text(
-               user.merchantBranchOrderTime.toString() + " mins" + " | " + user.distance.toString() + " km",
+              user.merchantBranchOrderTime.toString() +
+                  " mins" +
+                  " | " +
+                  user.distance.toString() +
+                  " km",
               style: TextStyle(
                 fontSize: 12,
               ),

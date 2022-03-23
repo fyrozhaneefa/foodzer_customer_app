@@ -78,6 +78,7 @@ class Results {
   String? merchantPackChargeType;
   String? merchantPackCharge;
   String? distance;
+  int? newTag;
   String? openStatus;
   OfferTag? offerTag;
 
@@ -134,6 +135,7 @@ class Results {
         this.merchantPackChargeType,
         this.merchantPackCharge,
         this.distance,
+        this.newTag,
         this.openStatus,
         this.offerTag});
 
@@ -191,6 +193,7 @@ class Results {
     merchantPackChargeType = json['merchant_pack_charge_type'];
     merchantPackCharge = json['merchant_pack_charge'];
     distance = json['distance'];
+    newTag = json['new_tag'];
     openStatus = json['open_status'];
     offerTag = json['offer_tag'] != null
         ? new OfferTag.fromJson(json['offer_tag'])
@@ -252,6 +255,7 @@ class Results {
     data['merchant_pack_charge_type'] = this.merchantPackChargeType;
     data['merchant_pack_charge'] = this.merchantPackCharge;
     data['distance'] = this.distance;
+    data['new_tag'] = this.newTag;
     data['open_status'] = this.openStatus;
     if (this.offerTag != null) {
       data['offer_tag'] = this.offerTag!.toJson();
