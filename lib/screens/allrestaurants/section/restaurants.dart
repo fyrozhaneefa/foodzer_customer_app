@@ -448,7 +448,17 @@ class ProductDesc extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            Text(user.avgReview!.toString()),
+            user.avgReview == "1"
+                ? Text("Amazing")
+                : user.avgReview == "2"
+                    ? Text("Very Good")
+                    : user.avgReview == "3"
+                        ? Text("Good")
+                        : user.avgReview == "4"
+                            ? Text("OK")
+                            : user.avgReview == "0"
+                                ? Text("Not Yet")
+                                : Container(),
           ],
         ),
         SizedBox(
