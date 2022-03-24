@@ -375,7 +375,8 @@ class _RestaurantsState extends State<Restaurants> {
                                   ])),
                         );
                       });
-                } else {
+                } else
+                  {
                   return Center(child: Text('some error occured!!'));
                 }
               })
