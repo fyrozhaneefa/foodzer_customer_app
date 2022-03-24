@@ -310,6 +310,7 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
                                       ],
                                     ),
                                   )
+
                                 ],
                               ),
                             );
