@@ -52,11 +52,11 @@ int? loadedItemCount;
                       title:categoryList[index].categoryName!,
                       // isActive: true,
                       // color:selectedIndex == index ? Colors.deepOrange : null,
-                        textColor:Provider.of<ApplicationProvider>(context ,listen: false).isSelectedIndex == index?Colors.white:Colors.black,
-                      color:Provider.of<ApplicationProvider>(context ,listen: false).isSelectedIndex == index?Colors.deepOrange:null,
+                        textColor:Provider.of<ApplicationProvider>(context ,listen: false).selectedCategoryIndex == index?Colors.white:Colors.black,
+                      color:Provider.of<ApplicationProvider>(context ,listen: false).selectedCategoryIndex == index?Colors.deepOrange:null,
                       press: (){
                         Provider.of<ApplicationProvider>(context ,listen: false).currentSelectedCategory(index);
-                        if (Provider.of<ApplicationProvider>(context, listen: false).isSelectedIndex ==index) {
+                        if (Provider.of<ApplicationProvider>(context, listen: false).selectedCategoryIndex ==index) {
                           setState(() {
                             if (categoryList[index].categoryId == "0") {
                               filteredList = Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.items!;
@@ -135,6 +135,7 @@ int? loadedItemCount;
         categoryList.insert(0, new Category(categoryId: "0",categoryName: "All"));
       }
       Provider.of<ApplicationProvider>(context ,listen: false).setCategoryName(categoryList.first.categoryName!);
+      Provider.of<ApplicationProvider>(context ,listen: false).setCategoryList(categoryList);
       setState(() {
 
       });

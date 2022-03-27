@@ -37,7 +37,7 @@ class _CategoryCardState extends State<CategoryCard> {
           // padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: widget.color,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(14),
           ),
           child: Column(
             children: [
@@ -47,7 +47,7 @@ class _CategoryCardState extends State<CategoryCard> {
                   child: Stack(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius: BorderRadius.circular(14.0),
                     child: Image.network(widget.cardImg!,
                       fit:BoxFit.fill,
                       height: double.infinity,

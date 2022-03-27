@@ -15,10 +15,20 @@ class UserPreference{
 
     prefs.setString('currentAddress', address);
   }
+
   getCurrentAddress() async {
     SharedPreferences prefs=await SharedPreferences.getInstance();
     String? selectedAddress=prefs.getString('currentAddress');
     return selectedAddress;
+  }
+  setDeliveryAddress(String address) async {
+    SharedPreferences prefs=await SharedPreferences.getInstance();
+    prefs.setString('deliveryAddress', address);
+  }
+  getDeliveryAddress() async {
+    SharedPreferences prefs=await SharedPreferences.getInstance();
+    String? deliveryAddress=prefs.getString('deliveryAddress');
+    return deliveryAddress;
   }
 
   Future<userData> getUserData() async{

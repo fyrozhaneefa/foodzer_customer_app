@@ -73,11 +73,14 @@ class PopularBrandCard extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 05,
               ),
               Container(
 
-                  child: Text(time!)
+                  child: Text('$time Mins',
+                  style: TextStyle(
+                    fontSize: 12
+                  ),)
               )
             ],
           ),

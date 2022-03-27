@@ -17,6 +17,7 @@ class AllRestaurantsScreen extends StatefulWidget {
 }
 
 class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
+  bool isFromCart = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,13 +34,16 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
           ),
         ),
         centerTitle: true,
+        titleSpacing: 0,
+        // leadingWidth: 30,
         title: InkWell(
           onTap: (){
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) =>
-                    GoogleMapScreen()));
+                    GoogleMapScreen(isFromCart)));
           },
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 child:Text(

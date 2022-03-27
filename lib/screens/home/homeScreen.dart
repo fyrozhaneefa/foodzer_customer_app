@@ -23,6 +23,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isFromCart = false;
   String? userName;
   @override
 void initState()  {
@@ -54,7 +55,7 @@ void initState()  {
           onTap: (){
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) =>
-            GoogleMapScreen()));
+            GoogleMapScreen(isFromCart)));
           },
           child: Column(
             children: [

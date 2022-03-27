@@ -16,6 +16,7 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
+  bool isFromCart = false;
 
   String? userName;
 
@@ -133,7 +134,7 @@ class _LandingScreenState extends State<LandingScreen> {
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  GoogleMapScreen()));
+                                  GoogleMapScreen(isFromCart)));
                         },
                         child: Stack(
                           children: [

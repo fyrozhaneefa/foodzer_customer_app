@@ -260,7 +260,8 @@ class Item {
     this.availableTime,
     this.availableDay,
     this.isPriceon,
-    this.isAddon,this.enteredQty
+    this.isAddon,this.enteredQty,
+    this.addonsList,
   });
 
   String? itemId;
@@ -322,8 +323,11 @@ class Item {
   int? isPriceon;
   int? isAddon;
   int? enteredQty;
+  double? totalPrice;
+  List<Addons>? addonsList;
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
+    // addonsList: List<Addons>.from(json["addonsList"].map((x) => Addons.fromJson(x))),
     itemId: json["item_id"],
     itemDeleteStatus: json["item_delete_status"],
     itemVisibility: json["item_visibility"],
@@ -382,6 +386,7 @@ class Item {
     availableDay: json["available_day"],
     isPriceon: json["is_priceon"],
     isAddon: json["is_addon"],
+
   );
 
   Map<String, dynamic> toJson() => {
@@ -445,6 +450,82 @@ class Item {
     "is_addon": isAddon,
   };
 }
+
+class Addons {
+  Addons({
+    this.itemAddonsTitleDisplayOrder,
+    this.itemAddonsTitleTblid,
+    this.itemAddonsTitleAddonsId,
+    this.itemAddonsTitleCount,
+    this.itemAddonsTitleType,
+    this.itemAddonsTitleItemId,
+    this.itemAddonsSubtitleTblid,
+    this.itemAddonsSubtitleSubtitleId,
+    this.addonsName,
+    this.addonsType,
+    this.addonsArabi,
+    this.addonsSubTitleName,
+    this.addonsSubTitleArabi,
+    this.addonsSubTitlePrice,
+    this.displayOrder,
+    this.isSelected,
+  });
+
+  String? itemAddonsTitleDisplayOrder;
+  String? itemAddonsTitleTblid;
+  String? itemAddonsTitleAddonsId;
+  String? itemAddonsTitleCount;
+  String? itemAddonsTitleType;
+  String? itemAddonsTitleItemId;
+  String? itemAddonsSubtitleTblid;
+  String? itemAddonsSubtitleSubtitleId;
+  String? addonsName;
+  String? addonsType;
+  String? addonsArabi;
+  String? addonsSubTitleName;
+  String? addonsSubTitleArabi;
+  double ? addonsSubTitlePrice;
+  dynamic displayOrder;
+  bool? isSelected;
+
+  factory Addons.fromJson(Map<String, dynamic> json) => Addons(
+    itemAddonsTitleDisplayOrder: json["item_addons_title_display_order"] == null ? null : json["item_addons_title_display_order"],
+    itemAddonsTitleTblid: json["item_addons_title_tblid"] == null ? null : json["item_addons_title_tblid"],
+    itemAddonsTitleAddonsId: json["item_addons_title_addons_id"] == null ? null : json["item_addons_title_addons_id"],
+    itemAddonsTitleCount: json["item_addons_title_count"] == null ? null : json["item_addons_title_count"],
+    itemAddonsTitleType: json["item_addons_title_type"] == null ? null : json["item_addons_title_type"],
+    itemAddonsTitleItemId: json["item_addons_title_item_id"] == null ? null : json["item_addons_title_item_id"],
+    itemAddonsSubtitleTblid: json["item_addons_subtitle_tblid"] == null ? null : json["item_addons_subtitle_tblid"],
+    itemAddonsSubtitleSubtitleId: json["item_addons_subtitle_subtitle_id"] == null ? null : json["item_addons_subtitle_subtitle_id"],
+    addonsName: json["addons_name"] == null ? null : json["addons_name"],
+    addonsType: json["addons_type"] == null ? null : json["addons_type"],
+    addonsArabi: json["addons_arabi"] == null ? null : json["addons_arabi"],
+    addonsSubTitleName: json["addons_sub_title_name"] == null ? null : json["addons_sub_title_name"],
+    addonsSubTitleArabi: json["addons_sub_title_arabi"] == null ? null : json["addons_sub_title_arabi"],
+    addonsSubTitlePrice: json["addons_sub_title_price"] == null ? null : double.parse(json["addons_sub_title_price"]),
+    displayOrder: json["display_order"],
+    isSelected: false,
+  );
+
+  Map<String, dynamic> toJson() => {
+    "item_addons_title_display_order": itemAddonsTitleDisplayOrder == null ? null : itemAddonsTitleDisplayOrder,
+    "item_addons_title_tblid": itemAddonsTitleTblid == null ? null : itemAddonsTitleTblid,
+    "item_addons_title_addons_id": itemAddonsTitleAddonsId == null ? null : itemAddonsTitleAddonsId,
+    "item_addons_title_count": itemAddonsTitleCount == null ? null : itemAddonsTitleCount,
+    "item_addons_title_type": itemAddonsTitleType == null ? null : itemAddonsTitleType,
+    "item_addons_title_item_id": itemAddonsTitleItemId == null ? null : itemAddonsTitleItemId,
+    "item_addons_subtitle_tblid": itemAddonsSubtitleTblid == null ? null : itemAddonsSubtitleTblid,
+    "item_addons_subtitle_subtitle_id": itemAddonsSubtitleSubtitleId == null ? null : itemAddonsSubtitleSubtitleId,
+    "addons_name": addonsName == null ? null :addonsName,
+    "addons_type": addonsType == null ? null : addonsType,
+    "addons_arabi": addonsArabi == null ? null : addonsArabi,
+    "addons_sub_title_name": addonsSubTitleName == null ? null : addonsSubTitleName,
+    "addons_sub_title_arabi": addonsSubTitleArabi == null ? null : addonsSubTitleArabi,
+    "addons_sub_title_price": addonsSubTitlePrice == null ? null : addonsSubTitlePrice,
+    "display_order": displayOrder,
+  };
+}
+
 
 class Reviews {
   Reviews({

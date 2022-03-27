@@ -59,7 +59,7 @@ class _ImageSliderState extends State<ImageSlider> {
                )).toList(),
                   options: CarouselOptions(
                    pageSnapping: true,
-                    height: 155,
+                    height: 135,
                     enlargeStrategy: CenterPageEnlargeStrategy.scale,
                     aspectRatio: 16 / 9,
                     // viewportFraction: 1,

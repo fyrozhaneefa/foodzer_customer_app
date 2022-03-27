@@ -26,6 +26,7 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   TextEditingController otpController = new TextEditingController();
 bool isLoading = false;
+bool isFromCart = false;
 
 
   late Timer _timer;
@@ -278,7 +279,7 @@ bool isLoading = false;
             );
             Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) =>
-                    GoogleMapScreen()));
+                    GoogleMapScreen(isFromCart)));
           } else {
             Fluttertoast.showToast(
                 msg: "Something happened. Try again",

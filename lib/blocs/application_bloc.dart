@@ -13,36 +13,44 @@ import '../Models/place.dart';
 import '../Models/place_search.dart';
 import '../Services/dashboardModelService.dart';
 
-class ApplicationProvider with ChangeNotifier{
+class ApplicationProvider with ChangeNotifier {
   final geoLocatorService = GeolocatorService();
-final placesService = PlacesService();
+  final placesService = PlacesService();
 // final dashboardService = DashboardModelService();
   //Variables
   Position? currentLocation;
   List<PlaceSearch>? searchResults;
   String? currentAddress;
   // List<CategoryModel>? dashboardResults;
-  List<Item> categoryBasedItemList=[];
-  List<Item> allItemsList=[];
-  List<Item> cartModelList=[];
+  List<Item> categoryBasedItemList = [];
+  List<Item> allItemsList = [];
+  List<Item> cartModelList = [];
   List<Item> filteredLoadedProductModelList = [];
 
-  SingleRestModel selectedRestModel= new SingleRestModel();
-  List<AddonModel> addonModelList =[];
-int? isSelectedIndex;
-int? isSelectedCategoryIndex;
-String? catName;
-String? itemId;
-
+  SingleRestModel selectedRestModel = new SingleRestModel();
+  List<AddonModel> addonModelList = [];
+  int? selectedCategoryIndex;
+  String? catName;
+// String? itemId;
+  List<Category> categoryList=[];
+  double? totalCartPrice;
   bool isItemLoading = false;
   ApplicationProvider() {
     setCurrentLocation();
   }
-
+  setTotalCartPrice(double price) async {
+    totalCartPrice = price;
+    notifyListeners();
+  }
   setCurrentLocation() async {
     currentLocation = await geoLocatorService.getCurrentLocation();
     notifyListeners();
   }
+  setCategoryList(List<Category> list) async {
+    this.categoryList = list;
+    notifyListeners();
+  }
+
   setItemLoading(bool isLoading) async {
     this.isItemLoading = isLoading;
     notifyListeners();
@@ -53,10 +61,11 @@ String? itemId;
     notifyListeners();
   }
 
-  clearItems() async{
+  clearItems() async {
     filteredLoadedProductModelList.clear();
     notifyListeners();
   }
+
   setAllItems() async {
     allItemsList = selectedRestModel.items!;
     notifyListeners();
@@ -68,9 +77,8 @@ String? itemId;
   //   notifyListeners();
   // }
 
-  addProductData(
-      List<Item> productList, bool isFilteredList, int position) {
-    isSelectedIndex = position;
+  addProductData(List<Item> productList, bool isFilteredList, int position) {
+    selectedCategoryIndex = position;
 
     if (!isFilteredList) {
       allItemsList = productList;
@@ -79,81 +87,116 @@ String? itemId;
     notifyListeners();
   }
 
-  setCategoryName(String categoryName){
+  setCategoryName(String categoryName) {
     catName = categoryName;
     notifyListeners();
   }
-  currentSelectedCategory(int selectedIndex){
-  isSelectedIndex = selectedIndex;
-  notifyListeners();
+
+  currentSelectedCategory(int selectedIndex) {
+    selectedCategoryIndex = selectedIndex;
+    notifyListeners();
   }
+
   searchPlaces(String searchTerm) async {
     searchResults = await placesService.getAutoComplete(searchTerm);
     notifyListeners();
   }
+
   getCurrentAddress() async {
     currentAddress = await geoLocatorService.getCurrentAddress();
     notifyListeners();
   }
-  getItemId(String addonItemId){
-    itemId = addonItemId;
-    notifyListeners();
-  }
+
+  // getItemId(String addonItemId){
+  //   itemId = addonItemId;
+  //   notifyListeners();
+  // }
   setItemAddons(List<AddonModel> itemAddonModel) {
     addonModelList = itemAddonModel;
     notifyListeners();
   }
 
-  updateProduct(Item product, bool isIncrement,int enteredQty) {
-    int index = filteredLoadedProductModelList.indexOf(product);
+  updateProduct(Item product, bool isIncrement, int enteredQty) {
+    int index = filteredLoadedProductModelList
+        .indexWhere((element) => element.itemId == product.itemId);
 
-    if (isIncrement) {
-      filteredLoadedProductModelList[index].enteredQty =
-          null!=filteredLoadedProductModelList[index].enteredQty?
-          filteredLoadedProductModelList[index].enteredQty! + enteredQty:enteredQty;
-      if (null != cartModelList && cartModelList.length > 0) {
-        if (!cartModelList.contains(product)) {
-          filteredLoadedProductModelList[index].enteredQty=enteredQty;
-          cartModelList.add(filteredLoadedProductModelList[index]);
+    if (index > 0) {
+      if (isIncrement) {
+        // filteredLoadedProductModelList[index].enteredQty = enteredQty;
+        if (null != cartModelList && cartModelList.length > 0) {
+          if (!cartModelList.contains(product)) {
+            filteredLoadedProductModelList[index]= calculateValue(product, enteredQty);
+            cartModelList.add(filteredLoadedProductModelList[index]);
+          } else {
+            int cartIndex = cartModelList.indexOf(product);
+            cartModelList[cartIndex] =  calculateValue(product, enteredQty);
+          }
         } else {
-          int cartIndex = cartModelList.indexOf(product);
-          cartModelList[cartIndex].enteredQty =
-          null!=filteredLoadedProductModelList[index].enteredQty?
-          filteredLoadedProductModelList[index].enteredQty! + enteredQty:enteredQty;
+          filteredLoadedProductModelList[index] = calculateValue(product, enteredQty);
+          cartModelList.add(filteredLoadedProductModelList[index]);
         }
       } else {
-        filteredLoadedProductModelList[index].enteredQty=enteredQty;
-        cartModelList.add(filteredLoadedProductModelList[index]);
+        int cartIndex = cartModelList.indexOf(product);
+
+        if (null != product.enteredQty && product.enteredQty! > 1) {
+          filteredLoadedProductModelList[index] = calculateValue(product, enteredQty);
+
+          cartModelList[cartIndex]=calculateValue(product, enteredQty);
+        } else {
+          cartModelList.remove(product);
+
+          filteredLoadedProductModelList[index]=calculateValue(product, enteredQty);
+        }
       }
-
     } else {
-      int cartIndex = cartModelList.indexOf(product);
-
-      if (product.enteredQty! > 1) {
-        filteredLoadedProductModelList[index].enteredQty =
-            filteredLoadedProductModelList[index].enteredQty! - 1;
-        cartModelList[cartIndex].enteredQty =
-            filteredLoadedProductModelList[index].enteredQty;
+      if (isIncrement) {
+        if (null != cartModelList && cartModelList.length > 0) {
+          if (!cartModelList.contains(product)) {
+            product=calculateValue(product, enteredQty);
+            cartModelList.add(product);
+          } else {
+            int cartIndex = cartModelList.indexOf(product);
+            cartModelList[cartIndex] = calculateValue(product, enteredQty);
+          }
+        } else {
+          product=calculateValue(product, enteredQty);
+          cartModelList.add(product);
+        }
       } else {
-        cartModelList.remove(product);
+        int cartIndex = cartModelList.indexOf(product);
 
-        filteredLoadedProductModelList[index].enteredQty = 0;
+        if (null != product.enteredQty && product.enteredQty! > 1) {
+          cartModelList[cartIndex] = calculateValue(product, enteredQty);
+        } else {
+          cartModelList.remove(product);
+        }
       }
     }
-    int allItemIndex=selectedRestModel.items!.indexWhere((element) =>
-    element.itemId==product.itemId);
-    if(allItemIndex>-1){
-      // double oldQty=null!=selectedRestModel.items![allItemIndex].enteredQty!?
-      // selectedRestModel.items![allItemIndex].enteredQty!:0;
-      // oldQty=oldQty+enteredQty;
-      selectedRestModel.items![allItemIndex].enteredQty!=filteredLoadedProductModelList[index].enteredQty;
+    int allItemIndex = selectedRestModel.items!
+        .indexWhere((element) => element.itemId == product.itemId);
+    if (allItemIndex > -1) {
 
+      selectedRestModel.items![allItemIndex] =calculateValue(product, enteredQty);
     }
     notifyListeners();
   }
-  
-  
-@override
+
+  Item calculateValue(Item product,int enteredQty) {
+    double totalAmt=0;
+    product.enteredQty=enteredQty;
+    totalAmt = (enteredQty * product.itemPrice!).toDouble();
+
+    if(null!=product.addonsList && product.addonsList!.length>0){
+      for(Addons addon in product.addonsList!){
+        totalAmt=totalAmt+addon.addonsSubTitlePrice!;
+      }
+    }
+    product.totalPrice=totalAmt;
+
+    return product;
+  }
+
+  @override
   void dispose() {
     super.dispose();
   }
