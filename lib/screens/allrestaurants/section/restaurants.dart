@@ -10,9 +10,7 @@ import '../../../Models/restaurentmodel.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Restaurants extends StatefulWidget {
-  const
-
-  Restaurants({Key? key}) : super(key: key);
+  const Restaurants({Key? key}) : super(key: key);
 
   @override
   _RestaurantsState createState() => _RestaurantsState();
@@ -100,40 +98,40 @@ class _RestaurantsState extends State<Restaurants> {
                   return ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount:null != snapshot.data? snapshot.data!.length : 0,
+                      itemCount:
+                          null != snapshot.data ? snapshot.data!.length : 0,
                       itemBuilder: (BuildContext context, int index) {
                         Results user = snapshot.data!.elementAt(index);
                         return InkWell(
                           onTap: () {
-                            if(user.openStatus == "Open"){
+                            if (user.openStatus == "Open") {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      RestaurantDetailsScreen(user.merchantBranchId,user.lat,user.lng)));
-                            } else if(user.openStatus =="Closed"){
+                                      RestaurantDetailsScreen(
+                                          user.merchantBranchId,
+                                          user.lat,
+                                          user.lng)));
+                            } else if (user.openStatus == "Closed") {
                               Fluttertoast.showToast(
                                   msg: "Closed",
                                   toastLength: Toast.LENGTH_LONG,
                                   fontSize: 14,
                                   backgroundColor: Colors.grey.shade300,
-                                  textColor: Colors.red
-                              );
-                            }
-                            else if(user.openStatus =="No-Service"){
+                                  textColor: Colors.red);
+                            } else if (user.openStatus == "No-Service") {
                               Fluttertoast.showToast(
                                   msg: "No Service",
                                   toastLength: Toast.LENGTH_LONG,
                                   fontSize: 14,
                                   backgroundColor: Colors.greenAccent,
-                                textColor: Colors.black
-                              );
-                            } else if(user.merchantBranchBusy == "1" ){
+                                  textColor: Colors.black);
+                            } else if (user.merchantBranchBusy == "1") {
                               Fluttertoast.showToast(
                                   msg: "Busy",
                                   toastLength: Toast.LENGTH_LONG,
                                   fontSize: 14,
                                   backgroundColor: Colors.white,
-                                textColor: Colors.black
-                              );
+                                  textColor: Colors.black);
                             }
                           },
                           child: isSwitchView
@@ -147,7 +145,7 @@ class _RestaurantsState extends State<Restaurants> {
                                         children: [
                                           Container(
                                             decoration: BoxDecoration(
-                                                 border: Border.all(
+                                                border: Border.all(
                                                     color:
                                                         Colors.grey.shade300),
                                                 borderRadius:
@@ -162,15 +160,25 @@ class _RestaurantsState extends State<Restaurants> {
                                                 child: Image.network(
                                                   user.merchantBranchImage!,
                                                   fit: BoxFit.fill,
-                                                  loadingBuilder: (BuildContext context, Widget child,
-                                                      ImageChunkEvent? loadingProgress) {
-                                                    if (loadingProgress == null) return child;
+                                                  loadingBuilder:
+                                                      (BuildContext context,
+                                                          Widget child,
+                                                          ImageChunkEvent?
+                                                              loadingProgress) {
+                                                    if (loadingProgress == null)
+                                                      return child;
                                                     return Center(
-                                                      child: CircularProgressIndicator(
-                                                        color: Colors.deepOrangeAccent,
-                                                        value: loadingProgress.expectedTotalBytes != null
-                                                            ? loadingProgress.cumulativeBytesLoaded /
-                                                            loadingProgress.expectedTotalBytes!
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        color: Colors
+                                                            .deepOrangeAccent,
+                                                        value: loadingProgress
+                                                                    .expectedTotalBytes !=
+                                                                null
+                                                            ? loadingProgress
+                                                                    .cumulativeBytesLoaded /
+                                                                loadingProgress
+                                                                    .expectedTotalBytes!
                                                             : null,
                                                       ),
                                                     );
@@ -260,7 +268,6 @@ class _RestaurantsState extends State<Restaurants> {
                                           user: user,
                                         ),
                                       ),
-
                                     ],
                                   ),
                                 )
@@ -278,15 +285,25 @@ class _RestaurantsState extends State<Restaurants> {
                                           child: Image.network(
                                             (user.merchantBranchImage!),
                                             fit: BoxFit.fill,
-                                            loadingBuilder: (BuildContext context, Widget child,
-                                                ImageChunkEvent? loadingProgress) {
-                                              if (loadingProgress == null) return child;
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                    Widget child,
+                                                    ImageChunkEvent?
+                                                        loadingProgress) {
+                                              if (loadingProgress == null)
+                                                return child;
                                               return Center(
-                                                child: CircularProgressIndicator(
-                                                  color: Colors.deepOrangeAccent,
-                                                  value: loadingProgress.expectedTotalBytes != null
-                                                      ? loadingProgress.cumulativeBytesLoaded /
-                                                      loadingProgress.expectedTotalBytes!
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color:
+                                                      Colors.deepOrangeAccent,
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
                                                       : null,
                                                 ),
                                               );
@@ -358,7 +375,8 @@ class _RestaurantsState extends State<Restaurants> {
                                   ])),
                         );
                       });
-                } else {
+                } else
+                  {
                   return Center(child: Text('some error occured!!'));
                 }
               })
@@ -367,7 +385,6 @@ class _RestaurantsState extends State<Restaurants> {
     );
   }
 }
-
 
 class ProductDesc extends StatelessWidget {
   Results user;
@@ -379,15 +396,44 @@ class ProductDesc extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(user.merchantBranchName.toString(), style: TextStyle(color: Colors.black)),
+        Row(
+          children: [
+            Text(
+              user.merchantBranchName.toString(),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15),
+            ),
+            user.newTag == 1
+                ? Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Container(
+                      height: 22,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.redAccent.withOpacity(.1),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Center(
+                        child: Text(
+                          "New",
+                          style: TextStyle(
+                              color: Colors.deepOrange,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ))
+                : Container(),
+          ],
+        ),
         SizedBox(
           height: 3,
         ),
         Text(
-          null!=user.cuisines?user.cuisines.toString():"",
+          null != user.cuisines ? user.cuisines.toString() : "",
           style: TextStyle(
             fontSize: 12,
-            color: Colors.grey,
+            color: Colors.grey.shade600,
           ),
         ),
         SizedBox(
@@ -403,7 +449,17 @@ class ProductDesc extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            Text(user.avgReview.toString()),
+            user.avgReview == "1"
+                ? Text("Amazing")
+                : user.avgReview == "2"
+                    ? Text("Very Good")
+                    : user.avgReview == "3"
+                        ? Text("Good")
+                        : user.avgReview == "4"
+                            ? Text("OK")
+                            : user.avgReview == "0"
+                                ? Text("Not Yet")
+                                : Container(),
           ],
         ),
         SizedBox(
@@ -419,7 +475,11 @@ class ProductDesc extends StatelessWidget {
               width: 5,
             ),
             Text(
-              'Within ' + user.merchantBranchOrderTime.toString() + " mins",
+              user.merchantBranchOrderTime.toString() +
+                  " mins" +
+                  " | " +
+                  user.distance.toString() +
+                  " km",
               style: TextStyle(
                 fontSize: 12,
               ),
@@ -442,7 +502,7 @@ class ProductDesc extends StatelessWidget {
               size: 20,
             ),
             Text(
-              'BD 0.400',
+              'BD 0.40',
               style: TextStyle(
                 fontSize: 12,
               ),

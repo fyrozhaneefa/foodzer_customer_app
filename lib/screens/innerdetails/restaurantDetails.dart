@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/constants/divider.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/ReviewSection/review_section.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
@@ -304,8 +305,11 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   crossAxisAlignment:
                                   CrossAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.menu,
-                                        color: Colors.deepOrange),
+                                    InkWell(
+                                        child: Icon(Icons.menu, color: Colors.deepOrange),
+                                        onTap: () {
+                                          onButtonpress(context);
+                                        }),
                                     Flexible(
                                       child: Container(
                                         height: 40,
@@ -674,6 +678,58 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       print("some error occured!!!");
     }
   }
+  void onButtonpress(context) {
+    showModalBottomSheet(isScrollControlled: false,
+      context: context,
+      builder: (context) {
+        return Column(mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: InkWell(
+                      child: Icon(Icons.clear_outlined),
+                      onTap: () {
+                        Navigator.pop(context);
+                      }),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 25, bottom: 20),
+                  child: Text(
+                    "Menu categories",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
+            ),
+            Flexible(child:ListView.separated(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemCount: categoryList.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(categoryList[index].categoryName.toString()),
+                  // trailing: Text(categoryList.),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Dividersection();
+              },
+            ),
+            ),],
+        );
+      },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+    );
+  }
 }
 
 class PersistentHeader extends SliverPersistentHeaderDelegate {
@@ -703,4 +759,5 @@ class PersistentHeader extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
     return true;
   }
+
 }

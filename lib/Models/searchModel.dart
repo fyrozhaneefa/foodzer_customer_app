@@ -1,10 +1,9 @@
-
-class RestaurentModel {
+class SearchModel {
   int? errorCode;
   List<Results>? results;
 
 
-  RestaurentModel.fromJson(Map<String, dynamic> json) {
+  SearchModel.fromJson(Map<String, dynamic> json) {
     if (json['results'] != null) {
       results = <Results>[];
       json['results'].forEach((v) {
