@@ -20,7 +20,8 @@ class _FoodzerPayScreenState extends State<FoodzerPayScreen> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+              // Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+              Navigator.pop(context);
             },
             icon: Icon(Icons.arrow_back,
             color: Colors.black,

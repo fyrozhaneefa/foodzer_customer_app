@@ -16,6 +16,10 @@ class MainSearchScreen extends StatefulWidget {
 }
 
 class _MainSearchScreenState extends State<MainSearchScreen> {
+  TextEditingController? textEditingController = TextEditingController();
+
+  get orientation => null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +52,9 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
                     color: Colors.black,
                   ),
                 ),
+                onChanged: (value) {
+                  setState(() {});
+                },
               ),
             ),
             decoration: BoxDecoration(
@@ -84,63 +91,64 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
                     future: MainSearch().getMainSearch(),
                     builder: (context, AsyncSnapshot<List<Results>?> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting)
-                        return Center(child: CircularProgressIndicator(color: Colors.deepOrange,));
+                        return Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.deepOrange,
+                        ));
                       else if (snapshot.hasData) {
                         return Container(
                           height: 150,
-                          child: GridView.count(scrollDirection: Axis.vertical,
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            childAspectRatio: 16 / 6,
-                            mainAxisSpacing: 0,
-                            crossAxisCount: 3,
-                            children:
-                                List.generate(snapshot.data!.length, (index) {
-                              Results user = snapshot.data!.elementAt(index);
-
-                              return Padding(
-                                padding: const EdgeInsets.all(7.0),
-                                child: InkWell(
-                                  onTap: () {
-                                    print('printed');
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(
-                                        color: Colors.grey,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                              left: 8, right: 8)
-                                          .copyWith(top: 0, bottom: 0),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.timeline,
-                                            color: Colors.grey,
-                                            size: 16,
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              user.cuisineName!,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 10),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
+                          width: Helper.getScreenHeight(context) * 1,
+                          child: GridView.builder(
+                            itemCount: snapshot.data!.length,
+                            gridDelegate:
+                                new SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: 10,
+                                    mainAxisSpacing: 10,
+                                    mainAxisExtent: 30,
+                                    childAspectRatio: 10),
+                            itemBuilder: (BuildContext context, int index) {
+                              Results data = snapshot.data!.elementAt(index);
+                              return InkWell( child:Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1.0,
                                   ),
                                 ),
-                              );
-                            }),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 8, right: 8)
+                                          .copyWith(top: 0, bottom: 0),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.timeline,
+                                        color: Colors.grey,
+                                        size: 16,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          data.cuisineName!,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 10),
+                                        ),
+                                      )
+
+                                    ],
+                                  ),
+                                ),
+                              ),onTap: (){
+
+
+                              },);
+                            },
                           ),
                         );
                       } else {
@@ -310,7 +318,6 @@ class _MainSearchScreenState extends State<MainSearchScreen> {
                                       ],
                                     ),
                                   )
-
                                 ],
                               ),
                             );
