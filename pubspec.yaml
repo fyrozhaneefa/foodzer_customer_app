@@ -44,6 +44,7 @@ dependencies:
   flutter_geocoder: ^0.2.2-nullsafety
   video_player: ^2.3.0
   shimmer:
+  cashfree_pg: ^2.0.7+27
 
 
 
