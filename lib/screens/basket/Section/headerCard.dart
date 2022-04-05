@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/applybutton.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/ReviewSection/dividersection.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/section/restaurantProductsList.dart';
@@ -86,18 +87,18 @@ class _BasketHeaderState extends State<BasketHeader> {
                               children: [
                                 Padding(
                                     padding:
-                                        EdgeInsets.only(left: 5, right: 10),
+                                    EdgeInsets.only(left: 5, right: 10),
                                     child: InkWell(
                                       onTap: () {
                                         Provider.of<ApplicationProvider>(
-                                                context,
-                                                listen: false)
+                                            context,
+                                            listen: false)
                                             .updateProduct(
-                                                provider.cartModelList[index],
-                                                false,
-                                                provider.cartModelList[index]
-                                                        .enteredQty! -
-                                                    1);
+                                            provider.cartModelList[index],
+                                            false,
+                                            provider.cartModelList[index]
+                                                .enteredQty! -
+                                                1);
                                       },
                                       child: Icon(
                                         Icons.remove,
@@ -116,13 +117,13 @@ class _BasketHeaderState extends State<BasketHeader> {
                                   child: InkWell(
                                     onTap: () {
                                       Provider.of<ApplicationProvider>(context,
-                                              listen: false)
+                                          listen: false)
                                           .updateProduct(
-                                              provider.cartModelList[index],
-                                              true,
-                                              provider.cartModelList[index]
-                                                      .enteredQty! +
-                                                  1);
+                                          provider.cartModelList[index],
+                                          true,
+                                          provider.cartModelList[index]
+                                              .enteredQty! +
+                                              1);
                                     },
                                     child: Icon(
                                       Icons.add,
@@ -140,7 +141,8 @@ class _BasketHeaderState extends State<BasketHeader> {
                                 padding: EdgeInsets.all(10),
                                 child: Text(
                                   // "₹320",
-                                  ('₹${provider.cartModelList[index].totalPrice.toString()}'),
+                                  ('₹${provider.cartModelList[index].totalPrice
+                                      .toString()}'),
                                   style: TextStyle(fontSize: 16),
                                 ),
                               ),
@@ -150,139 +152,152 @@ class _BasketHeaderState extends State<BasketHeader> {
                       ),
 
                       null != provider.cartModelList[index].addonsList &&
-                              provider.cartModelList[index].addonsList!.length >
-                                  0
+                          provider.cartModelList[index].addonsList!.length >
+                              0
                           ? InkWell(
-                              child: Row(children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 13),
-                                  child: Text(
-                                    "Custom",
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                Icon(Icons.keyboard_arrow_down,size: 17,)
-                              ]),
-                              onTap: () {
-                                showModalBottomSheet(
-                                  isScrollControlled: false,
-                                  context: context,
-                                  builder: (context) {
-                                    return Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    top: 25,
-                                                    bottom: 10,
-                                                    left: 20,
-                                                    right: 10),
-                                                child: InkWell(
-                                                    child: Icon(
-                                                        Icons.clear_outlined),
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                    }),
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: 25, bottom: 10),
-                                                    child: Text(
-                                                      provider
-                                                          .cartModelList[index]
-                                                          .itemName
-                                                          .toString(),
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.w600),
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    ('₹${provider.cartModelList[index].totalPrice.toString()}'),
-                                                    style:
-                                                        TextStyle(fontSize: 13),
-                                                  ),
-                                                ],
-                                              ),
-                                            ]),
-                                        Flexible(
-                                          child: ListView.builder(
-                                              physics: ScrollPhysics(),
-                                              itemCount: provider
+                        child: Row(children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 13),
+                            child: Text(
+                              "Custom",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          Icon(Icons.keyboard_arrow_down, size: 17,)
+                        ]),
+                        onTap: () {
+                          showModalBottomSheet(
+                            isScrollControlled: false,
+                            context: context,
+                            builder: (context) {
+                              return Column(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 25,
+                                            bottom: 10,
+                                            left: 20,
+                                            right: 10),
+                                        child: InkWell(
+                                            child: Icon(
+                                                Icons.clear_outlined),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            }),
+                                      ),
+                                      Container(child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 25, bottom: 10),
+                                            child: Text(
+                                              provider
                                                   .cartModelList[index]
-                                                  .addonsList!
-                                                  .length,
-                                              itemBuilder: (context, position) {
-                                                return ListTile(
-                                                  leading: IconButton(
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                      padding: EdgeInsets.zero,
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          provider
-                                                              .cartModelList[
-                                                                  index]
-                                                              .addonsList!
-                                                              .removeAt(
-                                                                  position);
-                                                          Provider.of<ApplicationProvider>(
-                                                                  context,
-                                                                  listen: true)
-                                                              .updateProduct(
-                                                                  provider.cartModelList[
-                                                                      index],false,
-                                                                  provider
-                                                                      .cartModelList[
-                                                                          index]
-                                                                      .enteredQty!);
-                                                        });
+                                                  .itemName
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight:
+                                                  FontWeight.w600),
+                                            ),
+                                          ),
+                                          Text(
+                                            ('₹${provider.cartModelList[index]
+                                                .totalPrice.toString()}'),
+                                            style:
+                                            TextStyle(fontSize: 13),
+                                          ),
 
-                                                      },
-                                                      icon: Icon(
-                                                        Icons
-                                                            .remove_circle_outline,
-                                                        color: Colors.red,
-                                                        size: 20,
-                                                      )),
-                                                  title: new Text(provider
-                                                      .cartModelList[index]
-                                                      .addonsList![position]
-                                                      .addonsSubTitleName
-                                                      .toString()),
-                                                  trailing: Text(
-                                                      '₹${provider.cartModelList[index].addonsList![position].addonsSubTitlePrice.toString()}'),
-                                                  style: ListTileStyle.drawer,
-                                                );
-                                              }),
-                                        ),
-                                        ApplyButton(
-                                            buttonname: "Update Item",
-                                            radius: 8)
-                                      ],
-                                    );
-                                  },
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20),
-                                    ),
+                                        ],
+                                      ),
+                                      ),
+                                    ],),
+                                  SizedBox(height: 10,),
+                                  MySeparator(),
+                                  Flexible(
+                                    child: ListView.builder(
+                                        physics: ScrollPhysics(),
+                                        itemCount: provider
+                                            .cartModelList[index]
+                                            .addonsList!
+                                            .length,
+                                        itemBuilder: (context, position) {
+                                          return ListTile(
+                                            leading: IconButton(
+                                                alignment:
+                                                Alignment.centerLeft,
+                                                padding: EdgeInsets.zero,
+                                                onPressed: () {
+                                                  setState(() {
+                                                    provider
+                                                        .cartModelList[
+                                                    index]
+                                                        .addonsList!
+                                                        .removeAt(
+                                                        position);
+                                                    Provider.of<
+                                                        ApplicationProvider>(
+                                                        context,
+                                                        listen: true)
+                                                        .updateProduct(
+                                                        provider.cartModelList[
+                                                        index],
+                                                        false,
+                                                        provider
+                                                            .cartModelList[
+                                                        index]
+                                                            .enteredQty!);
+                                                  });
+                                                },
+                                                icon: Icon(
+                                                  Icons
+                                                      .remove_circle_outline,
+                                                  color: Colors.red,
+                                                  size: 20,
+                                                )),
+                                            title: new Text(provider
+                                                .cartModelList[index]
+                                                .addonsList![position]
+                                                .addonsSubTitleName
+                                                .toString()),
+                                            trailing: Text(
+                                                '₹${provider
+                                                    .cartModelList[index]
+                                                    .addonsList![position]
+                                                    .addonsSubTitlePrice
+                                                    .toString()}'),
+                                            style: ListTileStyle.drawer,
+                                          );
+                                        }),
                                   ),
-                                );
-                              },
-                            )
+                                  Container(height: 55,
+                                      width: Helper.getScreenWidth(context) * 1,
+                                      child: ApplyButton(
+                                          buttonname: "Update Item",
+                                          radius: 8)
+                                  )
+                                ],
+                              );
+                            },
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                            ),
+                          );
+                        },
+                      )
                           : Container()
                       // ? ListView.builder(
                       //     physics: ScrollPhysics(),
