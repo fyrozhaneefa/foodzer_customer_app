@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Api/ApiData.dart';
+import 'package:foodzer_customer_app/Models/UserModel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
@@ -16,6 +18,8 @@ import 'package:flutter_geocoder/geocoder.dart' as geoCo;
 import '../Models/place.dart';
 import '../Services/geolocator_service.dart';
 import '../utils/helper.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class GoogleMapScreen extends StatefulWidget {
   static const routeName = "/googleMapScreen";
@@ -40,6 +44,9 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   Place selectedLocation = new Place();
   bool map = false;
   var maptype = MapType.normal;
+  bool isLoading=false;
+  UserData userModel=new UserData();
+
   double? mapBottomPadding;
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
@@ -52,12 +59,13 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
     print(' the value is ${widget.isFromCart}');
     final applicationBloc =
         Provider.of<ApplicationProvider>(context, listen: false);
+    UserPreference().getUserData().then((value) {
+      userModel=value;
+      setState(() {
 
-    // locationSubscription = applicationBloc.selectedLocation.stream.listen((place) {
-    //   if(place !=null) {
-    //     _goToPlace(place);
-    //   }
-    // });
+      });
+
+    });
     super.initState();
       _getAddressFromLatLng(0, 0);
 
@@ -441,7 +449,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                         height: 45,
                         child: ElevatedButton(
                           onPressed: () {
-                            UserPreference().setDeliveryAddress(_currentAddress!);
+                            // UserPreference().setDeliveryAddress(_currentAddress!);
                             locationDetails(context,locality);
                             setState(() {
 
@@ -563,7 +571,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         enableDrag: true,
         context: context,
         builder: (context) {
-          return AddDeliveryAddress(locality);
+          return AddDeliveryAddress(locality,latLongCurrent,_currentAddress);
         });
   }
 

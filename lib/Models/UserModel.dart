@@ -15,11 +15,11 @@ class UserModel {
   });
 
   String? loginStatus;
-  userData? data;
+  UserData? data;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     loginStatus: json["login_status"] == null ? null : json["login_status"],
-    data: json["data"] == null ? null : userData.fromJson(json["data"]),
+    data: json["data"] == null ? null : UserData.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -28,8 +28,8 @@ class UserModel {
   };
 }
 
-class userData {
-  userData({
+class UserData {
+  UserData({
     this.userId,
     this.userName,
     this.userEmail,
@@ -45,7 +45,7 @@ class userData {
   String? userCountry;
   String? userMobie;
 
-  factory userData.fromJson(Map<String, dynamic> json) => userData(
+  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
     userId: json["user_id"] == null ? null : json["user_id"],
     userName: json["user_name"] == null ? null : json["user_name"],
     userEmail: json["user_email"] == null ? null : json["user_email"],

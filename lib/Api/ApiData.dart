@@ -12,5 +12,9 @@ class ApiData{
 
   static String All_Restaurent=API_URL+"restaurants";
   static String GET_ITEM_ADDONS = API_URL+"addon_popup";
+  static String ADD_ADDRESS = API_URL+"add_address";
+  static String GET_USER_ADDRESS = API_URL+"get_user_adress";
+  static String MERCHANT_BRANCH_TAX = API_URL+"merchant_branch_tax";
+  static String GET_DELIVERY_CHARGE = API_URL+"get_delivery_charge";
 
 }
