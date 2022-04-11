@@ -559,7 +559,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       width: 5,
                                     ),
                                     Text(
-                                      '₹${provider.totalCartPrice}',
+                                     null!= provider.totalCartPrice?'₹${provider.totalCartPrice}':"₹0",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
@@ -605,8 +605,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       _singleRestModel = SingleRestModel.fromJson(json);
       Provider.of<ApplicationProvider>(context, listen: false)
           .setCurrentRestModel(_singleRestModel);
-      Provider.of<ApplicationProvider>(context, listen: false)
-          .addProductData(_singleRestModel.items!, false, 0);
+
       // Provider.of<ApplicationProvider>(context ,listen: false).filterItems(_singleRestModel.items![0].categoryId!);
       // Provider.of<ApplicationProvider>(context ,listen: false).setCategoryName(_singleRestModel.categories![0].categoryName!);
     } else {
@@ -712,7 +711,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(categoryList[index].categoryName.toString()),
-                  // trailing: Text(categoryList.),
+                  // trailing: Text('5'),
                 );
               },
               separatorBuilder: (context, index) {

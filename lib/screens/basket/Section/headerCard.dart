@@ -4,6 +4,7 @@ import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/applybutton.
 import 'package:foodzer_customer_app/Menu/Microfiles/ReviewSection/dividersection.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
+import 'package:foodzer_customer_app/screens/basket/Section/cartAddons.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/section/restaurantProductsList.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,7 @@ class BasketHeader extends StatefulWidget {
 class _BasketHeaderState extends State<BasketHeader> {
   bool isAddons = false;
   bool isClick = false;
+  int selectedCartItemIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -151,15 +153,14 @@ class _BasketHeaderState extends State<BasketHeader> {
                         ],
                       ),
 
-                      null != provider.cartModelList[index].addonsList &&
-                          provider.cartModelList[index].addonsList!.length >
-                              0
+                      null != provider.cartModelList[index].isAddon &&
+                          provider.cartModelList[index].isAddon == 1
                           ? InkWell(
                         child: Row(children: [
                           Padding(
                             padding: EdgeInsets.only(left: 13),
                             child: Text(
-                              "Custom",
+                              "Customize",
                               style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600),
@@ -169,133 +170,146 @@ class _BasketHeaderState extends State<BasketHeader> {
                         ]),
                         onTap: () {
                           showModalBottomSheet(
-                            isScrollControlled: false,
-                            context: context,
-                            builder: (context) {
-                              return Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            top: 25,
-                                            bottom: 10,
-                                            left: 20,
-                                            right: 10),
-                                        child: InkWell(
-                                            child: Icon(
-                                                Icons.clear_outlined),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            }),
-                                      ),
-                                      Container(child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                top: 25, bottom: 10),
-                                            child: Text(
-                                              provider
-                                                  .cartModelList[index]
-                                                  .itemName
-                                                  .toString(),
-                                              style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight:
-                                                  FontWeight.w600),
-                                            ),
-                                          ),
-                                          Text(
-                                            ('₹${provider.cartModelList[index]
-                                                .totalPrice.toString()}'),
-                                            style:
-                                            TextStyle(fontSize: 13),
-                                          ),
-
-                                        ],
-                                      ),
-                                      ),
-                                    ],),
-                                  SizedBox(height: 10,),
-                                  MySeparator(),
-                                  Flexible(
-                                    child: ListView.builder(
-                                        physics: ScrollPhysics(),
-                                        itemCount: provider
-                                            .cartModelList[index]
-                                            .addonsList!
-                                            .length,
-                                        itemBuilder: (context, position) {
-                                          return ListTile(
-                                            leading: IconButton(
-                                                alignment:
-                                                Alignment.centerLeft,
-                                                padding: EdgeInsets.zero,
-                                                onPressed: () {
-                                                  setState(() {
-                                                    provider
-                                                        .cartModelList[
-                                                    index]
-                                                        .addonsList!
-                                                        .removeAt(
-                                                        position);
-                                                    Provider.of<
-                                                        ApplicationProvider>(
-                                                        context,
-                                                        listen: true)
-                                                        .updateProduct(
-                                                        provider.cartModelList[
-                                                        index],
-                                                        false,
-                                                        provider
-                                                            .cartModelList[
-                                                        index]
-                                                            .enteredQty!);
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  Icons
-                                                      .remove_circle_outline,
-                                                  color: Colors.red,
-                                                  size: 20,
-                                                )),
-                                            title: new Text(provider
-                                                .cartModelList[index]
-                                                .addonsList![position]
-                                                .addonsSubTitleName
-                                                .toString()),
-                                            trailing: Text(
-                                                '₹${provider
-                                                    .cartModelList[index]
-                                                    .addonsList![position]
-                                                    .addonsSubTitlePrice
-                                                    .toString()}'),
-                                            style: ListTileStyle.drawer,
-                                          );
-                                        }),
-                                  ),
-                                  Container(height: 55,
-                                      width: Helper.getScreenWidth(context) * 1,
-                                      child: ApplyButton(
-                                          buttonname: "Update Item",
-                                          radius: 8)
-                                  )
-                                ],
-                              );
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(14),
+                                  topRight: Radius.circular(14),
+                                ),
                               ),
-                            ),
-                          );
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) {
+                                return CartAddons(provider.cartModelList[index],index);
+                              });
+
+                          // showModalBottomSheet(
+                          //   isScrollControlled: false,
+                          //   context: context,
+                          //   builder: (context) {
+                          //     return Column(
+                          //       mainAxisAlignment:
+                          //       MainAxisAlignment.center,
+                          //       children: [
+                          //         Row(
+                          //           crossAxisAlignment:
+                          //           CrossAxisAlignment.start,
+                          //           children: [
+                          //             Padding(
+                          //               padding: EdgeInsets.only(
+                          //                   top: 25,
+                          //                   bottom: 10,
+                          //                   left: 20,
+                          //                   right: 10),
+                          //               child: InkWell(
+                          //                   child: Icon(
+                          //                       Icons.clear_outlined),
+                          //                   onTap: () {
+                          //                     Navigator.pop(context);
+                          //                   }),
+                          //             ),
+                          //             Container(child: Column(
+                          //               crossAxisAlignment:
+                          //               CrossAxisAlignment.start,
+                          //               children: [
+                          //                 Padding(
+                          //                   padding: EdgeInsets.only(
+                          //                       top: 25, bottom: 10),
+                          //                   child: Text(
+                          //                     provider
+                          //                         .cartModelList[index]
+                          //                         .itemName
+                          //                         .toString(),
+                          //                     style: TextStyle(
+                          //                         fontSize: 18,
+                          //                         fontWeight:
+                          //                         FontWeight.w600),
+                          //                   ),
+                          //                 ),
+                          //                 Text(
+                          //                   ('₹${provider.cartModelList[index]
+                          //                       .totalPrice.toString()}'),
+                          //                   style:
+                          //                   TextStyle(fontSize: 13),
+                          //                 ),
+                          //
+                          //               ],
+                          //             ),
+                          //             ),
+                          //           ],),
+                          //         SizedBox(height: 10,),
+                          //         MySeparator(),
+                          //         Flexible(
+                          //           child: ListView.builder(
+                          //               physics: ScrollPhysics(),
+                          //               itemCount: provider
+                          //                   .cartModelList[index]
+                          //                   .addonsList!
+                          //                   .length,
+                          //               itemBuilder: (context, position) {
+                          //                 return ListTile(
+                          //                   leading: IconButton(
+                          //                       alignment:
+                          //                       Alignment.centerLeft,
+                          //                       padding: EdgeInsets.zero,
+                          //                       onPressed: () {
+                          //                         setState(() {
+                          //                           provider
+                          //                               .cartModelList[
+                          //                           index]
+                          //                               .addonsList!
+                          //                               .removeAt(
+                          //                               position);
+                          //                           Provider.of<
+                          //                               ApplicationProvider>(
+                          //                               context,
+                          //                               listen: true)
+                          //                               .updateProduct(
+                          //                               provider.cartModelList[
+                          //                               index],
+                          //                               false,
+                          //                               provider
+                          //                                   .cartModelList[
+                          //                               index]
+                          //                                   .enteredQty!);
+                          //                         });
+                          //                       },
+                          //                       icon: Icon(
+                          //                         Icons
+                          //                             .remove_circle_outline,
+                          //                         color: Colors.red,
+                          //                         size: 20,
+                          //                       )),
+                          //                   title: new Text(provider
+                          //                       .cartModelList[index]
+                          //                       .addonsList![position]
+                          //                       .addonsSubTitleName
+                          //                       .toString()),
+                          //                   trailing: Text(
+                          //                       '₹${provider
+                          //                           .cartModelList[index]
+                          //                           .addonsList![position]
+                          //                           .addonsSubTitlePrice
+                          //                           .toString()}'),
+                          //                   style: ListTileStyle.drawer,
+                          //                 );
+                          //               }),
+                          //         ),
+                          //         Container(height: 55,
+                          //             width: Helper.getScreenWidth(context) * 1,
+                          //             child: ApplyButton(
+                          //                 buttonname: "Update Item",
+                          //                 radius: 8)
+                          //         )
+                          //       ],
+                          //     );
+                          //   },
+                          //   shape: RoundedRectangleBorder(
+                          //     borderRadius: BorderRadius.only(
+                          //       topLeft: Radius.circular(20),
+                          //       topRight: Radius.circular(20),
+                          //     ),
+                          //   ),
+                          // );
                         },
                       )
                           : Container()
@@ -371,4 +385,5 @@ class _BasketHeaderState extends State<BasketHeader> {
       );
     });
   }
+
 }

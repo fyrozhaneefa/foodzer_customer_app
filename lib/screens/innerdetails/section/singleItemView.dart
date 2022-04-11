@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Models/itemAddonModel.dart';
@@ -340,17 +341,30 @@ class _SingleItemViewState extends State<SingleItemView> {
               height: 60,
               child: ElevatedButton(
                 onPressed: () {
-                  widget.itemModel.addonsList=addonModelList.where((element) => element.isSelected == true).toList();
+                  if(Provider.of<ApplicationProvider>(context, listen: false).cartModelList.isEmpty){
+                    widget.itemModel.addonsList=addonModelList.where((element) => element.isSelected == true).toList();
 
-                  Provider.of<ApplicationProvider>(context,
-                      listen: false)
-                      .updateProduct(widget.itemModel,
-                      null==widget.itemModel.enteredQty || null!=widget.itemModel.enteredQty && itemCount > widget.itemModel.enteredQty!,
-                      itemCount);
-                  Navigator.pop(context);
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (BuildContext context) =>
-                  //         ItemBasketHome()));
+                    Provider.of<ApplicationProvider>(context,
+                        listen: false)
+                        .updateProduct(widget.itemModel,
+                        null==widget.itemModel.enteredQty || null!=widget.itemModel.enteredQty && itemCount > widget.itemModel.enteredQty!,
+                        itemCount);
+                    Navigator.pop(context);
+                  }
+                 else if(Provider.of<ApplicationProvider>(context, listen: false).cartModelList.first.itemMerchantBranch ==
+                      Provider.of<ApplicationProvider>(context, listen: false).selectedRestModel.merchantBranchId){
+                    widget.itemModel.addonsList=addonModelList.where((element) => element.isSelected == true).toList();
+
+                    Provider.of<ApplicationProvider>(context,
+                        listen: false)
+                        .updateProduct(widget.itemModel,
+                        null==widget.itemModel.enteredQty || null!=widget.itemModel.enteredQty && itemCount > widget.itemModel.enteredQty!,
+                        itemCount);
+                    Navigator.pop(context);
+                  } else{
+                    showAlertDialog(context);
+                  }
+
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -484,4 +498,79 @@ class _SingleItemViewState extends State<SingleItemView> {
       //     .setItemAddons(addonModelList);
     }
   }
+  void showAlertDialog(BuildContext context) {
+
+      // set up the buttons
+      Widget cancelButton = Container(
+
+        decoration: BoxDecoration(
+            color: Colors.deepOrange.shade50,
+            borderRadius: BorderRadius.circular(14),
+        ),
+        child: TextButton(
+          child: Text("No",
+              style: TextStyle(
+                  color: Colors.deepOrange,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600
+              )),
+          onPressed:  () {
+            Navigator.pop(context);
+          },
+        ),
+      );
+      Widget continueButton = Container(
+        width: Helper.getScreenWidth(context)*.3,
+        decoration: BoxDecoration(
+          color: Colors.deepOrange,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.deepOrange,width: 1)
+        ),
+        child: TextButton(
+          child: Text("Replace",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w600
+          ),),
+          onPressed:  () {
+            Provider.of<ApplicationProvider>(context, listen: false).cartModelList.clear();
+            widget.itemModel.addonsList=addonModelList.where((element) => element.isSelected == true).toList();
+
+            Provider.of<ApplicationProvider>(context,
+                listen: false)
+                .updateProduct(widget.itemModel,
+                null==widget.itemModel.enteredQty || null!=widget.itemModel.enteredQty && itemCount > widget.itemModel.enteredQty!,
+                itemCount);
+            Navigator.pop(context);
+            Navigator.pop(context);
+          },
+        ),
+      );
+
+      // set up the AlertDialog
+      AlertDialog alert = AlertDialog(
+        title: Text("Replace cart item?",
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.w600,
+        ),),
+        content: Text("Your cart contains dishes from another restaurant. Do you wish to remove those items from cart?",
+        style:TextStyle(
+          height: 1.3
+        )),
+        actions: [
+          cancelButton,
+          continueButton,
+        ],
+      );
+
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
 }

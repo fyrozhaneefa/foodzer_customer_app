@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
+import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -25,19 +26,23 @@ class UserPreference{
     SharedPreferences prefs=await SharedPreferences.getInstance();
     prefs.setString('deliveryAddress', address);
   }
-  getDeliveryAddress() async {
+  Future<AddressModel>getDeliveryAddress() async {
     SharedPreferences prefs=await SharedPreferences.getInstance();
-    String? deliveryAddress=prefs.getString('deliveryAddress');
-    return deliveryAddress;
+    String? jsonSting=prefs.getString('deliveryAddress');
+    if(null!=jsonSting && jsonSting.isNotEmpty) {
+      return AddressModel.fromJson(jsonDecode(jsonSting));
+    } else{
+      return new AddressModel();
+    }
   }
 
-  Future<userData> getUserData() async{
+  Future<UserData> getUserData() async{
     SharedPreferences prefs=await SharedPreferences.getInstance();
     String? jsonSting=prefs.getString('userData');
     if(null!=jsonSting && jsonSting.isNotEmpty) {
-      return userData.fromJson(jsonDecode(jsonSting));
+      return UserData.fromJson(jsonDecode(jsonSting));
     }else{
-      return new userData();
+      return new UserData();
     }
   }
 
