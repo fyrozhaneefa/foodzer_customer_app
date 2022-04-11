@@ -35,14 +35,8 @@ class Address extends StatelessWidget {
                 child: Column(
                   children: [
                     SavedAddress(),
-                    Padding(
-                        padding: EdgeInsets.only(
-                            top: 10, left: 30, bottom: 10, right: 20),
-                        child: Divider(
-                          color: Colors.grey,
-                          thickness: .5,
-                        )),
-                    SavedAddress(),
+
+
                     Padding(
                       padding: EdgeInsets.only(
                           top: 10, left: 20, bottom: 10, right: 20),

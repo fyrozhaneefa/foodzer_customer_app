@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../Models/addressAdditonModel.dart';
@@ -42,12 +43,12 @@ class SavedAddress extends StatelessWidget {
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 15),
-                            child:
+                            child:Container(width: Helper.getScreenWidth(context)*.8,child:
                             Text(
                                 datas.addressStreetName!,
                                 style: TextStyle(
                                     color: Colors.black.withOpacity(.6), fontSize: 12),
-                  ),
+                  ),)
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 15),
