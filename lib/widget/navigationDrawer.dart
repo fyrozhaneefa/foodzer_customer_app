@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/EditAccountSection/editaccount.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/GetHelp/gethelphome.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/MyOrderSection//myAccountHome.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/OfferSection/offerHome.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
@@ -156,7 +157,8 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             buildMenuItem(
                 text: 'Get help',
                 icon: Icons.help_outline_outlined,
-                onClicked:() => selectedItem(context, 5)
+                // onClicked:() => selectedItem(context, 5)
+              onClicked: () => Navigator.of(context).push(MaterialPageRoute(builder: (context)=>GetHelp()))
             ),
             const SizedBox(height: 16),
             buildMenuItem(

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/Address/addresshome.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:foodzer_customer_app/widget/navigationDrawer.dart';
@@ -10,7 +11,7 @@ import '../loginScreen.dart';
 
 class UserSettingsScreen extends StatefulWidget {
   static const routeName = "/userSettings";
-  const UserSettingsScreen({Key? key}) : super(key: key);
+  const          UserSettingsScreen({Key? key}) : super(key: key);
 
   @override
   State<UserSettingsScreen> createState() => _UserSettingsScreenState();
@@ -127,6 +128,19 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
                 ],
               ),
             ),
+
+            Divider(height: 30,thickness: 1,),
+            SizedBox(height: 10,),
+            InkWell(onTap: (){
+
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Address()));
+            },child: Text(
+              'Address',
+              style: TextStyle(   fontSize: 17,
+                  fontWeight: FontWeight.w600
+
+              ),
+            )),
             SizedBox(height: 30,),
             Container(
               child: isLoggedIn?GestureDetector(

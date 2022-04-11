@@ -11,7 +11,10 @@ class Address extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(elevation: .5,
         backgroundColor: Colors.white,
-        leading: Icon(Icons.keyboard_backspace_outlined, color: Colors.black),
+        leading:InkWell(child: Icon(Icons.keyboard_backspace_outlined, color: Colors.black),onTap: (){
+
+          Navigator.pop(context);
+        }),
         title: Text(
           "ADDRESSES",
           style: TextStyle(color: Colors.black, fontSize: 18),
@@ -46,7 +49,9 @@ class Address extends StatelessWidget {
                       child: Container(
                         width: Helper.getScreenWidth(context),
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () {
+
+                          },
                           child: Text(
                             "ADD NEW ADDRESS",
                             style: TextStyle(color: Colors.green,fontWeight: FontWeight.w600),

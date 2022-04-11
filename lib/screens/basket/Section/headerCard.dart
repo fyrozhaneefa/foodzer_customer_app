@@ -380,6 +380,7 @@ class _BasketHeaderState extends State<BasketHeader> {
             //     ],
             //   ),
             // ),
+
           ],
         ),
       );

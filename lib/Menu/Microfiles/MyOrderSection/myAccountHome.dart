@@ -21,11 +21,7 @@ class MyOrder extends StatelessWidget {
       body: ListView(children: [
 
         MyOrders(),
-        MyOrders(),
-        MyOrders(),
-        MyOrders(),
-        MyOrders(),
-        MyOrders(),
+
 
       ]
       ),
