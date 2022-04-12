@@ -13,6 +13,7 @@ import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/chooseAddress.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/deliveryInstructions.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/headerCard.dart';
+import 'package:foodzer_customer_app/screens/basket/Section/moneycard.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/proceedToPay.dart';
 
 import 'package:foodzer_customer_app/screens/basket/Section/savedcontainer.dart';
@@ -36,18 +37,19 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
   bool isFromCart = true;
   bool isLoading = false;
   UserData userModel = new UserData();
-  List<AddressModel> getAddressList=[];
-  double taxPercentage=0;
+  List<AddressModel> getAddressList = [];
+  double taxPercentage = 0;
   double toPayAmt = 0;
-
+  double tipAmount = 0;
+  List<String> tips = ["1", "5", "10", "20"];
+  int? selectedTip = -1;
+  int tipValue = 0;
   @override
   void initState() {
     getMerchantTaxPercentage();
     UserPreference().getUserData().then((value) {
       userModel = value;
-      setState(() {
-
-      });
+      setState(() {});
       getUserAddress();
     });
 
@@ -68,50 +70,47 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
               icon: Icon(Icons.keyboard_backspace_outlined,
                   color: Colors.black.withOpacity(.5), size: 30)),
           title: Text(
-              provider.selectedRestModel.branchDetails!.merchantBranchName
-                  .toString(),
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16),
-
+            provider.selectedRestModel.branchDetails!.merchantBranchName
+                .toString(),
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
           ),
-      //     bottom:null!=provider.selectedRestModel.offerDetails? PreferredSize(
-      //       preferredSize: Size.fromHeight(80.0),
-      //       child: Padding(
-      //         padding: const EdgeInsets.all(8.0),
-      //         child: Container(
-      //           width: Helper.getScreenWidth(context),
-      //           decoration: BoxDecoration(
-      //             color: Colors.deepOrange.shade100,
-      //             borderRadius: BorderRadius.circular(20)
-      //           ),
-      //           child: Padding(
-      //             padding: const EdgeInsets.all(12.0),
-      //             child: Column(
-      //               crossAxisAlignment: CrossAxisAlignment.start,
-      //               children: [
-      //                 Text(
-      //                   'Rs.131 total savings',
-      //                   style: TextStyle(
-      //                     color: Colors.deepOrange,
-      //                     fontSize: 20,
-      //                     fontWeight: FontWeight.w600
-      //                   ),
-      //                 ),
-      //                 SizedBox(height: 7,),
-      //                 Text('indluding Rs.100 with WELCOME50 coupon',
-      //                 style: TextStyle(
-      //                   color: Colors.deepOrangeAccent,
-      //                   fontSize: 13,
-      //                   fontWeight: FontWeight.w500
-      //                 ),)
-      //               ],
-      //             ),
-      //           ),
-      //         ),
-      //       ) ):PreferredSize(
-      // preferredSize: Size.fromHeight(0.0), child: Container(),),
+          //     bottom:null!=provider.selectedRestModel.offerDetails? PreferredSize(
+          //       preferredSize: Size.fromHeight(80.0),
+          //       child: Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: Container(
+          //           width: Helper.getScreenWidth(context),
+          //           decoration: BoxDecoration(
+          //             color: Colors.deepOrange.shade100,
+          //             borderRadius: BorderRadius.circular(20)
+          //           ),
+          //           child: Padding(
+          //             padding: const EdgeInsets.all(12.0),
+          //             child: Column(
+          //               crossAxisAlignment: CrossAxisAlignment.start,
+          //               children: [
+          //                 Text(
+          //                   'Rs.131 total savings',
+          //                   style: TextStyle(
+          //                     color: Colors.deepOrange,
+          //                     fontSize: 20,
+          //                     fontWeight: FontWeight.w600
+          //                   ),
+          //                 ),
+          //                 SizedBox(height: 7,),
+          //                 Text('indluding Rs.100 with WELCOME50 coupon',
+          //                 style: TextStyle(
+          //                   color: Colors.deepOrangeAccent,
+          //                   fontSize: 13,
+          //                   fontWeight: FontWeight.w500
+          //                 ),)
+          //               ],
+          //             ),
+          //           ),
+          //         ),
+          //       ) ):PreferredSize(
+          // preferredSize: Size.fromHeight(0.0), child: Container(),),
         ),
         body: SafeArea(
           child: Column(
@@ -136,7 +135,9 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
-                            SizedBox(height: 15,),
+                            SizedBox(
+                              height: 15,
+                            ),
                             Container(
                               padding: EdgeInsets.all(10),
                               decoration: BoxDecoration(
@@ -151,16 +152,20 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                   Stack(
                                     children: [
                                       InkWell(
-                                       onTap: (){
-                                         setState(() {
-                                           deliveryType = 1;
-                                         });
-                                       },
+                                        onTap: () {
+                                          setState(() {
+                                            deliveryType = 1;
+                                          });
+                                        },
                                         child: Container(
                                           padding: EdgeInsets.all(10),
                                           decoration: BoxDecoration(
-                                            border: Border.all(color: deliveryType == 1?Colors.deepOrangeAccent:Colors.transparent),
-                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(
+                                                color: deliveryType == 1
+                                                    ? Colors.deepOrangeAccent
+                                                    : Colors.transparent),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             boxShadow: [
                                               BoxShadow(
                                                   color: Colors.grey.shade100,
@@ -180,26 +185,28 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                               Text(
                                                 'Delivery',
                                                 style: TextStyle(
-                                                    fontWeight: FontWeight.w600
-                                                ),
+                                                    fontWeight:
+                                                        FontWeight.w600),
                                               ),
                                             ],
                                           ),
                                         ),
                                       ),
-                                        deliveryType == 1? Align(
-                                        child: Icon(
-                                          Icons.check_circle,
-                                          size: 16,
-                                          color: Colors.deepOrangeAccent,
-                                        ),
-                                      ): Container()
+                                      deliveryType == 1
+                                          ? Align(
+                                              child: Icon(
+                                                Icons.check_circle,
+                                                size: 16,
+                                                color: Colors.deepOrangeAccent,
+                                              ),
+                                            )
+                                          : Container()
                                     ],
                                   ),
                                   Stack(
                                     children: [
                                       InkWell(
-                                        onTap: (){
+                                        onTap: () {
                                           setState(() {
                                             deliveryType = 2;
                                           });
@@ -207,8 +214,12 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                         child: Container(
                                           padding: EdgeInsets.all(10),
                                           decoration: BoxDecoration(
-                                            border: Border.all(color: deliveryType == 2?Colors.deepOrangeAccent:Colors.transparent),
-                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(
+                                                color: deliveryType == 2
+                                                    ? Colors.deepOrangeAccent
+                                                    : Colors.transparent),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
                                             boxShadow: [
                                               BoxShadow(
                                                   color: Colors.grey.shade100,
@@ -228,20 +239,22 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                               Text(
                                                 'Pick up',
                                                 style: TextStyle(
-                                                  fontWeight: FontWeight.w600
-                                                ),
+                                                    fontWeight:
+                                                        FontWeight.w600),
                                               ),
                                             ],
                                           ),
                                         ),
                                       ),
-                                      deliveryType==2?Align(
-                                        child: Icon(
-                                          Icons.check_circle,
-                                          size: 16,
-                                          color: Colors.deepOrangeAccent,
-                                        ),
-                                      ):Container()
+                                      deliveryType == 2
+                                          ? Align(
+                                              child: Icon(
+                                                Icons.check_circle,
+                                                size: 16,
+                                                color: Colors.deepOrangeAccent,
+                                              ),
+                                            )
+                                          : Container()
                                     ],
                                   )
                                 ],
@@ -290,7 +303,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                     Padding(
                       padding: EdgeInsets.only(
                           left: 20, right: 20, top: 10, bottom: 10),
-                      child: TipYourHungerSecond(),
+                      child: deliveryBoyTip(),
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
@@ -329,20 +342,90 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
     });
   }
 
+  Widget deliveryBoyTip() {
+    return Container(
+      height: 120,
+      width: Helper.getScreenWidth(context) * 1,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Container(
+              decoration: BoxDecoration(),
+              child: Text(
+                "Thank your delivery partner by leaving them a tip.\n"
+                "100% of the tip will go to your delivery partner ",
+                style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+              ),
+            ),
+          ),
+          Container(
+            height: 40,
+            child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: tips.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: EdgeInsets.only(left: 10, top: 10),
+                    child: GestureDetector(
+                      onTap: () {
+                        if(selectedTip == index){
+                          selectedTip = -1;
+                          tipValue = 0;
+                              setState(() {
+
+                              });
+                        } else{
+                          selectedTip = index;
+                          tipValue = int.parse(tips[index]);
+                          setState(() {
+
+                          });
+                        }
+
+
+                      },
+                      child: Container(
+                          width: 65,
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(color: Colors.grey.shade100,spreadRadius: 1,blurRadius: 1)
+                          ],
+                            color: index==selectedTip?Colors.deepOrange.shade50:Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: index==selectedTip?Colors.deepOrangeAccent
+                                :
+                            Colors.grey.shade200,width: 1),
+                          ),
+                          child: Center(child:Text('₹${tips[index]}'),))
+                    ),
+                  );
+                }),
+          ),
+
+        ],
+      ),
+    );
+  }
+
   Widget summaryView() {
     double totalAmt = 0;
     double deliveryFee = 0;
     double deliveryTip = 0;
 
-    var taxData={};
+    var taxData = {};
     return Consumer<ApplicationProvider>(builder: (context, provider, child) {
-
       for (Item item in provider.cartModelList) {
         totalAmt = totalAmt + item.totalPrice!;
         // provider.setTotalCartPrice(alltotal);
       }
-      taxData=provider.calculateTax(taxPercentage, totalAmt, false);
-        toPayAmt=taxData['totalAmtWithTax'];
+      taxData = provider.calculateTax(taxPercentage, totalAmt, false);
+      toPayAmt = taxData['totalAmtWithTax']+tipValue;
       provider.setTotalCartPrice(toPayAmt);
       return Container(
         height: 270,
@@ -386,9 +469,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                         height: 50,
                         message: 'Delivery Fee : ₹0',
                         textStyle: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500
-                        ),
+                            color: Colors.black, fontWeight: FontWeight.w500),
                         triggerMode: TooltipTriggerMode.tap,
                         child: Text('Delivery Fee',
                             style: TextStyle(
@@ -430,7 +511,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 15, top: 10),
-                  child: Text("₹$deliveryTip"),
+                  child: Text("₹$tipValue"),
                 ),
               ],
             ),
@@ -441,18 +522,17 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                   padding: EdgeInsets.only(left: 15, top: 15),
                   child: Tooltip(
                     decoration: BoxDecoration(
-                        color: Colors.deepOrange.shade50,
+                      color: Colors.deepOrange.shade50,
                       borderRadius: BorderRadius.circular(12),
                       // border: Border.all(color: Colors.black)
                     ),
                     preferBelow: false,
                     margin: EdgeInsets.only(left: 20),
                     height: 50,
-                    message: 'Restaurant GST : ₹${taxData['totalTaxAmt'].toStringAsFixed(2)}',
+                    message:
+                        'Restaurant GST : ₹${taxData['totalTaxAmt'].toStringAsFixed(2)}',
                     textStyle: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500
-                    ),
+                        color: Colors.black, fontWeight: FontWeight.w500),
                     triggerMode: TooltipTriggerMode.tap,
                     child: Text('Tax and Charges',
                         style: TextStyle(
@@ -515,122 +595,138 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-           deliveryType==1? Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: null!=provider.selectedAddressModel.addressId &&
-                      provider.selectedAddressModel.addressId!.isNotEmpty?
-                  ListTile(
-                          title: Text(
-                            "Deliver to "+provider.selectedAddressModel.addressTitle!,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black.withOpacity(.6),
-                            ),
-                          ),
-                          subtitle: Text(
-                            provider.selectedAddressModel.addressBuilding!+", "+
-                                provider.selectedAddressModel.adressApartmentNo!+", "+
-                                provider.selectedAddressModel.addressBuilding!+", "+
-                                provider.selectedAddressModel.addressStreetName!,
-
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          ),
-                          trailing: Container(
-                            width: 65,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              border: Border.all(
-                                  color: Colors.grey.shade300, width: 1),
-                            ),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.home, color: Colors.deepOrange),
-                                  InkWell(
-                                      onTap: () {
-
-                                        showModalBottomSheet(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(14),
-                                                topRight: Radius.circular(14),
-                                              ),
-                                            ),
-                                            isScrollControlled: true,
-                                            context: context,
-                                            builder: (context) {
-                                              return ChooseAddress(isFromCart,getAddressList);
-                                            }).then((value) {
-                                              setState(() {
-
+            deliveryType == 1
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: null !=
+                                    provider.selectedAddressModel.addressId &&
+                                provider
+                                    .selectedAddressModel.addressId!.isNotEmpty
+                            ? ListTile(
+                                title: Text(
+                                  "Deliver to " +
+                                      provider
+                                          .selectedAddressModel.addressTitle!,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black.withOpacity(.6),
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  provider.selectedAddressModel.addressBuilding! +
+                                      ", " +
+                                      provider.selectedAddressModel
+                                          .adressApartmentNo! +
+                                      ", " +
+                                      provider.selectedAddressModel
+                                          .addressBuilding! +
+                                      ", " +
+                                      provider.selectedAddressModel
+                                          .addressStreetName!,
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 12),
+                                ),
+                                trailing: Container(
+                                  width: 65,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                        color: Colors.grey.shade300, width: 1),
+                                  ),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.home,
+                                            color: Colors.deepOrange),
+                                        InkWell(
+                                            onTap: () {
+                                              showModalBottomSheet(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(14),
+                                                      topRight:
+                                                          Radius.circular(14),
+                                                    ),
+                                                  ),
+                                                  isScrollControlled: true,
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return ChooseAddress(
+                                                        isFromCart,
+                                                        getAddressList);
+                                                  }).then((value) {
+                                                setState(() {});
                                               });
-                                        });
-
-                                      },
-                                      child: Icon(
-                                          Icons.keyboard_arrow_down_rounded,
-                                          size: 20,
-                                          color: Colors.deepOrange)),
-                                ]),
-                          ),
-                        )
-                      : InkWell(
-                          onTap: () {
-                            showModalBottomSheet(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(14),
-                                    topRight: Radius.circular(14),
-                                  ),
+                                            },
+                                            child: Icon(
+                                                Icons
+                                                    .keyboard_arrow_down_rounded,
+                                                size: 20,
+                                                color: Colors.deepOrange)),
+                                      ]),
                                 ),
-                                isScrollControlled: true,
-                                context: context,
-                                builder: (context) {
-                                  return ChooseAddress(isFromCart,getAddressList);
-                                }).then((value) {
-                              setState(() {
-
-                              });
-                            });
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 15.0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.add,
-                                  color: Colors.deepOrange,
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    alignment: Alignment.centerLeft,
-                                    width: Helper.getScreenWidth(context),
-                                    height: 40,
-                                    child: Text(
-                                      "Add a delivery address",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black.withOpacity(.6),
+                              )
+                            : InkWell(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(14),
+                                          topRight: Radius.circular(14),
+                                        ),
                                       ),
-                                    ),
+                                      isScrollControlled: true,
+                                      context: context,
+                                      builder: (context) {
+                                        return ChooseAddress(
+                                            isFromCart, getAddressList);
+                                      }).then((value) {
+                                    setState(() {});
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 15.0),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        color: Colors.deepOrange,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          alignment: Alignment.centerLeft,
+                                          width: Helper.getScreenWidth(context),
+                                          height: 40,
+                                          child: Text(
+                                            "Add a delivery address",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              color:
+                                                  Colors.black.withOpacity(.6),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                )
-              ],
-            ):Container(),
+                              ),
+                      )
+                    ],
+                  )
+                : Container(),
             Padding(
               padding: EdgeInsets.only(
                 left: 20,
@@ -659,9 +755,9 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                   padding: const EdgeInsets.all(5),
                   child: ElevatedButton(
                     onPressed: () {
-                      if ( null!=provider.selectedAddressModel.addressId &&
-                          provider.selectedAddressModel.addressId!.isNotEmpty
-                      && deliveryType==1) {
+                      if (null != provider.selectedAddressModel.addressId &&
+                          provider.selectedAddressModel.addressId!.isNotEmpty &&
+                          deliveryType == 1) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => PaymentSection()));
                       } else {
@@ -681,11 +777,13 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: null!=provider.selectedAddressModel.addressId &&
-                          provider.selectedAddressModel.addressId!.isNotEmpty &&
-                      deliveryType==1
-                          ? Colors.deepOrange
-                          : Colors.deepOrange.shade100,
+                      primary:
+                          null != provider.selectedAddressModel.addressId &&
+                                  provider.selectedAddressModel.addressId!
+                                      .isNotEmpty &&
+                                  deliveryType == 1
+                              ? Colors.deepOrange
+                              : Colors.deepOrange.shade100,
                       fixedSize: Size(190, 58),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -700,6 +798,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
       );
     });
   }
+
   // getDeliveryCharge() async {
   //
   //   isLoadingDeliveryCharge =true;
@@ -745,40 +844,37 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
   // }
   getUserAddress() async {
     isLoading = true;
-    setState(() {
-
-    });
+    setState(() {});
     var map = new Map<String, dynamic>();
     map['user_id'] = userModel.userId;
 
-    var response = await http.post(Uri.parse(ApiData.GET_USER_ADDRESS), body: map);
+    var response =
+        await http.post(Uri.parse(ApiData.GET_USER_ADDRESS), body: map);
     var json = convert.jsonDecode(response.body);
     List dataList = json['address_list'];
     isLoading = false;
-    setState(() {
-
-    });
+    setState(() {});
     if (response.statusCode == 200) {
-        if (null != dataList && dataList.length > 0) {
-          getAddressList = dataList.map((address)=> new AddressModel.fromJson(address)).toList();
-          setState(() {
-
-          });
-        }
-
+      if (null != dataList && dataList.length > 0) {
+        getAddressList = dataList
+            .map((address) => new AddressModel.fromJson(address))
+            .toList();
+        setState(() {});
+      }
     }
   }
-  getMerchantTaxPercentage() async{
+
+  getMerchantTaxPercentage() async {
     var map = new Map<String, dynamic>();
     map['branch_id'] = Provider.of<ApplicationProvider>(context, listen: false)
-        .selectedRestModel.merchantBranchId.toString();
+        .selectedRestModel
+        .merchantBranchId
+        .toString();
 
-    var response = await http.post(Uri.parse(ApiData.MERCHANT_BRANCH_TAX), body: map);
+    var response =
+        await http.post(Uri.parse(ApiData.MERCHANT_BRANCH_TAX), body: map);
     var json = convert.jsonDecode(response.body);
-    taxPercentage=double.parse(json['tax_details']);
-    setState(() {
-
-    });
+    taxPercentage = double.parse(json['tax_details']);
+    setState(() {});
   }
-
 }
