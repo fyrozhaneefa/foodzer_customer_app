@@ -15,10 +15,10 @@ class SavedAddress extends StatelessWidget {
     return FutureBuilder(future: GetAddress().getAddress(),
         builder: (context, AsyncSnapshot <List<AddressList>?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
-            return Center(child: CircularProgressIndicator(),);
+            return Center(child: CircularProgressIndicator(color: Colors.deepOrangeAccent),);
 
           else if (snapshot.hasData) {
-            return ListView.separated(scrollDirection: Axis.vertical,shrinkWrap: true, physics: NeverScrollableScrollPhysics(),
+            return ListView.separated(shrinkWrap: true, scrollDirection: Axis.vertical,physics:ScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   AddressList datas = snapshot.data!.elementAt(index);
                   return Row(
