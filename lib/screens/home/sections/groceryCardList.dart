@@ -33,14 +33,14 @@ class _GroceryCardListState extends State<GroceryCardList> {
     return
       CarouselSlider(
         items: popularRestList.map((item) => GroceryCard(
-      cardName: item.merchantBranchName,
-      cardTime: item.merchantBranchOrderTime,
-      cardType: item.cuisines,
-      rating: item.avgReview,
+      cardName: null!=item.merchantBranchName?item.merchantBranchName:"",
+      cardTime: null!=item.merchantBranchOrderTime?item.merchantBranchOrderTime:"",
+      cardType: null!=item.cuisines?item.cuisines:"",
+      rating: null!=item.avgReview?item.avgReview:"",
       deliveryCharge: 'AED 4.00',
-      bannerName: item.merchantBranchImage,
+      bannerName: null!=item.merchantBranchImage?item.merchantBranchImage:"",
       discount: '34% off',
-      busy: item.merchantBranchBusy,
+      busy: null!=item.merchantBranchBusy?item.merchantBranchBusy:"",
       press: (){
         if(item.merchantBranchBusy == "0") {
           Navigator.of(context).push(MaterialPageRoute(

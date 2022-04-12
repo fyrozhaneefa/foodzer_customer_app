@@ -42,7 +42,8 @@ class _PayonDeliveryState extends State<PayonDelivery> {
                   style: TextStyle(fontSize: 11),
                 ),
                 leading: Container(
-                  width: 45,
+
+
                   decoration: BoxDecoration(
                       color: Colors.white, borderRadius: BorderRadius.circular(5)),
                   child: Card(
@@ -52,21 +53,18 @@ class _PayonDeliveryState extends State<PayonDelivery> {
                 ),
 
 
-             trailing: Padding(
-               padding: const EdgeInsets.only(bottom:110),
-               child: Radio<int>(
-                 value: 3,
-                 groupValue: value,
-                 onChanged: (newvalue) {
-                   setState(
-                         () {
-                       value = newvalue!;
+             trailing: Radio<int>(
+               value: 3,
+               groupValue: value,
+               onChanged: (newvalue) {
+                 setState(
+                       () {
+                     value = newvalue!;
 
-                     },
-                   );
-                 },
-                 activeColor: Colors.green,
-               ),
+                   },
+                 );
+               },
+               activeColor: Colors.green,
              ),
 
               ),

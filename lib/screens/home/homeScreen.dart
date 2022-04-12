@@ -25,12 +25,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool isFromCart = false;
   String? userName;
+  String? userType;
   @override
 void initState()  {
     getCurrentAddress();
-    UserPreference().getUserData().then((value)=> {
-    userName = value.userName,
-      print("value is $userName")
+    UserPreference().getUserData().then((value) {
+      userName = value.userName!;
+      userType = value.userType!;
+      print("value is $userName");
     });
 
 
@@ -106,6 +108,7 @@ getCurrentAddress() async{
 
   });
 }
+
 }
 
 

@@ -337,6 +337,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                     ? Colors.deepOrange
                                                     : null,
                                                 press: () {
+                                                  setState(() {
+                                                    isSwitched = false;
+                                                  });
                                                   provider.currentSelectedCategory(
                                                       index);
                                                   if (provider.selectedCategoryIndex ==
@@ -413,6 +416,68 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       onChanged: (value) {
                                         setState(() {
                                           isSwitched = value;
+                                          // if(isSwitched){
+                                          //   provider.setItemLoading(
+                                          //       true);
+                                          //   List<Item> vegList =[];
+                                          //   vegList =  provider.filteredLoadedProductModelList!
+                                          //       .where((product) => (product
+                                          //       .itemVegNonveg ==
+                                          //       "1"))
+                                          //       .toList();
+                                          //   provider.setItemLoading(
+                                          //       false);
+                                          //   provider.addProductData(
+                                          //       vegList,
+                                          //       true,
+                                          //       provider.selectedCategoryIndex!);
+                                          //
+                                          // }else{
+                                          //   if (provider.selectedCategoryIndex ==
+                                          //       provider.selectedCategoryIndex!) {
+                                          //     setState(() {
+                                          //       if (provider.categoryList[
+                                          //       provider.selectedCategoryIndex!]
+                                          //           .categoryId ==
+                                          //           "0") {
+                                          //         filteredList = provider.selectedRestModel
+                                          //             .items!;
+                                          //         filteredList.sort((a,
+                                          //             b) =>
+                                          //             a.categoryName!
+                                          //                 .compareTo(b
+                                          //                 .categoryName!));
+                                          //       } else {
+                                          //         filteredList = provider.selectedRestModel
+                                          //             .items!
+                                          //             .where((product) => (product
+                                          //             .categoryId ==
+                                          //             provider.categoryList[
+                                          //             provider.selectedCategoryIndex!]
+                                          //                 .categoryId))
+                                          //             .toList();
+                                          //         filteredList.sort((a,
+                                          //             b) =>
+                                          //             a.categoryName!
+                                          //                 .compareTo(b
+                                          //                 .categoryName!));
+                                          //       }
+                                          //       // Provider.of<ApplicationProvider>(context, listen: false).clearItems();
+                                          //       // provider.setItemLoading(
+                                          //       //     true);
+                                          //       loadedItemCount = 0;
+                                          //       _loadData();
+                                          //     });
+                                          //     provider.addProductData(
+                                          //         filteredList,
+                                          //         true,
+                                          //         provider.selectedCategoryIndex!);
+                                          //   }
+                                          //   provider.addProductData(
+                                          //       filteredList,
+                                          //       true,
+                                          //       provider.selectedCategoryIndex!);
+                                          // }
                                         });
                                       },
                                       activeTrackColor: Colors.green.shade100,
@@ -433,7 +498,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       fontSize: 18),
                                 ),
 
-                                RestaurantProductsList(),
+                                RestaurantProductsList(isSwitched),
                                 SizedBox(
                                   height: 30,
                                 ),
@@ -605,6 +670,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       _singleRestModel = SingleRestModel.fromJson(json);
       Provider.of<ApplicationProvider>(context, listen: false)
           .setCurrentRestModel(_singleRestModel);
+      Provider.of<ApplicationProvider>(context, listen: false).addProductData(
+          _singleRestModel.items!,
+          true,
+          0);
 
       // Provider.of<ApplicationProvider>(context ,listen: false).filterItems(_singleRestModel.items![0].categoryId!);
       // Provider.of<ApplicationProvider>(context ,listen: false).setCategoryName(_singleRestModel.categories![0].categoryName!);

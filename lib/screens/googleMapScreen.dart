@@ -335,10 +335,12 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                HomeScreen()));
+                                    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                        HomeScreen()), (Route<dynamic> route) => false);
+                                    // Navigator.of(context).pushReplacement(
+                                    //     MaterialPageRoute(
+                                    //         builder: (BuildContext context) =>
+                                    //             HomeScreen()));
                                   },
                                   child: Container(
                                     child: Text(
@@ -362,10 +364,12 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                         height: 60,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        HomeScreen()));
+                            Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                HomeScreen()), (Route<dynamic> route) => false);
+                            // Navigator.of(context).pushReplacement(
+                            //     MaterialPageRoute(
+                            //         builder: (BuildContext context) =>
+                            //             HomeScreen()));
                           },
                           child: Text('Deliver here'),
                           style: ElevatedButton.styleFrom(

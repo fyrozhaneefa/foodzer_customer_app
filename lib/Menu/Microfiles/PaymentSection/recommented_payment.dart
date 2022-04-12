@@ -23,7 +23,7 @@ class RecommededPayments extends StatelessWidget {
                 title: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Text(
-                    "Swiggy Money",
+                    "Foodzer Pay",
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -36,10 +36,10 @@ class RecommededPayments extends StatelessWidget {
                   child: Card(color: Colors.grey.shade300,
                       child: Image(
                           image: NetworkImage(
-                              "https://stories.seedtoscale.com/wp-content/uploads/2021/08/Swiggy-Logo-PNG.png"))),
+                              "https://www.foodzer.com/uploads/items/noitem_image.png"))),
                 ),
                 subtitle: Text(
-                  "Please complete KYC to enable Swiggy Money",
+                  "Please complete KYC to enable Foodzer Pay",
                   style: TextStyle(fontSize: 11),
                 )),
           ]),

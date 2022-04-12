@@ -6,7 +6,6 @@ import 'dart:convert';
 
 SingleRestModel restaurantModelFromJson(String str) => SingleRestModel.fromJson(json.decode(str));
 
-String restaurantModelToJson(SingleRestModel data) => json.encode(data.toJson());
 
 class SingleRestModel {
   SingleRestModel({
@@ -55,22 +54,22 @@ class SingleRestModel {
     branchDetails: BranchDetails.fromJson(json["branch_details"]),
     branchCuisine: json["branch_cuisine"],
   );
-
-  Map<String, dynamic> toJson() => {
-    "categories": List<dynamic>.from(categories!.map((x) => x.toJson())),
-    "offer_details": List<dynamic>.from(offerDetails!.map((x) => x)),
-    "timing": timing!.toJson(),
-    "items": List<dynamic>.from(items!.map((x) => x.toJson())),
-    "avg_quality": avgQuality,
-    "package_rating": packageRating,
-    "delivery_rating": deliveryRating,
-    "money_rating": moneyRating,
-    "num_of_rows": numOfRows,
-    "reviews": reviews!.toJson(),
-    "merchant_branch_id": merchantBranchId,
-    "branch_details": branchDetails!.toJson(),
-    "branch_cuisine": branchCuisine,
-  };
+  //
+  // Map<String, dynamic> toJson() => {
+  //   "categories": List<dynamic>.from(categories!.map((x) => x.toJson())),
+  //   "offer_details": List<dynamic>.from(offerDetails!.map((x) => x)),
+  //   "timing": timing!.toJson(),
+  //   "items": List<dynamic>.from(items!.map((x) => x.toJson())),
+  //   "avg_quality": avgQuality,
+  //   "package_rating": packageRating,
+  //   "delivery_rating": deliveryRating,
+  //   "money_rating": moneyRating,
+  //   "num_of_rows": numOfRows,
+  //   "reviews": reviews!.toJson(),
+  //   "merchant_branch_id": merchantBranchId,
+  //   "branch_details": branchDetails!.toJson(),
+  //   "branch_cuisine": branchCuisine,
+  // };
 }
 
 class BranchDetails {
@@ -202,6 +201,7 @@ class Category {
 }
 
 class Item {
+
   Item({
     this.itemId,
     this.itemDeleteStatus,
@@ -261,7 +261,7 @@ class Item {
     this.availableDay,
     this.isPriceon,
     this.isAddon,this.enteredQty,
-    this.addonsList,
+    this.addonsList,this.addonIds
   });
 
   String? itemId;
@@ -325,6 +325,7 @@ class Item {
   int? enteredQty;
   double? totalPrice;
   List<Addons>? addonsList;
+  String? addonIds;
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
     // addonsList: List<Addons>.from(json["addonsList"].map((x) => Addons.fromJson(x))),
@@ -386,69 +387,23 @@ class Item {
     availableDay: json["available_day"],
     isPriceon: json["is_priceon"],
     isAddon: json["is_addon"],
+    addonIds: "",
 
   );
+  static String ToJson(Item model) {
+    Map<String, dynamic> map() =>
+        {
 
-  Map<String, dynamic> toJson() => {
-    "item_id": itemId,
-    "item_delete_status": itemDeleteStatus,
-    "item_visibility": itemVisibility,
-    "item_visibility_approval": itemVisibilityApproval,
-    "item_approve_status": itemApproveStatus,
-    "item_merchant": itemMerchant,
-    "item_merchant_branch": itemMerchantBranch,
-    "item_type": itemType,
-    "item_category": itemCategory,
-    "item_name": itemName,
-    "item_name_arabic": itemNameArabic,
-    "item_price_type": itemPriceType,
-    "item_price": itemPrice,
-    "item_offer_price": itemOfferPrice,
-    "item_description": itemDescription,
-    "item_description_arabic": itemDescriptionArabic,
-    "item_flavour": itemFlavour,
-    "item_veg_nonveg": itemVegNonveg,
-    "item_image": itemImage,
-    "item_cuisine": itemCuisine,
-    "item_available_days": itemAvailableDays,
-    "item_available_time_from": itemAvailableTimeFrom,
-    "item_available_time_to": itemAvailableTimeTo,
-    "item_cart_slider": itemCartSlider,
-    "item_start_date": itemStartDate,
-    "item_end_date": itemEndDate,
-    "item_from_date": itemFromDate,
-    "item_to_date": itemToDate,
-    "item_added_date": itemAddedDate,
-    "item_added_by": itemAddedBy,
-    "item_addded_type": itemAdddedType,
-    "item_payment_mode": itemPaymentMode,
-    "food_item_home_visible": foodItemHomeVisible,
-    "item_offer_status": itemOfferStatus,
-    "item_offer_percentage": itemOfferPercentage,
-    "item_offer_amt": itemOfferAmt,
-    "hide_limit_time": hideLimitTime,
-    "hide_limit_date": hideLimitDate,
-    "is_egg_included": isEggIncluded,
-    "item_package_charge": itemPackageCharge,
-    "category_id": categoryId,
-    "category_delete_status": categoryDeleteStatus,
-    "category_branch_id": categoryBranchId,
-    "category_visibility": categoryVisibility,
-    "category_display_order": categoryDisplayOrder,
-    "category_name": categoryName,
-    "category_name_arb": categoryNameArb,
-    "category_added_date": categoryAddedDate,
-    "category_modifiedon": categoryModifiedon,
-    "category_added_by": categoryAddedBy,
-    "category_edited_by": categoryEditedBy,
-    "category_added_user_type": categoryAddedUserType,
-    "category_editted_user_type": categoryEdittedUserType,
-    "rest_status": restStatus,
-    "available_time": availableTime,
-    "available_day": availableDay,
-    "is_priceon": isPriceon,
-    "is_addon": isAddon,
-  };
+          "item_id": model.itemId,
+          "special_request": "",
+          "price_on_id": 0,
+          "qty": model.enteredQty,
+          "addons_id": model.addonIds,
+        };
+    String result = json.encode(map());
+    return result;
+  }
+
 }
 
 class Addons {

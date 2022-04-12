@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
-class MoneyCard extends StatelessWidget {
+class MoneyCard extends StatefulWidget {
    MoneyCard({Key? key,required this.text}) : super(key: key);
   String text;
 
+  @override
+  State<MoneyCard> createState() => _MoneyCardState();
+}
+
+class _MoneyCardState extends State<MoneyCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,6 +21,6 @@ class MoneyCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey.shade200,width: 1),
       ),
-    child: Center(child:Text(text),));
+    child: Center(child:Text(widget.text),));
   }
 }

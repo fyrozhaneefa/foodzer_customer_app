@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Models/UserModel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
@@ -85,45 +86,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     SizedBox(
                       height: 30,
                     ),
-                    // Container(
-                    //   width: double.infinity,
-                    //   height: 60,
-                    //   child: ElevatedButton(
-                    //     onPressed: () {},
-                    //     child: Stack(
-                    //       children: [
-                    //         Padding(
-                    //           padding: const EdgeInsets.all(12.0),
-                    //           child: Container(
-                    //             alignment: Alignment.centerLeft,
-                    //             child: Image.asset(
-                    //               Helper.getAssetName("google-logo.png", 'virtual'),
-                    //               fit: BoxFit.fill,
-                    //               width: 25,
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         Container(
-                    //           alignment: Alignment.center,
-                    //           child:  Text("Continue with Google",
-                    //             style: TextStyle(
-                    //               color: Colors.white,
-                    //               fontSize: 16.0,
-                    //               fontWeight: FontWeight.w600
-                    //             ),),
-                    //         )
-                    //       ],
-                    //     ),
-                    //         style: ElevatedButton.styleFrom(
-                    //           primary:Color(0xff4285f4),
-                    //           elevation: 0,
-                    //             shape: RoundedRectangleBorder(
-                    //                     borderRadius: BorderRadius.circular(12.0),
-                    //                     // side: BorderSide(color: Colors.red)
-                    //             )
-                    //         ),
-                    //   ),
-                    // ),
+
                     SizedBox(
                       height: 20,
                     ),
@@ -132,9 +95,16 @@ class _LandingScreenState extends State<LandingScreen> {
                       height: 60,
                       child: ElevatedButton(
                         onPressed: () {
+                          // UserModel userModel = new UserModel();
+                          // userModel.userType = "GUEST";
+                          // UserPreference().setUserData(userModel);
+                          // setState(() {
+                          //
+                          // });
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) =>
                                   GoogleMapScreen(isFromCart)));
+
                         },
                         child: Stack(
                           children: [

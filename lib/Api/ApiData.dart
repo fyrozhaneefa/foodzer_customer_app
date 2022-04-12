@@ -16,5 +16,8 @@ class ApiData{
   static String GET_USER_ADDRESS = API_URL+"get_user_adress";
   static String MERCHANT_BRANCH_TAX = API_URL+"merchant_branch_tax";
   static String GET_DELIVERY_CHARGE = API_URL+"get_delivery_charge";
+  static String GET_PAYMENT_TOKEN = API_URL+"generate_token";
+  static String ORDER_CHECKOUT = API_URL+"checkout_new/";
+  static String GET_ORDER_LIST = API_URL+"order_list/";
 
 }

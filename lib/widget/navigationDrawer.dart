@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/EditAccountSection/editaccount.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/GetHelp/gethelphome.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/MyOrderSection//myAccountHome.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/MyOrderSection/myoders.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/OfferSection/offerHome.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
@@ -130,7 +131,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                 text: 'Your orders',
                 icon: Icons.article_outlined,
                 // onClicked:() => selectedItem(context, 1)
-                onClicked:() => Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyOrder())),
+                onClicked:() => Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyOrders())),
 
             ),
             const SizedBox(height: 16),

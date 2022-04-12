@@ -10,9 +10,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class RestaurantProductsList extends StatefulWidget {
-  const RestaurantProductsList({
-    Key? key,
-  }) : super(key: key);
+  bool isSwitched;
+   RestaurantProductsList(this.isSwitched);
 
   @override
   State<RestaurantProductsList> createState() => _RestaurantProductsListState();

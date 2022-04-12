@@ -73,6 +73,7 @@ class ApplicationProvider with ChangeNotifier {
     this.selectedAddressModel = addressModel;
   }
 
+
   clearData() async {
     for (Item itemModel in cartModelList) {
       int itemModelIndex = -1;
@@ -114,6 +115,9 @@ class ApplicationProvider with ChangeNotifier {
 
   setCurrentRestModel(SingleRestModel restModel) async {
     this.selectedRestModel = restModel;
+    this.filteredLoadedProductModelList = [];
+    this.selectedCategoryIndex = 0;
+
     notifyListeners();
   }
 

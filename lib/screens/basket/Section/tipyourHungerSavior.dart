@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/moneycard.dart';
 
 import '../../../utils/helper.dart';
-class TipYourHungerSecond extends StatelessWidget {
+class TipYourHungerSecond extends StatefulWidget {
   const TipYourHungerSecond({Key? key}) : super(key: key);
+
+  @override
+  State<TipYourHungerSecond> createState() => _TipYourHungerSecondState();
+}
+
+class _TipYourHungerSecondState extends State<TipYourHungerSecond> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +39,12 @@ class TipYourHungerSecond extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsets.only(left: 10, top: 10),
-                child: MoneyCard(
-                  text: "₹20",
-                ),
-              ),
+            Padding(
+                 padding: EdgeInsets.only(left: 10, top: 10),
+                 child: MoneyCard(
+                   text: "₹20",
+                 ),
+               ),
               Padding(
                 padding: EdgeInsets.only(left: 10, top: 10),
                 child: MoneyCard(

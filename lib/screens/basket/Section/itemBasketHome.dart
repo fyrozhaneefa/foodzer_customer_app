@@ -42,7 +42,6 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
 
   @override
   void initState() {
-    // TODO: implement initState
     getMerchantTaxPercentage();
     UserPreference().getUserData().then((value) {
       userModel = value;
@@ -74,7 +73,45 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16)),
+                  fontSize: 16),
+
+          ),
+      //     bottom:null!=provider.selectedRestModel.offerDetails? PreferredSize(
+      //       preferredSize: Size.fromHeight(80.0),
+      //       child: Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: Container(
+      //           width: Helper.getScreenWidth(context),
+      //           decoration: BoxDecoration(
+      //             color: Colors.deepOrange.shade100,
+      //             borderRadius: BorderRadius.circular(20)
+      //           ),
+      //           child: Padding(
+      //             padding: const EdgeInsets.all(12.0),
+      //             child: Column(
+      //               crossAxisAlignment: CrossAxisAlignment.start,
+      //               children: [
+      //                 Text(
+      //                   'Rs.131 total savings',
+      //                   style: TextStyle(
+      //                     color: Colors.deepOrange,
+      //                     fontSize: 20,
+      //                     fontWeight: FontWeight.w600
+      //                   ),
+      //                 ),
+      //                 SizedBox(height: 7,),
+      //                 Text('indluding Rs.100 with WELCOME50 coupon',
+      //                 style: TextStyle(
+      //                   color: Colors.deepOrangeAccent,
+      //                   fontSize: 13,
+      //                   fontWeight: FontWeight.w500
+      //                 ),)
+      //               ],
+      //             ),
+      //           ),
+      //         ),
+      //       ) ):PreferredSize(
+      // preferredSize: Size.fromHeight(0.0), child: Container(),),
         ),
         body: SafeArea(
           child: Column(
@@ -555,7 +592,11 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                 context: context,
                                 builder: (context) {
                                   return ChooseAddress(isFromCart,getAddressList);
-                                });
+                                }).then((value) {
+                              setState(() {
+
+                              });
+                            });
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(left: 15.0),
