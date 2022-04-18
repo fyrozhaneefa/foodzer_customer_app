@@ -13,7 +13,9 @@ import 'package:foodzer_customer_app/utils/paymentUtils.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
 import 'package:validators/validators.dart';
+
 
 class AddNewCard extends StatefulWidget {
   @override
@@ -606,5 +608,63 @@ class _AddNewCardState extends State<AddNewCard> {
       }
       return null;
     }
+  }
+  showOrderPlaceDialogue(){
+
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        actions: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 30,
+              ),
+              Center(
+                child: ClipRRect(
+                  child: Image(
+                      image: AssetImage(
+                          "lib/Menu/Microfiles/assets/images/foodzer.jpg"),
+                      width: 60),borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Center(
+                child: Text("Thank You",
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w600)),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: Text("Your order placed successfully",style: TextStyle(color: Colors.black.withOpacity(.6),fontSize: 12,fontWeight: FontWeight.w500),),
+              ),
+              SizedBox(height: 30,),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text(
+                  "Ok",
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  primary: Colors.orange,
+                  fixedSize: Size(120, 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3),
+                    // side: BorderSide(color: Colors.black.withOpacity(.3)),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10,),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
