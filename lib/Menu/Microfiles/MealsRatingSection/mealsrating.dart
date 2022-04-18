@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 class MealsRating extends StatelessWidget {
   const MealsRating({Key? key}) : super(key: key);
 
