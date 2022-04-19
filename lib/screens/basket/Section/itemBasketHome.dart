@@ -292,31 +292,36 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                      child: Text(
-                        "Tip Your hunger saviour",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: 20, right: 20, top: 10, bottom: 10),
-                      child: deliveryBoyTip(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                      child: Text(
-                        "Delivery instructions",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DeliveryInstructions(),
-                    ),
+                   deliveryType == 1?Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       Padding(
+                         padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                         child: Text(
+                           "Tip Your hunger saviour",
+                           style: TextStyle(
+                               fontSize: 16, fontWeight: FontWeight.w600),
+                         ),
+                       ),
+                       Padding(
+                         padding: EdgeInsets.only(
+                             left: 20, right: 20, top: 10, bottom: 10),
+                         child: deliveryBoyTip(),
+                       ),
+                       Padding(
+                         padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                         child: Text(
+                           "Delivery instructions",
+                           style: TextStyle(
+                               fontSize: 16, fontWeight: FontWeight.w600),
+                         ),
+                       ),
+                       SingleChildScrollView(
+                         scrollDirection: Axis.horizontal,
+                         child: DeliveryInstructions(),
+                       ),
+                     ],
+                   ):Container(),
                     Padding(
                       padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
                       child: Text(
@@ -757,10 +762,13 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                     onPressed: () {
                       if (null != provider.selectedAddressModel.addressId &&
                           provider.selectedAddressModel.addressId!.isNotEmpty &&
-                          deliveryType == 1) {
+                          deliveryType == 1 || deliveryType == 2) {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => PaymentSection()));
-                      } else {
+                            builder: (context) => PaymentSection(deliveryType!)));
+                      }
+
+                      else
+                      {
                         Fluttertoast.showToast(
                             msg: "Select a delivery address to continue",
                             toastLength: Toast.LENGTH_SHORT,
@@ -781,7 +789,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                           null != provider.selectedAddressModel.addressId &&
                                   provider.selectedAddressModel.addressId!
                                       .isNotEmpty &&
-                                  deliveryType == 1
+                                  deliveryType == 1 || deliveryType == 2
                               ? Colors.deepOrange
                               : Colors.deepOrange.shade100,
                       fixedSize: Size(190, 58),

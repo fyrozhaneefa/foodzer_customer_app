@@ -11,9 +11,15 @@ import 'Constants/sizedbox.dart';
 
 
 
-class PaymentSection extends StatelessWidget {
-  const PaymentSection({Key? key}) : super(key: key);
+class PaymentSection extends StatefulWidget {
+  int delType;
+  PaymentSection(this.delType);
 
+  @override
+  State<PaymentSection> createState() => _PaymentSectionState();
+}
+
+class _PaymentSectionState extends State<PaymentSection> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationProvider>(builder: (context, provider, child) {
@@ -67,7 +73,6 @@ class PaymentSection extends StatelessWidget {
             child: ListView(
               children: [
                 Container(
-                  height: 100,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -78,43 +83,46 @@ class PaymentSection extends StatelessWidget {
                   child: Column(
                     children: [
                       ListTile(
+
                         leading:
                             Container(child: Image(image: AssetImage(Track))),
                         title: Padding(
                           padding: const EdgeInsets.only(bottom: 10),
-                          child: Text(
-                            "Hotel ${provider.selectedRestModel.branchDetails!.merchantBranchName}",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w500),
+                          child: Row(
+                            children: [
+                              Text(
+                                provider.selectedRestModel.branchDetails!.merchantBranchName.toString(),
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w500),
+                              ),
+                              Text(" | "),
+                              Text("Delivery in : 52 min",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12
+                              ),)
+                            ],
                           ),
                         ),
-                        subtitle: Text(
-                          provider.selectedAddressModel.addressTitle.toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, color: Colors.black),
+                        subtitle: Row(
+                          children: [
+                            Text(
+                              provider.selectedAddressModel.addressTitle.toString(),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, color: Colors.black),
+                            ),
+                            Text(" | "),
+                            Expanded(
+                              child: Text("Amaraprarambil House moolamattom p.o thodupuzha",
+                              style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                  color: Colors.grey,
+                                  fontSize: 12
+                              ),),
+                            )
+                          ],
                         ),
                       ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 70,
-                          ),
-                          Text(
-                            "Delivery in:",
-                            style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          Text(
-                            "25 mins",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600),
-                          )
-                        ],
-                      )
                     ],
                   ),
                 ),
@@ -142,7 +150,7 @@ class PaymentSection extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) =>
-                            AddNewCard()));
+                            AddNewCard(widget.delType)));
 
                         // buttonClick();
                         // Payment();

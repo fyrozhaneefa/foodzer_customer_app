@@ -18,6 +18,8 @@ import 'package:validators/validators.dart';
 
 
 class AddNewCard extends StatefulWidget {
+  int delType;
+  AddNewCard(this.delType);
   @override
   State<AddNewCard> createState() => _AddNewCardState();
 }
@@ -36,6 +38,7 @@ class _AddNewCardState extends State<AddNewCard> {
   String? cardHolderName;
   bool isLoading = false;
   UserData userModel = new UserData();
+  var _selectedApp;
 
   String? itemOrderId = "";
 
@@ -45,10 +48,12 @@ class _AddNewCardState extends State<AddNewCard> {
     cardNameFocus = FocusNode();
     expiryFocus = FocusNode();
     cvvFocus = FocusNode();
+
     UserPreference().getUserData().then((value) {
       userModel = value;
       setState(() {});
     });
+
     super.initState();
   }
 
@@ -402,7 +407,53 @@ class _AddNewCardState extends State<AddNewCard> {
       ),
     );
   }
-
+   getUPIApps() async{
+    await CashfreePGSDK.getUPIApps().then((value) => {
+      if(value != null && value.length > 0) {
+        _selectedApp = value[0]
+      }
+    });
+  }
+  // Future<void> seamlessUPIIntent() async {
+  //   //Replace with actual values
+  //   String orderId = "ORDER_ID";
+  //   String stage = "PROD";
+  //   String orderAmount = "ORDER_AMOUNT";
+  //   String tokenData = "TOKEN_DATA";
+  //   String customerName = "Customer Name";
+  //   String orderNote = "Order_Note";
+  //   String orderCurrency = "INR";
+  //   String appId = "APP_ID";
+  //   String customerPhone = "Customer Phone";
+  //   String customerEmail = "sample@gmail.com";
+  //   String notifyUrl = "https://test.gocashfree.com/notify";
+  //
+  //
+  //   Map<String, dynamic> inputParams = {
+  //     "orderId": orderId,
+  //     "orderAmount": orderAmount,
+  //     "customerName": customerName,
+  //     "orderNote": orderNote,
+  //     "orderCurrency": orderCurrency,
+  //     "appId": appId,
+  //     "customerPhone": customerPhone,
+  //     "customerEmail": customerEmail,
+  //     "stage": stage,
+  //     "tokenData": tokenData,
+  //     "notifyUrl": notifyUrl,
+  //
+  //
+  //     // For seamless UPI Intent
+  //     "appName": _selectedApp["id"]
+  //   };
+  //
+  //   CashfreePGSDK.doUPIPayment(inputParams)
+  //       .then((value) => value?.forEach((key, value) {
+  //     print("$key : $value");
+  //     //Do something with the result
+  //   }));
+  // }
+  //
   proceedPayment(String token) {
     isLoading = true;
     setState(() {});
@@ -446,9 +497,10 @@ class _AddNewCardState extends State<AddNewCard> {
       setState(() {});
       if (value!['txStatus'] == "SUCCESS") {
         Provider.of<ApplicationProvider>(context, listen: false).clearData();
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) =>
-                HomeScreen()), (Route<dynamic> route) => false);
+        // Navigator.of(context).pushAndRemoveUntil(
+        //     MaterialPageRoute(builder: (context) =>
+        //         HomeScreen()), (Route<dynamic> route) => false);
+        showOrderPlaceDialogue();
 
         Fluttertoast.showToast(
             msg: value['txStatus'],
@@ -495,14 +547,13 @@ class _AddNewCardState extends State<AddNewCard> {
       itemJson = itemJson + Item.ToJson(item) + ",";
     }
     itemJson = itemJson.substring(0, itemJson.length - 1);
-    itemJson = itemJson.replaceAll('\\', "");
     var map = {
       "lat": provider.selectedAddressModel.addressLat,
       "lng": provider.selectedAddressModel.addressLng,
       "merchant_branch": provider.selectedRestModel.merchantBranchId,
       "payment_mode": "2",
       "delivery_fee": "0",
-      "DEL_TYPE": "delivery",
+      "DEL_TYPE": widget.delType == 1?"delivery":"pickup",
       "address_id": provider.selectedAddressModel.addressId,
       "user_id": userModel.userId,
       "coupon_id": "",
