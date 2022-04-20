@@ -4,6 +4,7 @@ import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/constants/di
 import 'package:foodzer_customer_app/Menu/Microfiles/ReviewSection/review_section.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/DetailSearch/detailsearch.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantInfo.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/section/persistantHeader.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/section/productCategory.dart';
@@ -90,7 +91,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   shape: BoxShape.circle,
                                 ),
                                 child: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SearchDetails()));
+
+                                  },
                                   icon: Icon(
                                     Icons.search,
                                     color: Colors.black,
