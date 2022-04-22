@@ -6,9 +6,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/PopularRestModel.dart';
 import 'package:foodzer_customer_app/Models/otherCategoryModel.dart';
+import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/home/sections/OtherCategoryCard.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 import '../../../utils/helper.dart';
 import 'groceryCard.dart';
@@ -42,9 +44,9 @@ class _OtherCategoryCardListState extends State<OtherCategoryCardList> {
                   cardTime: item.merchantBranchOrderTime,
                   cardType: item.cuisines,
                   rating: item.avgReview,
-                  deliveryCharge: 'AED 4.00',
+                  deliveryCharge: '',
                   bannerName: item.merchantBranchImage,
-                  discount: '34% off',
+                  discount: '',
                   busy: item.merchantBranchBusy,
                   press: (){
                     if(item.merchantBranchBusy == "0") {
@@ -130,10 +132,10 @@ class _OtherCategoryCardListState extends State<OtherCategoryCardList> {
   }
 
   getPopularRest() async {
-
+    SharedPreferences prefs=await SharedPreferences.getInstance();
     var map = new Map<String, dynamic>();
-    map['lat'] = '10.9760357';
-    map['lng'] = '76.22544309999999';
+    map['lat'] =  prefs.getString('latitude');
+    map['lng'] =  prefs.getString('longitude');
     var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
     var json = convert.jsonDecode(response.body);
     if(json['error_code'] == 0){

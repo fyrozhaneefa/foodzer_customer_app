@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/DetailSearch/detailsearch.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/constants/divider.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/ReviewSection/review_section.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
@@ -90,7 +91,13 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   shape: BoxShape.circle,
                                 ),
                                 child: IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    // provider.selectedCategoryIndex=0;
+                                    // provider.clearItems();
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) =>
+                                            SearchDetails()));
+                                  },
                                   icon: Icon(
                                     Icons.search,
                                     color: Colors.black,

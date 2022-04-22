@@ -152,7 +152,7 @@ class _GroceryCardState extends State<GroceryCard> {
                             fontWeight: FontWeight.w500
                         ),),
                       SizedBox(width: 25,),
-                      Text('Delivery:'+' '+widget.deliveryCharge!,
+                      Text(widget.deliveryCharge!.isNotEmpty? 'Delivery:'+' '+widget.deliveryCharge!:"Delivery : ₹0",
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w500
@@ -161,7 +161,7 @@ class _GroceryCardState extends State<GroceryCard> {
                   )
               ),
               SizedBox(height: 5,),
-              Container(
+              widget.discount!.isNotEmpty? Container(
                 child: Row(
                   children: [
                     Icon(Icons.local_offer_outlined,
@@ -175,7 +175,7 @@ class _GroceryCardState extends State<GroceryCard> {
                       ),),
                   ],
                 ),
-              )
+              ):Container()
             ],
           ),
         ),

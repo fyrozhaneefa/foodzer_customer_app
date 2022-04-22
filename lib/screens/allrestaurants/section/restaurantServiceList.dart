@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
+import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurantServicesCard.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Models/specialcategorymode.dart';
 import '../../../utils/helper.dart';
@@ -50,14 +52,15 @@ class RestaurantServicesList extends StatelessWidget {
 
 class SpecialCategory {
   Future<List<SpecialCategories>?> getSpecialCategory() async {
+    SharedPreferences prefs=await SharedPreferences.getInstance();
     final response = await http.post(
         Uri.parse(ApiData.All_Restaurent),
         headers: {
           'Cookie': ' ci_session=445a8129f0edc2b81b72086233c20f2744cc4e92'
         },
         body: {
-          'lat': '10.9760357',
-          'lng': '76.22544309999999',
+          'lat': prefs.getString('latitude'),
+          'lng': prefs.getString('longitude'),
           'delivery_type': 'delivery',
         });
 

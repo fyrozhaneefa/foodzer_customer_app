@@ -33,6 +33,7 @@ class ItemBasketHome extends StatefulWidget {
 }
 
 class _ItemBasketHomeState extends State<ItemBasketHome> {
+  bool isLoadingDeliveryCharge = false;
   int? deliveryType = 1;
   bool isFromCart = true;
   bool isLoading = false;
@@ -44,6 +45,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
   List<String> tips = ["1", "5", "10", "20"];
   int? selectedTip = -1;
   int tipValue = 0;
+
   @override
   void initState() {
     getMerchantTaxPercentage();
@@ -207,6 +209,8 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                     children: [
                                       InkWell(
                                         onTap: () {
+                                          tipValue = 0;
+                                          selectedTip =-1;
                                           setState(() {
                                             deliveryType = 2;
                                           });
@@ -420,17 +424,19 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
 
   Widget summaryView() {
     double totalAmt = 0;
-    double deliveryFee = 0;
     double deliveryTip = 0;
 
     var taxData = {};
     return Consumer<ApplicationProvider>(builder: (context, provider, child) {
+      // if(null!=provider.selectedAddressModel.addressId && provider.selectedAddressModel.addressId!.isNotEmpty){
+      //   getDeliveryCharge();
+      // }
       for (Item item in provider.cartModelList) {
         totalAmt = totalAmt + item.totalPrice!;
-        // provider.setTotalCartPrice(alltotal);
+        provider.setItemTotal(totalAmt);
       }
       taxData = provider.calculateTax(taxPercentage, totalAmt, false);
-      toPayAmt = taxData['totalAmtWithTax']+tipValue;
+      toPayAmt = taxData['totalAmtWithTax']+tipValue+provider.deliveryFee;
       provider.setTotalCartPrice(toPayAmt);
       return Container(
         height: 270,
@@ -472,7 +478,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                         preferBelow: false,
                         margin: EdgeInsets.only(left: 20),
                         height: 50,
-                        message: 'Delivery Fee : ₹0',
+                        message: 'Delivery Fee : ₹'+provider.deliveryFee.toString(),
                         textStyle: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.w500),
                         triggerMode: TooltipTriggerMode.tap,
@@ -487,7 +493,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(right: 15, top: 15),
-                      child: Text("₹$deliveryFee"),
+                      child: Text("₹"+provider.deliveryFee.toString()),
                     )
                   ],
                 ),
@@ -668,6 +674,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                                         isFromCart,
                                                         getAddressList);
                                                   }).then((value) {
+                                                    // getDeliveryCharge();
                                                 setState(() {});
                                               });
                                             },
@@ -694,6 +701,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                         return ChooseAddress(
                                             isFromCart, getAddressList);
                                       }).then((value) {
+                                    // getDeliveryCharge();
                                     setState(() {});
                                   });
                                 },
@@ -850,6 +858,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
   //     }
   //   }
   // }
+
   getUserAddress() async {
     isLoading = true;
     setState(() {});

@@ -1,4 +1,5 @@
 import 'package:foodzer_customer_app/Api/ApiData.dart';
+import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:foodzer_customer_app/Models/SliderModel.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ImageSlider extends StatefulWidget {
 
@@ -135,14 +137,14 @@ class _ImageSliderState extends State<ImageSlider> {
   // }
 
   getSliderList() async {
-    // CategoryModel categoryModel = new CategoryModel();
+    SharedPreferences prefs=await SharedPreferences.getInstance();
     var map = new Map<String, dynamic>();
-    map['lat'] = '10.9760357';
-    map['lng'] = '76.22544309999999';
+    map['lat'] = prefs.getString('latitude');
+    map['lng'] = prefs.getString('longitude');
     var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
-    var json = convert.jsonDecode(response.body);
-    if(json['error_code'] == 0){
-      List dataList = json['advertisements'];
+    var jsonData = convert.jsonDecode(response.body);
+    if(jsonData['error_code'] == 0){
+      List dataList = jsonData['advertisements'];
       if(null!= dataList && dataList.length >0){
         slider =dataList.map((spacecraft) => new SliderModel.fromJson(spacecraft)).toList();
       }

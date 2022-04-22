@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/otherCategoryModel.dart';
+import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/home/sections/OtherCategoryCardList.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class OtherCategoriesSection extends StatefulWidget {
@@ -60,10 +63,10 @@ class _OtherCategoriesSectionState extends State<OtherCategoriesSection> {
     );
   }
 getOtherCategories() async {
-
+  SharedPreferences prefs=await SharedPreferences.getInstance();
   var map = new Map<String, dynamic>();
-  map['lat'] = '10.9760357';
-  map['lng'] = '76.22544309999999';
+  map['lat'] =  prefs.getString('latitude');
+  map['lng'] =  prefs.getString('longitude');
   var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
   var json = convert.jsonDecode(response.body);
   if(json['error_code'] == 0){

@@ -11,6 +11,11 @@ class UserPreference{
 
     prefs.setString('userData', userJson);
   }
+  setLatLng(String lat, String lng) async {
+    SharedPreferences prefs=await SharedPreferences.getInstance();
+    prefs.setString('latitude', lat);
+    prefs.setString('longitude', lng);
+  }
   setCurrentAddress(String address) async {
     SharedPreferences prefs=await SharedPreferences.getInstance();
 

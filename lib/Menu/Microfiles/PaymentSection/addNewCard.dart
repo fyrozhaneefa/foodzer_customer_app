@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/OrderPlaced/orderplaced.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
@@ -696,7 +697,11 @@ class _AddNewCardState extends State<AddNewCard> {
               ),
               SizedBox(height: 30,),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) =>
+                          OrderPlacedHome()), (Route<dynamic> route) => false);
+                },
                 child: Text(
                   "Ok",
                   style: TextStyle(fontWeight: FontWeight.w600),

@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/popularRestNearCard.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Models/popularrestaurentNearmodel.dart';
 import '../../../utils/helper.dart';
@@ -157,11 +159,12 @@ class PopularRestNearList extends StatelessWidget {
 
 class PopularRestaurentNear {
   Future<List<PopularRest>?> getPupularRestaurent() async {
+    SharedPreferences prefs=await SharedPreferences.getInstance();
     final response = await http.post(
       Uri.parse("https://opine.cloud/foodzer_test/mob_food_new/restaurants"),
       body: {
-        'lat': '10.9760357',
-        'lng': '76.22544309999999',
+        'lat': prefs.getString('latitude'),
+        'lng': prefs.getString('longitude'),
         'delivery_type': 'delivery',
       },
       headers: {

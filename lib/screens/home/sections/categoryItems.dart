@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:foodzer_customer_app/Preferences/Preferences.dart';
+import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/allFlowers/AllFlowersScreen.dart';
 import 'package:foodzer_customer_app/screens/allgroceries/AllGroceries.dart';
@@ -7,6 +9,7 @@ import 'package:foodzer_customer_app/screens/allrestaurants/allRestaurants.dart'
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 import '../../../Api/ApiData.dart';
 import '../../../Models/CategoryModel.dart';
@@ -98,11 +101,10 @@ class _CategoryItemsState extends State<CategoryItems> {
     );
   }
   getCategoryList() async {
-
-
+    SharedPreferences prefs=await SharedPreferences.getInstance();
     var map = new Map<String, dynamic>();
-    map['lat'] = '10.9760357';
-    map['lng'] = '76.22544309999999';
+    map['lat'] = prefs.getString('latitude');
+    map['lng'] = prefs.getString('longitude');
     var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
     var json = convert.jsonDecode(response.body);
     if(json['error_code'] == 0){

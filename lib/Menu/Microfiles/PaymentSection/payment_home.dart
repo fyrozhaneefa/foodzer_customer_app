@@ -82,8 +82,7 @@ class _PaymentSectionState extends State<PaymentSection> {
                   ),
                   child: Column(
                     children: [
-                      ListTile(
-
+                    widget.delType == 1? ListTile(
                         leading:
                             Container(child: Image(image: AssetImage(Track))),
                         title: Padding(
@@ -122,7 +121,24 @@ class _PaymentSectionState extends State<PaymentSection> {
                             )
                           ],
                         ),
+                      ):ListTile(
+
+                   title: Row(
+                        children: [
+                          Text(
+                            provider.selectedRestModel.branchDetails!.merchantBranchName.toString(),
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w500),
+                          ),
+                          Text(" | "),
+                          Text("Delivery type : ${widget.delType ==2 ? "Pickup":"Delivery"}",
+                            style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12
+                            ),)
+                        ],
                       ),
+                    ),
                     ],
                   ),
                 ),
@@ -199,7 +215,7 @@ class _PaymentSectionState extends State<PaymentSection> {
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                 ),
-                UpiSection(),
+                UpiSection(widget.delType),
                 SizedWidget(),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10),

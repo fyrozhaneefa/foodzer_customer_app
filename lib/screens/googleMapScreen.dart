@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
+import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
@@ -39,6 +41,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   bool isPinMoving = false;
   String? _currentAddress;
   String? locality;
+  int? delNotDel;
   LatLng latLongCurrent = LatLng(0, 0);
   LatLng latLong = new LatLng(0, 0);
   Place selectedLocation = new Place();
@@ -46,7 +49,8 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   var maptype = MapType.normal;
   bool isLoading=false;
   UserData userModel=new UserData();
-
+  bool isLoggedIn = false;
+  List<AddressModel> getAddressList = [];
   double? mapBottomPadding;
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
@@ -61,6 +65,17 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         Provider.of<ApplicationProvider>(context, listen: false);
     UserPreference().getUserData().then((value) {
       userModel=value;
+      if(null!=value.userId && value.userId!.isNotEmpty){
+        isLoggedIn = true;
+        setState(() {
+
+        });
+      } else{
+        isLoggedIn = false;
+        setState(() {
+
+        });
+      }
       setState(() {
 
       });
@@ -172,7 +187,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
             ),
           ),
           if (applicationBloc.searchResults != null &&
-              applicationBloc.searchResults?.length != 0)
+              applicationBloc.searchResults?.length != 0 )
             Container(
               height: MediaQuery.of(context).size.height,
               width: double.infinity,
@@ -182,10 +197,10 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                   ),
             ),
           if (applicationBloc.searchResults != null &&
-              applicationBloc.searchResults?.length != 0)
+              applicationBloc.searchResults?.length != 0 )
             Container(
-              height: MediaQuery.of(context).size.height,
               child: ListView.builder(
+                shrinkWrap: true,
                 itemCount: applicationBloc.searchResults?.length,
                 itemBuilder: (context, index) {
                   return ListTile(
@@ -262,118 +277,125 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                     ],
                   ),
                 ),
-                !widget.isFromCart &&
-                        isPinMoving &&
-                        searchController.text.length == 0
-                    ? Container(
-                        padding: EdgeInsets.only(
-                            left: 20, right: 20, top: 20, bottom: 30),
-                        width: Helper.getScreenWidth(context),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Delivery Location',
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextField(
-                              controller: addressController,
-                              obscureText: false,
-                              autocorrect: true,
-                              maxLines: null,
-                              autofocus: false,
-                              enabled: false,
-                              style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.3),
-                              decoration: new InputDecoration(
-                                isDense: true,
-                                border: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                errorBorder: InputBorder.none,
-                                disabledBorder: InputBorder.none,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'The selected pin location is a bit far from your current location. Are you sure this is correct?',
-                              style: TextStyle(height: 1.5),
-                            ),
-                            SizedBox(
-                              height: 25,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    print('clicked reset');
-                                    _getAddressFromLatLng(0, 0);
-                                    isPinMoving = false;
-                                    setState(() {});
-                                  },
-                                  child: Container(
-                                    child: Text(
-                                      'Reset to my location',
-                                      style: TextStyle(
-                                          color: Colors.deepOrangeAccent,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                                        HomeScreen()), (Route<dynamic> route) => false);
-                                    // Navigator.of(context).pushReplacement(
-                                    //     MaterialPageRoute(
-                                    //         builder: (BuildContext context) =>
-                                    //             HomeScreen()));
-                                  },
-                                  child: Container(
-                                    child: Text(
-                                      'Yes, deliver here',
-                                      style: TextStyle(
-                                          color: Colors.deepOrangeAccent,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      )
-                    :Container(),
-                !widget.isFromCart && !isPinMoving && !isCameraMoving
+                // !widget.isFromCart &&
+                //         isPinMoving &&
+                //         searchController.text.length == 0
+                //     ? Container(
+                //         padding: EdgeInsets.only(
+                //             left: 20, right: 20, top: 20, bottom: 30),
+                //         width: Helper.getScreenWidth(context),
+                //         decoration: BoxDecoration(
+                //           color: Colors.white,
+                //         ),
+                //         child: Column(
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: [
+                //             Text(
+                //               'Delivery Location',
+                //               style: TextStyle(
+                //                   color: Colors.grey,
+                //                   fontWeight: FontWeight.w500),
+                //             ),
+                //             SizedBox(
+                //               height: 10,
+                //             ),
+                //             TextField(
+                //               controller: addressController,
+                //               obscureText: false,
+                //               autocorrect: true,
+                //               maxLines: null,
+                //               autofocus: false,
+                //               enabled: false,
+                //               style: TextStyle(
+                //                   fontSize: 16.0,
+                //                   fontWeight: FontWeight.w600,
+                //                   height: 1.3),
+                //               decoration: new InputDecoration(
+                //                 isDense: true,
+                //                 border: InputBorder.none,
+                //                 focusedBorder: InputBorder.none,
+                //                 enabledBorder: InputBorder.none,
+                //                 errorBorder: InputBorder.none,
+                //                 disabledBorder: InputBorder.none,
+                //               ),
+                //             ),
+                //             SizedBox(
+                //               height: 10,
+                //             ),
+                //             Text(
+                //               'The selected pin location is a bit far from your current location. Are you sure this is correct?',
+                //               style: TextStyle(height: 1.5),
+                //             ),
+                //             SizedBox(
+                //               height: 25,
+                //             ),
+                //             Row(
+                //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //               children: [
+                //                 InkWell(
+                //                   onTap: () {
+                //                     print('clicked reset');
+                //                     _getAddressFromLatLng(0, 0);
+                //                     isPinMoving = false;
+                //                     setState(() {});
+                //                   },
+                //                   child: Container(
+                //                     child: Text(
+                //                       'Reset to my location',
+                //                       style: TextStyle(
+                //                           color: Colors.deepOrangeAccent,
+                //                           fontWeight: FontWeight.w600),
+                //                     ),
+                //                   ),
+                //                 ),
+                //                 InkWell(
+                //                   onTap: () {
+                //                     Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                //                         HomeScreen()), (Route<dynamic> route) => false);
+                //                     // Navigator.of(context).pushReplacement(
+                //                     //     MaterialPageRoute(
+                //                     //         builder: (BuildContext context) =>
+                //                     //             HomeScreen()));
+                //                   },
+                //                   child: Container(
+                //                     child: Text(
+                //                       'Yes, deliver here',
+                //                       style: TextStyle(
+                //                           color: Colors.deepOrangeAccent,
+                //                           fontWeight: FontWeight.w600),
+                //                     ),
+                //                   ),
+                //                 )
+                //               ],
+                //             )
+                //           ],
+                //         ),
+                //       )
+                //     :Container(),
+                // !widget.isFromCart && !isPinMoving && !isCameraMoving
+                !widget.isFromCart && !isCameraMoving && searchController.text.length == 0
                     ? Container(
                         margin: EdgeInsets.all(15),
                         width: MediaQuery.of(context).size.width,
                         height: 60,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                                HomeScreen()), (Route<dynamic> route) => false);
+                            if(delNotDel == 0){
+                              Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                  HomeScreen()), (Route<dynamic> route) => false);
+                              UserPreference().setCurrentAddress(_currentAddress!);
+                              UserPreference().setLatLng(latLongCurrent.latitude.toString(), latLongCurrent.longitude.toString());
+                            }
+
                             // Navigator.of(context).pushReplacement(
                             //     MaterialPageRoute(
                             //         builder: (BuildContext context) =>
                             //             HomeScreen()));
                           },
-                          child: Text('Deliver here'),
+                          child: isLoading?CircularProgressIndicator(color: Colors.deepOrangeAccent,)
+                          :Text(delNotDel == 0?'Deliver here':"Sorry, we don't deliver here"),
                           style: ElevatedButton.styleFrom(
-                              primary: Colors.deepOrange,
+                              primary: delNotDel == 0?Colors.deepOrange:Colors.deepOrange.shade200,
                               elevation: 0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12.0),
@@ -454,20 +476,24 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             // UserPreference().setDeliveryAddress(_currentAddress!);
-                            locationDetails(context,locality);
-                            setState(() {
+                            if(delNotDel == 0){
+                              locationDetails(context,locality);
+                              setState(() {
 
-                            });
+                              });
+                            }
                           },
-                          child: Container(
-                            child:  Text("CONFIRM LOCATION",
+                          child: isLoading?CircularProgressIndicator(
+                            color: Colors.deepOrangeAccent,
+                          ):Container(
+                            child:  Text(delNotDel == 0?"CONFIRM LOCATION":"Sorry, we don't deliver here",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600
                               ),),
                           ),
                           style: ElevatedButton.styleFrom(
-                              primary:Colors.deepOrange,
+                              primary:delNotDel == 0?Colors.deepOrange : Colors.deepOrange.shade100,
                               elevation: 0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0),
@@ -547,7 +573,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       } else {
         _mapController?.moveCamera(CameraUpdate.newLatLng(latLongCurrent));
       }
-
+      getDeliverableArea(latLongCurrent.latitude.toString(), latLongCurrent.longitude.toString());
       setState(() {
         _currentAddress = address[0].addressLine;
         locality= address[0].locality;
@@ -555,13 +581,31 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         //     .country}";
         addressController.text = _currentAddress!;
         print("zzz" + _currentAddress!);
-        UserPreference().setCurrentAddress(_currentAddress!);
+
+
         // UserPreference().setDeliveryAddress(_currentAddress!);
         // finalAddress = _currentAddress!;
       });
     } catch (e) {
       print(e);
     }
+  }
+  getDeliverableArea(String lat,String lng) async {
+isLoading = true;
+setState(() {
+
+});
+    var map = new Map<String, dynamic>();
+    map['lat'] = lat;
+    map['lng'] = lng;
+
+    var response =
+    await http.post(Uri.parse(ApiData.GET_DELIVERABLE_AREA), body: map);
+    var json = jsonDecode(response.body);
+    isLoading =false;
+    setState(() {
+      delNotDel = json;
+    });
   }
   void locationDetails(context,locality) {
     showModalBottomSheet(
@@ -578,5 +622,4 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
           return AddDeliveryAddress(locality,latLongCurrent,_currentAddress);
         });
   }
-
 }

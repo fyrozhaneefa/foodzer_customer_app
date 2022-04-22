@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Models/itemAddonModel.dart';
@@ -9,6 +10,7 @@ import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ApplicationProvider with ChangeNotifier {
   final geoLocatorService = GeolocatorService();
@@ -19,7 +21,7 @@ class ApplicationProvider with ChangeNotifier {
   String? currentAddress;
   List<Item> cartModelList = [];
   List<Item> filteredLoadedProductModelList = [];
-
+  List<Item> searchItemList=[];
   SingleRestModel selectedRestModel = new SingleRestModel();
   AddressModel selectedAddressModel = new AddressModel();
   List<AddonModel> addonModelList = [];
@@ -27,6 +29,8 @@ class ApplicationProvider with ChangeNotifier {
   String? catName;
   List<Category> categoryList = [];
   double? totalCartPrice;
+  double? itemTotal;
+  double deliveryFee = 0;
   bool isItemLoading = false;
   ApplicationProvider() {
     setCurrentLocation();
@@ -73,6 +77,16 @@ class ApplicationProvider with ChangeNotifier {
     this.selectedAddressModel = addressModel;
   }
 
+  clearSearch() async {
+    this.searchItemList = [];
+    notifyListeners();
+  }
+
+  setSearchItemList(String val) async {
+  searchItemList = selectedRestModel.items!.where((element) =>
+      element.itemName!.toLowerCase().contains(val.toLowerCase())).toList();
+  notifyListeners();
+  }
 
   clearData() async {
     for (Item itemModel in cartModelList) {
@@ -97,6 +111,18 @@ class ApplicationProvider with ChangeNotifier {
   setTotalCartPrice(double totalAmt) async {
     totalCartPrice = totalAmt;
   }
+  setItemTotal(double itemTotal) async {
+
+    this.itemTotal = itemTotal;
+    if(null!=selectedAddressModel.addressId && selectedAddressModel.addressId!.isNotEmpty){
+      getDeliveryCharge(itemTotal);
+    }
+
+    // notifyListeners();
+
+
+  }
+
 
   setCurrentLocation() async {
     currentLocation = await geoLocatorService.getCurrentLocation();
@@ -250,8 +276,20 @@ class ApplicationProvider with ChangeNotifier {
     return product;
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  getDeliveryCharge(double total) async {
+    var map = new Map<String, dynamic>();
+    map['merchant_branch_id'] = selectedRestModel
+        .merchantBranchId
+        .toString();
+    map['lat'] =  selectedAddressModel.addressLat;
+    map['lng'] = selectedAddressModel.addressLng;
+    map['order_amt'] = total.toString();
+    var response =
+    await http.post(Uri.parse(ApiData.GET_DELIVERY_CHARGE), body: map);
+    var jsonData = json.decode(response.body);
+    deliveryFee = null!=jsonData['delivery_fee']? double.parse(jsonData['delivery_fee'].toString()):0;
+
+    notifyListeners();
+
   }
 }

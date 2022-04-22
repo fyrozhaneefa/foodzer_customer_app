@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/constants/divider.dart';
+import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Api/ApiData.dart';
 import '../../../Models/cuisinesmodel.dart';
@@ -48,11 +50,12 @@ class _CuisinesItemsState extends State<CuisinesItems> {
 }
 class ListCuisines {
   Future<List<CuisineList>?> getCuisines() async {
+    SharedPreferences prefs=await SharedPreferences.getInstance();
     final response = await http.post(
         Uri.parse(ApiData.All_Restaurent),
         body: {
-          'lat': '10.9760357',
-          'lng': '76.22544309999999',
+          'lat': prefs.getString('latitude'),
+          'lng': prefs.getString('longitude'),
           'delivery_type': 'delivery',
         },
         headers: {

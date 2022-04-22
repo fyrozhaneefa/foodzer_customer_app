@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/PopularRestModel.dart';
+import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 import '../../../utils/helper.dart';
 import 'groceryCard.dart';
@@ -37,9 +39,9 @@ class _GroceryCardListState extends State<GroceryCardList> {
       cardTime: null!=item.merchantBranchOrderTime?item.merchantBranchOrderTime:"",
       cardType: null!=item.cuisines?item.cuisines:"",
       rating: null!=item.avgReview?item.avgReview:"",
-      deliveryCharge: 'AED 4.00',
+      deliveryCharge: '',
       bannerName: null!=item.merchantBranchImage?item.merchantBranchImage:"",
-      discount: '34% off',
+      discount: "",
       busy: null!=item.merchantBranchBusy?item.merchantBranchBusy:"",
       press: (){
         if(item.merchantBranchBusy == "0") {
@@ -110,14 +112,14 @@ class _GroceryCardListState extends State<GroceryCardList> {
   }
 
   getPopularRest() async {
-
+    SharedPreferences prefs=await SharedPreferences.getInstance();
     var map = new Map<String, dynamic>();
-    map['lat'] = '10.9760357';
-    map['lng'] = '76.22544309999999';
+    map['lat'] = prefs.getString('latitude');
+    map['lng'] = prefs.getString('longitude');
     var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
-    var json = convert.jsonDecode(response.body);
-    if(json['error_code'] == 0){
-      List dataList = json['popular_rest'];
+    var jsonData = convert.jsonDecode(response.body);
+    if(jsonData['error_code'] == 0){
+      List dataList = jsonData['popular_rest'];
       if(null!= dataList && dataList.length >0){
         popularRestList =dataList.map((spacecraft) => new PopularRestModel.fromJson(spacecraft)).toList();
       }

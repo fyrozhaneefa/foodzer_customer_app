@@ -19,5 +19,6 @@ class ApiData{
   static String GET_PAYMENT_TOKEN = API_URL+"generate_token";
   static String ORDER_CHECKOUT = API_URL+"checkout_new/";
   static String GET_ORDER_LIST = API_URL+"order_list/";
+  static String GET_DELIVERABLE_AREA = API_URL+"check_distance/";
 
 }

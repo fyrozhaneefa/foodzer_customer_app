@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/popularBrandModel.dart';
+import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/home/sections/popularBrandCardList.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PopularBrandSection extends StatefulWidget {
   const PopularBrandSection({
@@ -54,14 +57,14 @@ class _PopularBrandSectionState extends State<PopularBrandSection> {
   }
 
   getPopularBrands() async {
-
+    SharedPreferences prefs=await SharedPreferences.getInstance();
     var map = new Map<String, dynamic>();
-    map['lat'] = '10.9760357';
-    map['lng'] = '76.22544309999999';
+    map['lat'] = prefs.getString('latitude');
+    map['lng'] = prefs.getString('longitude');
     var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
-    var json = convert.jsonDecode(response.body);
-    if(json['error_code'] == 0){
-      List dataList = json['popular_barands'];
+    var jsonData = json.decode(response.body);
+    if(jsonData['error_code'] == 0){
+      List dataList = jsonData['popular_barands'];
       if(null!= dataList && dataList.length >0){
         popularBrandList =dataList.map((spacecraft) => new PopularBrandsModel.fromJson(spacecraft)).toList();
       }

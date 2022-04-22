@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../Api/ApiData.dart';
 import '../../../Models/restaurentmodel.dart';
@@ -516,9 +518,10 @@ class ProductDesc extends StatelessWidget {
 
 class AllRestaurent {
   Future<List<Results>?> getRestaurent() async {
+    SharedPreferences prefs=await SharedPreferences.getInstance();
     final response = await http.post(Uri.parse(ApiData.All_Restaurent), body: {
-      'lat': '10.9760357',
-      'lng': '76.22544309999999',
+      'lat': prefs.getString('latitude'),
+      'lng': prefs.getString('longitude'),
       'delivery_type': 'delivery'
     }, headers: {
       'Cookie': ' ci_session=445a8129f0edc2b81b72086233c20f2744cc4e92'
