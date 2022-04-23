@@ -84,71 +84,75 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.filter_list,
-                              size: 25,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            InkWell(
-                              onTap: () {
-                               filterSheet();
-                              },
-                              child: Text(
+                        child: InkWell(
+                          onTap: (){
+                            filterSheet();
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.filter_list,
+                                size: 18,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
                                 'Filters',
                                 style: TextStyle(
-                                    fontSize: 16,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w400),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       VerticalDivider(thickness: 1),
                       Container(
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.fastfood_outlined,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                cusinesSheet();
-                              },
-                              child: Text(
+                        child: InkWell(
+                          onTap: (){
+                            cusinesSheet();
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.fastfood_outlined,
+                                size: 18,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
                                 'Cuisines',
                                 style: TextStyle(
-                                    fontSize: 16,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w400),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       VerticalDivider(thickness: 1),
                       Container(
-                        child: Row(
-                          children: [
-                            Icon(Icons.search_outlined),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Search',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                            )
-                          ],
+                        child: InkWell(
+                          onTap: (){
+
+                          },
+                          child: Row(
+                            children: [
+                              Icon(Icons.search_outlined,
+                              size: 18,),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Search',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ],
