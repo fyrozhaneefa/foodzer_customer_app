@@ -32,6 +32,7 @@ class AddressModel {
     this.addressLng,
     this.areaName,
     this.cityName,
+    this.currentAddressLine
   });
 
   String? addressId;
@@ -55,6 +56,7 @@ class AddressModel {
   String? addressLng;
   dynamic areaName;
   dynamic cityName;
+  String? currentAddressLine;
 
   factory AddressModel.fromJson(Map<String, dynamic> json) => AddressModel(
     addressId: json["address_id"] == null ? null : json["address_id"],
@@ -78,6 +80,7 @@ class AddressModel {
     addressLng: json["address_lng"] == null ? null : json["address_lng"],
     areaName: json["area_name"],
     cityName: json["city_name"],
+    currentAddressLine:json["current_addressline"] == null ? null : json["current_addressline"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -102,5 +105,6 @@ class AddressModel {
     "address_lng": addressLng == null ? null : addressLng,
     "area_name": areaName,
     "city_name": cityName,
+    "current_addressline" : currentAddressLine,
   };
 }

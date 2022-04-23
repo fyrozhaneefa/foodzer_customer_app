@@ -26,12 +26,15 @@ import 'dart:convert' as convert;
 class GoogleMapScreen extends StatefulWidget {
   static const routeName = "/googleMapScreen";
   bool isFromCart;
-  GoogleMapScreen(this.isFromCart);
+  LatLng latLongCurrent = LatLng(0, 0);
+  GoogleMapScreen(this.isFromCart, this.latLongCurrent);
+
   @override
-  _GoogleMapScreenState createState() => _GoogleMapScreenState();
+  _GoogleMapScreenState createState() => _GoogleMapScreenState(latLongCurrent);
 }
 
 class _GoogleMapScreenState extends State<GoogleMapScreen> {
+  _GoogleMapScreenState(this.latLongCurrent);
   TextEditingController addressController = new TextEditingController();
   TextEditingController searchController = new TextEditingController();
   Completer<GoogleMapController> mapController = Completer();
@@ -82,7 +85,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
 
     });
     super.initState();
-      _getAddressFromLatLng(0, 0);
+      _getAddressFromLatLng(latLongCurrent.latitude,latLongCurrent.longitude);
 
   }
 

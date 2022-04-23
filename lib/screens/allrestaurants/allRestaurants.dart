@@ -6,6 +6,7 @@ import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurantSe
 import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurants.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../Menu/Microfiles/CuisinesSection/cuisinesheader.dart';
 
@@ -47,7 +48,7 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) =>
-                    GoogleMapScreen(isFromCart)));
+                    GoogleMapScreen(isFromCart,LatLng(0, 0))));
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

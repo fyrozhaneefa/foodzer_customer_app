@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -279,7 +280,7 @@ bool isFromCart = false;
             );
             Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (BuildContext context) =>
-                    GoogleMapScreen(isFromCart)));
+                    GoogleMapScreen(isFromCart, LatLng(0, 0))));
           } else {
             Fluttertoast.showToast(
                 msg: "Something happened. Try again",

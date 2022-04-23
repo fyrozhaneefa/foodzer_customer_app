@@ -10,6 +10,7 @@ import 'package:foodzer_customer_app/screens/home/changeAddressFromHome.dart';
 import 'package:foodzer_customer_app/screens/home/sections/body.dart';
 import 'package:foodzer_customer_app/screens/search/mainSearch.dart';
 import 'package:foodzer_customer_app/widget/navigationDrawer.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -79,7 +80,7 @@ void initState()  {
             }else {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      GoogleMapScreen(isFromCart)));
+                      GoogleMapScreen(isFromCart, LatLng(0, 0))));
             }
           },
           child: Column(

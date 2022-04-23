@@ -7,7 +7,9 @@ import 'package:foodzer_customer_app/Models/place.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
+import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -25,6 +27,7 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
   UserData userModel = new UserData();
   TextEditingController searchController = new TextEditingController();
   bool isLoading = false;
+  bool isFromCart = false;
   @override
   void initState() {
     UserPreference().getUserData().then((value) {
@@ -132,6 +135,11 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
                               applicationBloc.searchResults![index].place_id!)
                               .then((value) {
                             selectedLocation = value;
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) =>
+                                    GoogleMapScreen(isFromCart,
+                                      LatLng( selectedLocation.geometry!.location.lat,
+                                        selectedLocation.geometry!.location.lng))));
                             // _getAddressFromLatLng(value.geometry!.location.lat,
                             //     value.geometry!.location.lng);
                             applicationBloc.searchResults!.clear();
@@ -166,7 +174,7 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
                               Navigator.of(context).push(
                                   MaterialPageRoute(builder: (context) =>
                                       HomeScreen()));
-                              // UserPreference().setCurrentAddress(_currentAddress!);
+                              UserPreference().setCurrentAddress(getAddressList[index].currentAddressLine.toString());
                               UserPreference().setLatLng(getAddressList[index].addressLat.toString(), getAddressList[index].addressLng.toString());
                             },
                             leading: Icon(

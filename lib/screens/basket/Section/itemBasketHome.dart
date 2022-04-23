@@ -633,10 +633,8 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                           .adressApartmentNo! +
                                       ", " +
                                       provider.selectedAddressModel
-                                          .addressBuilding! +
-                                      ", " +
-                                      provider.selectedAddressModel
-                                          .addressStreetName!,
+                                          .addressStreetName! + ", " +
+                                      provider.selectedAddressModel.currentAddressLine!,
                                   style: TextStyle(
                                       color: Colors.grey, fontSize: 12),
                                 ),

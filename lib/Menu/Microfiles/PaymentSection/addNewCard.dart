@@ -548,12 +548,13 @@ class _AddNewCardState extends State<AddNewCard> {
       itemJson = itemJson + Item.ToJson(item) + ",";
     }
     itemJson = itemJson.substring(0, itemJson.length - 1);
+    itemJson = itemJson.replaceAll('\\', "");
     var map = {
       "lat": provider.selectedAddressModel.addressLat,
       "lng": provider.selectedAddressModel.addressLng,
       "merchant_branch": provider.selectedRestModel.merchantBranchId,
       "payment_mode": "2",
-      "delivery_fee": "0",
+      "delivery_fee": provider.deliveryFee,
       "DEL_TYPE": widget.delType == 1?"delivery":"pickup",
       "address_id": provider.selectedAddressModel.addressId,
       "user_id": userModel.userId,

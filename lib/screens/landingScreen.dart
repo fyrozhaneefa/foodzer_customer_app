@@ -6,6 +6,7 @@ import 'package:foodzer_customer_app/Models/UserModel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '/screens/loginScreen.dart';
 import '../utils/helper.dart';
 
@@ -103,7 +104,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           // });
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  GoogleMapScreen(isFromCart)));
+                                  GoogleMapScreen(isFromCart, LatLng(0, 0))));
 
                         },
                         child: Stack(

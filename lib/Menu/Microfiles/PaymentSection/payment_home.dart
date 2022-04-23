@@ -112,7 +112,10 @@ class _PaymentSectionState extends State<PaymentSection> {
                             ),
                             Text(" | "),
                             Expanded(
-                              child: Text("Amaraprarambil House moolamattom p.o thodupuzha",
+                              child: Text(provider.selectedAddressModel.addressBuilding.toString()+", "+
+                                provider.selectedAddressModel.adressApartmentNo.toString()+", "+
+                                provider.selectedAddressModel.addressStreetName.toString()+", "+
+                                provider.selectedAddressModel.currentAddressLine.toString(),
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
                                   color: Colors.grey,

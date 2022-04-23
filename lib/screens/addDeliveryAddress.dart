@@ -380,6 +380,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
     map['address_lat'] = widget.latLongCurrent.latitude.toString();
     map['address_lng'] = widget.latLongCurrent.longitude.toString();
     map['address_id'] = "";
+    map['current_addressline'] = widget.currentAddress.toString();
 
     var response = await http.post(Uri.parse(ApiData.ADD_ADDRESS), body: map);
 

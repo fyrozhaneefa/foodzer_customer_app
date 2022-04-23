@@ -8,6 +8,7 @@ import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 
@@ -108,7 +109,8 @@ class _ChooseAddressState extends State<ChooseAddress> {
                         Text(
                   widget.getAddressList[index].addressBuilding.toString()+" "+
                   widget.getAddressList[index].adressApartmentNo.toString()+" "+
-                      widget.getAddressList[index].addressStreetName.toString(),
+                      widget.getAddressList[index].addressStreetName.toString()+" "+
+                      widget.getAddressList[index].currentAddressLine.toString(),
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis, fontSize: 12),
                         )
@@ -128,7 +130,7 @@ class _ChooseAddressState extends State<ChooseAddress> {
                   MaterialPageRoute(
                       builder: (context) =>
                           GoogleMapScreen(
-                              widget.isFromCart)));
+                              widget.isFromCart,LatLng(0, 0))));
             },
             child: ListTile(
               leading: Container(
