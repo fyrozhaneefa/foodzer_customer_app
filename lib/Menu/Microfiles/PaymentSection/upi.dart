@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/addNewUpi.dart';
 
 import 'Constants/radiobutton.dart';
 import 'Constants/sapperator.dart';
 
 class UpiSection extends StatefulWidget {
   int? delType;
- UpiSection(this.delType);
+  UpiSection(this.delType);
 
   @override
   State<UpiSection> createState() => _UpiSectionState();
@@ -60,34 +59,28 @@ class _UpiSectionState extends State<UpiSection> {
 
               ),
               MySeparator(),
-              InkWell(
-                onTap:() {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => AddNewUpi(widget.delType!)));
-                },
-                child: ListTile(
-                  subtitle: Text(
-                    "You need to have a registered UPI ID.",
-                    style: TextStyle(fontSize: 11),
+              ListTile(
+                subtitle: Text(
+                  "You need to have a registered UPI ID.",
+                  style: TextStyle(fontSize: 11),
+                ),
+                title: Text(
+                  "Add New UPI ID",
+                  style: TextStyle(
+                      color: Colors.deepOrange, fontWeight: FontWeight.w600),
+                ),
+                leading: Container(
+                  height: 24,
+                  width: 35,
+                  child: Icon(
+                    Icons.add,
+                    size: 15,
+                    color: Colors.deepOrange,
                   ),
-                  title: Text(
-                    "Add New UPI ID",
-                    style: TextStyle(
-                        color: Colors.deepOrange, fontWeight: FontWeight.w600),
-                  ),
-                  leading: Container(
-                    height: 24,
-                    width: 35,
-                    child: Icon(
-                      Icons.add,
-                      size: 15,
-                      color: Colors.deepOrange,
-                    ),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey.shade300)),
-                  ),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.grey.shade300)),
                 ),
               ),
             ],
