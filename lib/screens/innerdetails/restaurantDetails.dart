@@ -55,6 +55,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 return Stack(
                   children: [
                     CustomScrollView(
+                      shrinkWrap: true,
                       slivers: [
                         SliverAppBar(
                           elevation: 0,
@@ -92,8 +93,6 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 ),
                                 child: IconButton(
                                   onPressed: () {
-                                    // provider.selectedCategoryIndex=0;
-                                    // provider.clearItems();
                                     Navigator.of(context).push(
                                         MaterialPageRoute(builder: (context) =>
                                             SearchDetails()));

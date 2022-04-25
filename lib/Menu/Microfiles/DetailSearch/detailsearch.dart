@@ -44,13 +44,6 @@ class _SearchDetailsState extends State<SearchDetails> {
                             )),
                         onChanged: (val){
                           provider.setSearchItemList(val);
-                          // List<Item> filteredList=[];
-                          // filteredList=  provider.selectedRestModel.items!.where((element) =>
-                          //     element.itemName!.toLowerCase().contains(val.toLowerCase())).toList();
-                          // provider.addProductData(
-                          //     filteredList,
-                          //     true,
-                          //     0);
                         },
                       ),
                     ),
@@ -58,6 +51,7 @@ class _SearchDetailsState extends State<SearchDetails> {
                   ),
                   InkWell(
                     onTap: () {
+                      _onBackPressed();
                       Navigator.of(context).pop();
                     },
                     child: Padding(
@@ -93,37 +87,64 @@ class _SearchDetailsState extends State<SearchDetails> {
                                 return SingleItemView(provider.searchItemList[index]);
                               });
                         },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 20, top: 10),
-                              child: Text(provider.searchItemList[index].itemName!,
-                                  style: TextStyle(fontWeight: FontWeight.w600)),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              left: null!= provider.searchItemList[index].enteredQty?
+                              BorderSide(
+                                  color: Colors.deepOrangeAccent, width: 7):
+                                  BorderSide.none
+
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 20),
-                                  child: Text(provider.searchItemList[index].isPriceon == 1?
-                                      "Price on selection" : "INR "+ provider.searchItemList[index].itemPrice.toString(),
-                                      style: TextStyle(fontWeight: FontWeight.w400)),
+                            // borderRadius: BorderRadius.only( topRight: Radius.circular(20),bottomRight: Radius.circular(20))
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 20, top: 10),
+                                child: Row(
+                                  children: [
+                                    Text(null != provider.searchItemList[index].enteredQty
+                                        ? '${provider.searchItemList[index].enteredQty.toString()}x'
+                                        : "",
+                                      style:TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.deepOrange
+                                      ),),
+                                    SizedBox(width: 5,),
+                                    Expanded(
+                                      child: Text(provider.searchItemList[index].itemName!,
+                                          style: TextStyle(fontWeight: FontWeight.w600)),
+                                    ),
+                                  ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right:20.0),
-                                  child: ClipRRect(
-                                    child: Image(
-                                        image: NetworkImage(
-                                            provider.searchItemList[index].itemImage.toString()),
-                                      width: 120,
-                                      fit: BoxFit.cover,
-                                       ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 20),
+                                    child: Text(provider.searchItemList[index].isPriceon == 1?
+                                        "Price on selection" : "INR "+ provider.searchItemList[index].itemPrice.toString(),
+                                        style: TextStyle(fontWeight: FontWeight.w400)),
                                   ),
-                                )
-                              ],
-                            ),
-                          ],
+                                  Padding(
+                                    padding: const EdgeInsets.only(right:20.0),
+                                    child: ClipRRect(
+                                      child: Image(
+                                          image: NetworkImage(
+                                              provider.searchItemList[index].itemImage.toString()),
+                                        width: 120,
+                                        fit: BoxFit.cover,
+                                         ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
