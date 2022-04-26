@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/CuisinesSection/checkbox.dart';
 
+import '../../../Models/sortandfilttermodel.dart';
 import 'constants/divider.dart';
+import 'package:http/http.dart' as http;
 
 class FiltterItems extends StatefulWidget {
   const FiltterItems({Key? key}) : super(key: key);
@@ -117,4 +121,31 @@ class _FiltterItemsState extends State<FiltterItems> {
       ],
     );
   }
+}
+class GetFilter{
+
+ Future <SortAndFiltterModel> getFilter() async{
+    
+    var response =  await http.post(Uri.parse("https://opine.cloud/foodzer_test/mob_food_new/filter"),headers: {
+
+      'Cookie': 'ci_session=9ac58a3de1c4ad2d2c0d86cec5e3f9b86e7db259'
+    },
+        body: {
+          'lat':'10.9760357',
+          'lng':'76.22544309999999'
+
+
+    });
+
+    final jsonData = jsonDecode(response.body);
+    var data = SortAndFiltterModel.fromJson(jsonData);
+    return data;
+    
+    
+    
+    
+  }
+  
+  
+  
 }
