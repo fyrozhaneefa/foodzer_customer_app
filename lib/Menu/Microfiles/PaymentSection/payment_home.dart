@@ -95,7 +95,7 @@ class _PaymentSectionState extends State<PaymentSection> {
                                     fontSize: 15, fontWeight: FontWeight.w500),
                               ),
                               Text(" | "),
-                              Text("Delivery in : 52 min",
+                              Text("Delivery in : ${provider.orderTime} min",
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 12
@@ -153,7 +153,7 @@ class _PaymentSectionState extends State<PaymentSection> {
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                 ),
-                PayonDelivery(),
+                PayOnDelivery(widget.delType),
                 SizedWidget(),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10),

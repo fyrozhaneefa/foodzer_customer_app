@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "929294803565",
+    "project_id": "foodzer-customer-app-452e4",
+    "storage_bucket": "foodzer-customer-app-452e4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:929294803565:android:92eec94b3452ae55c1d564",
+        "android_client_info": {
+          "package_name": "com.foodzer.customerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "929294803565-mp9cju6o1eongen78ct5mcid9kf442aa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc1Ybko8sQtg1jFTxffQvLBglOL7wJOIU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "929294803565-mp9cju6o1eongen78ct5mcid9kf442aa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -31,7 +31,9 @@ class ApplicationProvider with ChangeNotifier {
   double? totalCartPrice;
   double? itemTotal;
   double deliveryFee = 0;
+  String orderTime ="";
   bool isItemLoading = false;
+  String? currentOrderId = "";
   ApplicationProvider() {
     setCurrentLocation();
   }
@@ -76,7 +78,9 @@ class ApplicationProvider with ChangeNotifier {
   setAddressModel(AddressModel addressModel) async {
     this.selectedAddressModel = addressModel;
   }
-
+  setOrderId(String orderId) async {
+    this.currentOrderId = orderId;
+  }
   clearSearch() async {
     this.searchItemList = [];
     notifyListeners();
@@ -288,6 +292,7 @@ class ApplicationProvider with ChangeNotifier {
     await http.post(Uri.parse(ApiData.GET_DELIVERY_CHARGE), body: map);
     var jsonData = json.decode(response.body);
     deliveryFee = null!=jsonData['delivery_fee']? double.parse(jsonData['delivery_fee'].toString()):0;
+    orderTime = jsonData['order_time'];
 
     notifyListeners();
 

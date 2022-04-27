@@ -297,6 +297,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                       ),
                     ),
                    deliveryType == 1?Column(
+                     mainAxisSize: MainAxisSize.min,
                      crossAxisAlignment: CrossAxisAlignment.start,
                      children: [
                        Padding(
@@ -320,9 +321,12 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                fontSize: 16, fontWeight: FontWeight.w600),
                          ),
                        ),
-                       SingleChildScrollView(
-                         scrollDirection: Axis.horizontal,
-                         child: DeliveryInstructions(),
+                       Padding(
+                         padding: EdgeInsets.only(left: 20, top: 20, bottom: 10,right:20),
+                         child: Container(
+                           height:100,
+                           child: DeliveryInstructions()
+                         ),
                        ),
                      ],
                    ):Container(),

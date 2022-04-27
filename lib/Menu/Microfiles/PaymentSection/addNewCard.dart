@@ -498,10 +498,12 @@ class _AddNewCardState extends State<AddNewCard> {
       setState(() {});
       if (value!['txStatus'] == "SUCCESS") {
         Provider.of<ApplicationProvider>(context, listen: false).clearData();
+        Provider.of<ApplicationProvider>(context, listen: false).setOrderId(itemOrderId.toString());
         // Navigator.of(context).pushAndRemoveUntil(
         //     MaterialPageRoute(builder: (context) =>
         //         HomeScreen()), (Route<dynamic> route) => false);
-        showOrderPlaceDialogue();
+        onPaymentSuccess(value['orderId'],value['signature'],value['referenceId'],value['paymentMode'],value['orderAmount']);
+        // showOrderPlaceDialogue();
 
         Fluttertoast.showToast(
             msg: value['txStatus'],
@@ -524,7 +526,32 @@ class _AddNewCardState extends State<AddNewCard> {
       //Do something with the result
     });
   }
+  onPaymentSuccess(String orderId, signature, refNo, paymentMode, orderAmount) async {
+    var map = {
+      "order_id": orderId,
+      "signature": signature,
+      "ref_no": refNo,
+      "payment_mode": paymentMode,
+      "order_status": "1",
+      "order_amount": orderAmount,
+    };
+    String body = json.encode(map);
+    print('body is $body');
+    var response =
+    await http.post(Uri.parse(ApiData.ORDER_SUCCESS), body: body);
+    print(response.statusCode);
+    if(response.statusCode == 200){
+      print('response ${response.body}');
+      var resp = json.decode(response.body);
+      if(resp['errorcode'] == 0){
+        showOrderPlaceDialogue();
+      } else{
+        print('Something went wrong');
+      }
+    }
 
+
+  }
   orderCheckout() async {
     setState(() {
       isLoading = true;

@@ -1,4 +1,4 @@
-package com.example.foodzer_customer_app
+package com.foodzer.customerapp
 
 import io.flutter.embedding.android.FlutterActivity
 

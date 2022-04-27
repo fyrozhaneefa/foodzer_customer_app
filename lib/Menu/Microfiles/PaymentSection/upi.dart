@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/addNewUpi.dart';
+import 'package:foodzer_customer_app/utils/helper.dart';
 
 import 'Constants/radiobutton.dart';
 import 'Constants/sapperator.dart';
@@ -13,18 +14,13 @@ class UpiSection extends StatefulWidget {
 }
 
 class _UpiSectionState extends State<UpiSection> {
+  bool _value = false;
   @override
   Widget build(BuildContext context) {
-
-
-
-
-
 
     return Padding(
       padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
       child: Container(
-        height: 150,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
@@ -56,8 +52,42 @@ class _UpiSectionState extends State<UpiSection> {
                       ),
                     ),
                   ),
+                trailing: Checkbox(
+                  checkColor: Colors.white,
+                  activeColor: Colors.green.shade700,
+                  value: _value,
+                  shape: CircleBorder(),
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _value = value!;
+                    });
+                  },
+                ),
+              ),
+              Visibility(
+                visible: _value,
+                child: Container(
+                  width: Helper.getScreenWidth(context),
+                  padding: EdgeInsets.only(left: 20,right: 20),
+                  child: ElevatedButton(
+                    onPressed: (){
 
+                    },
+                    child: Text('PAY VIA GOOGLE PAY',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500
+                    ),),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.green.shade700,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
 
+                          // side: BorderSide(color: Colors.grey)
+                        )),
+                  ),
+                ),
               ),
               MySeparator(),
               InkWell(

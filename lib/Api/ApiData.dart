@@ -20,5 +20,6 @@ class ApiData{
   static String ORDER_CHECKOUT = API_URL+"checkout_new/";
   static String GET_ORDER_LIST = API_URL+"order_list/";
   static String GET_DELIVERABLE_AREA = API_URL+"check_distance/";
+  static String ORDER_SUCCESS = API_URL+"success/";
 
 }

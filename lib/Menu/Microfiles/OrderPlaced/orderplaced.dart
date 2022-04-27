@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
+import 'package:foodzer_customer_app/screens/orderTracking/orderTracking.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 
 class OrderPlacedHome extends StatelessWidget {
@@ -61,13 +62,13 @@ class OrderPlacedHome extends StatelessWidget {
                 width: Helper.getScreenWidth(context),
                 padding: EdgeInsets.all(20),child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
+                  Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) =>
-                          HomeScreen()), (Route<dynamic> route) => false);
+                          OrderTracking()));
                 },
                 child: Text(
                   // "Track Your Order",
-                  "Back to home",
+                  "Track your order",
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 style: ElevatedButton.styleFrom(
