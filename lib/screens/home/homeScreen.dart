@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import '../../blocs/application_bloc.dart';
+import '../../utils/helper.dart';
 
 
 
@@ -132,9 +133,36 @@ class _HomeScreenState extends State<HomeScreen> {
       body:
       isLoading?
       Center(child: CircularProgressIndicator(),):
-      delNotDel == 0 ?Body():Center(
-        child:Text(' No Restaurants Found'),
-      )
+      delNotDel == 0 ?Body():Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+        Expanded(
+          child: Container(
+            width: Helper.getScreenWidth(context),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage("assets/images/real/nolocation1.jpg"),
+              ),
+            ),
+            child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: 40),
+                child: Text("We are not present ath this loaction yet! We will let you know as\n\n                                     soon as we are here ",style: TextStyle(fontSize: 12),),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text(
+                  "CHANGE LOCATION",
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.deepOrange,
+                  fixedSize: Size(200, 40),
+                ),
+              ),
+            ]),
+          ),
+        )
+      ]),
     );
   }
 

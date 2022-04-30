@@ -5,6 +5,7 @@ import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/constants/di
 import 'package:foodzer_customer_app/Menu/Microfiles/ReviewSection/review_section.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
+import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurants.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantInfo.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/section/persistantHeader.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/section/productCategory.dart';
@@ -17,12 +18,14 @@ import 'dart:convert' as convert;
 import 'package:provider/provider.dart';
 
 import '../../Menu/Microfiles/ReviewSection/review.dart';
+import '../../Models/restaurentmodel.dart';
 import '../basket/Section/itemBasketHome.dart';
 
 class RestaurantDetailsScreen extends StatefulWidget {
   static const routeName = "/restaurantDetails";
   String? merchantBranchId, lat, lng;
-  RestaurantDetailsScreen(this.merchantBranchId, this.lat, this.lng);
+
+  RestaurantDetailsScreen(this.merchantBranchId, this.lat, this.lng,);
 
   @override
   State<RestaurantDetailsScreen> createState() =>
@@ -35,6 +38,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   int? loadedItemCount;
   List<Category> categoryList = [];
   List<Item> filteredList = [];
+  List<Item> filteredLoadedProductModelList = [];
+
+
+
   @override
   void initState() {
     getRestDetails();
@@ -94,8 +101,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 child: IconButton(
                                   onPressed: () {
                                     Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) =>
-                                            SearchDetails()));
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SearchDetails()));
                                   },
                                   icon: Icon(
                                     Icons.search,
@@ -150,7 +158,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                               .merchantBranchName!,
                                           style: TextStyle(
                                               fontSize: 20,
-                                              fontWeight: FontWeight.w700)),
+                                              fontWeight: FontWeight.bold)),
                                       InkWell(
                                         onTap: () {
                                           Navigator.of(context).push(
@@ -188,8 +196,11 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       RichText(
                                         text: new TextSpan(
                                           children: [
-                                            new TextSpan(
-                                              text: 'Very Good ',
+
+
+
+                                            TextSpan(text: "Amaze ",
+
                                               style: new TextStyle(
                                                 color: Colors.black,
                                               ),
@@ -231,7 +242,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   Row(
                                     children: [
                                       Icon(
-                                        Icons.delivery_dining,
+                                        Icons.access_time,
                                         color: Colors.grey.shade700,
                                         size: 25,
                                       ),
@@ -252,9 +263,17 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                   fontSize: 12,
                                                   color: Colors.grey),
                                             ),
+
                                           ],
                                         ),
                                       ),
+
+
+
+
+
+
+
                                     ],
                                   ),
                                   Divider(
@@ -296,7 +315,6 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
                                   // ProductCategoryItem(widget.merchantBranchId,
                                   //     widget.lat, widget.lng),
-
                                 ],
                               ),
                             ),
@@ -305,81 +323,89 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                         SliverPersistentHeader(
                           pinned: true,
                           delegate: PersistentHeader(
-                            widget:  Padding(
+                            widget: Padding(
                               padding: const EdgeInsets.only(left: 15.0),
                               child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     InkWell(
-                                        child: Icon(Icons.menu, color: Colors.deepOrange),
+                                        child: Icon(Icons.menu,
+                                            color: Colors.deepOrange),
                                         onTap: () {
                                           onButtonpress(context);
                                         }),
                                     Flexible(
                                       child: Container(
                                         height: 40,
-                                        width: MediaQuery.of(context)
-                                            .size
-                                            .width,
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         child: ListView.builder(
-                                            scrollDirection:
-                                            Axis.horizontal,
+                                            scrollDirection: Axis.horizontal,
                                             physics: ScrollPhysics(),
                                             shrinkWrap: true,
-                                            itemCount: provider.categoryList.length,
+                                            itemCount:
+                                                provider.categoryList.length,
                                             itemBuilder: (context, index) {
                                               return ProductCategory(
-                                                title: provider.categoryList[index]
+                                                title: provider
+                                                    .categoryList[index]
                                                     .categoryName!,
                                                 // isActive: true,
                                                 // color:selectedIndex == index ? Colors.deepOrange : null,
-                                                textColor:provider.selectedCategoryIndex ==
-                                                    index
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                color: provider.selectedCategoryIndex ==
-                                                    index
-                                                    ? Colors.deepOrange
-                                                    : null,
+                                                textColor:
+                                                    provider.selectedCategoryIndex ==
+                                                            index
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                color:
+                                                    provider.selectedCategoryIndex ==
+                                                            index
+                                                        ? Colors.deepOrange
+                                                        : null,
                                                 press: () {
                                                   setState(() {
                                                     isSwitched = false;
                                                   });
-                                                  provider.currentSelectedCategory(
-                                                      index);
-                                                  if (provider.selectedCategoryIndex ==
+                                                  provider
+                                                      .currentSelectedCategory(
+                                                          index);
+                                                  if (provider
+                                                          .selectedCategoryIndex ==
                                                       index) {
                                                     setState(() {
-                                                      if (provider.categoryList[
-                                                      index]
-                                                          .categoryId ==
+                                                      if (provider
+                                                              .categoryList[
+                                                                  index]
+                                                              .categoryId ==
                                                           "0") {
-                                                        filteredList = provider.selectedRestModel
+                                                        filteredList = provider
+                                                            .selectedRestModel
                                                             .items!;
-                                                        filteredList.sort((a,
-                                                            b) =>
-                                                            a.categoryName!
+                                                        filteredList.sort(
+                                                            (a, b) => a
+                                                                .categoryName!
                                                                 .compareTo(b
-                                                                .categoryName!));
+                                                                    .categoryName!));
                                                       } else {
-                                                        filteredList = provider.selectedRestModel
+                                                        filteredList = provider
+                                                            .selectedRestModel
                                                             .items!
                                                             .where((product) => (product
-                                                            .categoryId ==
-                                                            provider.categoryList[
-                                                            index]
-                                                                .categoryId))
+                                                                    .categoryId ==
+                                                                provider
+                                                                    .categoryList[
+                                                                        index]
+                                                                    .categoryId))
                                                             .toList();
-                                                        filteredList.sort((a,
-                                                            b) =>
-                                                            a.categoryName!
+                                                        filteredList.sort(
+                                                            (a, b) => a
+                                                                .categoryName!
                                                                 .compareTo(b
-                                                                .categoryName!));
+                                                                    .categoryName!));
                                                       }
                                                       // Provider.of<ApplicationProvider>(context, listen: false).clearItems();
-                                                      provider.setItemLoading(
-                                                          true);
+                                                      provider
+                                                          .setItemLoading(true);
                                                       loadedItemCount = 0;
                                                       _loadData();
                                                     });
@@ -391,8 +417,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                   // Provider.of<ApplicationProvider>(context ,listen: false).filterItems(categoryList[index].categoryId!);
 
                                                   provider.setCategoryName(
-                                                      provider.categoryList[
-                                                      index]
+                                                      provider
+                                                          .categoryList[index]
                                                           .categoryName!);
                                                 },
                                               );
@@ -404,7 +430,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           ),
                         ),
                         SliverList(
-                        delegate: SliverChildListDelegate([
+                            delegate: SliverChildListDelegate([
                           Padding(
                             padding: const EdgeInsets.all(15.0),
                             child: Column(
@@ -495,15 +521,13 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   height: 20,
                                 ),
                                 Text(
-                                  null !=
-                                      provider.catName
+                                  null != provider.catName
                                       ? provider.catName!
                                       : '',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18),
                                 ),
-
                                 RestaurantProductsList(isSwitched),
                                 SizedBox(
                                   height: 30,
@@ -511,8 +535,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               ],
                             ),
                           ),
-                        ])
-                        )
+                        ]))
                       ],
                     ),
                     Align(
@@ -542,7 +565,6 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       builder: (BuildContext context) =>
                                           ItemBasketHome()))
                                   .then((value) {
-
                                 if (Provider.of<ApplicationProvider>(context,
                                             listen: false)
                                         .selectedCategoryIndex ==
@@ -581,7 +603,6 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 loadedItemCount = 0;
                                 _loadData();
                               });
-
                             }
                           },
                           child: Row(
@@ -630,7 +651,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       width: 5,
                                     ),
                                     Text(
-                                     null!= provider.totalCartPrice?'₹${provider.totalCartPrice}':"₹0",
+                                      null != provider.totalCartPrice
+                                          ? '₹${provider.totalCartPrice}'
+                                          : "₹0",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
@@ -676,10 +699,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       _singleRestModel = SingleRestModel.fromJson(json);
       Provider.of<ApplicationProvider>(context, listen: false)
           .setCurrentRestModel(_singleRestModel);
-      Provider.of<ApplicationProvider>(context, listen: false).addProductData(
-          _singleRestModel.items!,
-          true,
-          0);
+      Provider.of<ApplicationProvider>(context, listen: false)
+          .addProductData(_singleRestModel.items!, true, 0);
 
       // Provider.of<ApplicationProvider>(context ,listen: false).filterItems(_singleRestModel.items![0].categoryId!);
       // Provider.of<ApplicationProvider>(context ,listen: false).setCategoryName(_singleRestModel.categories![0].categoryName!);
@@ -752,11 +773,14 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       print("some error occured!!!");
     }
   }
+
   void onButtonpress(context) {
-    showModalBottomSheet(isScrollControlled: false,
+    showModalBottomSheet(
+      isScrollControlled: false,
       context: context,
       builder: (context) {
-        return Column(mainAxisAlignment: MainAxisAlignment.center,
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -786,6 +810,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(categoryList[index].categoryName.toString()),
+                  trailing: Text("$index"),
                   // trailing: Text('5'),
                 );
               },
@@ -793,7 +818,31 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 return Dividersection();
               },
             ),
-            ),],
+            ),
+            // Consumer<ApplicationProvider>(builder: (context, provider, _) {
+            //   return Flexible(
+            //     child: ListView.separated(
+            //         scrollDirection: Axis.vertical,
+            //         separatorBuilder: (context, index) {
+            //           return Dividersection();
+            //         },
+            //         physics: ScrollPhysics(),
+            //         shrinkWrap: true,
+            //         itemCount: categoryList.length,
+            //         itemBuilder: (BuildContext context, int index) {
+            //           Item itemModel =
+            //               provider.filteredLoadedProductModelList[index];
+            //           return ListTile(
+            //             title:
+            //                 Text(categoryList[index].categoryName.toString()),
+            //             trailing: Text(provider.filteredLoadedProductModelList.length.toString())
+            //
+            //             // trailing: Text('5'),
+            //           );
+            //         }),
+            //   );
+            // })
+          ],
         );
       },
       shape: RoundedRectangleBorder(
@@ -817,9 +866,7 @@ class PersistentHeader extends SliverPersistentHeaderDelegate {
     return Container(
       padding: EdgeInsets.zero,
       color: Colors.white,
-        child: Card(
-          elevation: 2,
-            child: Center(child: widget)),
+      child: Card(elevation: 2, child: Center(child: widget)),
     );
   }
 
@@ -833,5 +880,4 @@ class PersistentHeader extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
     return true;
   }
-
 }

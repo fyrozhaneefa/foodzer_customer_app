@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/applybutton.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/popularfilters.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/popularRestNear.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurantServiceList.dart';
@@ -11,7 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../Menu/Microfiles/CuisinesSection/cuisinesheader.dart';
 
 import '../../Menu/Microfiles/CuisinesSection/cuisinesitems.dart';
-import '../../Menu/Microfiles/FiltterSection/filtters.dart';
+import '../../Menu/Microfiles/FiltterSection/dealsandoffers.dart';
 import '../../Menu/Microfiles/FiltterSection/sortby.dart';
 
 class AllRestaurantsScreen extends StatefulWidget {
@@ -134,7 +135,7 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                         ),
                       ),
                       VerticalDivider(thickness: 1),
-                      Container(
+                      InkWell(child: Container(
                         child: Row(
                           children: [
                             Icon(Icons.search_outlined),
@@ -151,6 +152,9 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                           ],
                         ),
                       ),
+                      onTap: (){
+
+                      },),
                     ],
                   ),
                 ),
@@ -269,18 +273,12 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
               Expanded(
                 child: Container(
                   color: Colors.white,
-                  child: ListView(
+                  child: ListView(shrinkWrap: true,scrollDirection: Axis.vertical,
                     children: [
+
+                      PopularFilter(),
                       FiltterItems(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 20),
-                        child: Text(
-                          "Sort by",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w600),
-                        ),
-                      ),
+
                       SortBy(),
                     ],
                   ),
