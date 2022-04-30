@@ -20,49 +20,47 @@ class _DeliveryInstructionsState extends State<DeliveryInstructions> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        itemCount: _items.length,
-        itemBuilder: (BuildContext context, int index){
-          return  InkWell(
-            onTap: () {
-              _items[index].isSelected = !_items[index].isSelected!;
-              setState(() {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      shrinkWrap: true,
+      itemCount: _items.length,
+      itemBuilder: (BuildContext context, int index){
+        return  InkWell(
+          onTap: () {
+            _items[index].isSelected = !_items[index].isSelected!;
+            setState(() {
 
-              });
-            },
-            child: Container(
-              height: 85,
-              width: 90,
-              margin: EdgeInsets.only(left:10),
-              decoration: BoxDecoration(
-                color:_items[index].isSelected!?Colors.deepOrange.shade100: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: _items[index].isSelected!?Colors.deepOrangeAccent
-                    :
-                Colors.grey.shade200,width: 1),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 10, left: 10),
-                    child: Icon(_items[index].icon,size: 20,
-
-                      color: Colors.black.withOpacity(.6),
-                    ),
-                  ),
-                  Padding(padding: EdgeInsets.only(left: 10,top: 10),child:Text(_items[index].title.toString(),style: TextStyle(fontSize: 12,color: Colors.grey.shade600),) ,)
-
-                ],
-              ),
+            });
+          },
+          child: Container(
+            height: 85,
+            width: 90,
+            margin: EdgeInsets.only(right:10),
+            decoration: BoxDecoration(
+              color:_items[index].isSelected!?Colors.deepOrange.shade100: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: _items[index].isSelected!?Colors.deepOrangeAccent
+                  :
+              Colors.grey.shade200,width: 1),
             ),
-          );
-        },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: 10, left: 10),
+                  child: Icon(_items[index].icon,size: 20,
 
-      ),
+                    color: Colors.black.withOpacity(.6),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(left: 10,top: 10),child:Text(_items[index].title.toString(),style: TextStyle(fontSize: 12,color: Colors.grey.shade600),) ,)
+
+              ],
+            ),
+          ),
+        );
+      },
+
     );
   }
 }

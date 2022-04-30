@@ -8,6 +8,7 @@ import 'package:foodzer_customer_app/Models/UserModel.dart';
 import 'package:foodzer_customer_app/Models/orderlistmodel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/loginScreen.dart';
+import 'package:foodzer_customer_app/screens/orderTracking/orderTracking.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -162,9 +163,18 @@ class _MyOrdersState extends State<MyOrders> {
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               OutlinedButton(
-                                onPressed: () {},
-                                child: Text(
-                                  "REORDER",
+                                onPressed: () {
+                                  if(orderList[index].orderStatus == "0" ||
+                                      orderList[index].orderStatus == "1" ||  orderList[index].orderStatus == "3"){
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) =>
+                                            OrderTracking(orderList[index].orderId.toString())));
+                                  }
+                                },
+                                child: Text(orderList[index].orderStatus == "0"
+                                    || orderList[index].orderStatus == "1" ||
+                                    orderList[index].orderStatus == "3"?
+                                  "TRACK ORDER":"REORDER",
                                   style: TextStyle(color:  Colors.orange.shade800, fontWeight: FontWeight.w600),
                                 ),
                                 style: OutlinedButton.styleFrom(

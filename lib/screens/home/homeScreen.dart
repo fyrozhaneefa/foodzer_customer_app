@@ -34,9 +34,16 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = false;
   int? delNotDel;
   @override
-void initState()  {
+  void initState()  {
 
-    getCurrentAddress();
+    UserPreference().getCurrentAddress().then((value) {
+
+      finalAddress = value!;
+      setState(() {
+
+      });
+    });
+    getDeliverableArea();
     UserPreference().getUserData().then((value) {
       userName = value.userName!;
       userType = value.userType!;
@@ -45,7 +52,7 @@ void initState()  {
         setState(() {
           isLoggedIn = true;
         });
-        getDeliverableArea();
+
       }else{
         setState(() {
           isLoggedIn = false;
@@ -123,6 +130,8 @@ void initState()  {
         ],
       ),
       body:
+      isLoading?
+      Center(child: CircularProgressIndicator(),):
       delNotDel == 0 ?Body():Center(
         child:Text(' No Restaurants Found'),
       )
@@ -147,13 +156,6 @@ void initState()  {
       delNotDel = jsonData;
     });
   }
-getCurrentAddress() async{
-  SharedPreferences prefs=await SharedPreferences.getInstance();
-  finalAddress=prefs.getString('currentAddress')!;
-  setState(() {
-
-  });
-}
 
 
 }

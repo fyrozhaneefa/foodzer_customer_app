@@ -168,6 +168,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                                     : Colors.transparent),
                                             borderRadius:
                                                 BorderRadius.circular(12),
+                                            color: deliveryType == 1?Colors.deepOrange.shade50:Colors.grey.shade100,
                                             boxShadow: [
                                               BoxShadow(
                                                   color: Colors.grey.shade100,
@@ -194,15 +195,15 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                           ),
                                         ),
                                       ),
-                                      deliveryType == 1
-                                          ? Align(
-                                              child: Icon(
-                                                Icons.check_circle,
-                                                size: 16,
-                                                color: Colors.deepOrangeAccent,
-                                              ),
-                                            )
-                                          : Container()
+                                      // deliveryType == 1
+                                      //     ? Align(
+                                      //         child: Icon(
+                                      //           Icons.check_circle,
+                                      //           size: 16,
+                                      //           color: Colors.deepOrangeAccent,
+                                      //         ),
+                                      //       )
+                                      //     : Container()
                                     ],
                                   ),
                                   Stack(
@@ -224,6 +225,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                                     : Colors.transparent),
                                             borderRadius:
                                                 BorderRadius.circular(12),
+                                            color: deliveryType == 2?Colors.deepOrange.shade50:Colors.grey.shade100,
                                             boxShadow: [
                                               BoxShadow(
                                                   color: Colors.grey.shade100,
@@ -250,15 +252,15 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                           ),
                                         ),
                                       ),
-                                      deliveryType == 2
-                                          ? Align(
-                                              child: Icon(
-                                                Icons.check_circle,
-                                                size: 16,
-                                                color: Colors.deepOrangeAccent,
-                                              ),
-                                            )
-                                          : Container()
+                                      // deliveryType == 2
+                                      //     ? Align(
+                                      //         child: Icon(
+                                      //           Icons.check_circle,
+                                      //           size: 16,
+                                      //           color: Colors.deepOrangeAccent,
+                                      //         ),
+                                      //       )
+                                      //     : Container()
                                     ],
                                   )
                                 ],
@@ -708,28 +710,36 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                   });
                                 },
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 15.0),
+                                  padding: const EdgeInsets.all( 15.0),
                                   child: Row(
                                     children: [
-                                      Icon(
-                                        Icons.add,
-                                        color: Colors.deepOrange,
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Colors.grey),
+                                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Icon(
+                                            Icons.add,
+                                            color: Colors.deepOrangeAccent,
+                                          ),
+                                        ),
                                       ),
                                       SizedBox(
-                                        width: 5,
+                                        width: 10,
                                       ),
                                       Expanded(
                                         child: Container(
                                           alignment: Alignment.centerLeft,
                                           width: Helper.getScreenWidth(context),
-                                          height: 40,
                                           child: Text(
                                             "Add a delivery address",
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w600,
                                               color:
-                                                  Colors.black.withOpacity(.6),
+                                                  Colors.deepOrange,
                                             ),
                                           ),
                                         ),

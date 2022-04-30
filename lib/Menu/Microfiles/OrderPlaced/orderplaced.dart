@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:foodzer_customer_app/screens/orderTracking/orderTracking.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
+import 'package:provider/provider.dart';
 
 class OrderPlacedHome extends StatelessWidget {
   const OrderPlacedHome({Key? key}) : super(key: key);
@@ -64,7 +66,8 @@ class OrderPlacedHome extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) =>
-                          OrderTracking()));
+                          OrderTracking(Provider.of<ApplicationProvider>(context, listen: false)
+                              .currentOrderId!)));
                 },
                 child: Text(
                   // "Track Your Order",

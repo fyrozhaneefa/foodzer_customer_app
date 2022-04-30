@@ -92,13 +92,13 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
                 child: Container(
                   width: Helper.getScreenWidth(context),
                   padding: EdgeInsets.only(left: 20,right: 20),
-                  child: ElevatedButton(
+                  child:  isLoading?Center(
+                    child: CircularProgressIndicator(color: Colors.deepOrangeAccent,),
+                  ):ElevatedButton(
                     onPressed: (){
                       orderCheckout();
                     },
-                    child: isLoading?Center(
-                      child: CircularProgressIndicator(),
-                    ):Text('PAY VIA CASH',
+                    child:Text('PAY VIA CASH',
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500

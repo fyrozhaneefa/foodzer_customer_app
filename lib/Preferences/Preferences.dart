@@ -22,7 +22,7 @@ class UserPreference{
     prefs.setString('currentAddress', address);
   }
 
-  getCurrentAddress() async {
+  Future<String?> getCurrentAddress() async {
     SharedPreferences prefs=await SharedPreferences.getInstance();
     String? selectedAddress=prefs.getString('currentAddress');
     return selectedAddress;
@@ -56,7 +56,6 @@ class UserPreference{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.remove('userData');
-    prefs.remove('currentAddress');
 
   }
 }
