@@ -19,6 +19,7 @@ import 'package:foodzer_customer_app/screens/basket/Section/proceedToPay.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/savedcontainer.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/tipyourHungerSavior.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
+import 'package:foodzer_customer_app/screens/loginScreen.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -45,14 +46,24 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
   List<String> tips = ["1", "5", "10", "20"];
   int? selectedTip = -1;
   int tipValue = 0;
+  bool isLoggedIn = false;
 
   @override
   void initState() {
     getMerchantTaxPercentage();
     UserPreference().getUserData().then((value) {
-      userModel = value;
-      setState(() {});
-      getUserAddress();
+      if(null!= value.userId && value.userId!.isNotEmpty){
+        userModel = value;
+        getUserAddress();
+        setState(() {
+          isLoggedIn = true;
+        });
+      }else{
+        setState(() {
+          isLoggedIn = false;
+        });
+      }
+
     });
 
     super.initState();
@@ -780,15 +791,17 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                   padding: const EdgeInsets.all(5),
                   child: ElevatedButton(
                     onPressed: () {
-                      if (null != provider.selectedAddressModel.addressId &&
+                      if (isLoggedIn && null != provider.selectedAddressModel.addressId &&
                           provider.selectedAddressModel.addressId!.isNotEmpty &&
                           deliveryType == 1 || deliveryType == 2) {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => PaymentSection(deliveryType!)));
                       }
-
-                      else
-                      {
+                      else if(!isLoggedIn){
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => LoginScreen(isFromCart)));
+                      }
+                     else {
                         Fluttertoast.showToast(
                             msg: "Select a delivery address to continue",
                             toastLength: Toast.LENGTH_SHORT,
@@ -799,18 +812,18 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                             fontSize: 16.0);
                       }
                     },
-                    child: Text(
-                      "Proceed to Pay",
+                    child: Text( isLoggedIn?
+                      "Proceed to Pay":"Log in to continue",
                       style:
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                     ),
                     style: ElevatedButton.styleFrom(
                       primary:
-                          null != provider.selectedAddressModel.addressId &&
+                       isLoggedIn && null != provider.selectedAddressModel.addressId &&
                                   provider.selectedAddressModel.addressId!
                                       .isNotEmpty &&
                                   deliveryType == 1 || deliveryType == 2
-                              ? Colors.deepOrange
+                              ? Colors.deepOrange: !isLoggedIn? Colors.deepOrange
                               : Colors.deepOrange.shade100,
                       fixedSize: Size(190, 58),
                       shape: RoundedRectangleBorder(

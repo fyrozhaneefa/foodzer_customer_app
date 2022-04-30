@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
@@ -16,8 +17,9 @@ import 'home/homeScreen.dart';
 
 class OtpScreen extends StatefulWidget {
   String mobileNumber;
+  bool fromCart;
 
-  OtpScreen(this.mobileNumber);
+  OtpScreen(this.mobileNumber,this.fromCart);
 
    static const routeName = "/otpScreen";
   @override
@@ -278,9 +280,16 @@ bool isFromCart = false;
                 textColor: Colors.white,
                 fontSize: 16.0
             );
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    GoogleMapScreen(isFromCart, LatLng(0, 0))));
+            if(widget.fromCart){
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      ItemBasketHome()));
+            }else{
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      GoogleMapScreen(isFromCart, LatLng(0, 0))));
+            }
+
           } else {
             Fluttertoast.showToast(
                 msg: "Something happened. Try again",

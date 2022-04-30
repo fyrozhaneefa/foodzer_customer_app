@@ -22,6 +22,7 @@ class MyOrders extends StatefulWidget {
 }
 
 class _MyOrdersState extends State<MyOrders> {
+  bool isFromCart = false;
   bool isLoading = false;
   List<OrderList> orderList = [];
   UserData userModel = new UserData();
@@ -276,7 +277,7 @@ class _MyOrdersState extends State<MyOrders> {
               }),
         ],
       )
-          :notLoggedIn(BuildContext,context),
+          :notLoggedIn(BuildContext,context, isFromCart),
     );
   }
 
@@ -313,7 +314,7 @@ class _MyOrdersState extends State<MyOrders> {
     setState(() {});
   }
 }
-Widget? notLoggedIn(BuildContext, context){
+Widget? notLoggedIn(BuildContext, context, isFromCart){
   return Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -340,7 +341,7 @@ Widget? notLoggedIn(BuildContext, context){
             onPressed: (){
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) =>
-                      LoginScreen()));
+                      LoginScreen(isFromCart)));
                       // (Route<dynamic> route) => false);
             },
             child: Text(

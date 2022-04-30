@@ -16,7 +16,8 @@ import 'otpValidation.dart';import 'package:http/http.dart' as http;
 class RegisterScreen extends StatefulWidget {
   static const routeName = "/registerScreen";
   String mobileNumber;
-  RegisterScreen(this.mobileNumber);
+  bool isFromCart;
+  RegisterScreen(this.mobileNumber,this.isFromCart);
 
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -219,7 +220,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           });
           Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) =>
-                  OtpScreen(widget.mobileNumber)));
+                  OtpScreen(widget.mobileNumber,widget.isFromCart)));
         } else {
           Fluttertoast.showToast(
               msg: "Failed to register",

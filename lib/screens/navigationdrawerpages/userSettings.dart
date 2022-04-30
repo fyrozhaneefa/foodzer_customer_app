@@ -21,7 +21,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
   bool isLoggedIn = false;
   bool isSwitched = true;
   bool isLoading = false;
-
+  bool isFromCart = false;
   @override
   void initState() {
     getUserData();
@@ -159,7 +159,7 @@ class _UserSettingsScreenState extends State<UserSettingsScreen> {
               ):GestureDetector(
                 onTap: (){
                   Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                      LoginScreen()), (Route<dynamic> route) => false);
+                      LoginScreen(isFromCart)), (Route<dynamic> route) => false);
                 },
                 child: Text(
                   'Login',

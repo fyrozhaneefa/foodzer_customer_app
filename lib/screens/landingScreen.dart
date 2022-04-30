@@ -150,7 +150,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => LoginScreen()));
+                              builder: (BuildContext context) => LoginScreen(isFromCart)));
                         },
                         child: Stack(
                           children: [

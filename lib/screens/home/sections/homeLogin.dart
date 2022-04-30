@@ -19,6 +19,7 @@ class loginSection extends StatefulWidget {
 class _loginSectionState extends State<loginSection> {
 
   bool isLoggedIn = false;
+  bool isFromCart = false;
   @override
   void initState() {
 
@@ -81,7 +82,7 @@ class _loginSectionState extends State<loginSection> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        LoginScreen()));
+                        LoginScreen(isFromCart)));
               },
               child: Container(
                 child:  Text("Login",

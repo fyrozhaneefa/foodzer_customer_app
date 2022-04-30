@@ -22,8 +22,8 @@ import 'home/homeScreen.dart';
 import 'locationGoogle.dart';
 
 class LoginScreen extends StatefulWidget {
-  static const routeName = "/loginScreen";
-
+  bool isFromCart;
+  LoginScreen(this.isFromCart);
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -185,7 +185,7 @@ bool isLoading = false;
       if(responsebody['login_status'] == '1'){
         Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) =>
-                RegisterScreen(mobileController.text)));
+                RegisterScreen(mobileController.text,widget.isFromCart)));
       } else {
 
         final resData = responsebody['data'];
@@ -196,7 +196,7 @@ bool isLoading = false;
           if(null!=value.userMobie && value.userMobie!.isNotEmpty){
             Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) =>
-                OtpScreen(value.userMobie.toString())))
+                OtpScreen(value.userMobie.toString(),widget.isFromCart)))
           } else{
             print("user data is not stored")
           }
