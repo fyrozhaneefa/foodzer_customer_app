@@ -26,6 +26,8 @@ class SliderModel {
     this.sliderModifiedDate,
     this.sliderModifiedType,
     this.distance,
+    this.lat,
+    this.lng
   });
 
   String? sliderId;
@@ -44,6 +46,8 @@ class SliderModel {
   DateTime? sliderModifiedDate;
   String? sliderModifiedType;
   String? distance;
+  String? lat;
+  String? lng;
 
   factory SliderModel.fromJson(Map<String, dynamic> json) => SliderModel(
     sliderId: json["slider_id"] == null ? null : json["slider_id"],
@@ -62,6 +66,8 @@ class SliderModel {
     sliderModifiedDate: json["slider_modified_date"] == null ? null : DateTime.parse(json["slider_modified_date"]),
     sliderModifiedType: json["slider_modified_type"] == null ? null : json["slider_modified_type"],
     distance: json["distance"] == null ? null : json["distance"],
+    lat: json["lat"] == null ? null : json["lat"],
+    lng: json["lng"] == null ? null : json["lng"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -81,5 +87,7 @@ class SliderModel {
     "slider_modified_date": sliderModifiedDate == null ? null : sliderModifiedDate,
     "slider_modified_type": sliderModifiedType == null ? null : sliderModifiedType,
     "distance": distance == null ? null : distance,
+    "lat": lat == null ? null : lat,
+    "lng": lng == null ? null : lng,
   };
 }

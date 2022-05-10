@@ -73,7 +73,9 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
   Widget build(BuildContext context) {
     return Consumer<ApplicationProvider>(builder: (context, provider, child) {
       return Scaffold(
-        appBar: AppBar(
+
+        appBar: null!= provider.cartModelList && provider.cartModelList.length > 0
+            ?AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
           leading: IconButton(
@@ -124,8 +126,14 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
           //         ),
           //       ) ):PreferredSize(
           // preferredSize: Size.fromHeight(0.0), child: Container(),),
+        ):AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          toolbarHeight: 0,
+          toolbarOpacity: 0,
         ),
-        body: SafeArea(
+        body: null!= provider.cartModelList && provider.cartModelList.length > 0
+            ?SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -362,7 +370,9 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
               proceedToPay(),
             ],
           ),
-        ),
+        ):Container(
+            padding: EdgeInsets.only(left: 50,right: 50),
+            child: cartEmpty(context)),
         backgroundColor: Colors.grey.shade200,
       );
     });
@@ -922,4 +932,61 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
     Provider.of<ApplicationProvider>(context, listen: false).setTaxPercentage(taxPercentage);
     setState(() {});
   }
+}
+Widget? cartEmpty(context){
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          height: 200,
+          child: Image.asset( Helper.getAssetName('empty-cart.png', 'virtual'),
+            fit: BoxFit.fill,),
+        ),
+        SizedBox(height: 20,),
+        Text(
+          'Your Cart is Empty',
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+        SizedBox(height: 20,),
+        Text(
+          "Looks like you haven't added anything to your cart yet",
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          textScaleFactor: 1,
+          style: TextStyle(
+            height: 1.3,
+            fontSize: 16,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w500
+          ),
+        ),
+        SizedBox(height: 30,),
+        Container(
+          height: 50,
+          width: Helper.getScreenWidth(context)*0.45,
+          child: ElevatedButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            child: Text(
+              'Back to menu',
+              style: TextStyle(
+                  fontSize: 16
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.deepOrange.shade600,
+              shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(10.0),
+              ),),
+          ),
+        )
+      ],
+    ),
+  );
 }

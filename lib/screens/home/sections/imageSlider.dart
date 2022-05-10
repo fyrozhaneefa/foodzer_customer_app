@@ -1,5 +1,6 @@
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
+import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:flutter/cupertino.dart';
@@ -34,31 +35,39 @@ class _ImageSliderState extends State<ImageSlider> {
              child: CarouselSlider(
                   // items: banners(),
                items:  slider
-                   .map((item) => Container(
+                   .map((item) => InkWell(
+                 onTap: (){
+                   print(item.sliderMerchantId);
+                   Navigator.of(context).push(MaterialPageRoute(
+                       builder: (BuildContext context) =>
+                           RestaurantDetailsScreen(item.sliderMerchantId,item.lat,item.lng)));
+                 },
+                     child: Container(
                  // margin: EdgeInsets.only(left: 20,right: 20),
                  child: ClipRRect(
-                     borderRadius: BorderRadius.circular(8.0),
-                     child: Image.network(
-                       item.sliderImage!,
-                       // 'https://www.pexels.com/photo/1640777/download/',
-                       fit: BoxFit.fill,
-                       loadingBuilder: (BuildContext context, Widget child,
-                           ImageChunkEvent? loadingProgress) {
-                         if (loadingProgress == null) return child;
-                         return Center(
-                           child: CircularProgressIndicator(
-                             color: Colors.deepOrangeAccent,
-                             value: loadingProgress.expectedTotalBytes != null
-                                 ? loadingProgress.cumulativeBytesLoaded /
-                                 loadingProgress.expectedTotalBytes!
-                                 : null,
-                           ),
-                         );
-                       },
-                       height: double.infinity,
-                       width: double.infinity,
-                     )),
-               )).toList(),
+                       borderRadius: BorderRadius.circular(8.0),
+                       child: Image.network(
+                         item.sliderImage!,
+                         // 'https://www.pexels.com/photo/1640777/download/',
+                         fit: BoxFit.fill,
+                         loadingBuilder: (BuildContext context, Widget child,
+                             ImageChunkEvent? loadingProgress) {
+                           if (loadingProgress == null) return child;
+                           return Center(
+                             child: CircularProgressIndicator(
+                               color: Colors.deepOrangeAccent,
+                               value: loadingProgress.expectedTotalBytes != null
+                                   ? loadingProgress.cumulativeBytesLoaded /
+                                   loadingProgress.expectedTotalBytes!
+                                   : null,
+                             ),
+                           );
+                         },
+                         height: double.infinity,
+                         width: double.infinity,
+                       )),
+               ),
+                   )).toList(),
                   options: CarouselOptions(
                    pageSnapping: true,
                     height: 135,
@@ -85,56 +94,6 @@ class _ImageSliderState extends State<ImageSlider> {
 
   }
 
-  // List<Widget> banners(){
-  //   List<Widget> banner = [] ;
-  //
-  //   Widget bannerwid1 = new Container(
-  //     margin: EdgeInsets.only(left: 20,right: 20),
-  //     child:  ClipRRect(
-  //       borderRadius: BorderRadius.circular(8.0),
-  //       child: Image.asset(
-  //         Helper.getAssetName('banner1.jpg', 'virtual'),
-  //         fit: BoxFit.fill,
-  //         height: double.infinity,
-  //         width: double.infinity,
-  //         alignment: Alignment.center,
-  //       ),
-  //     ),
-  //   );
-  //   Widget bannerwid2 = new Container(
-  //     margin: EdgeInsets.only(left: 20,right: 20),
-  //     child:  ClipRRect(
-  //       borderRadius: BorderRadius.circular(8.0),
-  //       child: Image.asset(
-  //         Helper.getAssetName('banner2.jpg', 'virtual'),
-  //         fit: BoxFit.fill,
-  //         height: double.infinity,
-  //         width: double.infinity,
-  //
-  //         alignment: Alignment.center,
-  //       ),
-  //     ),
-  //   );
-  //   Widget bannerwid3 = new Container(
-  //     margin: EdgeInsets.only(left: 20,right: 20),
-  //     child:  ClipRRect(
-  //       borderRadius: BorderRadius.circular(8.0),
-  //       child: Image.asset(
-  //         Helper.getAssetName('banner3.jpg', 'virtual'),
-  //         fit: BoxFit.fill,
-  //         height: double.infinity,
-  //         width: double.infinity,
-  //
-  //         alignment: Alignment.center,
-  //       ),
-  //     ),
-  //   );
-  //
-  //   banner.add(bannerwid1);
-  //   banner.add(bannerwid2);
-  //   banner.add(bannerwid3);
-  //   return banner;
-  // }
 
   getSliderList() async {
     SharedPreferences prefs=await SharedPreferences.getInstance();
