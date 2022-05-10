@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/PopularRestModel.dart';
+import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
+import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 import '../../../utils/helper.dart';
@@ -38,13 +41,17 @@ class _GroceryCardListState extends State<GroceryCardList> {
       cardName: null!=item.merchantBranchName?item.merchantBranchName:"",
       cardTime: null!=item.merchantBranchOrderTime?item.merchantBranchOrderTime:"",
       cardType: null!=item.cuisines?item.cuisines:"",
-      rating: null!=item.avgReview?item.avgReview:"",
+      rating: null!=item.avgReview||item.avgReview == "0"?item.avgReview:"No reviews yet",
       deliveryCharge: '',
-      bannerName: null!=item.merchantBranchImage?item.merchantBranchImage:"",
+      bannerName: null!=item.merchantBranchCoverImage?item.merchantBranchCoverImage:item.merchantBranchImage,
       discount: "",
       busy: null!=item.merchantBranchBusy?item.merchantBranchBusy:"",
       press: (){
         if(item.merchantBranchBusy == "0") {
+          Provider.of<ApplicationProvider>(context, listen: false)
+              .setCurrentRestModel(new SingleRestModel());
+          Provider.of<ApplicationProvider>(context, listen: false)
+              .setCategoryList([]);
           Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) =>
                   RestaurantDetailsScreen(item.merchantBranchId,item.lat,item.lng)));

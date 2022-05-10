@@ -59,6 +59,7 @@ class PopularRestModel {
     this.merchantPackChargeType,
     this.merchantPackCharge,
     this.distance,
+    this.merchantBranchCoverImage
   });
 
   String? cuisines;
@@ -87,6 +88,7 @@ class PopularRestModel {
   String? merchantBranchMinWalletAmnt;
   String? merchantBranchPaymnetMode;
   String? merchantBranchImage;
+  String? merchantBranchCoverImage;
   String? merchantBranchOrderTime;
   String? merchantBranchTaxOn;
   String? merchantBranchTaxPercentage;
@@ -110,6 +112,7 @@ class PopularRestModel {
   String? merchantPackChargeType;
   String? merchantPackCharge;
   String? distance;
+
 
   factory PopularRestModel.fromJson(Map<String, dynamic> json) => PopularRestModel(
     cuisines: json["cuisines"] == null ? null : json["cuisines"],
@@ -138,6 +141,7 @@ class PopularRestModel {
     merchantBranchMinWalletAmnt: json["merchant_branch_min_wallet_amnt"] == null ? null : json["merchant_branch_min_wallet_amnt"],
     merchantBranchPaymnetMode: json["merchant_branch_paymnet_mode"] == null ? null : json["merchant_branch_paymnet_mode"],
     merchantBranchImage: json["merchant_branch_image"] == null ? null : json["merchant_branch_image"],
+    merchantBranchCoverImage: json["merchant_branch_cover_image"] == null ? null : json["merchant_branch_cover_image"],
     merchantBranchOrderTime: json["merchant_branch_order_time"] == null ? null : json["merchant_branch_order_time"],
     merchantBranchTaxOn: json["merchant_branch_tax_on"] == null ? null : json["merchant_branch_tax_on"],
     merchantBranchTaxPercentage: json["merchant_branch_tax_percentage"] == null ? null : json["merchant_branch_tax_percentage"],
@@ -190,6 +194,7 @@ class PopularRestModel {
     "merchant_branch_min_wallet_amnt": merchantBranchMinWalletAmnt == null ? null : merchantBranchMinWalletAmnt,
     "merchant_branch_paymnet_mode": merchantBranchPaymnetMode == null ? null : merchantBranchPaymnetMode,
     "merchant_branch_image": merchantBranchImage == null ? null : merchantBranchImage,
+    "merchant_branch_cover_image" : merchantBranchCoverImage == null ? null : merchantBranchCoverImage,
     "merchant_branch_order_time": merchantBranchOrderTime == null ? null : merchantBranchOrderTime,
     "merchant_branch_tax_on": merchantBranchTaxOn == null ? null : merchantBranchTaxOn,
     "merchant_branch_tax_percentage": merchantBranchTaxPercentage == null ? null : merchantBranchTaxPercentage,

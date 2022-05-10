@@ -49,7 +49,8 @@ class _CategoryCardState extends State<CategoryCard> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(14.0),
                     child: Image.network(widget.cardImg!,
-                      fit:BoxFit.fill,
+                      width: double.infinity,
+                      fit:BoxFit.cover,
                       height: double.infinity,
                       loadingBuilder: (BuildContext context, Widget child,
                           ImageChunkEvent? loadingProgress) {

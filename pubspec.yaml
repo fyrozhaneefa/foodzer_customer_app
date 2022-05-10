@@ -50,6 +50,9 @@ dependencies:
   location: ^4.3.0
   flutter_polyline_points: ^1.0.0
   timelines: ^0.1.0
+  vertical_scrollable_tabview: ^0.0.7
+  intl:
+
 
 
 

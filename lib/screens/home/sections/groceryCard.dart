@@ -144,7 +144,8 @@ class _GroceryCardState extends State<GroceryCard> {
               Container(
                   child:  Row(
                     children: [
-                      Icon(Icons.tag_faces_outlined),
+                      Icon(widget.rating == "No reviews yet"||widget.rating == "0" ?Icons.sentiment_dissatisfied:
+                      Icons.tag_faces_outlined),
                       SizedBox(width: 5,),
                       Text(widget.rating!,
                         style: TextStyle(

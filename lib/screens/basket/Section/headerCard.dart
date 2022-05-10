@@ -35,13 +35,13 @@ class _BasketHeaderState extends State<BasketHeader> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Text("WELCOME50 eligible items",
-                  style: TextStyle(
-                      color: Colors.deepOrangeAccent,
-                      fontWeight: FontWeight.w500)),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.all(10),
+            //   child: Text("WELCOME50 eligible items",
+            //       style: TextStyle(
+            //           color: Colors.deepOrangeAccent,
+            //           fontWeight: FontWeight.w500)),
+            // ),
             ListView.separated(
                 separatorBuilder: (context, index) {
                   return Divider();
@@ -54,6 +54,23 @@ class _BasketHeaderState extends State<BasketHeader> {
                     children: [
                       Row(
                         children: [
+                        Container(
+                          padding:EdgeInsets.only(left: 15),
+                          child:   provider.cartModelList[index].itemVegNonveg ==
+                              "1"
+                              ? Image.asset(
+                            Helper.getAssetName(
+                                "veg.png",
+                                "virtual"),
+                            height: 15,
+                          )
+                              : Image.asset(
+                            Helper.getAssetName(
+                                "non-veg.png",
+                                "virtual"),
+                            height: 15,
+                          ),
+                        ),
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.all(15),
@@ -179,7 +196,8 @@ class _BasketHeaderState extends State<BasketHeader> {
                               isScrollControlled: true,
                               context: context,
                               builder: (context) {
-                                return CartAddons(provider.cartModelList[index],index);
+                                return CartAddons(provider.cartModelList[index],false,
+                                );
                               });
 
                           // showModalBottomSheet(

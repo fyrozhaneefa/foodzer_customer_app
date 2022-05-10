@@ -96,6 +96,8 @@ class BranchDetails {
     this.distance,
     this.openStatus,
     this.merchantBranchPaymnetList,
+    this.merchantBranchCoverImage,
+    this.deliveryAreaDeliveryTime
   });
 
   String? merchantBranchNameArabi;
@@ -120,6 +122,8 @@ class BranchDetails {
   String? distance;
   String? openStatus;
   List<String>? merchantBranchPaymnetList;
+  String? merchantBranchCoverImage;
+  String? deliveryAreaDeliveryTime;
 
   factory BranchDetails.fromJson(Map<String, dynamic> json) => BranchDetails(
     merchantBranchNameArabi: json["merchant_branch_name_arabi"],
@@ -137,12 +141,14 @@ class BranchDetails {
     merchantBranchBusy: json["merchant_branch_busy"],
     merchantBranchPaymnetMode: json["merchant_branch_paymnet_mode"],
     merchantBranchImage: json["merchant_branch_image"],
+    merchantBranchCoverImage: json["merchant_branch_cover_image"],
     merchantPackCharge: json["merchant_pack_charge"],
     merchantPackChargeType: json["merchant_pack_charge_type"],
     countryCurrency: json["country_currency"],
     restaurantArea: json["restaurant_area"],
     distance: json["distance"],
     openStatus: json["open_status"],
+    deliveryAreaDeliveryTime: json["delivery_area_delivery_time"],
     merchantBranchPaymnetList: List<String>.from(json["merchant_branch_paymnet_list"].map((x) => x)),
   );
 
@@ -162,12 +168,14 @@ class BranchDetails {
     "merchant_branch_busy": merchantBranchBusy,
     "merchant_branch_paymnet_mode": merchantBranchPaymnetMode,
     "merchant_branch_image": merchantBranchImage,
+    "merchant_branch_cover_image": merchantBranchCoverImage,
     "merchant_pack_charge": merchantPackCharge,
     "merchant_pack_charge_type": merchantPackChargeType,
     "country_currency": countryCurrency,
     "restaurant_area": restaurantArea,
     "distance": distance,
     "open_status": openStatus,
+    "delivery_area_delivery_time": deliveryAreaDeliveryTime,
     "merchant_branch_paymnet_list": List<dynamic>.from(merchantBranchPaymnetList!.map((x) => x)),
   };
 }
@@ -181,13 +189,13 @@ class Category {
 
   });
 
-  String? categoryId;
+  int? categoryId;
   String? categoryName;
   String? categoryNameArb;
   bool? isActive;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
-    categoryId: json["category_id"],
+    categoryId: int.parse(json["category_id"].toString()),
     categoryName: json["category_name"],
     categoryNameArb: json["category_name_arb"],
     isActive: true,
@@ -261,10 +269,12 @@ class Item {
     this.availableDay,
     this.isPriceon,
     this.isAddon,this.enteredQty,
-    this.addonsList,this.addonIds
+    this.addonsList,this.addonIds,this.tempId,this.lastItemTempId
   });
 
   String? itemId;
+  String? tempId;
+  String? lastItemTempId;
   String? itemDeleteStatus;
   String? itemVisibility;
   String? itemVisibilityApproval;
@@ -292,7 +302,7 @@ class Item {
   String? itemEndDate;
   String? itemFromDate;
   String? itemToDate;
-  DateTime? itemAddedDate;
+  String? itemAddedDate;
   String? itemAddedBy;
   String? itemAdddedType;
   String? itemPaymentMode;
@@ -304,14 +314,14 @@ class Item {
   dynamic hideLimitDate;
   dynamic isEggIncluded;
   dynamic itemPackageCharge;
-  String? categoryId;
+  int? categoryId;
   String? categoryDeleteStatus;
   String? categoryBranchId;
   String? categoryVisibility;
   String? categoryDisplayOrder;
   String? categoryName;
   String? categoryNameArb;
-  DateTime? categoryAddedDate;
+  String? categoryAddedDate;
   String? categoryModifiedon;
   String? categoryAddedBy;
   String? categoryEditedBy;
@@ -330,6 +340,8 @@ class Item {
   factory Item.fromJson(Map<String, dynamic> json) => Item(
     // addonsList: List<Addons>.from(json["addonsList"].map((x) => Addons.fromJson(x))),
     itemId: json["item_id"],
+    tempId: json.containsKey("tempId")?json["tempId"]:null,
+    lastItemTempId: json.containsKey("lastItemTempId")?json["lastItemTempId"]:null,
     itemDeleteStatus: json["item_delete_status"],
     itemVisibility: json["item_visibility"],
     itemVisibilityApproval: json["item_visibility_approval"],
@@ -357,7 +369,7 @@ class Item {
     itemEndDate: json["item_end_date"],
     itemFromDate: json["item_from_date"],
     itemToDate: json["item_to_date"],
-    itemAddedDate: DateTime.parse(json["item_added_date"]),
+    itemAddedDate: json["item_added_date"],
     itemAddedBy: json["item_added_by"],
     itemAdddedType: json["item_addded_type"],
     itemPaymentMode: json["item_payment_mode"],
@@ -369,14 +381,15 @@ class Item {
     hideLimitDate: json["hide_limit_date"],
     isEggIncluded: json["is_egg_included"],
     itemPackageCharge: json["item_package_charge"],
-    categoryId: json["category_id"],
+    categoryId: null!=json["category_id"]?
+    int.parse(json["category_id"].toString()):-1,
     categoryDeleteStatus: json["category_delete_status"],
     categoryBranchId: json["category_branch_id"],
     categoryVisibility: json["category_visibility"],
     categoryDisplayOrder: json["category_display_order"],
     categoryName: json["category_name"],
     categoryNameArb: json["category_name_arb"],
-    categoryAddedDate: DateTime.parse(json["category_added_date"]),
+    categoryAddedDate: json["category_added_date"],
     categoryModifiedon: json["category_modifiedon"],
     categoryAddedBy: json["category_added_by"],
     categoryEditedBy: json["category_edited_by"],
@@ -403,8 +416,77 @@ class Item {
     String result = json.encode(map());
     return result;
   }
+  static String ToPreferenceJson(Item model) {
+    Map<String, dynamic> map() =>
+        {
+          "item_id": model.itemId,
+          "tempId": model.tempId,
+          "lastItemTempId": model.lastItemTempId,
+          "item_delete_status": model.itemDeleteStatus,
+          "item_visibility": model.itemVisibility,
+          "item_visibility_approval": model.itemVisibilityApproval,
+          "item_approve_status": model.itemApproveStatus,
+          "item_merchant": model.itemMerchant,
+          "item_merchant_branch": model.itemMerchantBranch,
+          "item_type": model.itemType,
+          "item_category":model. itemCategory,
+          "item_name":model. itemName,
+          "item_name_arabic": model.itemNameArabic,
+          "item_price_type": model.itemPriceType,
+          "item_price":model. itemPrice,
+          "item_offer_price": model.itemOfferPrice,
+          "item_description": model.itemDescription,
+          "item_description_arabic": model.itemDescriptionArabic,
+          "item_flavour": model.itemFlavour,
+          "item_veg_nonveg": model.itemVegNonveg,
+          "item_image": model.itemImage,
+          "item_cuisine":model. itemCuisine,
+          "item_available_days": model.itemAvailableDays,
+          "item_available_time_from":model. itemAvailableTimeFrom,
+          "item_available_time_to":model. itemAvailableTimeTo,
+          "item_cart_slider": model.itemCartSlider,
+          "item_start_date":model. itemStartDate,
+          "item_end_date":model. itemEndDate,
+          "item_from_date": model.itemFromDate,
+          "item_to_date": model.itemToDate,
+          "item_added_date": model.itemAddedDate,
+          "item_added_by": model.itemAddedBy,
+          "item_addded_type": model.itemAdddedType,
+          "item_payment_mode": model.itemPaymentMode,
+          "food_item_home_visible": model.foodItemHomeVisible,
+          "item_offer_status": model.itemOfferStatus,
+          "item_offer_percentage": model.itemOfferPercentage,
+          "item_offer_amt": model.itemOfferAmt,
+          "hide_limit_time": model.hideLimitTime,
+          "hide_limit_date": model.hideLimitDate,
+          "is_egg_included": model.isEggIncluded,
+          "item_package_charge": model.itemPackageCharge,
+          "category_id": model.categoryId,
+          "category_delete_status": model.categoryDeleteStatus,
+          "category_branch_id": model.categoryBranchId,
+          "category_visibility": model.categoryVisibility,
+          "category_display_order": model.categoryDisplayOrder,
+          "category_name": model.categoryName,
+          "category_name_arb": model.categoryNameArb,
+          "category_added_date": model.categoryAddedDate,
+          "category_modifiedon": model.categoryModifiedon,
+          "category_added_by": model.categoryAddedBy,
+          "category_edited_by": model.categoryEditedBy,
+          "category_added_user_type": model.categoryAddedUserType,
+          "category_editted_user_type": model.categoryEdittedUserType,
+          // "addons_sub_title_id": addonsSubTitleId,
+          "rest_status": model.restStatus,
+          "available_time": model.availableTime,
+          "available_day": model.availableDay,
+          "is_priceon": model.isPriceon,
+          "is_addon": model.isAddon,
+        };
+    String result = json.encode(map());
+    return result;
+  }
 
-}
+
+  }
 
 class Addons {
   Addons({
@@ -435,7 +517,7 @@ class Addons {
   String? itemAddonsSubtitleTblid;
   String? itemAddonsSubtitleSubtitleId;
   String? addonsName;
-  String? addonsType;
+  int? addonsType;
   String? addonsArabi;
   String? addonsSubTitleName;
   String? addonsSubTitleArabi;
@@ -453,7 +535,7 @@ class Addons {
     itemAddonsSubtitleTblid: json["item_addons_subtitle_tblid"] == null ? null : json["item_addons_subtitle_tblid"],
     itemAddonsSubtitleSubtitleId: json["item_addons_subtitle_subtitle_id"] == null ? null : json["item_addons_subtitle_subtitle_id"],
     addonsName: json["addons_name"] == null ? null : json["addons_name"],
-    addonsType: json["addons_type"] == null ? null : json["addons_type"],
+    addonsType: json["addons_type"] == null ? 1 : int.parse(json["addons_type"].toString()),
     addonsArabi: json["addons_arabi"] == null ? null : json["addons_arabi"],
     addonsSubTitleName: json["addons_sub_title_name"] == null ? null : json["addons_sub_title_name"],
     addonsSubTitleArabi: json["addons_sub_title_arabi"] == null ? null : json["addons_sub_title_arabi"],

@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/Constants/sapperator.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Models/itemAddonModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
+import 'package:foodzer_customer_app/screens/basket/Section/cartAddons.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+
 class SingleItemView extends StatefulWidget {
   Item itemModel;
- SingleItemView(this.itemModel);
+  SingleItemView(this.itemModel);
 
   @override
   _SingleItemViewState createState() => _SingleItemViewState();
@@ -24,23 +27,27 @@ class _SingleItemViewState extends State<SingleItemView> {
   //         .length,
   //         (index) => false);
   bool isIncrement = false;
-  int itemCount = 1;
+  int totalQty = 0;
   dynamic itemPrice;
   dynamic totalPrice;
   bool isChecked = false;
-  List<Addons> addonModelList = [];
+  List<Addons> addOnList = [];
+  // List<Addons> mandatoryAddonList = [];
+  int lastAddonIndex = -1;
   bool isLoading = false;
-
+  int? radioValue;
+  bool isMandatory = false;
   @override
   void initState() {
     // TODO: implement initState
-    if(null!=widget.itemModel.enteredQty && null!=widget.itemModel.itemPrice){
-      totalPrice= widget.itemModel.itemPrice! * widget.itemModel.enteredQty!;
+    if (null != widget.itemModel.enteredQty &&
+        null != widget.itemModel.itemPrice) {
+      totalPrice = widget.itemModel.itemPrice! * widget.itemModel.enteredQty!;
     } else {
       totalPrice = widget.itemModel.itemPrice!;
     }
-    if(null!=widget.itemModel.enteredQty  ){
-      itemCount = widget.itemModel.enteredQty!;
+    if (null != widget.itemModel.enteredQty) {
+      totalQty = widget.itemModel.enteredQty!;
     }
     if (widget.itemModel.isAddon == 1) {
       getAddons();
@@ -48,354 +55,639 @@ class _SingleItemViewState extends State<SingleItemView> {
     itemPrice = widget.itemModel.itemPrice!;
     // totalPrice = widget.itemModel.itemPrice!;
 
-    setState(() {
-
-    });
+    setState(() {});
 
     super.initState();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-
-    return isLoading?Center(child: CircularProgressIndicator(color: Colors.deepOrangeAccent,),):Container(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-              padding: const EdgeInsets.only(top:20.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: Icon(
-                    Icons.close,
-                    color: Colors.black,
-                    size: 30,
-                  ),
-                ),
-              ),),
-          Flexible(
-            child: ListView(
-              physics: ScrollPhysics(),
-              shrinkWrap: true,
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              // mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: Helper.getScreenWidth(context),
-                  height: 200,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(14),
-                      topRight: Radius.circular(14),
-                    ),
-                    child: Image.network(
-                      widget.itemModel.itemImage!,
-                      // 'https://mumbaimirror.indiatimes.com/photo/76424716.cms',
-                      fit: BoxFit.fill,
-                      height: double.infinity,
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Container(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.itemModel.itemName!,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 18),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            widget.itemModel.itemDescription!,
-                            // 'Fried puff pastry balls, filled with spiced mashed potatoes and boondi. Served with spiced water and sweet tamarind sauce',
-                            style: TextStyle(
-                                color: Colors.grey.shade600,
-                                height: 1.5,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          null != widget.itemModel.itemDescription
-                              ? SizedBox(
-                            height: 20,
-                          )
-                              : SizedBox(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('INR $totalPrice',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600, fontSize: 16)),
-                              Container(
-                                decoration: new BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(12)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.shade400,
-                                      blurRadius: 3.0,
-                                      spreadRadius: 1.0,
-                                    )
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        if (itemCount == 1) {
-                                          // Navigator.of(context).pop();
-                                        } else {
-                                          setState(() {
-                                            itemCount--;
-                                            totalPrice = double.parse(
-                                                totalPrice.toString()) -
-                                                double.parse(
-                                                    itemPrice.toString());
-                                          });
-                                        }
-                                      },
-                                      icon: Icon(
-                                        Icons.remove,
-                                        color: itemCount == 1?Colors.deepOrange.shade100:Colors.deepOrange,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 15,
-                                    ),
-                                    Text(
-
-                                        itemCount.toString(),
-                                      style:
-                                      TextStyle(fontWeight: FontWeight.w600),
-                                    ),
-                                    SizedBox(
-                                      width: 15,
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          itemCount++; //_two => TextEditingController of 2nd TextField
-                                          totalPrice = double.parse(
-                                              totalPrice.toString()) +
-                                              double.parse(itemPrice.toString());
-                                        });
-                                      },
-                                      icon: Icon(
-                                        Icons.add,
-                                        color: Colors.deepOrange,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )),
-                ),
-                null !=addonModelList && addonModelList.length >0
-                    ? Divider(
-                    height: 15, thickness: 6, color: Colors.grey.shade300):Container(),
-                null !=addonModelList && addonModelList.length >0
-                    ? Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child:Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text("Add On's:",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16)),
-                          Text('(optional)',
-                              style: TextStyle(
-                                color: Colors.grey,
-                              ))
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text('Choose items from the list',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey,
-                              fontSize: 14)),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      ListView.separated(
-                          separatorBuilder: (context, index) {
-                            return Divider();
-                          },
-                          physics: ScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: addonModelList.length,
-                          itemBuilder: (context, index) {
-                            return Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                      addonModelList[index].addonsSubTitleName.toString()),
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                        '(+ INR ${addonModelList[index].addonsSubTitlePrice})'),
-                                    Checkbox(
-                                      checkColor: Colors.white,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(3),
-                                      ),
-                                      activeColor:
-                                      Colors.deepOrangeAccent,
-                                      value: addonModelList[index].isSelected,
-                                      onChanged: (checked) {
-                                        setState(
-                                              () {
-                                                addonModelList[index].isSelected = checked;
-                                                if(addonModelList[index].isSelected == true){
-                                                  totalPrice = double.parse(
-                                                      totalPrice.toString()) +
-                                                      double.parse(addonModelList[index].addonsSubTitlePrice.toString());
-                                                } else {
-                                                  totalPrice = double.parse(
-                                                      totalPrice.toString()) -
-                                                      double.parse(addonModelList[index].addonsSubTitlePrice.toString());
-                                                }
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                )
-                              ],
-                            );
-                          })
-                    ],
-                  ),
-                )
-                    : Container(),
-                Divider(
-                    height: 15, thickness: 6, color: Colors.grey.shade300),
-                Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          child: Row(
-                            children: [
-                              Icon(Icons.messenger_outline),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                'Any special requests?',
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () => addNote(context),
-                          child: Text(
-                            'Add note',
-                            style: TextStyle(
-                                color: Colors.deepOrange,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        )
-                      ],
-                    )),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Container(
-              height: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  if(Provider.of<ApplicationProvider>(context, listen: false).cartModelList.isEmpty){
-                    widget.itemModel.addonsList=addonModelList.where((element) => element.isSelected == true).toList();
-
-                    Provider.of<ApplicationProvider>(context,
-                        listen: false)
-                        .updateProduct(widget.itemModel,
-                        null==widget.itemModel.enteredQty || null!=widget.itemModel.enteredQty && itemCount > widget.itemModel.enteredQty!,
-                        itemCount);
-                    Navigator.pop(context);
-                  }
-                 else if(Provider.of<ApplicationProvider>(context, listen: false).cartModelList.first.itemMerchantBranch ==
-                      Provider.of<ApplicationProvider>(context, listen: false).selectedRestModel.merchantBranchId){
-                    widget.itemModel.addonsList=addonModelList.where((element) => element.isSelected == true).toList();
-
-                    Provider.of<ApplicationProvider>(context,
-                        listen: false)
-                        .updateProduct(widget.itemModel,
-                        null==widget.itemModel.enteredQty || null!=widget.itemModel.enteredQty && itemCount > widget.itemModel.enteredQty!,
-                        itemCount);
-                    Navigator.pop(context);
-                  } else{
-                    showAlertDialog(context);
-                  }
-
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      null!=widget.itemModel.enteredQty && widget.itemModel.enteredQty! > 0?'Update basket'
-                          :
-                      'Add to basket',
-                      style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w700),
-                    ),
-                    Text(
-                      'INR ' + totalPrice.toStringAsFixed(2),
-                      style: TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w700),
-                    )
-                  ],
-                ),
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.deepOrange,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                      // side: BorderSide(color: Colors.grey)
-                    )),
-              ),
+    return isLoading
+        ? Center(
+            child: CircularProgressIndicator(
+              color: Colors.deepOrangeAccent,
             ),
           )
-        ],
-      ),
-    );
+        : Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(
+                        Icons.close,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: ListView(
+                    physics: ScrollPhysics(),
+                    shrinkWrap: true,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    // mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: Helper.getScreenWidth(context),
+                        height: 200,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(14),
+                            topRight: Radius.circular(14),
+                          ),
+                          child: Image.network(
+                            widget.itemModel.itemImage!,
+                            // 'https://mumbaimirror.indiatimes.com/photo/76424716.cms',
+                            fit: BoxFit.fill,
+                            height: double.infinity,
+                            width: double.infinity,
+                            alignment: Alignment.center,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Container(
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.itemModel.itemName!,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 18),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              widget.itemModel.itemDescription!,
+                              // 'Fried puff pastry balls, filled with spiced mashed potatoes and boondi. Served with spiced water and sweet tamarind sauce',
+                              style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  height: 1.5,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            null != widget.itemModel.itemDescription
+                                ? SizedBox(
+                                    height: 20,
+                                  )
+                                : SizedBox(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('INR '+widget.itemModel.itemPrice!.toStringAsFixed(2),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16)),
+                                Container(
+                                  decoration: new BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.shade400,
+                                        blurRadius: 3.0,
+                                        spreadRadius: 1.0,
+                                      )
+                                    ],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          if (totalQty == 1) {
+                                            // Navigator.of(context).pop();
+                                          } else {
+                                            setState(() {
+                                              totalQty--;
+                                              totalPrice = double.parse(
+                                                      totalPrice.toString()) -
+                                                  double.parse(
+                                                      itemPrice.toString());
+                                            });
+                                          }
+                                        },
+                                        icon: Icon(
+                                          Icons.remove,
+                                          color: totalQty == 1
+                                              ? Colors.deepOrange.shade100
+                                              : Colors.deepOrange,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Text(
+                                        totalQty.toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+
+                                          if(totalQty==0){
+                                            widget.itemModel.enteredQty=1;
+                                            showModalBottomSheet(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(14),
+                                                    topRight: Radius.circular(14),
+                                                  ),
+                                                ),
+                                                isScrollControlled: true,
+                                                context: context,
+                                                builder: (context) {
+                                                  return CartAddons(widget.itemModel,true);
+                                                }).then((value) {
+                                                  if(null!=value){
+                                                    totalQty=value;
+                                                    setState(() {
+
+                                                    });
+                                                  }
+                                            });
+                                          }else {
+                                            addDuplicateItem(context);
+                                          }
+
+
+                                          // setState(() {
+                                          //   itemCount++; //_two => TextEditingController of 2nd TextField
+                                          //   totalPrice = double.parse(
+                                          //           totalPrice.toString()) +
+                                          //       double.parse(
+                                          //           itemPrice.toString());
+                                          // });
+                                        },
+                                        icon: Icon(
+                                          Icons.add,
+                                          color: Colors.deepOrange,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )),
+                      ),
+                      // null !=
+                      //             addOnList
+                      //                 .where((element) =>
+                      //                     null != element.addonsType &&
+                      //                     element.addonsType == 2)
+                      //                 .toList() &&
+                      //         addOnList
+                      //                 .where((element) =>
+                      //                     null != element.addonsType &&
+                      //                     element.addonsType == 2)
+                      //                 .toList()
+                      //                 .length >
+                      //             0
+                      //     ? Divider(
+                      //         height: 15,
+                      //         thickness: 6,
+                      //         color: Colors.grey.shade300)
+                      //     : Container(),
+                      // null !=
+                      //             addOnList
+                      //                 .where((element) =>
+                      //                     null != element.addonsType &&
+                      //                     element.addonsType == 2)
+                      //                 .toList() &&
+                      //         addOnList
+                      //                 .where((element) =>
+                      //                     null != element.addonsType &&
+                      //                     element.addonsType == 2)
+                      //                 .toList()
+                      //                 .length >
+                      //             0
+                      //     ? Padding(
+                      //         padding: const EdgeInsets.all(15.0),
+                      //         child: Column(
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: [
+                      //             Text(
+                      //                 null !=
+                      //                             addOnList
+                      //                                 .where((element) =>
+                      //                                     null !=
+                      //                                         element
+                      //                                             .addonsType &&
+                      //                                     element.addonsType ==
+                      //                                         2)
+                      //                                 .toList() &&
+                      //                         addOnList
+                      //                                 .where((element) =>
+                      //                                     null !=
+                      //                                         element
+                      //                                             .addonsType &&
+                      //                                     element.addonsType ==
+                      //                                         2)
+                      //                                 .toList()
+                      //                                 .length >
+                      //                             0
+                      //                     ? addOnList
+                      //                         .where((element) =>
+                      //                             null != element.addonsType &&
+                      //                             element.addonsType == 2)
+                      //                         .toList()
+                      //                         .first
+                      //                         .addonsName!
+                      //                     : "",
+                      //                 style: TextStyle(
+                      //                     fontWeight: FontWeight.w600,
+                      //                     fontSize: 16)),
+                      //             SizedBox(
+                      //               height: 5,
+                      //             ),
+                      //             null !=
+                      //                         addOnList
+                      //                             .where((element) =>
+                      //                                 null !=
+                      //                                     element.addonsType &&
+                      //                                 element.addonsType == 2)
+                      //                             .toList() &&
+                      //                     addOnList
+                      //                             .where((element) =>
+                      //                                 null !=
+                      //                                     element.addonsType &&
+                      //                                 element.addonsType == 2)
+                      //                             .toList()
+                      //                             .length >
+                      //                         0
+                      //                 ? !isMandatory
+                      //                     ? Text('Choose 1',
+                      //                         style: TextStyle(
+                      //                             fontWeight: FontWeight.w600,
+                      //                             color: Colors.grey,
+                      //                             fontSize: 14))
+                      //                     : Row(
+                      //                         children: [
+                      //                           Icon(
+                      //                             Icons.warning_amber_outlined,
+                      //                             color: Colors.red,
+                      //                           ),
+                      //                           SizedBox(
+                      //                             width: 2,
+                      //                           ),
+                      //                           Text("Choose 1",
+                      //                               style: TextStyle(
+                      //                                   fontWeight:
+                      //                                       FontWeight.w600,
+                      //                                   color: Colors.red,
+                      //                                   fontSize: 15))
+                      //                         ],
+                      //                       )
+                      //                 : Container(
+                      //                     height: 0,
+                      //                   ),
+                      //             ListView.builder(
+                      //                 physics: ScrollPhysics(),
+                      //                 shrinkWrap: true,
+                      //                 itemCount: addOnList.length,
+                      //                 itemBuilder: (context, index) {
+                      //                   return Visibility(
+                      //                     visible: null !=
+                      //                             addOnList[index].addonsType &&
+                      //                         addOnList[index].addonsType == 2,
+                      //                     child: Row(
+                      //                       mainAxisAlignment:
+                      //                           MainAxisAlignment.spaceBetween,
+                      //                       children: [
+                      //                         Expanded(
+                      //                           child: Text(addOnList[index]
+                      //                               .addonsSubTitleName
+                      //                               .toString()),
+                      //                         ),
+                      //                         Radio(
+                      //                           activeColor:
+                      //                               Colors.deepOrangeAccent,
+                      //                           value: null !=
+                      //                                       addOnList[index]
+                      //                                           .isSelected &&
+                      //                                   addOnList[index]
+                      //                                       .isSelected!
+                      //                               ? 1
+                      //                               : 0,
+                      //                           groupValue: 1,
+                      //                           onChanged: (value) {
+                      //                             addOnList[index].isSelected =
+                      //                                 true;
+                      //
+                      //                             if (lastAddonIndex != -1) {
+                      //                               addOnList[lastAddonIndex]
+                      //                                   .isSelected = false;
+                      //                             }
+                      //                             lastAddonIndex = index;
+                      //                             isMandatory = false;
+                      //                             setState(() {});
+                      //                           },
+                      //                         )
+                      //                       ],
+                      //                     ),
+                      //                   );
+                      //                 })
+                      //           ],
+                      //         ),
+                      //       )
+                      //     : Container(),
+                      // null != addOnList && addOnList.length > 0
+                      //     ? Divider(
+                      //         height: 1,
+                      //         thickness: 6,
+                      //         color: Colors.grey.shade300)
+                      //     : Container(),
+                      // null != addOnList && addOnList.length > 0
+                      //     ? Padding(
+                      //         padding: const EdgeInsets.all(15.0),
+                      //         child: Column(
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: [
+                      //             Row(
+                      //               children: [
+                      //                 Text(
+                      //                     null !=
+                      //                                 addOnList
+                      //                                     .where((element) =>
+                      //                                         null !=
+                      //                                             element
+                      //                                                 .addonsType &&
+                      //                                         element.addonsType ==
+                      //                                             1)
+                      //                                     .toList() &&
+                      //                             addOnList
+                      //                                     .where((element) =>
+                      //                                         null !=
+                      //                                             element
+                      //                                                 .addonsType &&
+                      //                                         element.addonsType ==
+                      //                                             1)
+                      //                                     .toList()
+                      //                                     .length >
+                      //                                 0
+                      //                         ? addOnList
+                      //                             .where((element) =>
+                      //                                 null !=
+                      //                                     element.addonsType &&
+                      //                                 element.addonsType == 1)
+                      //                             .toList()
+                      //                             .first
+                      //                             .addonsName!
+                      //                         : "",
+                      //                     style: TextStyle(
+                      //                         fontWeight: FontWeight.w600,
+                      //                         fontSize: 16)),
+                      //               ],
+                      //             ),
+                      //             SizedBox(
+                      //               height: 10,
+                      //             ),
+                      //             Text('Choose items from the list',
+                      //                 style: TextStyle(
+                      //                     fontWeight: FontWeight.w600,
+                      //                     color: Colors.grey,
+                      //                     fontSize: 14)),
+                      //             SizedBox(
+                      //               height: 20,
+                      //             ),
+                      //             ListView.separated(
+                      //                 separatorBuilder: (context, index) {
+                      //                   return Divider();
+                      //                 },
+                      //                 physics: ScrollPhysics(),
+                      //                 shrinkWrap: true,
+                      //                 itemCount: addOnList.length,
+                      //                 itemBuilder: (context, index) {
+                      //                   return Visibility(
+                      //                     visible: null !=
+                      //                             addOnList[index].addonsType &&
+                      //                         addOnList[index].addonsType == 1,
+                      //                     child: Row(
+                      //                       mainAxisAlignment:
+                      //                           MainAxisAlignment.spaceBetween,
+                      //                       children: [
+                      //                         Expanded(
+                      //                           child: Text(addOnList[index]
+                      //                               .addonsSubTitleName
+                      //                               .toString()),
+                      //                         ),
+                      //                         Row(
+                      //                           children: [
+                      //                             Text(
+                      //                                 '(+ INR ${addOnList[index].addonsSubTitlePrice})'),
+                      //                             Checkbox(
+                      //                               checkColor: Colors.white,
+                      //                               shape:
+                      //                                   RoundedRectangleBorder(
+                      //                                 borderRadius:
+                      //                                     BorderRadius.circular(
+                      //                                         3),
+                      //                               ),
+                      //                               activeColor:
+                      //                                   Colors.deepOrangeAccent,
+                      //                               value: addOnList[index]
+                      //                                   .isSelected,
+                      //                               onChanged: (checked) {
+                      //                                 setState(
+                      //                                   () {
+                      //                                     addOnList[index]
+                      //                                             .isSelected =
+                      //                                         checked;
+                      //                                     if (addOnList[index]
+                      //                                             .isSelected ==
+                      //                                         true) {
+                      //                                       totalPrice = double
+                      //                                               .parse(totalPrice
+                      //                                                   .toString()) +
+                      //                                           double.parse(addOnList[
+                      //                                                   index]
+                      //                                               .addonsSubTitlePrice
+                      //                                               .toString());
+                      //                                     } else {
+                      //                                       totalPrice = double
+                      //                                               .parse(totalPrice
+                      //                                                   .toString()) -
+                      //                                           double.parse(addOnList[
+                      //                                                   index]
+                      //                                               .addonsSubTitlePrice
+                      //                                               .toString());
+                      //                                     }
+                      //                                   },
+                      //                                 );
+                      //                               },
+                      //                             ),
+                      //                           ],
+                      //                         )
+                      //                       ],
+                      //                     ),
+                      //                   );
+                      //                 })
+                      //           ],
+                      //         ),
+                      //       )
+                          // : Container(),
+                      Divider(
+                          height: 15,
+                          thickness: 6,
+                          color: Colors.grey.shade300),
+                      Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.messenger_outline),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      'Any special requests?',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () => addNote(context),
+                                child: Text(
+                                  'Add note',
+                                  style: TextStyle(
+                                      color: Colors.deepOrange,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              )
+                            ],
+                          )),
+                    ],
+                  ),
+                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(20.0),
+                //   child: Container(
+                //     height: 60,
+                //     child: ElevatedButton(
+                //       onPressed: () {
+                //         if (Provider.of<ApplicationProvider>(context,
+                //                     listen: false)
+                //                 .cartModelList
+                //                 .isEmpty ||
+                //             Provider.of<ApplicationProvider>(context,
+                //                         listen: false)
+                //                     .cartModelList
+                //                     .first
+                //                     .itemMerchantBranch ==
+                //                 Provider.of<ApplicationProvider>(context,
+                //                         listen: false)
+                //                     .selectedRestModel
+                //                     .merchantBranchId) {
+                //           if (null != addOnList && addOnList.length > 0) {
+                //             List<Addons> addedMandatoryAddonList = [];
+                //             addedMandatoryAddonList = addOnList
+                //                 .where((element) =>
+                //                     null != element.addonsType &&
+                //                     element.addonsType == 2)
+                //                 .toList();
+                //             if (null != addedMandatoryAddonList &&
+                //                 addedMandatoryAddonList.length > 0 &&
+                //                 lastAddonIndex == -1) {
+                //               isMandatory = true;
+                //               setState(() {});
+                //             } else {
+                //               widget.itemModel.addonsList = addOnList
+                //                   .where(
+                //                       (element) => element.isSelected == true)
+                //                   .toList();
+                //               Provider.of<ApplicationProvider>(context,
+                //                       listen: false)
+                //                   .updateProduct(
+                //                       widget.itemModel,
+                //                       null == widget.itemModel.enteredQty ||
+                //                           null != widget.itemModel.enteredQty &&
+                //                               itemCount >
+                //                                   widget.itemModel.enteredQty!,
+                //                       itemCount);
+                //               Navigator.pop(context);
+                //               isMandatory = false;
+                //               setState(() {});
+                //             }
+                //           } else {
+                //             widget.itemModel.addonsList = addOnList
+                //                 .where((element) => element.isSelected == true)
+                //                 .toList();
+                //             Provider.of<ApplicationProvider>(context,
+                //                     listen: false)
+                //                 .updateProduct(
+                //                     widget.itemModel,
+                //                     null == widget.itemModel.enteredQty ||
+                //                         null != widget.itemModel.enteredQty &&
+                //                             itemCount >
+                //                                 widget.itemModel.enteredQty!,
+                //                     itemCount);
+                //             Navigator.pop(context);
+                //           }
+                //         } else {
+                //           showAlertDialog(context);
+                //         }
+                //       },
+                //       child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //         children: [
+                //           Text("Total amount",
+                //             // null != widget.itemModel.enteredQty &&
+                //             //         widget.itemModel.enteredQty! > 0
+                //             //     ? 'Update basket'
+                //             //     : 'Add to basket',
+                //             style: TextStyle(
+                //                 fontSize: 16, fontWeight: FontWeight.w700),
+                //           ),
+                //           Text(
+                //             'INR ' + totalPrice.toStringAsFixed(2),
+                //             style: TextStyle(
+                //                 fontSize: 16, fontWeight: FontWeight.w700),
+                //           )
+                //         ],
+                //       ),
+                //       style: ElevatedButton.styleFrom(
+                //           primary: Colors.deepOrange,
+                //           elevation: 0,
+                //           shape: RoundedRectangleBorder(
+                //             borderRadius: BorderRadius.circular(12.0),
+                //             // side: BorderSide(color: Colors.grey)
+                //           )),
+                //     ),
+                //   ),
+                // )
+              ],
+            ),
+          );
   }
 
   void addNote(context) {
@@ -404,7 +696,7 @@ class _SingleItemViewState extends State<SingleItemView> {
         context: context,
         builder: (context) {
           TextEditingController itemNoteController =
-          new TextEditingController();
+              new TextEditingController();
           return Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -452,7 +744,7 @@ class _SingleItemViewState extends State<SingleItemView> {
                     child: Text(
                       'Done',
                       style:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                       textAlign: TextAlign.end,
                     ),
                   ))
@@ -460,117 +752,329 @@ class _SingleItemViewState extends State<SingleItemView> {
           );
         });
   }
-  getAddons() async {
-    isLoading =true;
-    setState(() {
 
-    });
+  getAddons() async {
+    isLoading = true;
+    setState(() {});
     var map = new Map<String, dynamic>();
-    map['item_id'] =
-       widget.itemModel.itemId!;
+    map['item_id'] = widget.itemModel.itemId!;
     var response =
-    await http.post(Uri.parse(ApiData.GET_ITEM_ADDONS), body: map);
+        await http.post(Uri.parse(ApiData.GET_ITEM_ADDONS), body: map);
     var json = convert.jsonDecode(response.body);
     List dataList = json['addons'];
     if (null != dataList && dataList.length > 0) {
-      addonModelList = dataList
+      // List<Addons> addonList = [];
+
+      addOnList = dataList
           .map((spacecraft) => new Addons.fromJson(spacecraft))
           .toList();
+      // for (Addons addon in addonList){
+      //
+      //   if(null!=addon.addonsType &&
+      //       addon.addonsType==2){
+      //     mandatoryAddonList.add(addon);
+      //   }else{
+      //     optionalAddonList.add(addon);
+      //   }
+      // }
+      // if(null!=mandatoryAddonList && mandatoryAddonList.length>0) {
+      //   mandatoryAddonList[0].isSelected = true;
+      // }
 
-        if(null!=widget.itemModel.addonsList && widget.itemModel.addonsList!.length>0){
-          for(Addons  addonModel in widget.itemModel.addonsList!){
-           if(addonModel.isSelected!){
-             addonModelList.where((element) => element.itemAddonsSubtitleTblid
-                 == addonModel.itemAddonsSubtitleTblid).first.isSelected = true;
-             totalPrice = double.parse(
-                 totalPrice.toString()) +  addonModel.addonsSubTitlePrice!;
-             setState(() {
-
-             });
-           }
+      if (null != widget.itemModel.addonsList &&
+          widget.itemModel.addonsList!.length > 0) {
+        for (Addons addonModel in widget.itemModel.addonsList!) {
+          if (addonModel.isSelected!) {
+            if (null != addonModel.addonsType && addonModel.addonsType == 2) {
+              lastAddonIndex = addOnList.indexWhere((element) =>
+                  element.itemAddonsSubtitleTblid ==
+                  addonModel.itemAddonsSubtitleTblid);
+              if (lastAddonIndex != -1) {
+                addOnList[lastAddonIndex].isSelected = true;
+              }
+            } else {
+              addOnList
+                  .where((element) =>
+                      element.itemAddonsSubtitleTblid ==
+                      addonModel.itemAddonsSubtitleTblid)
+                  .first
+                  .isSelected = true;
+            }
+            totalPrice = double.parse(totalPrice.toString()) +
+                addonModel.addonsSubTitlePrice!;
+            setState(() {});
           }
         }
-      isLoading =false;
-      setState(() {
+      }
 
-      });
+      isLoading = false;
+      setState(() {});
       // Provider.of<ApplicationProvider>(context, listen: false)
       //     .setItemAddons(addonModelList);
     }
   }
+
   void showAlertDialog(BuildContext context) {
-
-      // set up the buttons
-      Widget cancelButton = Container(
-
-        decoration: BoxDecoration(
-            color: Colors.deepOrange.shade50,
-            borderRadius: BorderRadius.circular(14),
-        ),
-        child: TextButton(
-          child: Text("No",
-              style: TextStyle(
-                  color: Colors.deepOrange,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600
-              )),
-          onPressed:  () {
-            Navigator.pop(context);
-          },
-        ),
-      );
-      Widget continueButton = Container(
-        width: Helper.getScreenWidth(context)*.3,
-        decoration: BoxDecoration(
+    // set up the buttons
+    Widget cancelButton = Container(
+      decoration: BoxDecoration(
+        color: Colors.deepOrange.shade50,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: TextButton(
+        child: Text("No",
+            style: TextStyle(
+                color: Colors.deepOrange,
+                fontSize: 16,
+                fontWeight: FontWeight.w600)),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+    Widget continueButton = Container(
+      width: Helper.getScreenWidth(context) * .3,
+      decoration: BoxDecoration(
           color: Colors.deepOrange,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: Colors.deepOrange,width: 1)
-        ),
-        child: TextButton(
-          child: Text("Replace",
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.deepOrange, width: 1)),
+      child: TextButton(
+        child: Text(
+          "Replace",
           style: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600
-          ),),
-          onPressed:  () {
-            Provider.of<ApplicationProvider>(context, listen: false).cartModelList.clear();
-            widget.itemModel.addonsList=addonModelList.where((element) => element.isSelected == true).toList();
-
-            Provider.of<ApplicationProvider>(context,
-                listen: false)
-                .updateProduct(widget.itemModel,
-                null==widget.itemModel.enteredQty || null!=widget.itemModel.enteredQty && itemCount > widget.itemModel.enteredQty!,
-                itemCount);
-            Navigator.pop(context);
-            Navigator.pop(context);
-          },
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
         ),
-      );
+        onPressed: () {
+          Provider.of<ApplicationProvider>(context, listen: false)
+              .cartModelList
+              .clear();
+          widget.itemModel.addonsList =
+              addOnList.where((element) => element.isSelected == true).toList();
 
-      // set up the AlertDialog
-      AlertDialog alert = AlertDialog(
-        title: Text("Replace cart item?",
+          Provider.of<ApplicationProvider>(context, listen: false)
+              .updateProduct(
+                  widget.itemModel,
+                  null == widget.itemModel.enteredQty ||
+                      null != widget.itemModel.enteredQty &&
+                          totalQty > widget.itemModel.enteredQty!,
+                  totalQty);
+          Navigator.pop(context);
+          Navigator.pop(context);
+        },
+      ),
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text(
+        "Replace cart item?",
         style: TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.w600,
-        ),),
-        content: Text("Your cart contains dishes from another restaurant. Do you wish to remove those items from cart?",
-        style:TextStyle(
-          height: 1.3
-        )),
-        actions: [
-          cancelButton,
-          continueButton,
-        ],
-      );
+        ),
+      ),
+      content: Text(
+          "Your cart contains dishes from another restaurant. Do you wish to remove those items from cart?",
+          style: TextStyle(height: 1.3)),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
 
-      // show the dialog
-      showDialog(
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void addDuplicateItem(context) {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(14),
+            topRight: Radius.circular(14),
+          ),
+        ),
+        isScrollControlled: true,
         context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-      );
-    }
+        builder: (context) {
+          return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    leading: widget.itemModel.itemVegNonveg == "1"
+                        ? Image.asset(
+                            Helper.getAssetName("veg.png", "virtual"),
+                            height: 15,
+                          )
+                        : Image.asset(
+                            Helper.getAssetName("non-veg.png", "virtual"),
+                            height: 15,
+                          ),
+                    minLeadingWidth: 2,
+                    title: Text(
+                      widget.itemModel.itemName.toString(),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: Text("₹${widget.itemModel.itemPrice.toString()}"),
+                    trailing: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.close)),
+                  ),
+                  Divider(
+                    color: Colors.grey[300],
+                    thickness: 1,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 50,
+                          margin: EdgeInsets.only(left: 15, right: 10),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              showModalBottomSheet(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(14),
+                                      topRight: Radius.circular(14),
+                                    ),
+                                  ),
+                                  isScrollControlled: true,
+                                  context: context,
+                                  builder: (context) {
+                                    return CartAddons(widget.itemModel,true);
+                                  }).then((value) {
+
+                              });
+                            },
+                            child: Text(
+                              "I'll Choose",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.deepOrange,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.deepOrange.shade50,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: 50,
+                          margin: EdgeInsets.only(right: 15, left: 10),
+                          child: ElevatedButton(
+                            onPressed: () {
+
+                              totalQty++;
+                              // widget.itemModel.enteredQty = itemCount;
+                              if (Provider.of<ApplicationProvider>(context,
+                                          listen: false)
+                                      .cartModelList
+                                      .isEmpty ||
+                                  Provider.of<ApplicationProvider>(context,
+                                              listen: false)
+                                          .cartModelList
+                                          .first
+                                          .itemMerchantBranch ==
+                                      Provider.of<ApplicationProvider>(context,
+                                              listen: false)
+                                          .selectedRestModel
+                                          .merchantBranchId) {
+                                if (null != addOnList && addOnList.length > 0) {
+                                  List<Addons> addedMandatoryAddonList = [];
+                                  addedMandatoryAddonList = addOnList
+                                      .where((element) =>
+                                          null != element.addonsType &&
+                                          element.addonsType == 2)
+                                      .toList();
+                                  // if (null != addedMandatoryAddonList &&
+                                  //     addedMandatoryAddonList.length > 0 &&
+                                  //     lastAddonIndex == -1) {
+                                  //   isMandatory = true;
+                                  //   setState(() {});
+                                  // } else {
+                                    widget.itemModel.addonsList = addOnList
+                                        .where((element) =>
+                                            element.isSelected == true)
+                                        .toList();
+                                    Provider.of<ApplicationProvider>(context,
+                                            listen: false)
+                                        .updateProduct(
+                                            widget.itemModel,
+                                            null ==
+                                                    widget
+                                                        .itemModel.enteredQty ||
+                                                null !=
+                                                        widget.itemModel
+                                                            .enteredQty &&
+                                                    totalQty >
+                                                        widget.itemModel
+                                                            .enteredQty!,
+                                            totalQty);
+                                    Navigator.pop(context);
+                                    isMandatory = false;
+                                    setState(() {});
+                                  // }
+                                } else {
+                                  widget.itemModel.addonsList = addOnList
+                                      .where((element) =>
+                                          element.isSelected == true)
+                                      .toList();
+                                  Provider.of<ApplicationProvider>(context,
+                                          listen: false)
+                                      .updateProduct(
+                                          widget.itemModel,
+                                          null == widget.itemModel.enteredQty ||
+                                              null !=
+                                                      widget.itemModel
+                                                          .enteredQty &&
+                                                  totalQty >
+                                                      widget.itemModel
+                                                          .enteredQty!,
+                                          totalQty);
+                                  Navigator.pop(context);
+                                }
+                              } else {
+                                showAlertDialog(context);
+                              }
+                            },
+                            child: Text(
+                              "Repeat Last",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.deepOrange,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ));
+        });
+  }
 }

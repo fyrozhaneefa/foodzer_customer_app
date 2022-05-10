@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/DetailSearch/detailsearch.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/constants/divider.dart';
@@ -14,7 +15,7 @@ import 'package:foodzer_customer_app/screens/innerdetails/section/restaurantProd
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-
+import 'package:vertical_scrollable_tabview/vertical_scrollable_tabview.dart';
 import 'package:provider/provider.dart';
 
 import '../../Menu/Microfiles/ReviewSection/review.dart';
@@ -25,53 +26,91 @@ class RestaurantDetailsScreen extends StatefulWidget {
   static const routeName = "/restaurantDetails";
   String? merchantBranchId, lat, lng;
 
-  RestaurantDetailsScreen(this.merchantBranchId, this.lat, this.lng,);
+  RestaurantDetailsScreen(
+    this.merchantBranchId,
+    this.lat,
+    this.lng,
+  );
 
   @override
   State<RestaurantDetailsScreen> createState() =>
       _RestaurantDetailsScreenState();
 }
 
-class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
+class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
+    with TickerProviderStateMixin {
   bool isSwitched = false;
   bool isLoading = true;
+  bool isRestContainItems=false;
   int? loadedItemCount;
-  List<Category> categoryList = [];
+
   List<Item> filteredList = [];
   List<Item> filteredLoadedProductModelList = [];
+  TabController? tabController;
 
-
+  @override
+  void dispose() {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      Provider.of<ApplicationProvider>(context, listen: false)
+          .setCurrentRestModel(new SingleRestModel());
+    });
+    super.dispose();
+  }
 
   @override
   void initState() {
+
     getRestDetails();
-    getItemCategory();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: isLoading
-            ? Center(
-                child: CircularProgressIndicator(
-                color: Colors.deepOrangeAccent,
-              ))
-            : Consumer<ApplicationProvider>(
-                builder: (context, provider, child) {
-                return Stack(
-                  children: [
-                    CustomScrollView(
-                      shrinkWrap: true,
-                      slivers: [
-                        SliverAppBar(
-                          elevation: 0,
-                          expandedHeight: 150,
-                          backgroundColor: Colors.white,
-                          pinned: true,
-                          leading: Padding(
+        body: SafeArea(
+      child: isLoading
+          ? Center(
+              child: CircularProgressIndicator(
+              color: Colors.deepOrangeAccent,
+            ))
+          : Consumer<ApplicationProvider>(builder: (context, provider, child) {
+              return Stack(
+                children: [
+                  !isRestContainItems?
+                  Center(child:Text("No item found")):
+                  CustomScrollView(
+                    shrinkWrap: true,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    slivers: [
+                      SliverAppBar(
+                        elevation: 0,
+                        expandedHeight: 150,
+                        backgroundColor: Colors.white,
+                        pinned: true,
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: IconButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              icon: Icon(
+                                Icons.arrow_back,
+                                color: Colors.black,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                        actions: [
+                          Padding(
                             padding:
-                                const EdgeInsets.only(left: 10.0, top: 10.0),
+                                const EdgeInsets.only(right: 10.0, top: 10.0),
                             child: Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -79,606 +118,432 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               ),
                               child: IconButton(
                                 onPressed: () {
-                                  Navigator.of(context).pop();
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => SearchDetails()));
                                 },
                                 icon: Icon(
-                                  Icons.arrow_back,
+                                  Icons.search,
                                   color: Colors.black,
                                   size: 30,
                                 ),
                               ),
                             ),
                           ),
-                          actions: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 10.0, top: 10.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SearchDetails()));
-                                  },
-                                  icon: Icon(
-                                    Icons.search,
-                                    color: Colors.black,
-                                    size: 30,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                          centerTitle: true,
-                          title: Text(
-                            provider.selectedRestModel.branchDetails!
-                                .merchantBranchName!,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          flexibleSpace: FlexibleSpaceBar(
-                            collapseMode: CollapseMode.parallax,
-                            background: Image.network(
-                              provider.selectedRestModel.branchDetails!
-                                  .merchantBranchImage!,
-                              // _singleRestModel.branchDetails!.merchantBranchImage!,
-                              // 'https://cdn-prod.medicalnewstoday.com/content/images/articles/314/314819/delicious-buffet-foods.jpg',
-                              fit: BoxFit.cover,
-                            ),
+                        ],
+                        centerTitle: true,
+                        title: Text(
+                          null!=provider.selectedRestModel.branchDetails?
+                          provider.selectedRestModel.branchDetails!
+                              .merchantBranchName!:"",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        flexibleSpace: FlexibleSpaceBar(
+                          collapseMode: CollapseMode.parallax,
+                          background: Image.network(
+                            null !=
+                                    provider.selectedRestModel.branchDetails!
+                                        .merchantBranchCoverImage
+                                ? provider.selectedRestModel.branchDetails!
+                                    .merchantBranchCoverImage!
+                                : provider.selectedRestModel.branchDetails!
+                                    .merchantBranchImage!,
+
+                            // _singleRestModel.branchDetails!.merchantBranchImage!,
+                            // 'https://cdn-prod.medicalnewstoday.com/content/images/articles/314/314819/delicious-buffet-foods.jpg',
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        SliverList(
-                            delegate: SliverChildListDelegate([
-                          SingleChildScrollView(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20.0,
-                                  right: 20.0,
-                                  bottom: 10,
-                                  top: 20.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                          // Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.branchDetails!.merchantBranchName!,
-                                          provider
-                                              .selectedRestModel
-                                              .branchDetails!
-                                              .merchantBranchName!,
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold)),
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (BuildContext
-                                                          context) =>
-                                                      RestaurantInfoScreen(provider
-                                                          .selectedRestModel)));
-                                        },
-                                        child: Text(
-                                          'Info',
-                                          style: TextStyle(
-                                              color: Colors.deepOrange,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Text(provider
-                                      .selectedRestModel.branchCuisine!),
-                                  SizedBox(
-                                    height: 25,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.tag_faces,
-                                        color: Colors.grey.shade700,
-                                        size: 25,
-                                      ),
-                                      SizedBox(width: 10),
-                                      RichText(
-                                        text: new TextSpan(
-                                          children: [
-
-
-
-                                            TextSpan(text: "Amaze ",
-
-                                              style: new TextStyle(
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            new TextSpan(
-                                              text:
-                                                  'Based on (${provider.selectedRestModel.reviews!.numOfRows}) ratings ',
-                                              style: new TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                    builder: (BuildContext
-                                                            context) =>
-                                                        ReviewRestaurent()));
-                                          },
-                                          child: Text(
-                                            'Reviews',
-                                            style: TextStyle(
-                                                color: Colors.deepOrange,
-                                                fontWeight: FontWeight.w600),
-                                            textAlign: TextAlign.right,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(
-                                    height: 25,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.access_time,
-                                        color: Colors.grey.shade700,
-                                        size: 25,
-                                      ),
-                                      SizedBox(width: 10),
-                                      RichText(
-                                        text: new TextSpan(
-                                          children: [
-                                            new TextSpan(
-                                              text:
-                                                  'Within ${provider.selectedRestModel.branchDetails!.merchantBranchOrderTime} mins ',
-                                              style: new TextStyle(
-                                                  color: Colors.black),
-                                            ),
-                                            new TextSpan(
-                                              text:
-                                                  '(${provider.selectedRestModel.branchDetails!.countryCurrency} 0.590 delivery) ',
-                                              style: new TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.grey),
-                                            ),
-
-                                          ],
-                                        ),
-                                      ),
-
-
-
-
-
-
-
-                                    ],
-                                  ),
-                                  Divider(
-                                    height: 25,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.local_offer_outlined,
-                                        color: Colors.pinkAccent,
-                                        size: 25,
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text('2 RO Off Orders 7 Rials or More!',
-                                          style: TextStyle(
-                                            color: Colors.pinkAccent,
-                                            fontWeight: FontWeight.w500,
-                                          ))
-                                    ],
-                                  ),
-                                  Divider(
-                                    height: 25,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(15),
-                                    width: Helper.getScreenWidth(context),
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0),
-                                        color: Colors.grey.shade100),
-                                    child: Text(
-                                      'Delivered by us, with live tracking',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-
-                                  // ProductCategoryItem(widget.merchantBranchId,
-                                  //     widget.lat, widget.lng),
-                                ],
-                              ),
-                            ),
-                          )
-                        ])),
-                        SliverPersistentHeader(
-                          pinned: true,
-                          delegate: PersistentHeader(
-                            widget: Padding(
-                              padding: const EdgeInsets.only(left: 15.0),
-                              child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    InkWell(
-                                        child: Icon(Icons.menu,
-                                            color: Colors.deepOrange),
-                                        onTap: () {
-                                          onButtonpress(context);
-                                        }),
-                                    Flexible(
-                                      child: Container(
-                                        height: 40,
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: ListView.builder(
-                                            scrollDirection: Axis.horizontal,
-                                            physics: ScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount:
-                                                provider.categoryList.length,
-                                            itemBuilder: (context, index) {
-                                              return ProductCategory(
-                                                title: provider
-                                                    .categoryList[index]
-                                                    .categoryName!,
-                                                // isActive: true,
-                                                // color:selectedIndex == index ? Colors.deepOrange : null,
-                                                textColor:
-                                                    provider.selectedCategoryIndex ==
-                                                            index
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                color:
-                                                    provider.selectedCategoryIndex ==
-                                                            index
-                                                        ? Colors.deepOrange
-                                                        : null,
-                                                press: () {
-                                                  setState(() {
-                                                    isSwitched = false;
-                                                  });
-                                                  provider
-                                                      .currentSelectedCategory(
-                                                          index);
-                                                  if (provider
-                                                          .selectedCategoryIndex ==
-                                                      index) {
-                                                    setState(() {
-                                                      if (provider
-                                                              .categoryList[
-                                                                  index]
-                                                              .categoryId ==
-                                                          "0") {
-                                                        filteredList = provider
-                                                            .selectedRestModel
-                                                            .items!;
-                                                        filteredList.sort(
-                                                            (a, b) => a
-                                                                .categoryName!
-                                                                .compareTo(b
-                                                                    .categoryName!));
-                                                      } else {
-                                                        filteredList = provider
-                                                            .selectedRestModel
-                                                            .items!
-                                                            .where((product) => (product
-                                                                    .categoryId ==
-                                                                provider
-                                                                    .categoryList[
-                                                                        index]
-                                                                    .categoryId))
-                                                            .toList();
-                                                        filteredList.sort(
-                                                            (a, b) => a
-                                                                .categoryName!
-                                                                .compareTo(b
-                                                                    .categoryName!));
-                                                      }
-                                                      // Provider.of<ApplicationProvider>(context, listen: false).clearItems();
-                                                      provider
-                                                          .setItemLoading(true);
-                                                      loadedItemCount = 0;
-                                                      _loadData();
-                                                    });
-                                                    provider.addProductData(
-                                                        filteredList,
-                                                        true,
-                                                        index);
-                                                  }
-                                                  // Provider.of<ApplicationProvider>(context ,listen: false).filterItems(categoryList[index].categoryId!);
-
-                                                  provider.setCategoryName(
-                                                      provider
-                                                          .categoryList[index]
-                                                          .categoryName!);
-                                                },
-                                              );
-                                            }),
-                                      ),
-                                    )
-                                  ]),
-                            ),
-                          ),
-                        ),
-                        SliverList(
-                            delegate: SliverChildListDelegate([
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
+                      ),
+                      SliverList(
+                          delegate: SliverChildListDelegate([
+                        SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20.0, right: 20.0, bottom: 10, top: 20.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'VEG',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    Switch(
-                                      value: isSwitched,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          isSwitched = value;
-                                          // if(isSwitched){
-                                          //   provider.setItemLoading(
-                                          //       true);
-                                          //   List<Item> vegList =[];
-                                          //   vegList =  provider.filteredLoadedProductModelList!
-                                          //       .where((product) => (product
-                                          //       .itemVegNonveg ==
-                                          //       "1"))
-                                          //       .toList();
-                                          //   provider.setItemLoading(
-                                          //       false);
-                                          //   provider.addProductData(
-                                          //       vegList,
-                                          //       true,
-                                          //       provider.selectedCategoryIndex!);
-                                          //
-                                          // }else{
-                                          //   if (provider.selectedCategoryIndex ==
-                                          //       provider.selectedCategoryIndex!) {
-                                          //     setState(() {
-                                          //       if (provider.categoryList[
-                                          //       provider.selectedCategoryIndex!]
-                                          //           .categoryId ==
-                                          //           "0") {
-                                          //         filteredList = provider.selectedRestModel
-                                          //             .items!;
-                                          //         filteredList.sort((a,
-                                          //             b) =>
-                                          //             a.categoryName!
-                                          //                 .compareTo(b
-                                          //                 .categoryName!));
-                                          //       } else {
-                                          //         filteredList = provider.selectedRestModel
-                                          //             .items!
-                                          //             .where((product) => (product
-                                          //             .categoryId ==
-                                          //             provider.categoryList[
-                                          //             provider.selectedCategoryIndex!]
-                                          //                 .categoryId))
-                                          //             .toList();
-                                          //         filteredList.sort((a,
-                                          //             b) =>
-                                          //             a.categoryName!
-                                          //                 .compareTo(b
-                                          //                 .categoryName!));
-                                          //       }
-                                          //       // Provider.of<ApplicationProvider>(context, listen: false).clearItems();
-                                          //       // provider.setItemLoading(
-                                          //       //     true);
-                                          //       loadedItemCount = 0;
-                                          //       _loadData();
-                                          //     });
-                                          //     provider.addProductData(
-                                          //         filteredList,
-                                          //         true,
-                                          //         provider.selectedCategoryIndex!);
-                                          //   }
-                                          //   provider.addProductData(
-                                          //       filteredList,
-                                          //       true,
-                                          //       provider.selectedCategoryIndex!);
-                                          // }
-                                        });
+                                        // Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.branchDetails!.merchantBranchName!,
+                                        provider.selectedRestModel
+                                            .branchDetails!.merchantBranchName!,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold)),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    RestaurantInfoScreen(provider
+                                                        .selectedRestModel)));
                                       },
-                                      activeTrackColor: Colors.green.shade100,
-                                      activeColor: Colors.green.shade300,
-                                    ),
+                                      child: Text(
+                                        'Info',
+                                        style: TextStyle(
+                                            color: Colors.deepOrange,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    )
                                   ],
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 8,
                                 ),
-                                Text(
-                                  null != provider.catName
-                                      ? provider.catName!
-                                      : '',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18),
-                                ),
-                                RestaurantProductsList(isSwitched),
+                                Text(provider.selectedRestModel.branchCuisine!),
                                 SizedBox(
-                                  height: 30,
+                                  height: 25,
                                 ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      null !=
+                                                  provider.selectedRestModel
+                                                      .reviews!.numOfRows &&
+                                              provider.selectedRestModel
+                                                      .reviews!.numOfRows ==
+                                                  0
+                                          ? Icons.sentiment_dissatisfied
+                                          : Icons.tag_faces,
+                                      color: null !=
+                                                  provider.selectedRestModel
+                                                      .reviews!.numOfRows &&
+                                              provider.selectedRestModel
+                                                      .reviews!.numOfRows ==
+                                                  0
+                                          ? Colors.yellow[600]
+                                          : Colors.grey.shade700,
+                                      size: 25,
+                                    ),
+                                    SizedBox(width: 10),
+                                    RichText(
+                                      text: new TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: null !=
+                                                        provider
+                                                            .selectedRestModel
+                                                            .reviews!
+                                                            .numOfRows &&
+                                                    provider
+                                                            .selectedRestModel
+                                                            .reviews!
+                                                            .numOfRows ==
+                                                        0
+                                                ? "No review yet "
+                                                : provider.selectedRestModel
+                                                    .reviews!.branchAvgRating
+                                                    .toString(),
+                                            style: new TextStyle(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          new TextSpan(
+                                            text:
+                                                'Based on (${provider.selectedRestModel.reviews!.numOfRows}) ratings ',
+                                            style: new TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          ReviewRestaurent()));
+                                        },
+                                        child: Text(
+                                          'Reviews',
+                                          style: TextStyle(
+                                              color: Colors.deepOrange,
+                                              fontWeight: FontWeight.w600),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Divider(
+                                  height: 25,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.access_time,
+                                      color: Colors.grey.shade700,
+                                      size: 25,
+                                    ),
+                                    SizedBox(width: 10),
+                                    RichText(
+                                      text: new TextSpan(
+                                        children: [
+                                          new TextSpan(
+                                            text:
+                                                'Within ${provider.selectedRestModel.branchDetails!.merchantBranchOrderTime} mins ',
+                                            style: new TextStyle(
+                                                color: Colors.black),
+                                          ),
+                                          // new TextSpan(
+                                          //   text:
+                                          //       '(${provider.selectedRestModel.branchDetails!.countryCurrency} 0.590 delivery) ',
+                                          //   style: new TextStyle(
+                                          //       fontSize: 12,
+                                          //       color: Colors.grey),
+                                          // ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Divider(
+                                  height: 25,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.local_offer_outlined,
+                                      color: Colors.pinkAccent,
+                                      size: 25,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text('2 RO Off Orders 7 Rials or More!',
+                                        style: TextStyle(
+                                          color: Colors.pinkAccent,
+                                          fontWeight: FontWeight.w500,
+                                        ))
+                                  ],
+                                ),
+                                Divider(
+                                  height: 25,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(15),
+                                  width: Helper.getScreenWidth(context),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      color: Colors.grey.shade100),
+                                  child: Text(
+                                    'Delivered by us, with live tracking',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+
+                                // ProductCategoryItem(widget.merchantBranchId,
+                                //     widget.lat, widget.lng),
                               ],
                             ),
                           ),
-                        ]))
-                      ],
-                    ),
-                    Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 100.0),
-                          child: provider.isItemLoading
-                              ? CircularProgressIndicator(
-                                  color: Colors.deepOrangeAccent,
-                                )
-                              : Container(
-                                  height: 0,
-                                ),
-                        )),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        height: 60,
-                        padding:
-                            EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (provider.cartModelList.length > 0) {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          ItemBasketHome()))
-                                  .then((value) {
-                                if (Provider.of<ApplicationProvider>(context,
-                                            listen: false)
-                                        .selectedCategoryIndex ==
-                                    0) {
-                                  filteredList =
-                                      Provider.of<ApplicationProvider>(context,
-                                              listen: false)
-                                          .selectedRestModel
-                                          .items!;
-                                  filteredList.sort((a, b) => a.categoryName!
-                                      .compareTo(b.categoryName!));
-                                } else {
-                                  filteredList = Provider.of<
-                                              ApplicationProvider>(context,
-                                          listen: false)
-                                      .selectedRestModel
-                                      .items!
-                                      .where((product) => (product.categoryId ==
-                                          Provider.of<ApplicationProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .categoryList[Provider.of<
-                                                          ApplicationProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .selectedCategoryIndex!]
-                                              .categoryId))
-                                      .toList();
-                                  filteredList.sort((a, b) => a.categoryName!
-                                      .compareTo(b.categoryName!));
-                                }
-                                // Provider.of<ApplicationProvider>(context, listen: false).clearItems();
-                                Provider.of<ApplicationProvider>(context,
-                                        listen: false)
-                                    .setItemLoading(true);
-                                loadedItemCount = 0;
-                                _loadData();
-                              });
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          width: 2, //
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          provider.cartModelList.length
-                                              .toString(),
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 15,
-                                    ),
-                                    Text(
-                                      'View basket',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18),
-                                    ),
-                                  ],
-                                ),
+                        )
+                      ])),
+
+                      SliverPersistentHeader(
+                          pinned: true,
+                          floating: false,
+                          delegate: PersistentHeader(
+                            TabBar(
+                              indicatorWeight: 2.0,
+                              onTap: (int val) {
+                                VerticalScrollableTabBarStatus.setIndex(val);
+                              },
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              isScrollable: true,
+                              labelColor: Colors.white,
+                              unselectedLabelColor: Colors.black,
+                              indicatorColor: Colors.transparent,
+                              padding: EdgeInsets.zero,
+                              controller: tabController,
+                              indicator: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'Total',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      null != provider.totalCartPrice
-                                          ? '₹${provider.totalCartPrice}'
-                                          : "₹0",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ],
-                                ),
-                              )
+                              labelStyle: const TextStyle(
+                                  fontSize: 12, fontWeight: FontWeight.w500),
+                              tabs: provider.categoryList
+                                  .map((t) => Tab(
+                                        text: t.categoryName,
+                                      ))
+                                  .toList(),
+                            ),
+
+                            // pinned: true,
+                          )
+
+                          ),
+                      SliverList(
+                          delegate: SliverChildListDelegate([
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Row(
+                              //   children: [
+                              //     Text(
+                              //       'VEG',
+                              //       style: TextStyle(
+                              //           fontWeight: FontWeight.w600),
+                              //     ),
+                              //     Switch(
+                              //       value: isSwitched,
+                              //       onChanged: (value) {
+                              //         setState(() {
+                              //           isSwitched = value;
+                              //         });
+                              //       },
+                              //       activeTrackColor: Colors.green.shade100,
+                              //       activeColor: Colors.green.shade300,
+                              //     ),
+                              //   ],
+                              // ),
+                              // SizedBox(
+                              //   height: 20,
+                              // ),
+                              RestaurantProductsList(isSwitched, tabController),
+                              // SizedBox(
+                              //   height: 30,
+                              // ),
                             ],
                           ),
-                          style: ElevatedButton.styleFrom(
-                            primary: provider.cartModelList.length > 0
-                                ? Colors.deepOrange
-                                : Colors.deepOrange.shade200,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(12), // <-- Radius
+                        ),
+                      ]))
+                    ],
+                  ),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 100.0),
+                        child: Container(
+                          height: 0,
+                        ),
+                      )),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      height: 60,
+                      padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (provider.cartModelList.length > 0) {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        ItemBasketHome()))
+                                .then((value) {
+                              if (provider.selectedCategoryId == 0) {
+                                filteredList =
+                                    provider.selectedRestModel.items!;
+                                filteredList.sort((a, b) =>
+                                    a.categoryName!.compareTo(b.categoryName!));
+                              } else {
+                                filteredList = provider.selectedRestModel.items!
+                                    .where((product) => (product.categoryId ==
+                                        provider.selectedCategoryId!))
+                                    .toList();
+                                filteredList.sort((a, b) =>
+                                    a.categoryName!.compareTo(b.categoryName!));
+                              }
+                              // Provider.of<ApplicationProvider>(context, listen: false).clearItems();
+                              Provider.of<ApplicationProvider>(context,
+                                      listen: false)
+                                  .setItemLoading(true);
+                              loadedItemCount = 0;
+                              _loadData();
+                            });
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              child: Row(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        width: 2, //
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        provider.cartModelList.length
+                                            .toString(),
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Text(
+                                    'View basket',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
+                                  ),
+                                ],
+                              ),
                             ),
+                            Container(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Total',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 16),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    null != provider.totalWithoutTax
+                                        ? '₹${provider.totalWithoutTax}'
+                                        : "₹0",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: provider.cartModelList.length > 0
+                              ? Colors.deepOrange
+                              : Colors.deepOrange.shade200,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(12), // <-- Radius
                           ),
                         ),
                       ),
-                    )
-                  ],
-                );
-              }));
+                    ),
+                  )
+                ],
+              );
+            }),
+    ));
   }
 
   getRestDetails() async {
@@ -690,18 +555,40 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     map['lng'] = widget.lng;
     var response = await http.post(Uri.parse(ApiData.SINGLE_REST), body: map);
     var json = convert.jsonDecode(response.body);
-
     if (json['error_code'] == 0) {
-      isLoading = false;
-      setState(() {});
-      SingleRestModel _singleRestModel = new SingleRestModel();
 
+      SingleRestModel _singleRestModel = new SingleRestModel();
       _singleRestModel = SingleRestModel.fromJson(json);
+      List<Category> categoryList = [];
+      categoryList = _singleRestModel.categories!;
+      if(null!=categoryList && categoryList.length>0) {
+        Provider.of<ApplicationProvider>(context, listen: false)
+            .setCategoryName(categoryList.first.categoryName!);
+        tabController = TabController(length: categoryList.length, vsync: this);
+        isRestContainItems=true;
+        tabController!.addListener(() {
+          setState(() {
+            // selectedIndex = tabController!.index;
+          });
+        });
+        setState(() {});
+      }else{
+        // tabController = TabController(length: 1, vsync: this);
+        // categoryList.add(new Category(categoryName: "",categoryId: 0));
+        isRestContainItems=false;
+      }
+      Provider.of<ApplicationProvider>(context, listen: false)
+          .setCategoryList(categoryList);
+
+
+
       Provider.of<ApplicationProvider>(context, listen: false)
           .setCurrentRestModel(_singleRestModel);
       Provider.of<ApplicationProvider>(context, listen: false)
-          .addProductData(_singleRestModel.items!, true, 0);
+          .addProductData(_singleRestModel.items!, true);
 
+      isLoading = false;
+      setState(() {});
       // Provider.of<ApplicationProvider>(context ,listen: false).filterItems(_singleRestModel.items![0].categoryId!);
       // Provider.of<ApplicationProvider>(context ,listen: false).setCategoryName(_singleRestModel.categories![0].categoryName!);
     } else {
@@ -747,103 +634,120 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     }
   }
 
-  getItemCategory() async {
-    var map = new Map<String, dynamic>();
-    map['merchant_branch_id'] = widget.merchantBranchId;
-    map['lat'] = widget.lat;
-    map['lng'] = widget.lng;
-    var response = await http.post(Uri.parse(ApiData.SINGLE_REST), body: map);
-    var json = convert.jsonDecode(response.body);
-
-    if (json['error_code'] == 0) {
-      List dataList = json['categories'];
-      if (null != dataList && dataList.length > 0) {
-        categoryList = dataList
-            .map((spacecraft) => new Category.fromJson(spacecraft))
-            .toList();
-        categoryList.insert(
-            0, new Category(categoryId: "0", categoryName: "All"));
-      }
-      Provider.of<ApplicationProvider>(context, listen: false)
-          .setCategoryName(categoryList.first.categoryName!);
-      Provider.of<ApplicationProvider>(context, listen: false)
-          .setCategoryList(categoryList);
-      setState(() {});
-    } else {
-      print("some error occured!!!");
-    }
-  }
+  // getItemCategory() async {
+  //   var map = new Map<String, dynamic>();
+  //   map['merchant_branch_id'] = widget.merchantBranchId;
+  //   map['lat'] = widget.lat;
+  //   map['lng'] = widget.lng;
+  //   var response = await http.post(Uri.parse(ApiData.SINGLE_REST), body: map);
+  //   var json = convert.jsonDecode(response.body);
+  //
+  //
+  //   if (json['error_code'] == 0) {
+  //     List dataList = json['categories'];
+  //
+  //     if (null != dataList && dataList.length > 0) {
+  //       categoryList = dataList
+  //           .map((spacecraft) => new Category.fromJson(spacecraft))
+  //           .toList();
+  //       // categoryList.insert(
+  //       //     0, new Category(categoryId: 0, categoryName: "All"));
+  //     }
+  //     Provider.of<ApplicationProvider>(context, listen: false)
+  //         .setCategoryName(categoryList.first.categoryName!);
+  //     Provider.of<ApplicationProvider>(context, listen: false)
+  //         .setCategoryList(categoryList);
+  //     tabController = TabController(length: categoryList.length, vsync: this);
+  //     setState(() {});
+  //
+  //     tabController!.addListener(() {
+  //       setState(() {
+  //         // selectedIndex = tabController!.index;
+  //       });
+  //     });
+  //   } else {
+  //     print("some error occured!!!");
+  //   }
+  // }
 
   void onButtonpress(context) {
     showModalBottomSheet(
       isScrollControlled: false,
       context: context,
       builder: (context) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: InkWell(
-                      child: Icon(Icons.clear_outlined),
-                      onTap: () {
-                        Navigator.pop(context);
-                      }),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 25, bottom: 20),
-                  child: Text(
-                    "Menu categories",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        return Consumer<ApplicationProvider>(builder: (context, provider, _) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: InkWell(
+                        child: Icon(Icons.clear_outlined),
+                        onTap: () {
+                          Navigator.pop(context);
+                        }),
                   ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 25, bottom: 20),
+                    child: Text(
+                      "Menu categories",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ],
+              ),
+              Flexible(
+                child: ListView.separated(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  physics: ScrollPhysics(),
+                  itemCount: provider.categoryList.length,
+                  itemBuilder: (context, index) {
+                    // var count = Provider.of<ApplicationProvider>(context, listen: false).selectedRestModel.items!.
+                    // where((c) => c.categoryId == categoryList[index].categoryId).toList();
+
+                    return ListTile(
+                      title: Text(
+                          provider.categoryList[index].categoryName.toString()),
+                      // trailing: Text("${count.length}"),
+                      // trailing: Text('5'),
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return Dividersection();
+                  },
                 ),
-              ],
-            ),
-            Flexible(child:ListView.separated(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              physics: ScrollPhysics(),
-              itemCount: categoryList.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(categoryList[index].categoryName.toString()),
-                  trailing: Text("$index"),
-                  // trailing: Text('5'),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return Dividersection();
-              },
-            ),
-            ),
-            // Consumer<ApplicationProvider>(builder: (context, provider, _) {
-            //   return Flexible(
-            //     child: ListView.separated(
-            //         scrollDirection: Axis.vertical,
-            //         separatorBuilder: (context, index) {
-            //           return Dividersection();
-            //         },
-            //         physics: ScrollPhysics(),
-            //         shrinkWrap: true,
-            //         itemCount: categoryList.length,
-            //         itemBuilder: (BuildContext context, int index) {
-            //           Item itemModel =
-            //               provider.filteredLoadedProductModelList[index];
-            //           return ListTile(
-            //             title:
-            //                 Text(categoryList[index].categoryName.toString()),
-            //             trailing: Text(provider.filteredLoadedProductModelList.length.toString())
-            //
-            //             // trailing: Text('5'),
-            //           );
-            //         }),
-            //   );
-            // })
-          ],
-        );
+              ),
+              // Consumer<ApplicationProvider>(builder: (context, provider, _) {
+              //   return Flexible(
+              //     child: ListView.separated(
+              //         scrollDirection: Axis.vertical,
+              //         separatorBuilder: (context, index) {
+              //           return Dividersection();
+              //         },
+              //         physics: ScrollPhysics(),
+              //         shrinkWrap: true,
+              //         itemCount: categoryList.length,
+              //         itemBuilder: (BuildContext context, int index) {
+              //           Item itemModel =
+              //               provider.filteredLoadedProductModelList[index];
+              //           return ListTile(
+              //             title:
+              //                 Text(categoryList[index].categoryName.toString()),
+              //             trailing: Text(provider.filteredLoadedProductModelList.length.toString())
+              //
+              //             // trailing: Text('5'),
+              //           );
+              //         }),
+              //   );
+              // })
+            ],
+          );
+        });
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -856,28 +760,45 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 }
 
 class PersistentHeader extends SliverPersistentHeaderDelegate {
-  final Widget? widget;
+  PersistentHeader(this.tabBar);
 
-  PersistentHeader({this.widget});
+  final TabBar tabBar;
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      padding: EdgeInsets.zero,
-      color: Colors.white,
-      child: Card(elevation: 2, child: Center(child: widget)),
-    );
+        padding: const EdgeInsets.only(
+            left: 20.0, right: 20.0, top: 8.0, bottom: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(bottom: BorderSide(color: Colors.grey, width: 1)),
+        ),
+        child: Container(
+          margin: EdgeInsets.only(left: 8),
+          child: tabBar,
+        )
+        // Row(
+        //   children: [
+        //     // InkWell(
+        //     //     child: Icon(Icons.menu,
+        //     //         color: Colors.deepOrange),
+        //     //     onTap: () {
+        //     //       // onButtonpress(context);
+        //     //     }),
+        //
+        //   ],
+        // )
+        );
   }
 
   @override
-  double get maxExtent => 56.0;
-
-  @override
-  double get minExtent => 56.0;
-
-  @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
+    return false;
   }
 }

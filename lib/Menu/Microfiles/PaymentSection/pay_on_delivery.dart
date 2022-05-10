@@ -55,12 +55,12 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
                 title: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Text("Cash",style: TextStyle(fontWeight: FontWeight.w600,
-                  color: Colors.deepOrange),),
+                  color: widget.delType == 1?Colors.deepOrange:Colors.grey),),
                 ),
-                subtitle: Text(
+                subtitle: Text(widget.delType == 1?
                   "Pay cash at the time of delivery.We\n"
                   "reccomended you use online payments for"
-                  "\ncontacless delivery",
+                  "\ncontacless delivery":"Cash on delivery not available",
                   style: TextStyle(fontSize: 11,color: Colors.grey),
                 ),
                 leading: Container(
@@ -80,9 +80,11 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
                value: _value,
                shape: CircleBorder(),
                onChanged: (bool? value) {
-                 setState(() {
-                   _value = value!;
-                 });
+                 if(widget.delType == 1){
+                   setState(() {
+                     _value = value!;
+                   });
+                 }
                },
              ),
 

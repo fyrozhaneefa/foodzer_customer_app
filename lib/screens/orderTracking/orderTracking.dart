@@ -38,7 +38,7 @@ class _OrderTrackingState extends State<OrderTracking> {
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
   String googleApiKey = "AIzaSyDkqhaT1weCdUwCPuUT9OqKsGbCQPGsMM8";
-  int _processIndex = 1;
+  int _processIndex = 0;
   BitmapDescriptor? driverIcon, restaurantsIcon, destinationIcon;
   StreamSubscription<DocumentSnapshot>? _eventsSubscription;
 

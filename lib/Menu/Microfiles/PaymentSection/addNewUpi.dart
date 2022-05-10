@@ -58,7 +58,7 @@ class _AddNewUpiState extends State<AddNewUpi> {
                   color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
             ),
             SizedBox(height: 3,),
-            Text("${provider.cartModelList.length} item . Total: ₹${provider.totalCartPrice}",
+            Text("${provider.cartModelList.length} item . Total: ₹${provider.totalWithoutTax}",
                 style: TextStyle(
                   color: Colors.grey.shade500,
                   fontSize: 12,
@@ -148,7 +148,7 @@ class _AddNewUpiState extends State<AddNewUpi> {
     Map<String, dynamic> inputParams = {
       "orderId": itemOrderId,
       "orderAmount": Provider.of<ApplicationProvider>(context, listen: false)
-          .totalCartPrice
+          .totalWithoutTax
           .toString(),
       "customerName": customerName,
       "orderNote": orderNote,
@@ -271,7 +271,7 @@ class _AddNewUpiState extends State<AddNewUpi> {
     });
     var map = new Map<String, dynamic>();
     map['amount'] = Provider.of<ApplicationProvider>(context, listen: false)
-        .totalCartPrice
+        .totalWithoutTax
         .toString();
     map['order_id'] = itemOrderId;
 

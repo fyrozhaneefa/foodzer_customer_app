@@ -410,6 +410,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                         } else{
                           selectedTip = index;
                           tipValue = int.parse(tips[index]);
+                          Provider.of<ApplicationProvider>(context, listen: false).setTipValue(tipValue);
                           setState(() {
 
                           });
@@ -448,13 +449,14 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
       // if(null!=provider.selectedAddressModel.addressId && provider.selectedAddressModel.addressId!.isNotEmpty){
       //   getDeliveryCharge();
       // }
-      for (Item item in provider.cartModelList) {
-        totalAmt = totalAmt + item.totalPrice!;
-        provider.setItemTotal(totalAmt);
-      }
-      taxData = provider.calculateTax(taxPercentage, totalAmt, false);
-      toPayAmt = taxData['totalAmtWithTax']+tipValue+provider.deliveryFee;
-      provider.setTotalCartPrice(toPayAmt);
+      // provider.calculateTotal();
+      // for (Item item in provider.cartModelList) {
+      //   totalAmt = totalAmt + item.totalPrice!;
+      //   provider.setItemTotal(totalAmt);
+      // }
+      // taxData = provider.calculateTax(taxPercentage, totalAmt, false);
+      // toPayAmt = taxData['totalAmtWithTax']+tipValue+provider.deliveryFee;
+      // provider.setTotalCartPrice(toPayAmt);
       return Container(
         height: 270,
         width: Helper.getScreenWidth(context) * 1,
@@ -474,7 +476,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 15, top: 20),
-                  child: Text('₹${totalAmt.toStringAsFixed(2)}'),
+                  child: Text('₹${provider.totalWithoutTax}'),
                 )
               ],
             ),
@@ -558,7 +560,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                     margin: EdgeInsets.only(left: 20),
                     height: 50,
                     message:
-                        'Restaurant GST : ₹${taxData['totalTaxAmt'].toStringAsFixed(2)}',
+                        'Restaurant GST : ₹${provider.taxData['totalTaxAmt']}',
                     textStyle: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.w500),
                     triggerMode: TooltipTriggerMode.tap,
@@ -572,7 +574,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 15, top: 15),
-                  child: Text('₹${taxData['totalTaxAmt'].toStringAsFixed(2)}'),
+                  child: Text('₹${provider.taxData['totalTaxAmt']}'),
                 ),
               ],
             ),
@@ -592,7 +594,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 15, top: 20),
-                  child: Text('₹${provider.totalCartPrice}',
+                  child: Text('₹${provider.toPayAmt}',
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Colors.black.withOpacity(.6))),
@@ -628,7 +630,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: null !=
+                        child: isLoggedIn && null !=
                                     provider.selectedAddressModel.addressId &&
                                 provider
                                     .selectedAddressModel.addressId!.isNotEmpty
@@ -701,7 +703,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                       ]),
                                 ),
                               )
-                            : InkWell(
+                            :!isLoggedIn? Container(): InkWell(
                                 onTap: () {
                                   showModalBottomSheet(
                                       shape: RoundedRectangleBorder(
@@ -772,7 +774,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
             ),
             ListTile(
               title: Text(
-                "₹${provider.totalCartPrice}",
+                "₹${provider.toPayAmt}",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -917,6 +919,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
         await http.post(Uri.parse(ApiData.MERCHANT_BRANCH_TAX), body: map);
     var json = convert.jsonDecode(response.body);
     taxPercentage = double.parse(json['tax_details']);
+    Provider.of<ApplicationProvider>(context, listen: false).setTaxPercentage(taxPercentage);
     setState(() {});
   }
 }

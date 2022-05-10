@@ -12,6 +12,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 class ApplicationProvider with ChangeNotifier {
   final geoLocatorService = GeolocatorService();
   final placesService = PlacesService();
@@ -20,20 +22,26 @@ class ApplicationProvider with ChangeNotifier {
   List<PlaceSearch>? searchResults;
   String? currentAddress;
   List<Item> cartModelList = [];
+
   List<Item> filteredLoadedProductModelList = [];
-  List<Item> searchItemList=[];
+  List<Item> searchItemList = [];
   SingleRestModel selectedRestModel = new SingleRestModel();
   AddressModel selectedAddressModel = new AddressModel();
   List<AddonModel> addonModelList = [];
-  int? selectedCategoryIndex;
+  int? selectedCategoryId;
   String? catName;
   List<Category> categoryList = [];
-  double? totalCartPrice;
+  double? totalWithoutTax;
   double? itemTotal;
   double deliveryFee = 0;
-  String orderTime ="";
+  String orderTime = "";
   bool isItemLoading = false;
   String? currentOrderId = "";
+  double totalAmt = 0;
+  double toPayAmt = 0;
+  int deliveryBoyTip = 0;
+  var taxData = {};
+  double setTexPercentage = 0;
   ApplicationProvider() {
     setCurrentLocation();
   }
@@ -78,18 +86,22 @@ class ApplicationProvider with ChangeNotifier {
   setAddressModel(AddressModel addressModel) async {
     this.selectedAddressModel = addressModel;
   }
+
   setOrderId(String orderId) async {
     this.currentOrderId = orderId;
   }
+
   clearSearch() async {
     this.searchItemList = [];
     notifyListeners();
   }
 
   setSearchItemList(String val) async {
-  searchItemList = selectedRestModel.items!.where((element) =>
-      element.itemName!.toLowerCase().contains(val.toLowerCase())).toList();
-  notifyListeners();
+    searchItemList = selectedRestModel.items!
+        .where((element) =>
+            element.itemName!.toLowerCase().contains(val.toLowerCase()))
+        .toList();
+    notifyListeners();
   }
 
   clearData() async {
@@ -112,21 +124,20 @@ class ApplicationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  setTotalCartPrice(double totalAmt) async {
-    totalCartPrice = totalAmt;
-  }
   setItemTotal(double itemTotal) async {
-
     this.itemTotal = itemTotal;
-    if(null!=selectedAddressModel.addressId && selectedAddressModel.addressId!.isNotEmpty){
+    if (null != selectedAddressModel.addressId &&
+        selectedAddressModel.addressId!.isNotEmpty) {
       getDeliveryCharge(itemTotal);
     }
 
     // notifyListeners();
-
-
   }
 
+  clearDeliveryFee() {
+    this.deliveryFee = 0;
+    notifyListeners();
+  }
 
   setCurrentLocation() async {
     currentLocation = await geoLocatorService.getCurrentLocation();
@@ -146,7 +157,7 @@ class ApplicationProvider with ChangeNotifier {
   setCurrentRestModel(SingleRestModel restModel) async {
     this.selectedRestModel = restModel;
     this.filteredLoadedProductModelList = [];
-    this.selectedCategoryIndex = 0;
+    this.selectedCategoryId = 0;
 
     notifyListeners();
   }
@@ -156,9 +167,8 @@ class ApplicationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
-  addProductData(List<Item> productList, bool isFilteredList, int position) {
-    selectedCategoryIndex = position;
+  addProductData(List<Item> productList, bool isFilteredList) {
+    // selectedCategoryId = categoryId;
 
     // if (!isFilteredList) {
     //   allItemsList = productList;
@@ -172,8 +182,9 @@ class ApplicationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  currentSelectedCategory(int selectedIndex) {
-    selectedCategoryIndex = selectedIndex;
+  currentSelectedCategory(int categoryId) {
+    print(categoryId.toString() + "zzzzzzzzzzzzzzzzzzzzzzzzzz");
+    selectedCategoryId = categoryId;
     notifyListeners();
   }
 
@@ -196,73 +207,128 @@ class ApplicationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  updateProduct(Item product, bool isIncrement, int enteredQty) {
-    int index = filteredLoadedProductModelList
+  updateProduct(Item product, bool isIncrement, int enteredQty,
+      ) {
+    // if(isRepeatLast){
+    //
+    //   product.addonsList=cartModelList
+    //       .where((element) => element.lastItemTempId
+    //       == product.tempId).single.addonsList!;
+    // }
+    int filteredItemIndex = filteredLoadedProductModelList
         .indexWhere((element) => element.itemId == product.itemId);
-
-    if (index > 0) {
+    int cartIndex = null != product.tempId && product.tempId!.isNotEmpty
+        ? cartModelList
+            .indexWhere((element) => element.tempId == product.tempId)
+        : -1;
+    if (filteredItemIndex != -1) {
       if (isIncrement) {
-        // filteredLoadedProductModelList[index].enteredQty = enteredQty;
+        // filteredLoadedProductModelList[cartIndex].enteredQty = enteredQty;
         if (null != cartModelList && cartModelList.length > 0) {
-          if (!cartModelList.contains(product)) {
-            filteredLoadedProductModelList[index] =
-                calculateValue(product, enteredQty);
-            cartModelList.add(filteredLoadedProductModelList[index]);
+          if (cartIndex == -1) {
+            product.tempId = getTempId();
+            product = calculateValue(product, enteredQty);
+
+            cartModelList.add(product);
           } else {
-            int cartIndex = cartModelList.indexOf(product);
             cartModelList[cartIndex] = calculateValue(product, enteredQty);
           }
         } else {
-          filteredLoadedProductModelList[index] =
-              calculateValue(product, enteredQty);
-          cartModelList.add(filteredLoadedProductModelList[index]);
+          product.tempId = getTempId();
+          product = calculateValue(product, enteredQty);
+          cartModelList.add(product);
         }
       } else {
-        int cartIndex = cartModelList.indexOf(product);
-
         if (null != product.enteredQty && product.enteredQty! > 1) {
-          filteredLoadedProductModelList[index] =
-              calculateValue(product, enteredQty);
+          // filteredLoadedProductModelList[filteredItemIndex] =
+          //     calculateValue(product, enteredQty);
 
           cartModelList[cartIndex] = calculateValue(product, enteredQty);
         } else {
-          cartModelList.remove(product);
+          filteredLoadedProductModelList[filteredItemIndex].addonsList = [];
+          cartModelList.removeAt(cartIndex);
 
-          filteredLoadedProductModelList[index] =
-              calculateValue(product, enteredQty);
+          // filteredLoadedProductModelList[filteredItemIndex] =
+          //     calculateValue(product, enteredQty);
         }
       }
     } else {
       if (isIncrement) {
         if (null != cartModelList && cartModelList.length > 0) {
-          if (!cartModelList.contains(product)) {
+          if (cartIndex == -1) {
+            product.tempId = getTempId();
             product = calculateValue(product, enteredQty);
             cartModelList.add(product);
           } else {
-            int cartIndex = cartModelList.indexOf(product);
             cartModelList[cartIndex] = calculateValue(product, enteredQty);
           }
         } else {
+          product.tempId = getTempId();
           product = calculateValue(product, enteredQty);
           cartModelList.add(product);
         }
       } else {
-        int cartIndex = cartModelList.indexOf(product);
-
         if (null != product.enteredQty && product.enteredQty! > 1) {
           cartModelList[cartIndex] = calculateValue(product, enteredQty);
         } else {
-          cartModelList.remove(product);
+          cartModelList.removeAt(cartIndex);
         }
       }
     }
     int allItemIndex = selectedRestModel.items!
         .indexWhere((element) => element.itemId == product.itemId);
-    if (allItemIndex > -1) {
-      selectedRestModel.items![allItemIndex] =
-          calculateValue(product, enteredQty);
+    List<Item> items = cartModelList
+        .where((element) => element.itemId == product.itemId)
+        .toList();
+    int qty=0;
+    if(null!=items && items.length>0){
+      for(Item item in items){
+        qty=qty+item.enteredQty!;
+      }
     }
+    Item item = new Item();
+    String kson = Item.ToPreferenceJson(product);
+    var jsonData = json.decode(kson);
+    item = Item.fromJson(jsonData);
+    item.lastItemTempId=product.tempId;
+
+    if (allItemIndex > -1) {
+    filteredLoadedProductModelList[filteredItemIndex] =
+        calculateValue(item, qty);
+    selectedRestModel.items![allItemIndex] =
+        calculateValue(item, qty);
+
+    }
+    calculateTotal();
     notifyListeners();
+  }
+
+  static String getTempId() {
+    String date = "";
+
+    DateTime lastUpdateTime = DateTime.now();
+
+    date = (lastUpdateTime.day.toString().length == 1
+            ? "0" + lastUpdateTime.day.toString()
+            : lastUpdateTime.day.toString()) +
+        (lastUpdateTime.hour.toString().length == 1
+            ? "0" + lastUpdateTime.hour.toString()
+            : lastUpdateTime.hour.toString()) +
+        (lastUpdateTime.minute.toString().length == 1
+            ? "0" + lastUpdateTime.minute.toString()
+            : lastUpdateTime.minute.toString()) +
+        (lastUpdateTime.second.toString().length == 1
+            ? "0" + lastUpdateTime.second.toString()
+            : lastUpdateTime.second.toString()) +
+        (lastUpdateTime.millisecond.toString().length == 0
+            ? "000"
+            : lastUpdateTime.millisecond.toString().length == 1
+                ? "00" + lastUpdateTime.millisecond.toString()
+                : lastUpdateTime.millisecond.toString().length == 2
+                    ? "0" + lastUpdateTime.millisecond.toString()
+                    : lastUpdateTime.millisecond.toString());
+
+    return date;
   }
 
   Item calculateValue(Item product, int enteredQty) {
@@ -282,19 +348,41 @@ class ApplicationProvider with ChangeNotifier {
 
   getDeliveryCharge(double total) async {
     var map = new Map<String, dynamic>();
-    map['merchant_branch_id'] = selectedRestModel
-        .merchantBranchId
-        .toString();
-    map['lat'] =  selectedAddressModel.addressLat;
+    map['merchant_branch_id'] = selectedRestModel.merchantBranchId.toString();
+    map['lat'] = selectedAddressModel.addressLat;
     map['lng'] = selectedAddressModel.addressLng;
     map['order_amt'] = total.toString();
     var response =
-    await http.post(Uri.parse(ApiData.GET_DELIVERY_CHARGE), body: map);
+        await http.post(Uri.parse(ApiData.GET_DELIVERY_CHARGE), body: map);
     var jsonData = json.decode(response.body);
-    deliveryFee = null!=jsonData['delivery_fee']? double.parse(jsonData['delivery_fee'].toString()):0;
+    deliveryFee = null != jsonData['delivery_fee']
+        ? double.parse(jsonData['delivery_fee'].toString())
+        : 0;
+    print(deliveryFee.toString() + "del");
     orderTime = jsonData['order_time'];
 
     notifyListeners();
+  }
 
+  setTipValue(int tip) {
+    this.deliveryBoyTip = tip;
+    notifyListeners();
+  }
+
+  setTaxPercentage(double tax) {
+    this.setTexPercentage = tax;
+    notifyListeners();
+  }
+
+  calculateTotal() async {
+    totalAmt = 0;
+    for (Item item in cartModelList) {
+      totalAmt = totalAmt + item.totalPrice!;
+    }
+    this.setItemTotal(totalAmt);
+    taxData = calculateTax(setTexPercentage, totalAmt, false);
+    toPayAmt = taxData['totalAmtWithTax'] + deliveryBoyTip + deliveryFee;
+    totalWithoutTax = totalAmt;
+    notifyListeners();
   }
 }
