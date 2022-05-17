@@ -179,6 +179,7 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
     });
 
     if (jsonData['error_code'] == 0) {
+
       Provider.of<ApplicationProvider>(context, listen: false).clearData();
       Provider.of<ApplicationProvider>(context, listen: false).setOrderId(itemOrderId.toString());
       showOrderPlaceDialogue();

@@ -23,7 +23,8 @@ const todoColor = Color(0xffd1d2d7);
 
 class OrderTracking extends StatefulWidget {
   final String orderId;
-  OrderTracking(this.orderId);
+  bool isPaymentDone;
+  OrderTracking(this.orderId, this.isPaymentDone);
   @override
   _OrderTrackingState createState() => _OrderTrackingState();
 }
@@ -63,8 +64,20 @@ class _OrderTrackingState extends State<OrderTracking> {
   @override
   void initState() {
     super.initState();
-    _getPolyline();
-    getBoyLocation();
+   if(widget.isPaymentDone){
+     _processIndex = 1;
+     setState(() {
+
+     });
+     _getPolyline();
+     getBoyLocation();
+   } else{
+     _processIndex = 0;
+     setState(() {
+
+     });
+   }
+
   }
 
   @override
@@ -469,7 +482,27 @@ class _OrderTrackingState extends State<OrderTracking> {
       // Uint8List imageData = await getDeliveryBoyMarker();
       // setState(() {});
       var data = event.data();
+      String orderStatus;
+      orderStatus = event.get("orderStatus");
+     setState(() {
 
+     });
+     if(orderStatus == "1"){
+       _processIndex =3;
+       setState(() {
+
+       });
+     } else if(orderStatus == "2"){
+       _processIndex =4;
+       setState(() {
+
+       });
+     } else{
+       _processIndex = 5;
+       setState(() {
+
+       });
+     }
       if(null!=_controller) {
         await _controller!
             .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(

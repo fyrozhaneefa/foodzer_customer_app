@@ -153,7 +153,10 @@ class _SingleItemViewState extends State<SingleItemView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('INR '+widget.itemModel.itemPrice!.toStringAsFixed(2),
+                                Text(
+                                    'INR ' +
+                                        widget.itemModel.itemPrice!
+                                            .toStringAsFixed(2),
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 16)),
@@ -174,21 +177,42 @@ class _SingleItemViewState extends State<SingleItemView> {
                                     children: [
                                       IconButton(
                                         onPressed: () {
-                                          if (totalQty == 1) {
-                                            // Navigator.of(context).pop();
-                                          } else {
-                                            setState(() {
-                                              totalQty--;
-                                              totalPrice = double.parse(
-                                                      totalPrice.toString()) -
-                                                  double.parse(
-                                                      itemPrice.toString());
-                                            });
-                                          }
+
+                                       if(widget.itemModel.isAddon == 0) {
+                                         if(totalQty == 0){
+                                           Navigator.of(context).pop();
+                                         } else{
+                                           widget.itemModel.enteredQty = widget.itemModel.enteredQty! - 1;
+                                           Provider.of<ApplicationProvider>(
+                                               context,
+                                               listen: false)
+                                               .updateProduct( widget.itemModel, false, false);
+                                           setState(() {
+                                             totalQty = widget.itemModel.enteredQty!;
+                                             totalPrice = double.parse(
+                                                 totalPrice.toString()) -
+                                                 double.parse(
+                                                     itemPrice.toString());
+                                           });
+                                         }
+                                       } else{
+                                         showDeleteDialogForMultipleItem(context);
+                                       }
+                                          // if (totalQty == 1) {
+                                          //   // Navigator.of(context).pop();
+                                          // } else {
+                                          //   setState(() {
+                                          //     totalQty--;
+                                          //     totalPrice = double.parse(
+                                          //             totalPrice.toString()) -
+                                          //         double.parse(
+                                          //             itemPrice.toString());
+                                          //   });
+                                          // }
                                         },
                                         icon: Icon(
                                           Icons.remove,
-                                          color: totalQty == 1
+                                          color: totalQty == 0
                                               ? Colors.deepOrange.shade100
                                               : Colors.deepOrange,
                                         ),
@@ -206,32 +230,89 @@ class _SingleItemViewState extends State<SingleItemView> {
                                       ),
                                       IconButton(
                                         onPressed: () {
+                                          // if (Provider.of<ApplicationProvider>(
+                                          //             context,
+                                          //             listen: false)
+                                          //         .cartModelList
+                                          //         .isEmpty ||
+                                          //     Provider.of<ApplicationProvider>(
+                                          //                 context,
+                                          //                 listen: false)
+                                          //             .cartModelList
+                                          //             .first
+                                          //             .itemMerchantBranch ==
+                                          //         Provider.of<ApplicationProvider>(
+                                          //                 context,
+                                          //                 listen: false)
+                                          //             .selectedRestModel
+                                          //             .merchantBranchId) {
+                                            if (totalQty == 0) {
 
-                                          if(totalQty==0){
-                                            widget.itemModel.enteredQty=1;
-                                            showModalBottomSheet(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(14),
-                                                    topRight: Radius.circular(14),
-                                                  ),
-                                                ),
-                                                isScrollControlled: true,
-                                                context: context,
-                                                builder: (context) {
-                                                  return CartAddons(widget.itemModel,true);
-                                                }).then((value) {
-                                                  if(null!=value){
-                                                    totalQty=value;
-                                                    setState(() {
-
-                                                    });
+                                              if (null !=
+                                                      widget
+                                                          .itemModel.isAddon &&
+                                                  widget.itemModel.isAddon ==
+                                                      1) {
+                                                showModalBottomSheet(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(14),
+                                                        topRight:
+                                                            Radius.circular(14),
+                                                      ),
+                                                    ),
+                                                    isScrollControlled: true,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return CartAddons(
+                                                          widget.itemModel,
+                                                          true);
+                                                    }).then((value) {
+                                                  if (null != value) {
+                                                    totalQty = value;
+                                                    setState(() {});
                                                   }
-                                            });
-                                          }else {
-                                            addDuplicateItem(context);
-                                          }
-
+                                                });
+                                              } else {
+                                                widget.itemModel.enteredQty = 1;
+                                                // widget.itemModel.enteredQty= widget.itemModel.enteredQty!+1;
+                                                setState(() {
+                                                  totalQty = widget
+                                                      .itemModel.enteredQty!;
+                                                });
+                                                Provider.of<ApplicationProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .updateProduct(
+                                                        widget.itemModel,
+                                                        true,
+                                                        false);
+                                              }
+                                            } else if (totalQty > 0 &&
+                                                widget.itemModel.isAddon == 0) {
+                                              widget.itemModel.enteredQty =
+                                                  widget.itemModel.enteredQty! +
+                                                      1;
+                                              Provider.of<ApplicationProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .updateProduct(
+                                                      widget.itemModel,
+                                                      true,
+                                                      false);
+                                              setState(() {
+                                                totalQty = widget
+                                                    .itemModel.enteredQty!;
+                                              });
+                                            } else {
+                                              addDuplicateItem(context);
+                                            }
+                                          // } else {
+                                          //   showAlertDialog(context);
+                                          // }
 
                                           // setState(() {
                                           //   itemCount++; //_two => TextEditingController of 2nd TextField
@@ -549,7 +630,7 @@ class _SingleItemViewState extends State<SingleItemView> {
                       //           ],
                       //         ),
                       //       )
-                          // : Container(),
+                      // : Container(),
                       Divider(
                           height: 15,
                           thickness: 6,
@@ -813,7 +894,73 @@ class _SingleItemViewState extends State<SingleItemView> {
       //     .setItemAddons(addonModelList);
     }
   }
+  void showDeleteDialogForMultipleItem(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = Container(
+      decoration: BoxDecoration(
+        color: Colors.deepOrange.shade50,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: TextButton(
+        child: Text("No",
+            style: TextStyle(
+                color: Colors.deepOrange,
+                fontSize: 16,
+                fontWeight: FontWeight.w600)),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+    Widget continueButton = Container(
+      width: Helper.getScreenWidth(context) * .3,
+      decoration: BoxDecoration(
+          color: Colors.deepOrange,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.deepOrange, width: 1)),
+      child: TextButton(
+        child: Text(
+          "Yes",
+          style: TextStyle(
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  ItemBasketHome()));
+        },
+      ),
+    );
 
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text(
+        "Remove item from cart?",
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      content: Text(
+          "The item has multiple customizations added. Proceed to cart to remove item?",
+          style: TextStyle(height: 1.3)),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
   void showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = Container(
@@ -850,14 +997,14 @@ class _SingleItemViewState extends State<SingleItemView> {
               .clear();
           widget.itemModel.addonsList =
               addOnList.where((element) => element.isSelected == true).toList();
-
+          widget.itemModel.enteredQty = totalQty;
           Provider.of<ApplicationProvider>(context, listen: false)
               .updateProduct(
                   widget.itemModel,
                   null == widget.itemModel.enteredQty ||
                       null != widget.itemModel.enteredQty &&
                           totalQty > widget.itemModel.enteredQty!,
-                  totalQty);
+                  false);
           Navigator.pop(context);
           Navigator.pop(context);
         },
@@ -956,10 +1103,8 @@ class _SingleItemViewState extends State<SingleItemView> {
                                   isScrollControlled: true,
                                   context: context,
                                   builder: (context) {
-                                    return CartAddons(widget.itemModel,true);
-                                  }).then((value) {
-
-                              });
+                                    return CartAddons(widget.itemModel, true);
+                                  }).then((value) {});
                             },
                             child: Text(
                               "I'll Choose",
@@ -983,7 +1128,6 @@ class _SingleItemViewState extends State<SingleItemView> {
                           margin: EdgeInsets.only(right: 15, left: 10),
                           child: ElevatedButton(
                             onPressed: () {
-
                               totalQty++;
                               // widget.itemModel.enteredQty = itemCount;
                               if (Provider.of<ApplicationProvider>(context,
@@ -1012,33 +1156,11 @@ class _SingleItemViewState extends State<SingleItemView> {
                                   //   isMandatory = true;
                                   //   setState(() {});
                                   // } else {
-                                    widget.itemModel.addonsList = addOnList
-                                        .where((element) =>
-                                            element.isSelected == true)
-                                        .toList();
-                                    Provider.of<ApplicationProvider>(context,
-                                            listen: false)
-                                        .updateProduct(
-                                            widget.itemModel,
-                                            null ==
-                                                    widget
-                                                        .itemModel.enteredQty ||
-                                                null !=
-                                                        widget.itemModel
-                                                            .enteredQty &&
-                                                    totalQty >
-                                                        widget.itemModel
-                                                            .enteredQty!,
-                                            totalQty);
-                                    Navigator.pop(context);
-                                    isMandatory = false;
-                                    setState(() {});
-                                  // }
-                                } else {
                                   widget.itemModel.addonsList = addOnList
                                       .where((element) =>
                                           element.isSelected == true)
                                       .toList();
+                                  widget.itemModel.enteredQty = totalQty;
                                   Provider.of<ApplicationProvider>(context,
                                           listen: false)
                                       .updateProduct(
@@ -1050,7 +1172,29 @@ class _SingleItemViewState extends State<SingleItemView> {
                                                   totalQty >
                                                       widget.itemModel
                                                           .enteredQty!,
-                                          totalQty);
+                                          true);
+                                  Navigator.pop(context);
+                                  isMandatory = false;
+                                  setState(() {});
+                                  // }
+                                } else {
+                                  widget.itemModel.addonsList = addOnList
+                                      .where((element) =>
+                                          element.isSelected == true)
+                                      .toList();
+                                  widget.itemModel.enteredQty = totalQty;
+                                  Provider.of<ApplicationProvider>(context,
+                                          listen: false)
+                                      .updateProduct(
+                                          widget.itemModel,
+                                          null == widget.itemModel.enteredQty ||
+                                              null !=
+                                                      widget.itemModel
+                                                          .enteredQty &&
+                                                  totalQty >
+                                                      widget.itemModel
+                                                          .enteredQty!,
+                                          false);
                                   Navigator.pop(context);
                                 }
                               } else {

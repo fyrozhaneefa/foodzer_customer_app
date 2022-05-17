@@ -9,10 +9,12 @@ import 'package:foodzer_customer_app/Services/places_service.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+import 'dart:convert';
+import 'package:flutter_geocoder/geocoder.dart' as geoCo;
 
 class ChangeAddressFromHome extends StatefulWidget {
   const ChangeAddressFromHome({Key? key}) : super(key: key);
@@ -28,12 +30,17 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
   TextEditingController searchController = new TextEditingController();
   bool isLoading = false;
   bool isFromCart = false;
+  int? delNotDel;
+  LatLng? _center ;
+  Position? currentLocation;
+  String? currentAddress;
   @override
   void initState() {
     UserPreference().getUserData().then((value) {
       userModel = value;
       setState(() {});
       getUserAddress();
+      getUserLocation();
     });
     super.initState();
   }
@@ -84,34 +91,62 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
+        body: isLoading?
+        Center(
+          child: CircularProgressIndicator(color: Colors.deepOrangeAccent,),
+        )
+            :
+        SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
 
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListTile(
-                minLeadingWidth: 2,
-                leading: Icon(
-                  Icons.gps_fixed,
-                ),
-                title: Text(
-                  'Current location',
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Using GPS',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                    Container(
-                      height: 10,
-                    ),
-                    Divider(thickness: 3, height: 2)
-                  ],
+              InkWell(
+                onTap: (){
+                 if(delNotDel == 0){
+                   UserPreference().setLatLng(_center!.latitude.toString(), _center!.longitude.toString());
+                   UserPreference().setCurrentAddress(currentAddress!);
+                   Navigator.of(context).push(
+                       MaterialPageRoute(builder: (context) =>
+                           HomeScreen()));
+                 }
+                  },
+                child: ListTile(
+                  minLeadingWidth: 2,
+                  leading: Icon(
+                    Icons.gps_fixed,
+                      color: delNotDel==1?Colors.grey:Colors.black
+                  ),
+                  title: Text(
+                    'Deliver to current location',
+                    style: TextStyle(color: delNotDel==1?Colors.grey:Colors.black),
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    delNotDel==1? Container(
+                      padding: EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        color: Colors.pink.shade100,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(4),
+                        ),
+                      ),
+                      child: Text(
+                          'Outside Delivery Zone',
+                          style: TextStyle(fontSize: 12, color: Colors.black),
+                        ),
+                    ):Container(),
+                      Container(
+                        height: 10,
+                      ),
+
+                    ],
+                  ),
                 ),
               ),
+              Divider(thickness: 3, height: 2),
              applicationBloc.searchResults != null &&
                   applicationBloc.searchResults?.length != 0?
                 Container(
@@ -204,6 +239,39 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
           ),
         ));
   }
+  Future<Position> locateUser() async {
+    return Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+  }
+
+  getUserLocation() async {
+    currentLocation = await locateUser();
+    setState(() {
+      _center = LatLng(currentLocation!.latitude, currentLocation!.longitude);
+    });
+    final cords = geoCo.Coordinates(_center!.latitude, _center!.longitude);
+    var address =
+    await geoCo.Geocoder.local.findAddressesFromCoordinates(cords);
+    currentAddress = address[0].addressLine;
+    setState(() {
+
+    });
+    getDeliverableArea(_center!.latitude.toString(), _center!.longitude.toString());
+    print('center $_center');
+  }
+  getDeliverableArea(String lat,String lng) async {
+
+    var map = new Map<String, dynamic>();
+    map['lat'] = lat;
+    map['lng'] = lng;
+
+    var response =
+    await http.post(Uri.parse(ApiData.GET_DELIVERABLE_AREA), body: map);
+    var json = jsonDecode(response.body);
+    setState(() {
+      delNotDel = json;
+    });
+  }
   getUserAddress() async {
     isLoading = true;
     setState(() {});
@@ -212,7 +280,7 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
 
     var response =
     await http.post(Uri.parse(ApiData.GET_USER_ADDRESS), body: map);
-    var json = convert.jsonDecode(response.body);
+    var json = jsonDecode(response.body);
     List dataList = json['address_list'];
     isLoading = false;
     setState(() {});

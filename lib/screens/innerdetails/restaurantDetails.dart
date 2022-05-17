@@ -13,6 +13,7 @@ import 'package:foodzer_customer_app/screens/innerdetails/section/productCategor
 import 'package:foodzer_customer_app/screens/innerdetails/section/productCategoryItem.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/section/restaurantProductsList.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
+import 'package:foodzer_customer_app/utils/shimmer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:vertical_scrollable_tabview/vertical_scrollable_tabview.dart';
@@ -48,6 +49,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
   List<Item> filteredLoadedProductModelList = [];
   TabController? tabController;
 
+
   @override
   void dispose() {
     SchedulerBinding.instance!.addPostFrameCallback((_) {
@@ -70,12 +72,12 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
     return Scaffold(
         body: SafeArea(
       child: isLoading
-          ? Center(
-              child: CircularProgressIndicator(
-              color: Colors.deepOrangeAccent,
-            ))
+          ?Center(
+        child: CircularProgressIndicator(color: Colors.deepOrangeAccent,),
+      )
           : Consumer<ApplicationProvider>(builder: (context, provider, child) {
-              return Stack(
+              return
+                Stack(
                 children: [
                   !isRestContainItems?
                   Center(child:Text("No item found")):
@@ -380,7 +382,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                         text: t.categoryName,
                                       ))
                                   .toList(),
-                            ),
+                            ),tabController!
 
                             // pinned: true,
                           )
@@ -760,9 +762,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
 }
 
 class PersistentHeader extends SliverPersistentHeaderDelegate {
-  PersistentHeader(this.tabBar);
+  PersistentHeader(this.tabBar,this.controller);
 
   final TabBar tabBar;
+  TabController controller;
 
   @override
   double get minExtent => tabBar.preferredSize.height;
@@ -779,21 +782,94 @@ class PersistentHeader extends SliverPersistentHeaderDelegate {
           color: Colors.white,
           border: Border(bottom: BorderSide(color: Colors.grey, width: 1)),
         ),
-        child: Container(
-          margin: EdgeInsets.only(left: 8),
-          child: tabBar,
+        child: Row(
+          children: [
+                InkWell(
+                    child: Icon(Icons.menu,
+                        color: Colors.deepOrange),
+                    onTap: () {
+                      showModalBottomSheet(
+                        isScrollControlled: false,
+                        context: context,
+                        builder: (context) {
+                          return Consumer<ApplicationProvider>(builder: (context, provider, _) {
+                            return Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(20),
+                                      child: InkWell(
+                                          child: Icon(Icons.clear_outlined),
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                          }),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 25, bottom: 20),
+                                      child: Text(
+                                        "Menu categories",
+                                        style:
+                                        TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Flexible(
+                                  child: ListView.separated(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    physics: ScrollPhysics(),
+                                    itemCount: provider.categoryList.length,
+                                    itemBuilder: (context, index) {
+                                      List<Item> filteredList=[];
+                                      filteredList = provider.selectedRestModel.items!
+                                          .where((product) => (product.categoryId ==
+                                          provider.categoryList[index].categoryId))
+                                          .toList();
+                                      return ListTile(
+                                        onTap: (){
+                                          controller.animateTo(index);
+                                          VerticalScrollableTabBarStatus.setIndex(index);
+                                          Navigator.of(context).pop();
+                                        },
+                                        title: Text(
+                                            provider.categoryList[index].categoryName.toString()),
+                                        trailing: Text(
+                                            filteredList.length.toString()
+                                        ),
+                                        // trailing: Text("${count.length}"),
+                                        // trailing: Text('5'),
+                                      );
+                                    },
+                                    separatorBuilder: (context, index) {
+                                      return Dividersection();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          });
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                          ),
+                        ),
+                      );
+                    }),
+            Flexible(
+              child: Container(
+                margin: EdgeInsets.only(left: 8),
+                child: tabBar,
+              ),
+            ),
+          ],
         )
-        // Row(
-        //   children: [
-        //     // InkWell(
-        //     //     child: Icon(Icons.menu,
-        //     //         color: Colors.deepOrange),
-        //     //     onTap: () {
-        //     //       // onButtonpress(context);
-        //     //     }),
-        //
-        //   ],
-        // )
         );
   }
 

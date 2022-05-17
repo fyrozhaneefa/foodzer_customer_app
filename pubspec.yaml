@@ -43,7 +43,6 @@ dependencies:
   geolocator: ^8.2.0
   flutter_geocoder: ^0.2.2-nullsafety
   video_player: ^2.3.0
-  shimmer:
   cashfree_pg: ^2.0.7+27
   validators: ^3.0.0
   cloud_firestore: ^3.1.13

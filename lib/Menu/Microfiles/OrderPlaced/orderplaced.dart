@@ -5,9 +5,14 @@ import 'package:foodzer_customer_app/screens/orderTracking/orderTracking.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
 
-class OrderPlacedHome extends StatelessWidget {
-  const OrderPlacedHome({Key? key}) : super(key: key);
+class OrderPlacedHome extends StatefulWidget {
 
+
+  @override
+  State<OrderPlacedHome> createState() => _OrderPlacedHomeState();
+}
+
+class _OrderPlacedHomeState extends State<OrderPlacedHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +72,7 @@ class OrderPlacedHome extends StatelessWidget {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) =>
                           OrderTracking(Provider.of<ApplicationProvider>(context, listen: false)
-                              .currentOrderId!)));
+                              .currentOrderId!,true)));
                 },
                 child: Text(
                   // "Track Your Order",

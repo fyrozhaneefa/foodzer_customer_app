@@ -14,7 +14,7 @@ import 'dart:convert' as convert;
 import '../../../Api/ApiData.dart';
 import '../../../Models/CategoryModel.dart';
 import 'categoryCard.dart';
-import 'package:shimmer/shimmer.dart';
+
 class CategoryItems extends StatefulWidget {
   const CategoryItems({
     Key? key,
@@ -67,6 +67,15 @@ class _CategoryItemsState extends State<CategoryItems> {
                                   backgroundColor: Colors.grey.shade300,
                                   textColor: Colors.red
                               );
+                            } else if(categoryList[index].name == "Cakes"){
+                              Fluttertoast.showToast(
+                                  msg: "Cakes are currently not available",
+                                  toastLength: Toast.LENGTH_LONG,
+                                  fontSize: 14,
+                                  gravity: ToastGravity.CENTER,
+                                  backgroundColor: Colors.grey.shade300,
+                                  textColor: Colors.red
+                              );
                             }
 
                           },);
@@ -74,31 +83,6 @@ class _CategoryItemsState extends State<CategoryItems> {
         ),
       );
 
-  }
-  Widget loadingShimmer() {
-    return Container(
-      child: Shimmer.fromColors(
-          baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(5, (index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.all(8),
-                    child: const Text("zzz"),
-                    color: Colors.teal[100],
-                  ),
-                );
-              }),
-            ),
-          )),
-    );
   }
   getCategoryList() async {
     SharedPreferences prefs=await SharedPreferences.getInstance();

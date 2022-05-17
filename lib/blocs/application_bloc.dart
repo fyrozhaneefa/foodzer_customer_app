@@ -40,6 +40,7 @@ class ApplicationProvider with ChangeNotifier {
   double totalAmt = 0;
   double toPayAmt = 0;
   int deliveryBoyTip = 0;
+  int deliveryType = 0;
   var taxData = {};
   double setTexPercentage = 0;
   ApplicationProvider() {
@@ -126,16 +127,17 @@ class ApplicationProvider with ChangeNotifier {
 
   setItemTotal(double itemTotal) async {
     this.itemTotal = itemTotal;
-    if (null != selectedAddressModel.addressId &&
-        selectedAddressModel.addressId!.isNotEmpty) {
+    // if (null != selectedAddressModel.addressId &&
+    //     selectedAddressModel.addressId!.isNotEmpty) {
       getDeliveryCharge(itemTotal);
-    }
+    // }
 
     // notifyListeners();
   }
 
   clearDeliveryFee() {
     this.deliveryFee = 0;
+    calculateTotal();
     notifyListeners();
   }
 
@@ -207,14 +209,19 @@ class ApplicationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  updateProduct(Item product, bool isIncrement, int enteredQty,
+  updateProduct(Item product, bool isIncrement, bool isRepeatLastItem
       ) {
-    // if(isRepeatLast){
-    //
-    //   product.addonsList=cartModelList
-    //       .where((element) => element.lastItemTempId
-    //       == product.tempId).single.addonsList!;
-    // }
+    if(isRepeatLastItem){
+      product.addonsList=cartModelList
+          .where((element) => element.lastItemTempId
+          == product.tempId).single.addonsList!;
+      //if repeate last item qty is managed from provider
+      product.enteredQty=cartModelList
+          .where((element) => element.lastItemTempId
+          == product.tempId).single.enteredQty!+1;
+
+
+    }
     int filteredItemIndex = filteredLoadedProductModelList
         .indexWhere((element) => element.itemId == product.itemId);
     int cartIndex = null != product.tempId && product.tempId!.isNotEmpty
@@ -227,23 +234,27 @@ class ApplicationProvider with ChangeNotifier {
         if (null != cartModelList && cartModelList.length > 0) {
           if (cartIndex == -1) {
             product.tempId = getTempId();
-            product = calculateValue(product, enteredQty);
+            product.lastItemTempId=product.tempId;
+
+            product = calculateValue(product);
 
             cartModelList.add(product);
           } else {
-            cartModelList[cartIndex] = calculateValue(product, enteredQty);
+            cartModelList[cartIndex] = calculateValue(product);
           }
         } else {
           product.tempId = getTempId();
-          product = calculateValue(product, enteredQty);
+          product.lastItemTempId=product.tempId;
+
+          product = calculateValue(product);
           cartModelList.add(product);
         }
       } else {
-        if (null != product.enteredQty && product.enteredQty! > 1) {
+        if (null != product.enteredQty && product.enteredQty! > 0) {
           // filteredLoadedProductModelList[filteredItemIndex] =
           //     calculateValue(product, enteredQty);
 
-          cartModelList[cartIndex] = calculateValue(product, enteredQty);
+          cartModelList[cartIndex] = calculateValue(product);
         } else {
           filteredLoadedProductModelList[filteredItemIndex].addonsList = [];
           cartModelList.removeAt(cartIndex);
@@ -257,19 +268,23 @@ class ApplicationProvider with ChangeNotifier {
         if (null != cartModelList && cartModelList.length > 0) {
           if (cartIndex == -1) {
             product.tempId = getTempId();
-            product = calculateValue(product, enteredQty);
+            product.lastItemTempId=product.tempId;
+
+            product = calculateValue(product);
             cartModelList.add(product);
           } else {
-            cartModelList[cartIndex] = calculateValue(product, enteredQty);
+            cartModelList[cartIndex] = calculateValue(product);
           }
         } else {
           product.tempId = getTempId();
-          product = calculateValue(product, enteredQty);
+          product.lastItemTempId=product.tempId;
+
+          product = calculateValue(product);
           cartModelList.add(product);
         }
       } else {
         if (null != product.enteredQty && product.enteredQty! > 1) {
-          cartModelList[cartIndex] = calculateValue(product, enteredQty);
+          cartModelList[cartIndex] = calculateValue(product);
         } else {
           cartModelList.removeAt(cartIndex);
         }
@@ -291,12 +306,13 @@ class ApplicationProvider with ChangeNotifier {
     var jsonData = json.decode(kson);
     item = Item.fromJson(jsonData);
     item.lastItemTempId=product.tempId;
+    item.enteredQty=qty;
 
     if (allItemIndex > -1) {
     filteredLoadedProductModelList[filteredItemIndex] =
-        calculateValue(item, qty);
+        calculateValue(item);
     selectedRestModel.items![allItemIndex] =
-        calculateValue(item, qty);
+        calculateValue(item);
 
     }
     calculateTotal();
@@ -331,10 +347,10 @@ class ApplicationProvider with ChangeNotifier {
     return date;
   }
 
-  Item calculateValue(Item product, int enteredQty) {
+  Item calculateValue(Item product) {
     double totalAmt = 0;
-    product.enteredQty = enteredQty;
-    totalAmt = (enteredQty * product.itemPrice!).toDouble();
+    // product.enteredQty = enteredQty;
+    totalAmt = (product.enteredQty! * product.itemPrice!).toDouble();
 
     if (null != product.addonsList && product.addonsList!.length > 0) {
       for (Addons addon in product.addonsList!) {
@@ -358,14 +374,30 @@ class ApplicationProvider with ChangeNotifier {
     deliveryFee = null != jsonData['delivery_fee']
         ? double.parse(jsonData['delivery_fee'].toString())
         : 0;
+
+    if(deliveryType==2){
+      deliveryFee=0;
+    }
     print(deliveryFee.toString() + "del");
     orderTime = jsonData['order_time'];
+    totalAmt = 0;
+    for (Item item in cartModelList) {
+      totalAmt = totalAmt + item.totalPrice!;
+    }
 
+    taxData = calculateTax(setTexPercentage, totalAmt, false);
+    toPayAmt = taxData['totalAmtWithTax'] + deliveryBoyTip + deliveryFee;
+    totalWithoutTax = totalAmt;
     notifyListeners();
   }
-
+  setDeliveryType(int deliveryType) {
+      this.deliveryType = deliveryType;
+      calculateTotal();
+      notifyListeners();
+  }
   setTipValue(int tip) {
-    this.deliveryBoyTip = tip;
+      this.deliveryBoyTip = tip;
+      calculateTotal();
     notifyListeners();
   }
 
@@ -375,14 +407,7 @@ class ApplicationProvider with ChangeNotifier {
   }
 
   calculateTotal() async {
-    totalAmt = 0;
-    for (Item item in cartModelList) {
-      totalAmt = totalAmt + item.totalPrice!;
-    }
     this.setItemTotal(totalAmt);
-    taxData = calculateTax(setTexPercentage, totalAmt, false);
-    toPayAmt = taxData['totalAmtWithTax'] + deliveryBoyTip + deliveryFee;
-    totalWithoutTax = totalAmt;
-    notifyListeners();
+
   }
 }

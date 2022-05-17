@@ -177,6 +177,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                           setState(() {
                                             deliveryType = 1;
                                           });
+                                          provider.setDeliveryType(1);
                                         },
                                         child: Container(
                                           padding: EdgeInsets.all(10),
@@ -234,6 +235,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                           setState(() {
                                             deliveryType = 2;
                                           });
+                                          provider.setDeliveryType(2);
                                         },
                                         child: Container(
                                           padding: EdgeInsets.all(10),
@@ -420,11 +422,13 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                         } else{
                           selectedTip = index;
                           tipValue = int.parse(tips[index]);
-                          Provider.of<ApplicationProvider>(context, listen: false).setTipValue(tipValue);
                           setState(() {
 
                           });
+
                         }
+                        Provider.of<ApplicationProvider>(context, listen: false).setTipValue(tipValue);
+
 
 
                       },
@@ -584,7 +588,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 15, top: 15),
-                  child: Text('₹${provider.taxData['totalTaxAmt']}'),
+                  child: Text('₹${provider.taxData['totalTaxAmt'].toStringAsFixed(2)}'),
                 ),
               ],
             ),
@@ -701,7 +705,9 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                                         isFromCart,
                                                         getAddressList);
                                                   }).then((value) {
-                                                    // getDeliveryCharge();
+                                                Provider.of<ApplicationProvider>(context,
+                                                    listen: false)
+                                                    .calculateTotal();
                                                 setState(() {});
                                               });
                                             },
@@ -728,7 +734,10 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                                         return ChooseAddress(
                                             isFromCart, getAddressList);
                                       }).then((value) {
-                                    // getDeliveryCharge();
+                                    //qty will be incremented from cart
+                                    Provider.of<ApplicationProvider>(context,
+                                        listen: false)
+                                        .calculateTotal();
                                     setState(() {});
                                   });
                                 },
