@@ -104,8 +104,6 @@ class _CategoryItemsState extends State<CategoryItems> {
 
     print("some error occured!!!");
     }
-
-
   }
 }
 

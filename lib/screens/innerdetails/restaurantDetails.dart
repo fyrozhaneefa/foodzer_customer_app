@@ -18,7 +18,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:vertical_scrollable_tabview/vertical_scrollable_tabview.dart';
 import 'package:provider/provider.dart';
-
 import '../../Menu/Microfiles/ReviewSection/review.dart';
 import '../../Models/restaurentmodel.dart';
 import '../basket/Section/itemBasketHome.dart';
@@ -82,8 +81,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                   !isRestContainItems?
                   Center(child:Text("No item found")):
                   CustomScrollView(
+                    // scrollDirection: Axis.vertical,
                     shrinkWrap: true,
-                    physics: AlwaysScrollableScrollPhysics(),
+                    physics:ScrollPhysics(),
                     slivers: [
                       SliverAppBar(
                         elevation: 0,
@@ -161,196 +161,194 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                       ),
                       SliverList(
                           delegate: SliverChildListDelegate([
-                        SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20.0, right: 20.0, bottom: 10, top: 20.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                        // Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.branchDetails!.merchantBranchName!,
-                                        provider.selectedRestModel
-                                            .branchDetails!.merchantBranchName!,
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold)),
-                                    InkWell(
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20.0, right: 20.0, bottom: 10, top: 20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      // Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.branchDetails!.merchantBranchName!,
+                                      provider.selectedRestModel
+                                          .branchDetails!.merchantBranchName!,
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold)),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext
+                                                      context) =>
+                                                  RestaurantInfoScreen(provider
+                                                      .selectedRestModel)));
+                                    },
+                                    child: Text(
+                                      'Info',
+                                      style: TextStyle(
+                                          color: Colors.deepOrange,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(provider.selectedRestModel.branchCuisine!),
+                              SizedBox(
+                                height: 25,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    null !=
+                                                provider.selectedRestModel
+                                                    .reviews!.numOfRows &&
+                                            provider.selectedRestModel
+                                                    .reviews!.numOfRows ==
+                                                0
+                                        ? Icons.sentiment_dissatisfied
+                                        : Icons.tag_faces,
+                                    color: null !=
+                                                provider.selectedRestModel
+                                                    .reviews!.numOfRows &&
+                                            provider.selectedRestModel
+                                                    .reviews!.numOfRows ==
+                                                0
+                                        ? Colors.yellow[600]
+                                        : Colors.grey.shade700,
+                                    size: 25,
+                                  ),
+                                  SizedBox(width: 10),
+                                  RichText(
+                                    text: new TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: null !=
+                                                      provider
+                                                          .selectedRestModel
+                                                          .reviews!
+                                                          .numOfRows &&
+                                                  provider
+                                                          .selectedRestModel
+                                                          .reviews!
+                                                          .numOfRows ==
+                                                      0
+                                              ? "No review yet "
+                                              : provider.selectedRestModel
+                                                  .reviews!.branchAvgRating
+                                                  .toString(),
+                                          style: new TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        new TextSpan(
+                                          text:
+                                              'Based on (${provider.selectedRestModel.reviews!.numOfRows}) ratings ',
+                                          style: new TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: InkWell(
                                       onTap: () {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
-                                                builder: (BuildContext
-                                                        context) =>
-                                                    RestaurantInfoScreen(provider
-                                                        .selectedRestModel)));
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        ReviewRestaurent()));
                                       },
                                       child: Text(
-                                        'Info',
+                                        'Reviews',
                                         style: TextStyle(
                                             color: Colors.deepOrange,
                                             fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.right,
                                       ),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(provider.selectedRestModel.branchCuisine!),
-                                SizedBox(
-                                  height: 25,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      null !=
-                                                  provider.selectedRestModel
-                                                      .reviews!.numOfRows &&
-                                              provider.selectedRestModel
-                                                      .reviews!.numOfRows ==
-                                                  0
-                                          ? Icons.sentiment_dissatisfied
-                                          : Icons.tag_faces,
-                                      color: null !=
-                                                  provider.selectedRestModel
-                                                      .reviews!.numOfRows &&
-                                              provider.selectedRestModel
-                                                      .reviews!.numOfRows ==
-                                                  0
-                                          ? Colors.yellow[600]
-                                          : Colors.grey.shade700,
-                                      size: 25,
-                                    ),
-                                    SizedBox(width: 10),
-                                    RichText(
-                                      text: new TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: null !=
-                                                        provider
-                                                            .selectedRestModel
-                                                            .reviews!
-                                                            .numOfRows &&
-                                                    provider
-                                                            .selectedRestModel
-                                                            .reviews!
-                                                            .numOfRows ==
-                                                        0
-                                                ? "No review yet "
-                                                : provider.selectedRestModel
-                                                    .reviews!.branchAvgRating
-                                                    .toString(),
-                                            style: new TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          new TextSpan(
-                                            text:
-                                                'Based on (${provider.selectedRestModel.reviews!.numOfRows}) ratings ',
-                                            style: new TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          ReviewRestaurent()));
-                                        },
-                                        child: Text(
-                                          'Reviews',
-                                          style: TextStyle(
-                                              color: Colors.deepOrange,
-                                              fontWeight: FontWeight.w600),
-                                          textAlign: TextAlign.right,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Divider(
-                                  height: 25,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.access_time,
-                                      color: Colors.grey.shade700,
-                                      size: 25,
-                                    ),
-                                    SizedBox(width: 10),
-                                    RichText(
-                                      text: new TextSpan(
-                                        children: [
-                                          new TextSpan(
-                                            text:
-                                                'Within ${provider.selectedRestModel.branchDetails!.merchantBranchOrderTime} mins ',
-                                            style: new TextStyle(
-                                                color: Colors.black),
-                                          ),
-                                          // new TextSpan(
-                                          //   text:
-                                          //       '(${provider.selectedRestModel.branchDetails!.countryCurrency} 0.590 delivery) ',
-                                          //   style: new TextStyle(
-                                          //       fontSize: 12,
-                                          //       color: Colors.grey),
-                                          // ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Divider(
-                                  height: 25,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.local_offer_outlined,
-                                      color: Colors.pinkAccent,
-                                      size: 25,
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text('2 RO Off Orders 7 Rials or More!',
-                                        style: TextStyle(
-                                          color: Colors.pinkAccent,
-                                          fontWeight: FontWeight.w500,
-                                        ))
-                                  ],
-                                ),
-                                Divider(
-                                  height: 25,
-                                ),
-                                Container(
-                                  padding: EdgeInsets.all(15),
-                                  width: Helper.getScreenWidth(context),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      color: Colors.grey.shade100),
-                                  child: Text(
-                                    'Delivered by us, with live tracking',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
+                                ],
+                              ),
+                              Divider(
+                                height: 25,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time,
+                                    color: Colors.grey.shade700,
+                                    size: 25,
+                                  ),
+                                  SizedBox(width: 10),
+                                  RichText(
+                                    text: new TextSpan(
+                                      children: [
+                                        new TextSpan(
+                                          text:
+                                              'Within ${provider.selectedRestModel.branchDetails!.merchantBranchOrderTime} mins ',
+                                          style: new TextStyle(
+                                              color: Colors.black),
+                                        ),
+                                        // new TextSpan(
+                                        //   text:
+                                        //       '(${provider.selectedRestModel.branchDetails!.countryCurrency} 0.590 delivery) ',
+                                        //   style: new TextStyle(
+                                        //       fontSize: 12,
+                                        //       color: Colors.grey),
+                                        // ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Divider(
+                                height: 25,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.local_offer_outlined,
+                                    color: Colors.pinkAccent,
+                                    size: 25,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text('2 RO Off Orders 7 Rials or More!',
+                                      style: TextStyle(
+                                        color: Colors.pinkAccent,
+                                        fontWeight: FontWeight.w500,
+                                      ))
+                                ],
+                              ),
+                              Divider(
+                                height: 25,
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(15),
+                                width: Helper.getScreenWidth(context),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    color: Colors.grey.shade100),
+                                child: Text(
+                                  'Delivered by us, with live tracking',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
+                              ),
 
-                                // ProductCategoryItem(widget.merchantBranchId,
-                                //     widget.lat, widget.lng),
-                              ],
-                            ),
+                              // ProductCategoryItem(widget.merchantBranchId,
+                              //     widget.lat, widget.lng),
+                            ],
                           ),
                         )
                       ])),
@@ -364,7 +362,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                               onTap: (int val) {
                                 VerticalScrollableTabBarStatus.setIndex(val);
                               },
-                              physics: const AlwaysScrollableScrollPhysics(),
+                              // physics: const AlwaysScrollableScrollPhysics(),
                               isScrollable: true,
                               labelColor: Colors.white,
                               unselectedLabelColor: Colors.black,

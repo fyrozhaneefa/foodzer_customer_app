@@ -220,7 +220,6 @@ class ApplicationProvider with ChangeNotifier {
           .where((element) => element.lastItemTempId
           == product.tempId).single.enteredQty!+1;
 
-
     }
     int filteredItemIndex = filteredLoadedProductModelList
         .indexWhere((element) => element.itemId == product.itemId);
@@ -349,12 +348,18 @@ class ApplicationProvider with ChangeNotifier {
 
   Item calculateValue(Item product) {
     double totalAmt = 0;
+    double itemPrice=0;
+    if(null!=product.priceOnId && product.priceOnId!.isNotEmpty){
+      itemPrice=product.priceOnItemPrice!;
+    }else{
+      itemPrice=product.itemPrice!;
+    }
     // product.enteredQty = enteredQty;
-    totalAmt = (product.enteredQty! * product.itemPrice!).toDouble();
+    totalAmt = (product.enteredQty! * itemPrice).toDouble();
 
     if (null != product.addonsList && product.addonsList!.length > 0) {
       for (Addons addon in product.addonsList!) {
-        totalAmt = totalAmt + addon.addonsSubTitlePrice!;
+        totalAmt = totalAmt + (addon.addonsSubTitlePrice! * product.enteredQty!);
       }
     }
     product.totalPrice = totalAmt;
@@ -363,23 +368,28 @@ class ApplicationProvider with ChangeNotifier {
   }
 
   getDeliveryCharge(double total) async {
-    var map = new Map<String, dynamic>();
-    map['merchant_branch_id'] = selectedRestModel.merchantBranchId.toString();
-    map['lat'] = selectedAddressModel.addressLat;
-    map['lng'] = selectedAddressModel.addressLng;
-    map['order_amt'] = total.toString();
-    var response =
-        await http.post(Uri.parse(ApiData.GET_DELIVERY_CHARGE), body: map);
-    var jsonData = json.decode(response.body);
-    deliveryFee = null != jsonData['delivery_fee']
-        ? double.parse(jsonData['delivery_fee'].toString())
-        : 0;
+    if(null!=selectedAddressModel.addressLat) {
+      var map = new Map<String, dynamic>();
+      map['merchant_branch_id'] = selectedRestModel.merchantBranchId.toString();
+      map['lat'] = selectedAddressModel.addressLat;
+      map['lng'] = selectedAddressModel.addressLng;
+      map['order_amt'] = total.toString();
+      var response =
+      await http.post(Uri.parse(ApiData.GET_DELIVERY_CHARGE), body: map);
+      var jsonData = json.decode(response.body);
+
+      deliveryFee = null != jsonData['delivery_fee']
+          ? double.parse(jsonData['delivery_fee'].toString())
+          : 0;
+      orderTime = jsonData['order_time'];
+
+    }
 
     if(deliveryType==2){
       deliveryFee=0;
+      deliveryBoyTip =0;
     }
     print(deliveryFee.toString() + "del");
-    orderTime = jsonData['order_time'];
     totalAmt = 0;
     for (Item item in cartModelList) {
       totalAmt = totalAmt + item.totalPrice!;
@@ -403,11 +413,20 @@ class ApplicationProvider with ChangeNotifier {
 
   setTaxPercentage(double tax) {
     this.setTexPercentage = tax;
+    calculateTotal();
     notifyListeners();
   }
 
   calculateTotal() async {
+    totalAmt = 0;
+    for (Item item in cartModelList) {
+      totalAmt = totalAmt + item.totalPrice!;
+    }
     this.setItemTotal(totalAmt);
+    taxData = calculateTax(setTexPercentage, totalAmt, false);
+    toPayAmt = taxData['totalAmtWithTax'] + deliveryBoyTip + deliveryFee;
+    totalWithoutTax = totalAmt;
+    notifyListeners();
 
   }
 }

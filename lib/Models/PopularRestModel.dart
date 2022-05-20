@@ -59,11 +59,13 @@ class PopularRestModel {
     this.merchantPackChargeType,
     this.merchantPackCharge,
     this.distance,
-    this.merchantBranchCoverImage
+    this.merchantBranchCoverImage,
+    this.rating
   });
 
   String? cuisines;
   dynamic? reviewAvgRating;
+  String? rating;
   String? reviewCount;
   String? avgReview;
   String? cuisineName;
@@ -118,6 +120,7 @@ class PopularRestModel {
     cuisines: json["cuisines"] == null ? null : json["cuisines"],
     reviewAvgRating: json["review_avg_rating"],
     reviewCount: json["review_count"] == null ? null : json["review_count"],
+    rating: json["rating"] == null ? null : json["rating"],
     avgReview: json["avg_review"] == null ? null : json["avg_review"],
     cuisineName: json["cuisine_name"] == null ? null : json["cuisine_name"],
     merchantBranchId: json["merchant_branch_id"] == null ? null : json["merchant_branch_id"],
@@ -171,6 +174,7 @@ class PopularRestModel {
     "cuisines": cuisines == null ? null : cuisines,
     "review_avg_rating": reviewAvgRating,
     "review_count": reviewCount == null ? null : reviewCount,
+    "rating": rating == null ? null : rating,
     "avg_review": avgReview == null ? null : avgReview,
     "cuisine_name": cuisineName == null ? null : cuisineName,
     "merchant_branch_id": merchantBranchId == null ? null : merchantBranchId,

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/Constants/sapperator.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
+import 'package:foodzer_customer_app/screens/basket/Section/cartAddons.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/section/singleItemView.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
@@ -33,7 +35,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
     super.initState();
   }
 
-  _scrollListener() {
+  // _scrollListener() {
     // if (_controller.offset >= _controller.position.maxScrollExtent &&
     //     !_controller.position.outOfRange) {
     //   setState(() {
@@ -46,7 +48,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
     //     message = "reach the top";
     //   });
     // }
-  }
+  // }
 
   @override
   void dispose() {
@@ -82,43 +84,18 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
 
                     List<Item> filteredList = [];
 
-                    // provider
-                    //     .currentSelectedCategory(
-                    //     provider
-                    //         .categoryList[
-                    //     index]
-                    //         .categoryId!);
-                    // if (provider
-                    //     .selectedCategoryId ==
-                    //     provider.categoryList[index].categoryId) {
+
                     if (provider.categoryList[index].categoryId == 0) {
                       filteredList = provider.selectedRestModel.items!;
-                      // filteredList.sort(
-                      //     (a, b) => a.categoryName!.compareTo(b.categoryName!));
+
                     } else {
                       filteredList = provider.selectedRestModel.items!
                           .where((product) => (product.categoryId ==
                               provider.categoryList[index].categoryId))
                           .toList();
-                      // filteredList.sort(
-                      //     (a, b) => a.categoryName!.compareTo(b.categoryName!));
+
                     }
-                    // Provider.of<ApplicationProvider>(context, listen: false).clearItems();
-                    // provider
-                    //     .setItemLoading(true);
-                    // loadedItemCount = 0;
-                    // _loadData();
 
-                    // provider.addProductData(
-                    //     filteredList,
-                    //     true);
-                    // }
-                    // Provider.of<ApplicationProvider>(context ,listen: false).filterItems(categoryList[index].categoryId!);
-
-                    // provider.setCategoryName(
-                    //     provider
-                    //         .categoryList[index]
-                    //         .categoryName!);
 
                     return Theme(
                         data: ThemeData()
@@ -133,6 +110,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                 child: Container(
                                   width: MediaQuery.of(context).size.width,
                                   child: Material(
+                                    color: Colors.white,
                                     elevation: 0,
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.only(
@@ -155,10 +133,13 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                   Center(child: CircularProgressIndicator(),):
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 20.0),
-                                child: ListView.builder(
-
+                                child: ListView.separated(
+                                  separatorBuilder: (context, index) {
+                                                  return Divider(height: 1,thickness: 1,color: Colors.grey[300],);
+                                                },
+                                  // scrollDirection: Axis.vertical,
                                     // controller: scrollController,
-                                    physics: ScrollPhysics(),
+                                    physics:NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemCount: filteredList.length,
                                     itemBuilder:
@@ -171,8 +152,9 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                       return Container(
                                         height: 120,
                                         child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
                                           child: Material(
+                                            color: Colors.white,
                                             elevation: 0,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:index==filteredList.length-1?
@@ -184,7 +166,16 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                               padding: const EdgeInsets.all(2.0),
                                               child: InkWell(
                                                 onTap: () {
-                                                  singleItemDetails(context, itemModel);
+
+                                                  if (null==itemModel.enteredQty ||
+                                                      itemModel.enteredQty == 0 || (itemModel.enteredQty! > 0 &&
+                                                      itemModel.isAddon == 0)) {
+                                                    singleItemDetails(context, itemModel);
+
+
+                                                  }  else {
+                                                    addDuplicateItem(itemModel);
+                                                  }
                                                   // provider.getItemId(itemModel.itemId!);
                                                   // if (itemModel.isAddon == 1) {
                                                   //   getAddons();
@@ -367,6 +358,185 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
         context: context,
         builder: (context) {
           return SingleItemView(itemModel);
+        });
+  }
+  void addDuplicateItem( Item itemModel) {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(14),
+            topRight: Radius.circular(14),
+          ),
+        ),
+        isScrollControlled: true,
+        context: context,
+        builder: (_context) {
+          return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    leading: itemModel.itemVegNonveg == "1"
+                        ? Image.asset(
+                      Helper.getAssetName("veg.png", "virtual"),
+                      height: 15,
+                    )
+                        : Image.asset(
+                      Helper.getAssetName("non-veg.png", "virtual"),
+                      height: 15,
+                    ),
+                    minLeadingWidth: 2,
+                    title: Text(
+                      itemModel.itemName.toString(),
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: Text("₹${itemModel.itemPrice.toString()}"),
+                    trailing: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.close)),
+                  ),
+                  Divider(
+                    color: Colors.grey[300],
+                    thickness: 1,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 50,
+                          margin: EdgeInsets.only(left: 15, right: 10),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              itemModel.enteredQty=1;
+                              singleItemDetails(context, itemModel);
+
+                              // showModalBottomSheet(
+                              //     shape: RoundedRectangleBorder(
+                              //       borderRadius: BorderRadius.only(
+                              //         topLeft: Radius.circular(14),
+                              //         topRight: Radius.circular(14),
+                              //       ),
+                              //     ),
+                              //     isScrollControlled: true,
+                              //     context: context,
+                              //     builder: (context) {
+                              //       return CartAddons(itemModel, true);
+                              //     }).then((value) {});
+                            },
+                            child: Text(
+                              "I'll Choose",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.deepOrange,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.deepOrange.shade50,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: 50,
+                          margin: EdgeInsets.only(right: 15, left: 10),
+                          child: ElevatedButton(
+                            onPressed: () {
+                            //   totalQty++;
+                            //   // widget.itemModel.enteredQty = itemCount;
+                            //   if (Provider.of<ApplicationProvider>(context,
+                            //       listen: false)
+                            //       .cartModelList
+                            //       .isEmpty ||
+                            //       Provider.of<ApplicationProvider>(context,
+                            //           listen: false)
+                            //           .cartModelList
+                            //           .first
+                            //           .itemMerchantBranch ==
+                            //           Provider.of<ApplicationProvider>(context,
+                            //               listen: false)
+                            //               .selectedRestModel
+                            //               .merchantBranchId) {
+                            //     if (null != addOnList && addOnList.length > 0) {
+                            //       List<Addons> addedMandatoryAddonList = [];
+                            //       addedMandatoryAddonList = addOnList
+                            //           .where((element) =>
+                            //       null != element.addonsType &&
+                            //           element.addonsType == 2)
+                            //           .toList();
+                            //       // if (null != addedMandatoryAddonList &&
+                            //       //     addedMandatoryAddonList.length > 0 &&
+                            //       //     lastAddonIndex == -1) {
+                            //       //   isMandatory = true;
+                            //       //   setState(() {});
+                            //       // } else {
+                            //       itemModel.addonsList = addOnList
+                            //           .where((element) =>
+                            //       element.isSelected == true)
+                            //           .toList();
+                                 itemModel.enteredQty = itemModel.enteredQty!+1;
+                                  Provider.of<ApplicationProvider>(context,
+                                      listen: false)
+                                      .updateProduct(
+                                      itemModel,true,
+                                      true);
+                                  Navigator.pop(context);
+                            //       isMandatory = false;
+                            //       setState(() {});
+                            //       // }
+                            //     } else {
+                            //      itemModel.addonsList = addOnList
+                            //           .where((element) =>
+                            //       element.isSelected == true)
+                            //           .toList();
+                            //      itemModel.enteredQty = totalQty;
+                            //       Provider.of<ApplicationProvider>(context,
+                            //           listen: false)
+                            //           .updateProduct(
+                            //           itemModel,
+                            //           null == itemModel.enteredQty ||
+                            //               null !=
+                            //                   itemModel
+                            //                       .enteredQty &&
+                            //                   totalQty >
+                            //                      itemModel
+                            //                           .enteredQty!,
+                            //           false);
+                            //       Navigator.pop(context);
+                            //     }
+                            //   } else {
+                            //     showAlertDialog(context);
+                            //   }
+                            },
+                            child: Text(
+                              "Repeat Last",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w600),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.deepOrange,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ));
         });
   }
 }

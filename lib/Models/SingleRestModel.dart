@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:foodzer_customer_app/Models/itemPriceOnModel.dart';
+
 SingleRestModel restaurantModelFromJson(String str) => SingleRestModel.fromJson(json.decode(str));
 
 
@@ -269,7 +271,8 @@ class Item {
     this.availableDay,
     this.isPriceon,
     this.isAddon,this.enteredQty,
-    this.addonsList,this.addonIds,this.tempId,this.lastItemTempId
+    this.addonsList,this.addonIds,this.tempId,this.lastItemTempId,
+    this.priceOnId,this.priceOnItemPrice
   });
 
   String? itemId;
@@ -286,7 +289,7 @@ class Item {
   String? itemName;
   String? itemNameArabic;
   String? itemPriceType;
-  int? itemPrice;
+  double? itemPrice;
   String? itemOfferPrice;
   String? itemDescription;
   String? itemDescriptionArabic;
@@ -336,12 +339,16 @@ class Item {
   double? totalPrice;
   List<Addons>? addonsList;
   String? addonIds;
+  String? priceOnId;
+  double? priceOnItemPrice;
 
   factory Item.fromJson(Map<String, dynamic> json) => Item(
     // addonsList: List<Addons>.from(json["addonsList"].map((x) => Addons.fromJson(x))),
     itemId: json["item_id"],
     tempId: json.containsKey("tempId")?json["tempId"]:null,
     lastItemTempId: json.containsKey("lastItemTempId")?json["lastItemTempId"]:null,
+    priceOnId: json.containsKey("priceOnId")?json["priceOnId"]:null,
+    priceOnItemPrice: json.containsKey("priceOnItemPrice")?json["priceOnItemPrice"]:0,
     itemDeleteStatus: json["item_delete_status"],
     itemVisibility: json["item_visibility"],
     itemVisibilityApproval: json["item_visibility_approval"],
@@ -353,7 +360,8 @@ class Item {
     itemName: json["item_name"],
     itemNameArabic: json["item_name_arabic"],
     itemPriceType: json["item_price_type"],
-    itemPrice: json["item_price"],
+    itemPrice: null!=json["item_price"]? json["item_price"] is double ?
+    json["item_price"] : double.parse(json["item_price"].toString()):0,
     itemOfferPrice: json["item_offer_price"],
     itemDescription: json["item_description"],
     itemDescriptionArabic: json["item_description_arabic"],
@@ -433,7 +441,7 @@ class Item {
           "item_name":model. itemName,
           "item_name_arabic": model.itemNameArabic,
           "item_price_type": model.itemPriceType,
-          "item_price":model. itemPrice,
+          "item_price":model.itemPrice,
           "item_offer_price": model.itemOfferPrice,
           "item_description": model.itemDescription,
           "item_description_arabic": model.itemDescriptionArabic,
@@ -480,6 +488,9 @@ class Item {
           "available_day": model.availableDay,
           "is_priceon": model.isPriceon,
           "is_addon": model.isAddon,
+          "priceOnId": model.priceOnId,
+          "priceOnItemPrice": model.priceOnItemPrice,
+
         };
     String result = json.encode(map());
     return result;

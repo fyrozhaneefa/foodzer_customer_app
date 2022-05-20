@@ -588,7 +588,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 15, top: 15),
-                  child: Text('₹${provider.taxData['totalTaxAmt'].toStringAsFixed(2)}'),
+                  child: Text('₹${provider.taxData['totalTaxAmt']}'),
                 ),
               ],
             ),
@@ -792,64 +792,83 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
               child: MySeparator(),
             ),
             ListTile(
-              title: Text(
-                "₹${provider.toPayAmt}",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black.withOpacity(.6),
+              title:
+              Container(
+                height: 45,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                  "Add Items",
+                    style:
+                    TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary:Colors.deepOrange,
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
                 ),
               ),
-              subtitle: Text(
-                "View Detailed Bill",
-                style: TextStyle(
-                    color: Colors.deepOrangeAccent,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600),
-              ),
+              // Text(
+              //   "₹${provider.toPayAmt}",
+              //   style: TextStyle(
+              //     fontSize: 16,
+              //     fontWeight: FontWeight.w600,
+              //     color: Colors.black.withOpacity(.6),
+              //   ),
+              // ),
+              // subtitle: Text(
+              //   "View Detailed Bill",
+              //   style: TextStyle(
+              //       color: Colors.deepOrangeAccent,
+              //       fontSize: 12,
+              //       fontWeight: FontWeight.w600),
+              // ),
               trailing: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (isLoggedIn && null != provider.selectedAddressModel.addressId &&
-                          provider.selectedAddressModel.addressId!.isNotEmpty &&
-                          deliveryType == 1 || deliveryType == 2) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => PaymentSection(deliveryType!)));
-                      }
-                      else if(!isLoggedIn){
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => LoginScreen(isFromCart)));
-                      }
-                     else {
-                        Fluttertoast.showToast(
-                            msg: "Select a delivery address to continue",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.deepOrange,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                      }
-                    },
-                    child: Text( isLoggedIn?
-                      "Proceed to Pay":"Log in to continue",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary:
-                       isLoggedIn && null != provider.selectedAddressModel.addressId &&
-                                  provider.selectedAddressModel.addressId!
-                                      .isNotEmpty &&
-                                  deliveryType == 1 || deliveryType == 2
-                              ? Colors.deepOrange: !isLoggedIn? Colors.deepOrange
-                              : Colors.deepOrange.shade100,
-                      fixedSize: Size(190, 58),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                padding: const EdgeInsets.all(5),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (isLoggedIn && null != provider.selectedAddressModel.addressId &&
+                        provider.selectedAddressModel.addressId!.isNotEmpty &&
+                        deliveryType == 1 || deliveryType == 2) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => PaymentSection(deliveryType!)));
+                    }
+                    else if(!isLoggedIn){
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => LoginScreen(isFromCart)));
+                    }
+                   else {
+                      Fluttertoast.showToast(
+                          msg: "Select a delivery address to continue",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.deepOrange,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    }
+                  },
+                  child: Text( isLoggedIn?
+                    "Proceed to Pay":"Log in to continue",
+                    style:
+                        TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary:
+                     isLoggedIn && null != provider.selectedAddressModel.addressId &&
+                                provider.selectedAddressModel.addressId!
+                                    .isNotEmpty &&
+                                deliveryType == 1 || deliveryType == 2
+                            ? Colors.deepOrange: !isLoggedIn? Colors.deepOrange
+                            : Colors.deepOrange.shade100,
+                    fixedSize: Size(Helper.getScreenWidth(context)/2, 58),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                 ),

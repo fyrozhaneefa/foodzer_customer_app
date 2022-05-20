@@ -5,6 +5,7 @@ import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/applybutton.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/Constants/sapperator.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
+import 'package:foodzer_customer_app/Models/itemPriceOnModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:http/http.dart' as http;
@@ -24,9 +25,13 @@ class CartAddons extends StatefulWidget {
 
 class _CartAddonsState extends State<CartAddons> {
   List<Addons> addonModelList = [];
+  List<PriceOnItem> priceOnItemList = [];
+  PriceOnItem selectedPriceOnItem = new PriceOnItem();
+
   bool isLoading = false;
   double totalPrice = 0;
   bool isMandatory = false;
+  int lastPriceOnItemIndex = -1;
   int lastAddonIndex = -1;
 
   @override
@@ -34,6 +39,9 @@ class _CartAddonsState extends State<CartAddons> {
     // TODO: implement initState
     if (widget.itemModel.isAddon == 1) {
       getCartAddons();
+    }
+    if(widget.itemModel.isPriceon == 1){
+      getPriceOnItem();
     }
 
     super.initState();
@@ -82,6 +90,91 @@ class _CartAddonsState extends State<CartAddons> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    null != priceOnItemList && priceOnItemList.length > 0
+                        ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Price on Item",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16)),
+                            SizedBox(
+                              height: 5,
+                            ),
+                             Row(
+                              children: [
+                                Text("Choose 1",
+                                    style: TextStyle(
+                                        fontWeight:
+                                        FontWeight.w600,
+                                        fontSize: 15))
+                              ],
+                            ),
+                            ListView.builder(
+                                physics: ScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: priceOnItemList.length,
+                                itemBuilder: (context, index) {
+                                  return Visibility(
+                                    visible: null != priceOnItemList &&
+                                        priceOnItemList.length > 0,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(priceOnItemList[index]
+                                              .priceonItemTitle
+                                              .toString()),
+                                        ),
+                                        Text(
+                                            "(+ INR ${priceOnItemList[index].priceonItemPrice.toString()})"),
+                                        Radio(
+                                          activeColor:
+                                          Colors.deepOrangeAccent,
+                                          value: null !=
+                                              priceOnItemList[index]
+                                                  .isItemSelected &&
+                                              priceOnItemList[index]
+                                                  .isItemSelected!
+                                              ? 1
+                                              : 0,
+                                          groupValue: 1,
+                                          onChanged: (value) {
+                                            priceOnItemList[index]
+                                                .isItemSelected = true;
+
+                                            if (lastPriceOnItemIndex !=
+                                                -1) {
+                                              priceOnItemList[
+                                              lastPriceOnItemIndex]
+                                                  .isItemSelected = false;
+                                            }
+
+                                            // totalPrice=totalPrice + priceOnItemList[index]
+                                            //     .priceonItemPrice!;
+                                            // if(lastPriceOnItemIndex!=-1){
+                                            //  totalPrice=totalPrice - priceOnItemList[
+                                            //  lastPriceOnItemIndex].priceonItemPrice!;
+                                            // }
+                                            selectedPriceOnItem=priceOnItemList[index];
+
+                                            lastPriceOnItemIndex = index;
+                                            calculatePrice();
+                                            setState(() {});
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                }),
+                            Divider(
+                                height: 15,
+                                thickness: 6,
+                                color: Colors.grey.shade300)
+                          ],
+                        )
+                        : Container(),
                     null !=
                                 addonModelList
                                     .where((element) =>
@@ -209,6 +302,7 @@ class _CartAddonsState extends State<CartAddons> {
                                     }
                                     lastAddonIndex = index;
                                     isMandatory = false;
+                                    calculatePrice();
                                     setState(() {});
                                   },
                                 )
@@ -345,6 +439,7 @@ class _CartAddonsState extends State<CartAddons> {
                                                           .addonsSubTitlePrice
                                                           .toString());
                                             }
+                                            calculatePrice();
                                           },
                                         );
                                       },
@@ -413,17 +508,50 @@ class _CartAddonsState extends State<CartAddons> {
       ),
     );
   }
+  calculatePrice(){
+    totalPrice=0;
 
-  Widget saveBtn() {
-    double totalAddonPrice = 0;
-    if (null != addonModelList && addonModelList.length > 0) {
-      for (Addons addon in addonModelList) {
-        if (addon.isSelected!) {
-          totalAddonPrice = totalAddonPrice + addon.addonsSubTitlePrice!;
+    double itemPrice=0;
+    if(null != widget.itemModel.isPriceon &&
+        widget.itemModel.isPriceon == 1 &&
+        null!=selectedPriceOnItem.priceonItemPrice){
+      itemPrice = selectedPriceOnItem.priceonItemPrice!;
+    }else{
+      itemPrice=widget.itemModel.itemPrice!;
+    }
+    itemPrice=itemPrice*widget.itemModel.enteredQty!;
+    for(Addons addon in addonModelList){
+
+      // if(null!=widget.priceOnId && product.priceOnId!.isNotEmpty){
+      //   itemPrice=product.priceOnItemPrice!;
+      // }else{
+      //   itemPrice=product.itemPrice!;
+      // }
+
+
+      if (null != addon.isSelected && addon.isSelected!) {
+        if( null !=
+            addon.addonsType &&
+            addon.addonsType == 1) {
+          totalPrice = totalPrice + (addon
+              .addonsSubTitlePrice! * widget.itemModel.enteredQty!);
         }
       }
+
     }
-    totalAddonPrice = totalAddonPrice + widget.itemModel.itemPrice!;
+    totalPrice=totalPrice+itemPrice;
+
+  }
+  Widget saveBtn() {
+    // double totalAddonPrice = 0;
+    // if (null != addonModelList && addonModelList.length > 0) {
+    //   for (Addons addon in addonModelList) {
+    //     if (addon.isSelected!) {
+    //       totalAddonPrice = totalAddonPrice + addon.addonsSubTitlePrice!;
+    //     }
+    //   }
+    // }
+    // totalAddonPrice = totalAddonPrice + widget.itemModel.itemPrice!;
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
@@ -435,7 +563,7 @@ class _CartAddonsState extends State<CartAddons> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '₹${totalAddonPrice.toStringAsFixed(2)}',
+                    '₹${totalPrice.toStringAsFixed(2)}',
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -467,11 +595,21 @@ class _CartAddonsState extends State<CartAddons> {
                       .toList();
                   item.tempId = null;
                   item.enteredQty = 1;
+                  if(null != widget.itemModel.isPriceon &&
+                      widget.itemModel.isPriceon == 1){
+                    item.priceOnItemPrice=selectedPriceOnItem.priceonItemPrice;
+                    item.priceOnId=selectedPriceOnItem.priceonId;
+                  }
                 } else {
                   item = widget.itemModel;
                   item.addonsList = addonModelList
                       .where((element) => element.isSelected == true)
                       .toList();
+                  if(null != widget.itemModel.isPriceon &&
+                      widget.itemModel.isPriceon == 1){
+                    item.priceOnItemPrice=selectedPriceOnItem.priceonItemPrice;
+                    item.priceOnId=selectedPriceOnItem.priceonId;
+                  }
                   // if(!widget.isModifyAddon) {
                   //   item.enteredQty = null != widget.itemModel.enteredQty
                   //       ? widget.itemModel.enteredQty! + 1
@@ -503,7 +641,31 @@ class _CartAddonsState extends State<CartAddons> {
       ),
     );
   }
+  getPriceOnItem() async {
+    isLoading = true;
+    setState(() {});
+    var map = new Map<String, dynamic>();
+    map['item_id'] = widget.itemModel.itemId!;
+    var response = await http.post(Uri.parse(ApiData.ITEM_PRICEON), body: map);
+    var json = convert.jsonDecode(response.body);
+    isLoading = false;
+    setState(() {});
+    List priceonItem = json['item_priceon'];
+    if (null != priceonItem && priceonItem.length > 0) {
+      priceOnItemList = priceonItem
+          .map((spacecraft) => new PriceOnItem.fromJson(spacecraft))
+          .toList();
+      lastPriceOnItemIndex = priceOnItemList.indexWhere((element) =>
+      element.priceonId ==
+          widget.itemModel.priceOnId);
+      if (lastPriceOnItemIndex != -1) {
+        priceOnItemList[lastPriceOnItemIndex].isItemSelected = true;
+        selectedPriceOnItem=priceOnItemList[lastPriceOnItemIndex];
+      }
+    }
+    calculatePrice();
 
+  }
   getCartAddons() async {
     isLoading = true;
     setState(() {});
@@ -558,6 +720,7 @@ class _CartAddonsState extends State<CartAddons> {
 
 
       }
+      calculatePrice();
       isLoading = false;
       setState(() {});
       // Provider.of<ApplicationProvider>(context, listen: false)

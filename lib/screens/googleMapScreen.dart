@@ -47,6 +47,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   int? delNotDel;
   LatLng latLongCurrent = LatLng(0, 0);
   LatLng latLong = new LatLng(0, 0);
+  LatLng myLatLng = LatLng(0,0);
   Place selectedLocation = new Place();
   bool map = false;
   var maptype = MapType.normal;
@@ -55,6 +56,8 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   bool isLoggedIn = false;
   List<AddressModel> getAddressList = [];
   double? mapBottomPadding;
+  String? myLat, myLng;
+
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     mapController.complete(controller);
@@ -112,7 +115,9 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
             size: 26,
             color: Colors.black,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         title: Padding(
           padding: const EdgeInsets.only(top: 5),
@@ -280,103 +285,107 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                     ],
                   ),
                 ),
-                // !widget.isFromCart &&
-                //         isPinMoving &&
-                //         searchController.text.length == 0
-                //     ? Container(
-                //         padding: EdgeInsets.only(
-                //             left: 20, right: 20, top: 20, bottom: 30),
-                //         width: Helper.getScreenWidth(context),
-                //         decoration: BoxDecoration(
-                //           color: Colors.white,
-                //         ),
-                //         child: Column(
-                //           crossAxisAlignment: CrossAxisAlignment.start,
-                //           children: [
-                //             Text(
-                //               'Delivery Location',
-                //               style: TextStyle(
-                //                   color: Colors.grey,
-                //                   fontWeight: FontWeight.w500),
-                //             ),
-                //             SizedBox(
-                //               height: 10,
-                //             ),
-                //             TextField(
-                //               controller: addressController,
-                //               obscureText: false,
-                //               autocorrect: true,
-                //               maxLines: null,
-                //               autofocus: false,
-                //               enabled: false,
-                //               style: TextStyle(
-                //                   fontSize: 16.0,
-                //                   fontWeight: FontWeight.w600,
-                //                   height: 1.3),
-                //               decoration: new InputDecoration(
-                //                 isDense: true,
-                //                 border: InputBorder.none,
-                //                 focusedBorder: InputBorder.none,
-                //                 enabledBorder: InputBorder.none,
-                //                 errorBorder: InputBorder.none,
-                //                 disabledBorder: InputBorder.none,
-                //               ),
-                //             ),
-                //             SizedBox(
-                //               height: 10,
-                //             ),
-                //             Text(
-                //               'The selected pin location is a bit far from your current location. Are you sure this is correct?',
-                //               style: TextStyle(height: 1.5),
-                //             ),
-                //             SizedBox(
-                //               height: 25,
-                //             ),
-                //             Row(
-                //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //               children: [
-                //                 InkWell(
-                //                   onTap: () {
-                //                     print('clicked reset');
-                //                     _getAddressFromLatLng(0, 0);
-                //                     isPinMoving = false;
-                //                     setState(() {});
-                //                   },
-                //                   child: Container(
-                //                     child: Text(
-                //                       'Reset to my location',
-                //                       style: TextStyle(
-                //                           color: Colors.deepOrangeAccent,
-                //                           fontWeight: FontWeight.w600),
-                //                     ),
-                //                   ),
-                //                 ),
-                //                 InkWell(
-                //                   onTap: () {
-                //                     Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                //                         HomeScreen()), (Route<dynamic> route) => false);
-                //                     // Navigator.of(context).pushReplacement(
-                //                     //     MaterialPageRoute(
-                //                     //         builder: (BuildContext context) =>
-                //                     //             HomeScreen()));
-                //                   },
-                //                   child: Container(
-                //                     child: Text(
-                //                       'Yes, deliver here',
-                //                       style: TextStyle(
-                //                           color: Colors.deepOrangeAccent,
-                //                           fontWeight: FontWeight.w600),
-                //                     ),
-                //                   ),
-                //                 )
-                //               ],
-                //             )
-                //           ],
-                //         ),
-                //       )
-                //     :Container(),
+                !widget.isFromCart &&
+                        isPinMoving &&
+                        searchController.text.length == 0 && delNotDel == 0 || delNotDel ==0
+                    ? Container(
+                        padding: EdgeInsets.only(
+                            left: 20, right: 20, top: 20, bottom: 30),
+                        width: Helper.getScreenWidth(context),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Delivery Location',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                           TextField(
+                              controller: addressController,
+                              obscureText: false,
+                              autocorrect: true,
+                              maxLines: null,
+                              autofocus: false,
+                              enabled: false,
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.3),
+                              decoration: new InputDecoration(
+                                isDense: true,
+                                border: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'The selected pin location is a bit far from your current location. Are you sure this is correct?',
+                              style: TextStyle(height: 1.5),
+                            ),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    print('clicked reset');
+                                    _getAddressFromLatLng(0, 0);
+                                    isPinMoving = false;
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    child: Text(
+                                      'Reset to my location',
+                                      style: TextStyle(
+                                          color: Colors.deepOrangeAccent,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    if(delNotDel == 0){
+                                      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                          HomeScreen()), (Route<dynamic> route) => false);
+                                      UserPreference().setCurrentAddress(_currentAddress!);
+                                      UserPreference().setLatLng(latLongCurrent.latitude.toString(), latLongCurrent.longitude.toString());
+                                    }
+                                    // Navigator.of(context).pushReplacement(
+                                    //     MaterialPageRoute(
+                                    //         builder: (BuildContext context) =>
+                                    //             HomeScreen()));
+                                  },
+                                  child: Container(
+                                    child: Text(
+                                      'Yes, deliver here',
+                                      style: TextStyle(
+                                          color: Colors.deepOrangeAccent,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    :Container(),
                 // !widget.isFromCart && !isPinMoving && !isCameraMoving
-                !widget.isFromCart && !isCameraMoving && searchController.text.length == 0
+                !widget.isFromCart && !isCameraMoving && searchController.text.length == 0 && myLatLng == latLongCurrent || delNotDel == 1
                     ? Container(
                         margin: EdgeInsets.all(15),
                         width: MediaQuery.of(context).size.width,
@@ -530,6 +539,10 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   }
 
   _getAddressFromLatLng(double latitude, double longitude) async {
+    isLoading =true;
+    setState(() {
+
+    });
     bool serviceEnabled;
     LocationPermission permission;
     try {
@@ -555,7 +568,9 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
 
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-
+      setState(() {
+        myLatLng = LatLng(position.latitude,position.longitude);
+      });
       if (latitude == 0 && longitude == 0) {
         latitude = position.latitude;
         longitude = position.longitude;

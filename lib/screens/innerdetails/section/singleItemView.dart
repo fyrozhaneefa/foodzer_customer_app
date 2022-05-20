@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/Constants/sapperator.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Models/itemAddonModel.dart';
+import 'package:foodzer_customer_app/Models/itemPriceOnModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/cartAddons.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
@@ -27,16 +30,21 @@ class _SingleItemViewState extends State<SingleItemView> {
   //         .length,
   //         (index) => false);
   bool isIncrement = false;
-  int totalQty = 0;
-  dynamic itemPrice;
-  dynamic totalPrice;
+  int totalQty = 1;
+  PriceOnItem selectedPriceOnItem = new PriceOnItem();
+  int initialQty = 0;
+  double itemPrice=0;
+  double totalPrice=0;
   bool isChecked = false;
   List<Addons> addOnList = [];
+  List<PriceOnItem> priceOnItemList = [];
   // List<Addons> mandatoryAddonList = [];
   int lastAddonIndex = -1;
+  int lastPriceOnItemIndex = -1;
   bool isLoading = false;
   int? radioValue;
   bool isMandatory = false;
+  bool isPOIMandatory = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -48,9 +56,13 @@ class _SingleItemViewState extends State<SingleItemView> {
     }
     if (null != widget.itemModel.enteredQty) {
       totalQty = widget.itemModel.enteredQty!;
+      initialQty = widget.itemModel.enteredQty!;
     }
     if (widget.itemModel.isAddon == 1) {
       getAddons();
+    }
+    if (widget.itemModel.isPriceon == 1) {
+      getPriceOnItem();
     }
     itemPrice = widget.itemModel.itemPrice!;
     // totalPrice = widget.itemModel.itemPrice!;
@@ -113,7 +125,8 @@ class _SingleItemViewState extends State<SingleItemView> {
                             topLeft: Radius.circular(14),
                             topRight: Radius.circular(14),
                           ),
-                          child: Image.network(
+                          child:
+                          Image.network(
                             widget.itemModel.itemImage!,
                             // 'https://mumbaimirror.indiatimes.com/photo/76424716.cms',
                             fit: BoxFit.fill,
@@ -167,7 +180,7 @@ class _SingleItemViewState extends State<SingleItemView> {
                                         BorderRadius.all(Radius.circular(12)),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.grey.shade400,
+                                        color: Colors.grey.shade200,
                                         blurRadius: 3.0,
                                         spreadRadius: 1.0,
                                       )
@@ -177,27 +190,29 @@ class _SingleItemViewState extends State<SingleItemView> {
                                     children: [
                                       IconButton(
                                         onPressed: () {
+                                            if (totalQty == 1) {
+                                              Navigator.of(context).pop();
+                                            } else {
+                                              totalQty = totalQty - 1;
+                                              calculatePrice();
+                                              // Provider.of<ApplicationProvider>(
+                                              //     context,
+                                              //     listen: false)
+                                              //     .updateProduct( widget.itemModel, false, false);
+                                              // setState(() {
+                                              //   totalQty = widget.itemModel.enteredQty!;
+                                              //   totalPrice = double.parse(
+                                              //       totalPrice.toString()) -
+                                              //       double.parse(
+                                              //           itemPrice.toString());
+                                              // });
+                                            }
 
-                                       if(widget.itemModel.isAddon == 0) {
-                                         if(totalQty == 0){
-                                           Navigator.of(context).pop();
-                                         } else{
-                                           widget.itemModel.enteredQty = widget.itemModel.enteredQty! - 1;
-                                           Provider.of<ApplicationProvider>(
-                                               context,
-                                               listen: false)
-                                               .updateProduct( widget.itemModel, false, false);
-                                           setState(() {
-                                             totalQty = widget.itemModel.enteredQty!;
-                                             totalPrice = double.parse(
-                                                 totalPrice.toString()) -
-                                                 double.parse(
-                                                     itemPrice.toString());
-                                           });
-                                         }
-                                       } else{
-                                         showDeleteDialogForMultipleItem(context);
-                                       }
+                                          // else {
+                                          //   showDeleteDialogForMultipleItem(
+                                          //       context);
+                                          // }
+                                          setState(() {});
                                           // if (totalQty == 1) {
                                           //   // Navigator.of(context).pop();
                                           // } else {
@@ -230,6 +245,11 @@ class _SingleItemViewState extends State<SingleItemView> {
                                       ),
                                       IconButton(
                                         onPressed: () {
+                                          totalQty = totalQty + 1;
+
+                                          calculatePrice();
+                                          setState(() {});
+
                                           // if (Provider.of<ApplicationProvider>(
                                           //             context,
                                           //             listen: false)
@@ -246,70 +266,7 @@ class _SingleItemViewState extends State<SingleItemView> {
                                           //                 listen: false)
                                           //             .selectedRestModel
                                           //             .merchantBranchId) {
-                                            if (totalQty == 0) {
 
-                                              if (null !=
-                                                      widget
-                                                          .itemModel.isAddon &&
-                                                  widget.itemModel.isAddon ==
-                                                      1) {
-                                                showModalBottomSheet(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(14),
-                                                        topRight:
-                                                            Radius.circular(14),
-                                                      ),
-                                                    ),
-                                                    isScrollControlled: true,
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return CartAddons(
-                                                          widget.itemModel,
-                                                          true);
-                                                    }).then((value) {
-                                                  if (null != value) {
-                                                    totalQty = value;
-                                                    setState(() {});
-                                                  }
-                                                });
-                                              } else {
-                                                widget.itemModel.enteredQty = 1;
-                                                // widget.itemModel.enteredQty= widget.itemModel.enteredQty!+1;
-                                                setState(() {
-                                                  totalQty = widget
-                                                      .itemModel.enteredQty!;
-                                                });
-                                                Provider.of<ApplicationProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .updateProduct(
-                                                        widget.itemModel,
-                                                        true,
-                                                        false);
-                                              }
-                                            } else if (totalQty > 0 &&
-                                                widget.itemModel.isAddon == 0) {
-                                              widget.itemModel.enteredQty =
-                                                  widget.itemModel.enteredQty! +
-                                                      1;
-                                              Provider.of<ApplicationProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .updateProduct(
-                                                      widget.itemModel,
-                                                      true,
-                                                      false);
-                                              setState(() {
-                                                totalQty = widget
-                                                    .itemModel.enteredQty!;
-                                              });
-                                            } else {
-                                              addDuplicateItem(context);
-                                            }
                                           // } else {
                                           //   showAlertDialog(context);
                                           // }
@@ -335,302 +292,406 @@ class _SingleItemViewState extends State<SingleItemView> {
                           ],
                         )),
                       ),
-                      // null !=
-                      //             addOnList
-                      //                 .where((element) =>
-                      //                     null != element.addonsType &&
-                      //                     element.addonsType == 2)
-                      //                 .toList() &&
-                      //         addOnList
-                      //                 .where((element) =>
-                      //                     null != element.addonsType &&
-                      //                     element.addonsType == 2)
-                      //                 .toList()
-                      //                 .length >
-                      //             0
-                      //     ? Divider(
-                      //         height: 15,
-                      //         thickness: 6,
-                      //         color: Colors.grey.shade300)
-                      //     : Container(),
-                      // null !=
-                      //             addOnList
-                      //                 .where((element) =>
-                      //                     null != element.addonsType &&
-                      //                     element.addonsType == 2)
-                      //                 .toList() &&
-                      //         addOnList
-                      //                 .where((element) =>
-                      //                     null != element.addonsType &&
-                      //                     element.addonsType == 2)
-                      //                 .toList()
-                      //                 .length >
-                      //             0
-                      //     ? Padding(
-                      //         padding: const EdgeInsets.all(15.0),
-                      //         child: Column(
-                      //           crossAxisAlignment: CrossAxisAlignment.start,
-                      //           children: [
-                      //             Text(
-                      //                 null !=
-                      //                             addOnList
-                      //                                 .where((element) =>
-                      //                                     null !=
-                      //                                         element
-                      //                                             .addonsType &&
-                      //                                     element.addonsType ==
-                      //                                         2)
-                      //                                 .toList() &&
-                      //                         addOnList
-                      //                                 .where((element) =>
-                      //                                     null !=
-                      //                                         element
-                      //                                             .addonsType &&
-                      //                                     element.addonsType ==
-                      //                                         2)
-                      //                                 .toList()
-                      //                                 .length >
-                      //                             0
-                      //                     ? addOnList
-                      //                         .where((element) =>
-                      //                             null != element.addonsType &&
-                      //                             element.addonsType == 2)
-                      //                         .toList()
-                      //                         .first
-                      //                         .addonsName!
-                      //                     : "",
-                      //                 style: TextStyle(
-                      //                     fontWeight: FontWeight.w600,
-                      //                     fontSize: 16)),
-                      //             SizedBox(
-                      //               height: 5,
-                      //             ),
-                      //             null !=
-                      //                         addOnList
-                      //                             .where((element) =>
-                      //                                 null !=
-                      //                                     element.addonsType &&
-                      //                                 element.addonsType == 2)
-                      //                             .toList() &&
-                      //                     addOnList
-                      //                             .where((element) =>
-                      //                                 null !=
-                      //                                     element.addonsType &&
-                      //                                 element.addonsType == 2)
-                      //                             .toList()
-                      //                             .length >
-                      //                         0
-                      //                 ? !isMandatory
-                      //                     ? Text('Choose 1',
-                      //                         style: TextStyle(
-                      //                             fontWeight: FontWeight.w600,
-                      //                             color: Colors.grey,
-                      //                             fontSize: 14))
-                      //                     : Row(
-                      //                         children: [
-                      //                           Icon(
-                      //                             Icons.warning_amber_outlined,
-                      //                             color: Colors.red,
-                      //                           ),
-                      //                           SizedBox(
-                      //                             width: 2,
-                      //                           ),
-                      //                           Text("Choose 1",
-                      //                               style: TextStyle(
-                      //                                   fontWeight:
-                      //                                       FontWeight.w600,
-                      //                                   color: Colors.red,
-                      //                                   fontSize: 15))
-                      //                         ],
-                      //                       )
-                      //                 : Container(
-                      //                     height: 0,
-                      //                   ),
-                      //             ListView.builder(
-                      //                 physics: ScrollPhysics(),
-                      //                 shrinkWrap: true,
-                      //                 itemCount: addOnList.length,
-                      //                 itemBuilder: (context, index) {
-                      //                   return Visibility(
-                      //                     visible: null !=
-                      //                             addOnList[index].addonsType &&
-                      //                         addOnList[index].addonsType == 2,
-                      //                     child: Row(
-                      //                       mainAxisAlignment:
-                      //                           MainAxisAlignment.spaceBetween,
-                      //                       children: [
-                      //                         Expanded(
-                      //                           child: Text(addOnList[index]
-                      //                               .addonsSubTitleName
-                      //                               .toString()),
-                      //                         ),
-                      //                         Radio(
-                      //                           activeColor:
-                      //                               Colors.deepOrangeAccent,
-                      //                           value: null !=
-                      //                                       addOnList[index]
-                      //                                           .isSelected &&
-                      //                                   addOnList[index]
-                      //                                       .isSelected!
-                      //                               ? 1
-                      //                               : 0,
-                      //                           groupValue: 1,
-                      //                           onChanged: (value) {
-                      //                             addOnList[index].isSelected =
-                      //                                 true;
-                      //
-                      //                             if (lastAddonIndex != -1) {
-                      //                               addOnList[lastAddonIndex]
-                      //                                   .isSelected = false;
-                      //                             }
-                      //                             lastAddonIndex = index;
-                      //                             isMandatory = false;
-                      //                             setState(() {});
-                      //                           },
-                      //                         )
-                      //                       ],
-                      //                     ),
-                      //                   );
-                      //                 })
-                      //           ],
-                      //         ),
-                      //       )
-                      //     : Container(),
-                      // null != addOnList && addOnList.length > 0
-                      //     ? Divider(
-                      //         height: 1,
-                      //         thickness: 6,
-                      //         color: Colors.grey.shade300)
-                      //     : Container(),
-                      // null != addOnList && addOnList.length > 0
-                      //     ? Padding(
-                      //         padding: const EdgeInsets.all(15.0),
-                      //         child: Column(
-                      //           crossAxisAlignment: CrossAxisAlignment.start,
-                      //           children: [
-                      //             Row(
-                      //               children: [
-                      //                 Text(
-                      //                     null !=
-                      //                                 addOnList
-                      //                                     .where((element) =>
-                      //                                         null !=
-                      //                                             element
-                      //                                                 .addonsType &&
-                      //                                         element.addonsType ==
-                      //                                             1)
-                      //                                     .toList() &&
-                      //                             addOnList
-                      //                                     .where((element) =>
-                      //                                         null !=
-                      //                                             element
-                      //                                                 .addonsType &&
-                      //                                         element.addonsType ==
-                      //                                             1)
-                      //                                     .toList()
-                      //                                     .length >
-                      //                                 0
-                      //                         ? addOnList
-                      //                             .where((element) =>
-                      //                                 null !=
-                      //                                     element.addonsType &&
-                      //                                 element.addonsType == 1)
-                      //                             .toList()
-                      //                             .first
-                      //                             .addonsName!
-                      //                         : "",
-                      //                     style: TextStyle(
-                      //                         fontWeight: FontWeight.w600,
-                      //                         fontSize: 16)),
-                      //               ],
-                      //             ),
-                      //             SizedBox(
-                      //               height: 10,
-                      //             ),
-                      //             Text('Choose items from the list',
-                      //                 style: TextStyle(
-                      //                     fontWeight: FontWeight.w600,
-                      //                     color: Colors.grey,
-                      //                     fontSize: 14)),
-                      //             SizedBox(
-                      //               height: 20,
-                      //             ),
-                      //             ListView.separated(
-                      //                 separatorBuilder: (context, index) {
-                      //                   return Divider();
-                      //                 },
-                      //                 physics: ScrollPhysics(),
-                      //                 shrinkWrap: true,
-                      //                 itemCount: addOnList.length,
-                      //                 itemBuilder: (context, index) {
-                      //                   return Visibility(
-                      //                     visible: null !=
-                      //                             addOnList[index].addonsType &&
-                      //                         addOnList[index].addonsType == 1,
-                      //                     child: Row(
-                      //                       mainAxisAlignment:
-                      //                           MainAxisAlignment.spaceBetween,
-                      //                       children: [
-                      //                         Expanded(
-                      //                           child: Text(addOnList[index]
-                      //                               .addonsSubTitleName
-                      //                               .toString()),
-                      //                         ),
-                      //                         Row(
-                      //                           children: [
-                      //                             Text(
-                      //                                 '(+ INR ${addOnList[index].addonsSubTitlePrice})'),
-                      //                             Checkbox(
-                      //                               checkColor: Colors.white,
-                      //                               shape:
-                      //                                   RoundedRectangleBorder(
-                      //                                 borderRadius:
-                      //                                     BorderRadius.circular(
-                      //                                         3),
-                      //                               ),
-                      //                               activeColor:
-                      //                                   Colors.deepOrangeAccent,
-                      //                               value: addOnList[index]
-                      //                                   .isSelected,
-                      //                               onChanged: (checked) {
-                      //                                 setState(
-                      //                                   () {
-                      //                                     addOnList[index]
-                      //                                             .isSelected =
-                      //                                         checked;
-                      //                                     if (addOnList[index]
-                      //                                             .isSelected ==
-                      //                                         true) {
-                      //                                       totalPrice = double
-                      //                                               .parse(totalPrice
-                      //                                                   .toString()) +
-                      //                                           double.parse(addOnList[
-                      //                                                   index]
-                      //                                               .addonsSubTitlePrice
-                      //                                               .toString());
-                      //                                     } else {
-                      //                                       totalPrice = double
-                      //                                               .parse(totalPrice
-                      //                                                   .toString()) -
-                      //                                           double.parse(addOnList[
-                      //                                                   index]
-                      //                                               .addonsSubTitlePrice
-                      //                                               .toString());
-                      //                                     }
-                      //                                   },
-                      //                                 );
-                      //                               },
-                      //                             ),
-                      //                           ],
-                      //                         )
-                      //                       ],
-                      //                     ),
-                      //                   );
-                      //                 })
-                      //           ],
-                      //         ),
-                      //       )
-                      // : Container(),
+                      null != priceOnItemList && priceOnItemList.length > 0
+                          ? Divider(
+                              height: 15,
+                              thickness: 6,
+                              color: Colors.grey.shade300)
+                          : Container(),
+                      null != priceOnItemList && priceOnItemList.length > 0
+                          ? Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Price on Item",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16)),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  null != priceOnItemList && priceOnItemList.length > 0
+                                      ? !isPOIMandatory
+                                          ? Text('Choose 1',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.grey,
+                                                  fontSize: 14))
+                                          : Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.warning_amber_outlined,
+                                                  color: Colors.red,
+                                                ),
+                                                SizedBox(
+                                                  width: 2,
+                                                ),
+                                                Text("Choose 1",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: Colors.red,
+                                                        fontSize: 15))
+                                              ],
+                                            )
+                                      : Container(
+                                          height: 0,
+                                        ),
+                                  ListView.builder(
+                                      physics: ScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: priceOnItemList.length,
+                                      itemBuilder: (context, index) {
+                                        return Visibility(
+                                          visible: null != priceOnItemList &&
+                                              priceOnItemList.length > 0,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Text(priceOnItemList[index]
+                                                    .priceonItemTitle
+                                                    .toString()),
+                                              ),
+                                              Text(
+                                                  "(+ INR ${priceOnItemList[index].priceonItemPrice.toString()})"),
+                                              Radio(
+                                                activeColor:
+                                                    Colors.deepOrangeAccent,
+                                                value: null !=
+                                                            priceOnItemList[index]
+                                                                .isItemSelected &&
+                                                        priceOnItemList[index]
+                                                            .isItemSelected!
+                                                    ? 1
+                                                    : 0,
+                                                groupValue: 1,
+                                                onChanged: (value) {
+                                                  priceOnItemList[index]
+                                                      .isItemSelected = true;
+
+                                                  if (lastPriceOnItemIndex !=
+                                                      -1) {
+                                                    priceOnItemList[
+                                                            lastPriceOnItemIndex]
+                                                        .isItemSelected = false;
+                                                  }
+
+                                                  // totalPrice=totalPrice + priceOnItemList[index]
+                                                  //     .priceonItemPrice!;
+                                                  // if(lastPriceOnItemIndex!=-1){
+                                                  //  totalPrice=totalPrice - priceOnItemList[
+                                                  //  lastPriceOnItemIndex].priceonItemPrice!;
+                                                  // }
+                                                  selectedPriceOnItem=priceOnItemList[index];
+
+                                                  lastPriceOnItemIndex = index;
+                                                  calculatePrice();
+                                                  setState(() {});
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      })
+                                ],
+                              ),
+                            )
+                          : Container(),
+
+
+                      null != addOnList && addOnList.length > 0
+                          ?   null!=widget.itemModel.isPriceon
+                          && widget.itemModel.isPriceon==1 &&
+                          null!=selectedPriceOnItem.priceonId
+                          && selectedPriceOnItem.priceonId!.isNotEmpty ||
+                          null==widget.itemModel.isPriceon
+                          || widget.itemModel.isPriceon==0?
+                      Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              null !=
+                                  addOnList
+                                      .where((element) =>
+                                  null != element.addonsType &&
+                                      element.addonsType == 2)
+                                      .toList() &&
+                                  addOnList
+                                      .where((element) =>
+                                  null != element.addonsType &&
+                                      element.addonsType == 2)
+                                      .toList()
+                                      .length >
+                                      0
+                                  ? Divider(
+                                  height: 15,
+                                  thickness: 6,
+                                  color: Colors.grey.shade300)
+                                  : Container(),
+                              null !=
+                                  addOnList
+                                      .where((element) =>
+                                  null != element.addonsType &&
+                                      element.addonsType == 2)
+                                      .toList() &&
+                                  addOnList
+                                      .where((element) =>
+                                  null != element.addonsType &&
+                                      element.addonsType == 2)
+                                      .toList()
+                                      .length >
+                                      0
+                                  ? Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        null !=
+                                            addOnList
+                                                .where((element) =>
+                                            null !=
+                                                element
+                                                    .addonsType &&
+                                                element.addonsType ==
+                                                    2)
+                                                .toList() &&
+                                            addOnList
+                                                .where((element) =>
+                                            null !=
+                                                element
+                                                    .addonsType &&
+                                                element.addonsType ==
+                                                    2)
+                                                .toList()
+                                                .length >
+                                                0
+                                            ? addOnList
+                                            .where((element) =>
+                                        null != element.addonsType &&
+                                            element.addonsType == 2)
+                                            .toList()
+                                            .first
+                                            .addonsName!
+                                            : "",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16)),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    null !=
+                                        addOnList
+                                            .where((element) =>
+                                        null !=
+                                            element.addonsType &&
+                                            element.addonsType == 2)
+                                            .toList() &&
+                                        addOnList
+                                            .where((element) =>
+                                        null !=
+                                            element.addonsType &&
+                                            element.addonsType == 2)
+                                            .toList()
+                                            .length >
+                                            0
+                                        ? !isMandatory
+                                        ? Text('Choose 1',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.grey,
+                                            fontSize: 14))
+                                        : Row(
+                                      children: [
+                                        Icon(
+                                          Icons.warning_amber_outlined,
+                                          color: Colors.red,
+                                        ),
+                                        SizedBox(
+                                          width: 2,
+                                        ),
+                                        Text("Choose 1",
+                                            style: TextStyle(
+                                                fontWeight:
+                                                FontWeight.w600,
+                                                color: Colors.red,
+                                                fontSize: 15))
+                                      ],
+                                    )
+                                        : Container(
+                                      height: 0,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: ListView.builder(
+                                          physics: ScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: addOnList.length,
+                                          itemBuilder: (context, index) {
+                                            return Visibility(
+                                              visible: null !=
+                                                  addOnList[index].addonsType &&
+                                                  addOnList[index].addonsType == 2,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(addOnList[index]
+                                                        .addonsSubTitleName
+                                                        .toString()),
+                                                  ),
+                                                  Radio(
+                                                    activeColor:
+                                                    Colors.deepOrangeAccent,
+                                                    value: null !=
+                                                        addOnList[index]
+                                                            .isSelected &&
+                                                        addOnList[index]
+                                                            .isSelected!
+                                                        ? 1
+                                                        : 0,
+                                                    groupValue: 1,
+                                                    onChanged: (value) {
+                                                      addOnList[index].isSelected =
+                                                      true;
+
+                                                      if (lastAddonIndex != -1) {
+                                                        addOnList[lastAddonIndex]
+                                                            .isSelected = false;
+                                                      }
+                                                      lastAddonIndex = index;
+                                                      isMandatory = false;
+                                                      calculatePrice();
+                                                      setState(() {});
+                                                    },
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                          }),
+                                    )
+                                  ],
+                                ),
+                              )
+                                  : Container(),
+                              Divider(
+                                  height: 1,
+                                  thickness: 6,
+                                  color: Colors.grey.shade300),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 15.0,top: 15.0),
+
+                                child: Row(
+                                  children: [
+                                    Text(
+                                        null !=
+                                                    addOnList
+                                                        .where((element) =>
+                                                            null !=
+                                                                element
+                                                                    .addonsType &&
+                                                            element.addonsType ==
+                                                                1)
+                                                        .toList() &&
+                                                addOnList
+                                                        .where((element) =>
+                                                            null !=
+                                                                element
+                                                                    .addonsType &&
+                                                            element.addonsType ==
+                                                                1)
+                                                        .toList()
+                                                        .length >
+                                                    0
+                                            ? addOnList
+                                                .where((element) =>
+                                                    null !=
+                                                        element.addonsType &&
+                                                    element.addonsType == 1)
+                                                .toList()
+                                                .first
+                                                .addonsName!
+                                            : "",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16)),
+                                  ],
+                                ),
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.only( left:15.0),
+                                child: Text('Choose items from the list',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey,
+                                        fontSize: 14)),
+                              ),
+
+
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: ListView.separated(
+                                    separatorBuilder: (context, index) {
+                                      return Divider();
+                                    },
+                                    physics: ScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: addOnList.length,
+                                    itemBuilder: (context, index) {
+                                      return Visibility(
+                                        visible: null !=
+                                                addOnList[index].addonsType &&
+                                            addOnList[index].addonsType == 1,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(addOnList[index]
+                                                  .addonsSubTitleName
+                                                  .toString()),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                    '(+ INR ${addOnList[index].addonsSubTitlePrice})'),
+                                                Checkbox(
+                                                  checkColor: Colors.white,
+                                                  shape:
+                                                      RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            3),
+                                                  ),
+                                                  activeColor:
+                                                      Colors.deepOrangeAccent,
+                                                  value: addOnList[index]
+                                                      .isSelected,
+                                                  onChanged: (checked) {
+                                                    setState(
+                                                      () {
+                                                        addOnList[index]
+                                                                .isSelected =
+                                                            checked;
+                                                        calculatePrice();
+                                                      },
+                                                    );
+                                                  },
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                              )
+                            ],
+                          )
+                          : Container():Container(),
                       Divider(
                           height: 15,
                           thickness: 6,
@@ -670,105 +731,141 @@ class _SingleItemViewState extends State<SingleItemView> {
                     ],
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.all(20.0),
-                //   child: Container(
-                //     height: 60,
-                //     child: ElevatedButton(
-                //       onPressed: () {
-                //         if (Provider.of<ApplicationProvider>(context,
-                //                     listen: false)
-                //                 .cartModelList
-                //                 .isEmpty ||
-                //             Provider.of<ApplicationProvider>(context,
-                //                         listen: false)
-                //                     .cartModelList
-                //                     .first
-                //                     .itemMerchantBranch ==
-                //                 Provider.of<ApplicationProvider>(context,
-                //                         listen: false)
-                //                     .selectedRestModel
-                //                     .merchantBranchId) {
-                //           if (null != addOnList && addOnList.length > 0) {
-                //             List<Addons> addedMandatoryAddonList = [];
-                //             addedMandatoryAddonList = addOnList
-                //                 .where((element) =>
-                //                     null != element.addonsType &&
-                //                     element.addonsType == 2)
-                //                 .toList();
-                //             if (null != addedMandatoryAddonList &&
-                //                 addedMandatoryAddonList.length > 0 &&
-                //                 lastAddonIndex == -1) {
-                //               isMandatory = true;
-                //               setState(() {});
-                //             } else {
-                //               widget.itemModel.addonsList = addOnList
-                //                   .where(
-                //                       (element) => element.isSelected == true)
-                //                   .toList();
-                //               Provider.of<ApplicationProvider>(context,
-                //                       listen: false)
-                //                   .updateProduct(
-                //                       widget.itemModel,
-                //                       null == widget.itemModel.enteredQty ||
-                //                           null != widget.itemModel.enteredQty &&
-                //                               itemCount >
-                //                                   widget.itemModel.enteredQty!,
-                //                       itemCount);
-                //               Navigator.pop(context);
-                //               isMandatory = false;
-                //               setState(() {});
-                //             }
-                //           } else {
-                //             widget.itemModel.addonsList = addOnList
-                //                 .where((element) => element.isSelected == true)
-                //                 .toList();
-                //             Provider.of<ApplicationProvider>(context,
-                //                     listen: false)
-                //                 .updateProduct(
-                //                     widget.itemModel,
-                //                     null == widget.itemModel.enteredQty ||
-                //                         null != widget.itemModel.enteredQty &&
-                //                             itemCount >
-                //                                 widget.itemModel.enteredQty!,
-                //                     itemCount);
-                //             Navigator.pop(context);
-                //           }
-                //         } else {
-                //           showAlertDialog(context);
-                //         }
-                //       },
-                //       child: Row(
-                //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //         children: [
-                //           Text("Total amount",
-                //             // null != widget.itemModel.enteredQty &&
-                //             //         widget.itemModel.enteredQty! > 0
-                //             //     ? 'Update basket'
-                //             //     : 'Add to basket',
-                //             style: TextStyle(
-                //                 fontSize: 16, fontWeight: FontWeight.w700),
-                //           ),
-                //           Text(
-                //             'INR ' + totalPrice.toStringAsFixed(2),
-                //             style: TextStyle(
-                //                 fontSize: 16, fontWeight: FontWeight.w700),
-                //           )
-                //         ],
-                //       ),
-                //       style: ElevatedButton.styleFrom(
-                //           primary: Colors.deepOrange,
-                //           elevation: 0,
-                //           shape: RoundedRectangleBorder(
-                //             borderRadius: BorderRadius.circular(12.0),
-                //             // side: BorderSide(color: Colors.grey)
-                //           )),
-                //     ),
-                //   ),
-                // )
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Container(
+                    height: 60,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (null != widget.itemModel.isPriceon &&
+                            widget.itemModel.isPriceon == 1 &&
+                            lastPriceOnItemIndex == -1) {
+                          isPOIMandatory = true;
+                          setState(() {});
+                        } else if (null != widget.itemModel.isAddon &&
+                            widget.itemModel.isAddon == 1 &&
+                            addOnList
+                                    .where((element) =>
+                                        null != element.addonsType &&
+                                        element.addonsType! == 2)
+                                    .length >
+                                0 &&
+                            lastAddonIndex == -1) {
+                          isMandatory = true;
+                          setState(() {});
+                        } else {
+                          if (null != widget.itemModel.isAddon &&
+                              widget.itemModel.isAddon == 1) {
+                            Item item = new Item();
+                            // if (widget.isNewItem) {
+                            String kson =
+                                Item.ToPreferenceJson(widget.itemModel);
+                            var jsonData = json.decode(kson);
+                            item = Item.fromJson(jsonData);
+                            item.addonsList = addOnList
+                                .where((element) => element.isSelected == true)
+                                .toList();
+                            item.tempId = null;
+                            item.enteredQty = totalQty;
+                            if(null != widget.itemModel.isPriceon &&
+                                widget.itemModel.isPriceon == 1){
+                              item.priceOnItemPrice=selectedPriceOnItem.priceonItemPrice;
+                              item.priceOnId=selectedPriceOnItem.priceonId;
+                            }
+
+                            Provider.of<ApplicationProvider>(context,
+                                    listen: false)
+                                .updateProduct(item, true, false);
+                            Navigator.of(context)
+                                .pop(widget.itemModel.enteredQty);
+                          } else {
+                            Item item = new Item();
+                            // if (widget.isNewItem) {
+                            String kson =
+                            Item.ToPreferenceJson(widget.itemModel);
+                            var jsonData = json.decode(kson);
+                            item = Item.fromJson(jsonData);
+
+                            item.enteredQty = totalQty;
+                            if(null != widget.itemModel.isPriceon &&
+                                widget.itemModel.isPriceon == 1){
+                              item.priceOnItemPrice=selectedPriceOnItem.priceonItemPrice;
+                              item.priceOnId=selectedPriceOnItem.priceonId;
+                            }
+                            Provider.of<ApplicationProvider>(context,
+                                    listen: false)
+                                .updateProduct(item,
+                                    totalQty > initialQty, false);
+                            Navigator.of(context)
+                                .pop(widget.itemModel.enteredQty);
+                          }
+                        }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            null != widget.itemModel.enteredQty &&
+                                    widget.itemModel.enteredQty! > 0
+                                ? 'Update basket'
+                                : 'Add to basket',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w700),
+                          ),
+                          Text(
+                            'INR ' + totalPrice.toStringAsFixed(2),
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w700),
+                          )
+                        ],
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.deepOrange,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            // side: BorderSide(color: Colors.grey)
+                          )),
+                    ),
+                  ),
+                )
               ],
             ),
           );
+  }
+  calculatePrice(){
+    totalPrice=0;
+
+    double itemPrice=0;
+    if(null != widget.itemModel.isPriceon &&
+        widget.itemModel.isPriceon == 1 &&
+        null!=selectedPriceOnItem.priceonItemPrice){
+      itemPrice = selectedPriceOnItem.priceonItemPrice!;
+    }else{
+      itemPrice=widget.itemModel.itemPrice!;
+    }
+    itemPrice=itemPrice*totalQty;
+    for(Addons addon in addOnList){
+
+      // if(null!=widget.priceOnId && product.priceOnId!.isNotEmpty){
+      //   itemPrice=product.priceOnItemPrice!;
+      // }else{
+      //   itemPrice=product.itemPrice!;
+      // }
+
+
+        if (null != addon.isSelected && addon.isSelected!) {
+          if( null !=
+              addon.addonsType &&
+              addon.addonsType == 1) {
+            totalPrice = totalPrice + (addon
+                .addonsSubTitlePrice! * totalQty);
+          }
+        }
+
+    }
+    totalPrice=totalPrice+itemPrice;
+
   }
 
   void addNote(context) {
@@ -834,6 +931,23 @@ class _SingleItemViewState extends State<SingleItemView> {
         });
   }
 
+  getPriceOnItem() async {
+    isLoading = true;
+    setState(() {});
+    var map = new Map<String, dynamic>();
+    map['item_id'] = widget.itemModel.itemId!;
+    var response = await http.post(Uri.parse(ApiData.ITEM_PRICEON), body: map);
+    var json = convert.jsonDecode(response.body);
+    isLoading = false;
+    setState(() {});
+    List priceonItem = json['item_priceon'];
+    if (null != priceonItem && priceonItem.length > 0) {
+      priceOnItemList = priceonItem
+          .map((spacecraft) => new PriceOnItem.fromJson(spacecraft))
+          .toList();
+    }
+  }
+
   getAddons() async {
     isLoading = true;
     setState(() {});
@@ -849,18 +963,6 @@ class _SingleItemViewState extends State<SingleItemView> {
       addOnList = dataList
           .map((spacecraft) => new Addons.fromJson(spacecraft))
           .toList();
-      // for (Addons addon in addonList){
-      //
-      //   if(null!=addon.addonsType &&
-      //       addon.addonsType==2){
-      //     mandatoryAddonList.add(addon);
-      //   }else{
-      //     optionalAddonList.add(addon);
-      //   }
-      // }
-      // if(null!=mandatoryAddonList && mandatoryAddonList.length>0) {
-      //   mandatoryAddonList[0].isSelected = true;
-      // }
 
       if (null != widget.itemModel.addonsList &&
           widget.itemModel.addonsList!.length > 0) {
@@ -890,10 +992,9 @@ class _SingleItemViewState extends State<SingleItemView> {
 
       isLoading = false;
       setState(() {});
-      // Provider.of<ApplicationProvider>(context, listen: false)
-      //     .setItemAddons(addonModelList);
     }
   }
+
   void showDeleteDialogForMultipleItem(BuildContext context) {
     // set up the buttons
     Widget cancelButton = Container(
@@ -927,10 +1028,8 @@ class _SingleItemViewState extends State<SingleItemView> {
         onPressed: () {
           Navigator.pop(context);
           Navigator.pop(context);
-          Navigator.of(context)
-              .push(MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  ItemBasketHome()));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => ItemBasketHome()));
         },
       ),
     );
@@ -961,6 +1060,7 @@ class _SingleItemViewState extends State<SingleItemView> {
       },
     );
   }
+
   void showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = Container(

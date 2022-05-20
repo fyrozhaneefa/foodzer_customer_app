@@ -41,7 +41,7 @@ class _GroceryCardListState extends State<GroceryCardList> {
       cardName: null!=item.merchantBranchName?item.merchantBranchName:"",
       cardTime: null!=item.merchantBranchOrderTime?item.merchantBranchOrderTime:"",
       cardType: null!=item.cuisines?item.cuisines:"",
-      rating: null!=item.avgReview||item.avgReview == "0"?item.avgReview:"No reviews yet",
+      rating: null!=item.rating && item.rating!.isNotEmpty?item.rating:"No reviews yet",
       deliveryCharge: '',
       bannerName: null!=item.merchantBranchCoverImage?item.merchantBranchCoverImage:item.merchantBranchImage,
       discount: "",
@@ -87,34 +87,7 @@ class _GroceryCardListState extends State<GroceryCardList> {
             scrollDirection: Axis.horizontal,
           ),
       );
-      // ...popularRestList.map((item) => GroceryCard(
-      //   cardName: item.merchantBranchName,
-      //   cardTime: item.merchantBranchOrderTime,
-      //   cardType: item.cuisines,
-      //   rating: item.avgReview,
-      //   deliveryCharge: 'AED 4.00',
-      //   bannerName: item.merchantBranchImage,
-      //   discount: '34% off',
-      //   busy: item.merchantBranchBusy,
-      //   press: (){
-      //     if(item.merchantBranchBusy == "0") {
-      //       Navigator.of(context).push(MaterialPageRoute(
-      //           builder: (BuildContext context) =>
-      //               RestaurantDetailsScreen(item.merchantBranchId,item.lat,item.lng)));
-      //       // Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
-      //     } else {
-      //       Fluttertoast.showToast(
-      //           msg: "Restaurant is busy!! Come back later...",
-      //           toastLength: Toast.LENGTH_SHORT,
-      //           gravity: ToastGravity.SNACKBAR,
-      //           timeInSecForIosWeb: 1,
-      //           backgroundColor: Colors.red,
-      //           textColor: Colors.red,
-      //           fontSize: 16.0
-      //       );
-      //     }
-      //   },
-      // )).toList();
+
 
   }
 
