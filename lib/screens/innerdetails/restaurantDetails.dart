@@ -109,6 +109,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                     ),
                   ],
                 ),
+
                 Padding(
                   padding: EdgeInsets.only(left: 10, top: 30),
                   child: ShimmerWidget.rectangular(
