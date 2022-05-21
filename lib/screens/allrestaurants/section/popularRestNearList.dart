@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/popularRestNearCard.dart';
+import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shimmerwidget.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,8 +13,9 @@ import '../../../Models/popularrestaurentNearmodel.dart';
 import '../../../utils/helper.dart';
 
 class PopularRestNearList extends StatelessWidget {
+  final bool isLoading;
   const PopularRestNearList({
-    Key? key,
+    Key? key,this.isLoading=true
   }) : super(key: key);
 
   @override
@@ -24,9 +26,7 @@ class PopularRestNearList extends StatelessWidget {
             future: PopularRestaurentNear().getPupularRestaurent(),
             builder: (context, AsyncSnapshot<List<PopularRest>?> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting)
-                return Center(
-                  child: CircularProgressIndicator(color: Colors.deepOrange),
-                );
+                return Padding(padding: EdgeInsets.only(bottom: 10),child: ShimmerWidget.rectangular(height:150 ,shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),),);
               else if (snapshot.hasData) {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shimmerwidget.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 
 class RestaurantServices extends StatelessWidget {
   final String? serviceImage, serviceName;
+  final bool isLoading;
   const RestaurantServices({
-    Key? key, this.serviceImage, this.serviceName,
+    Key? key, this.serviceImage, this.serviceName,this.isLoading=false
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left:20,top: 10),
-      child: Container(
+      child:isLoading ? ShimmerWidget.rectangular(height: 100): Container(
         width: Helper.getScreenWidth(context)*0.22,
 
 

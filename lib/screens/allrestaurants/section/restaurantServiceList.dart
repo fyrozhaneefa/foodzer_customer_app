@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurantServicesCard.dart';
+import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shimmerwidget.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,9 +26,9 @@ class RestaurantServicesList extends StatelessWidget {
             builder:
                 (context, AsyncSnapshot<List<SpecialCategories>?> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting)
-                return Center(
-                    child: Text("Loading..."
-                ));
+                return
+
+                Text("Loading....");
               else if (snapshot.hasData) {
                 return Row(children: [
                   Container( height: 140,

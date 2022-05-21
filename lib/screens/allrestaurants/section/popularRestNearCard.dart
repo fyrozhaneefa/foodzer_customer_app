@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shimmerwidget.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 
 class PopularRestNearCard extends StatelessWidget {
-  final String cardName,
+  final  cardName,
       cardTime,
       cardType,
       cardSubType,
@@ -12,9 +13,11 @@ class PopularRestNearCard extends StatelessWidget {
       bannerName,
       discount;
   final press;
+  final isLoading;
   const PopularRestNearCard({
     Key? key,
     // required this.cardBanner,
+    this.isLoading =true,
     required this.cardName,
     required this.cardTime,
     required this.cardType,
@@ -62,6 +65,7 @@ class PopularRestNearCard extends StatelessWidget {
                               loadingProgress.expectedTotalBytes!
                               : null,
                         ),
+
                       );
                     },
                     height: double.infinity,

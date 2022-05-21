@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
+import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shimmerwidget.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../Api/ApiData.dart';
 import '../../../Models/restaurentmodel.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class Restaurants extends StatefulWidget {
+
   const Restaurants({Key? key}) : super(key: key);
 
   @override
@@ -20,6 +23,13 @@ class Restaurants extends StatefulWidget {
 
 class _RestaurantsState extends State<Restaurants> {
   bool isSwitchView = true;
+  bool isLoading =true;
+
+  get user => null;
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -92,11 +102,74 @@ class _RestaurantsState extends State<Restaurants> {
               future: AllRestaurent().getRestaurent(),
               builder: (context, AsyncSnapshot<List<Results>?> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting)
-                  return Center(
-                      child: CircularProgressIndicator(
-                    color: Colors.deepOrange,
-                  ));
-                else if (snapshot.hasData) {
+                  return
+
+                  ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount:
+                      null != snapshot.data  ? snapshot.data!.length : 0,
+                      itemBuilder: (BuildContext context, int index) {
+                        Results user = snapshot.data!.elementAt(index);
+                        return Container(
+                            margin: EdgeInsets.only(bottom: 30),
+                            child: Row(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                Stack(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color:
+                                              Colors.grey.shade300),
+                                          borderRadius:
+                                          BorderRadius.circular(12)),
+                                      width: 70,
+                                      height: 60,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                          BorderRadius.circular(8.0),
+                                          child:isLoading?ShimmerWidget.rectangular(height: 100):Image.network(
+                                            user.merchantBranchImage!,
+                                            fit: BoxFit.fill,
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                Widget child,
+                                                ImageChunkEvent?
+                                                loadingProgress) {
+                                              if (loadingProgress == null)
+                                                return child;
+                                              return Center(
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Expanded(
+                                  child: ProductDesc(isLoading: true,
+                                    user: user,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+
+                        );
+                      });
+                // 2nd
+
+                else
+                  if (snapshot.hasData) {
                   return ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -169,21 +242,12 @@ class _RestaurantsState extends State<Restaurants> {
                                                               loadingProgress) {
                                                     if (loadingProgress == null)
                                                       return child;
-                                                    return Center(
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        color: Colors
-                                                            .deepOrangeAccent,
-                                                        value: loadingProgress
-                                                                    .expectedTotalBytes !=
-                                                                null
-                                                            ? loadingProgress
-                                                                    .cumulativeBytesLoaded /
-                                                                loadingProgress
-                                                                    .expectedTotalBytes!
-                                                            : null,
-                                                      ),
+                                                    return  Center(
+
+
                                                     );
+
+
                                                   },
                                                 ),
                                               ),
@@ -373,7 +437,7 @@ class _RestaurantsState extends State<Restaurants> {
                                                     )
                                                   : Container()
                                     ]),
-                                    ProductDesc(user: user),
+                                     ProductDesc(user: user,isLoading: false),
                                   ])),
                         );
                       });
@@ -390,8 +454,9 @@ class _RestaurantsState extends State<Restaurants> {
 
 class ProductDesc extends StatelessWidget {
   Results user;
+  final bool isLoading;
 
-  ProductDesc({Key? key, required this.user}) : super(key: key);
+  ProductDesc({Key? key, required this.user,this.isLoading = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -400,7 +465,8 @@ class ProductDesc extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(
+
+            isLoading?ShimmerWidget.rectangular(height: 15,width: 200,):Text(
               user.merchantBranchName.toString(),
               style: TextStyle(
                   color: Colors.black,
@@ -431,7 +497,7 @@ class ProductDesc extends StatelessWidget {
         SizedBox(
           height: 3,
         ),
-        Text(
+        isLoading?ShimmerWidget.rectangular(height: 15,width: 150,): Text(
           null != user.cuisines ? user.cuisines.toString() : "",
           style: TextStyle(
             fontSize: 12,
@@ -443,7 +509,7 @@ class ProductDesc extends StatelessWidget {
         ),
         Row(
           children: [
-            Icon(
+            isLoading?ShimmerWidget.rectangular(height: 15,width: 100,):Icon(
               Icons.tag_faces,
               color: Colors.orangeAccent,
               size: 20,
@@ -451,7 +517,7 @@ class ProductDesc extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            user.avgReview == "1"
+            isLoading?Container(): user.avgReview == "1"
                 ? Text("Amazing")
                 : user.avgReview == "2"
                     ? Text("Very Good")
@@ -469,14 +535,14 @@ class ProductDesc extends StatelessWidget {
         ),
         Row(
           children: [
-            Icon(
+            isLoading?Container():Icon(
               Icons.access_time,
               size: 20,
             ),
             SizedBox(
               width: 5,
             ),
-            Text(
+            isLoading?Container(): Text(
               user.merchantBranchOrderTime.toString() +
                   " mins" +
                   " | " +
@@ -489,7 +555,7 @@ class ProductDesc extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            Container(
+            isLoading?Container():Container(
               child: CircleAvatar(
                 radius: 2,
                 backgroundColor: Colors.grey.shade400,
@@ -498,12 +564,12 @@ class ProductDesc extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            Icon(
+            isLoading?Container(): Icon(
               Icons.delivery_dining,
               color: Colors.grey.shade900,
               size: 20,
             ),
-            Text(
+            isLoading?Container(): Text(
               'BD 0.40',
               style: TextStyle(
                 fontSize: 12,

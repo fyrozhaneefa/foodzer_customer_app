@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shimmerwidget.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -55,15 +56,22 @@ class _CategoryCardState extends State<CategoryCard> {
                       loadingBuilder: (BuildContext context, Widget child,
                           ImageChunkEvent? loadingProgress) {
                         if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.deepOrangeAccent,
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
+                        return 
+
+                        //   Center(
+                        //   child: CircularProgressIndicator(
+                        //     color: Colors.deepOrangeAccent,
+                        //     value: loadingProgress.expectedTotalBytes != null
+                        //         ? loadingProgress.cumulativeBytesLoaded /
+                        //         loadingProgress.expectedTotalBytes!
+                        //         : null,
+                        //   ),
+                        // );
+                        
+                        ShimmerWidget.rectangular(height: 150,value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                            : null,);
                       },
                     ),
                   ),

@@ -5,6 +5,7 @@ import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
+import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shimmerwidget.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:foodzer_customer_app/screens/home/changeAddressFromHome.dart';
@@ -223,7 +224,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body:
       isLoading?
-      Center(child: CircularProgressIndicator(),):
+     Center(child: CircularProgressIndicator(),
+
+      ):
+
       delNotDel == 0 ?Body():Column(mainAxisAlignment: MainAxisAlignment.end, children: [
         Expanded(
           child: Container(
