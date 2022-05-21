@@ -484,9 +484,7 @@ class ProductDesc extends StatelessWidget {
         Row(
           children: [
 
-            isLoading
-                ? ShimmerWidget.rectangular(height: 15, width: 200,)
-                : Text(
+             Text(
               user.merchantBranchName.toString(),
               style: TextStyle(
                   color: Colors.black,
@@ -517,7 +515,7 @@ class ProductDesc extends StatelessWidget {
         SizedBox(
           height: 3,
         ),
-        isLoading ? ShimmerWidget.rectangular(height: 15, width: 150,) : Text(
+        Text(
           null != user.cuisines ? user.cuisines.toString() : "",
           style: TextStyle(
             fontSize: 12,
@@ -529,9 +527,7 @@ class ProductDesc extends StatelessWidget {
         ),
         Row(
           children: [
-            isLoading
-                ? ShimmerWidget.rectangular(height: 15, width: 100,)
-                : Icon(
+           Icon(
               Icons.tag_faces,
               color: Colors.orangeAccent,
               size: 20,
@@ -539,7 +535,7 @@ class ProductDesc extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            isLoading ? Container() : user.avgReview == "1"
+             user.avgReview == "1"
                 ? Text("Amazing")
                 : user.avgReview == "2"
                 ? Text("Very Good")
@@ -557,14 +553,14 @@ class ProductDesc extends StatelessWidget {
         ),
         Row(
           children: [
-            isLoading ? Container() : Icon(
+             Icon(
               Icons.access_time,
               size: 20,
             ),
             SizedBox(
               width: 5,
             ),
-            isLoading ? Container() : Text(
+             Text(
               user.merchantBranchOrderTime.toString() +
                   " mins" +
                   " | " +
@@ -577,7 +573,7 @@ class ProductDesc extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            isLoading ? Container() : Container(
+           Container(
               child: CircleAvatar(
                 radius: 2,
                 backgroundColor: Colors.grey.shade400,
@@ -586,12 +582,12 @@ class ProductDesc extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            isLoading ? Container() : Icon(
+            Icon(
               Icons.delivery_dining,
               color: Colors.grey.shade900,
               size: 20,
             ),
-            isLoading ? Container() : Text(
+             Text(
               'BD 0.40',
               style: TextStyle(
                 fontSize: 12,

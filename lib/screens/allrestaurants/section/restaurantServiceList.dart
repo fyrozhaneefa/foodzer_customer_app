@@ -26,24 +26,52 @@ class RestaurantServicesList extends StatelessWidget {
             builder:
                 (context, AsyncSnapshot<List<SpecialCategories>?> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting)
-                return
+                return Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 20,top: 10),
+                      child: ShimmerWidget.rectangular(
+                          height: 130,
+                          width: 80,
+                          shapeBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                    ),
+                    Padding(
+                      padding:  EdgeInsets.only(left: 20,top: 10),
+                      child: ShimmerWidget.rectangular(
+                          height: 130,
+                          width: 80,
+                          shapeBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20,top: 10),
+                      child: ShimmerWidget.rectangular(
+                          height: 130,
+                          width: 80,
+                          shapeBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                    ),
 
-                Text("Loading....");
+                  ],
+                );
               else if (snapshot.hasData) {
                 return Row(children: [
-                  Container( height: 140,
-                      child: ListView.builder(scrollDirection: Axis.horizontal,shrinkWrap: true,
+                  Container(
+                      height: 140,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
                           itemCount: (snapshot.data!.length),
                           itemBuilder: (BuildContext context, int index) {
-                            SpecialCategories restaurentdata = snapshot.data!.elementAt(index);
+                            SpecialCategories restaurentdata =
+                                snapshot.data!.elementAt(index);
                             return RestaurantServices(
-                              serviceImage:
-                                  restaurentdata.categoryImage,
+                              serviceImage: restaurentdata.categoryImage,
                               serviceName: restaurentdata.categoryName,
                             );
                           }))
-                ]
-                );
+                ]);
               } else {
                 return Center(child: Text("no data"));
               }
@@ -53,17 +81,15 @@ class RestaurantServicesList extends StatelessWidget {
 
 class SpecialCategory {
   Future<List<SpecialCategories>?> getSpecialCategory() async {
-    SharedPreferences prefs=await SharedPreferences.getInstance();
-    final response = await http.post(
-        Uri.parse(ApiData.All_Restaurent),
-        headers: {
-          'Cookie': ' ci_session=445a8129f0edc2b81b72086233c20f2744cc4e92'
-        },
-        body: {
-          'lat': prefs.getString('latitude'),
-          'lng': prefs.getString('longitude'),
-          'delivery_type': 'delivery',
-        });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final response =
+        await http.post(Uri.parse(ApiData.All_Restaurent), headers: {
+      'Cookie': ' ci_session=445a8129f0edc2b81b72086233c20f2744cc4e92'
+    }, body: {
+      'lat': prefs.getString('latitude'),
+      'lng': prefs.getString('longitude'),
+      'delivery_type': 'delivery',
+    });
 
     final jsonData = jsonDecode(response.body);
     var data = SpecialCategoryModel.fromJson(jsonData).specialCategories;

@@ -14,9 +14,9 @@ import '../../../utils/helper.dart';
 
 class PopularRestNearList extends StatelessWidget {
   final bool isLoading;
-  const PopularRestNearList({
-    Key? key,this.isLoading=true
-  }) : super(key: key);
+
+  const PopularRestNearList({Key? key, this.isLoading = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,27 @@ class PopularRestNearList extends StatelessWidget {
             future: PopularRestaurentNear().getPupularRestaurent(),
             builder: (context, AsyncSnapshot<List<PopularRest>?> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting)
-                return Padding(padding: EdgeInsets.only(bottom: 10),child: ShimmerWidget.rectangular(height:150 ,shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),),);
+                return
+                  Column(crossAxisAlignment: CrossAxisAlignment.start,children: [
+
+                  Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+              child: ShimmerWidget.rectangular(
+              height: 150,
+              shapeBorder: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)),
+              ),
+              ),
+                    
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+                      Padding(padding: EdgeInsets.all(1),child: ShimmerWidget.rectangular(height: 20,width: 160),),
+                      Padding(padding: EdgeInsets.only(bottom: 10),child: ShimmerWidget.rectangular(height: 20,width: 100),)
+                    ],),
+                    Padding(padding: EdgeInsets.only(bottom: 30,top: 5),child: ShimmerWidget.rectangular(height: 20,width: 100),),
+
+
+
+                  ],);
               else if (snapshot.hasData) {
                 return Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +76,10 @@ class PopularRestNearList extends StatelessWidget {
                               press: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        RestaurantDetailsScreen(nearrestaurent.merchantBranchId,nearrestaurent.lat,nearrestaurent.lng)));
+                                        RestaurantDetailsScreen(
+                                            nearrestaurent.merchantBranchId,
+                                            nearrestaurent.lat,
+                                            nearrestaurent.lng)));
                               },
                             );
                           }),
@@ -159,7 +182,7 @@ class PopularRestNearList extends StatelessWidget {
 
 class PopularRestaurentNear {
   Future<List<PopularRest>?> getPupularRestaurent() async {
-    SharedPreferences prefs=await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = await http.post(
       Uri.parse("https://opine.cloud/foodzer_test/mob_food_new/restaurants"),
       body: {
