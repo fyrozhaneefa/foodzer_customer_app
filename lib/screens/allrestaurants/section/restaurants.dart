@@ -12,9 +12,9 @@ import 'package:shimmer/shimmer.dart';
 import '../../../Api/ApiData.dart';
 import '../../../Models/restaurentmodel.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class Restaurants extends StatefulWidget {
-
   const Restaurants({Key? key}) : super(key: key);
 
   @override
@@ -26,7 +26,6 @@ class _RestaurantsState extends State<Restaurants> {
   bool isLoading = true;
 
   get user => null;
-
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +63,7 @@ class _RestaurantsState extends State<Restaurants> {
                             Icons.list,
                             size: 20,
                             color:
-                            isSwitchView ? Colors.deepOrange : Colors.black,
+                                isSwitchView ? Colors.deepOrange : Colors.black,
                           ),
                         ),
                       ),
@@ -99,31 +98,52 @@ class _RestaurantsState extends State<Restaurants> {
               future: AllRestaurent().getRestaurent(),
               builder: (context, AsyncSnapshot<List<Results>?> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting)
-                  return
-
-
-                    ListView.builder(itemCount: 4,shrinkWrap: true,itemBuilder: (context, index) {
-                      return Row(crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          Padding(padding: EdgeInsets.all(10),
-                            child: ShimmerWidget.rectangular(height: 70,
-                              width: 70,
-                              shapeBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),),),),
-
-                         Column(crossAxisAlignment: CrossAxisAlignment.start,
-                           children: [
-                             Padding(padding: EdgeInsets.only(left: 10,top: 10),child:  ShimmerWidget.rectangular(height: 20,width: 120,),),
-                             Padding(padding: EdgeInsets.only(left: 10,top: 5),child:  ShimmerWidget.rectangular(height: 20,width: 180,),),
-                             Padding(padding: EdgeInsets.only(left: 10,top: 5),child:  ShimmerWidget.rectangular(height: 20,width: 90,),),
-                           ],
-                         )
-
-
-                        ],
-                      );
-                    });
+                  return ListView.builder(
+                      itemCount: 4,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(10),
+                              child: ShimmerWidget.rectangular(
+                                height: 70,
+                                width: 70,
+                                shapeBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 10, top: 10),
+                                  child: ShimmerWidget.rectangular(
+                                    height: 20,
+                                    width: 120,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 10, top: 5),
+                                  child: ShimmerWidget.rectangular(
+                                    height: 20,
+                                    width: 180,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 10, top: 5),
+                                  child: ShimmerWidget.rectangular(
+                                    height: 20,
+                                    width: 90,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        );
+                      });
 
                 // ListView.builder(
                 //     physics: NeverScrollableScrollPhysics(),
@@ -194,7 +214,7 @@ class _RestaurantsState extends State<Restaurants> {
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount:
-                      null != snapshot.data ? snapshot.data!.length : 0,
+                          null != snapshot.data ? snapshot.data!.length : 0,
                       itemBuilder: (BuildContext context, int index) {
                         Results user = snapshot.data!.elementAt(index);
                         return InkWell(
@@ -231,232 +251,241 @@ class _RestaurantsState extends State<Restaurants> {
                           },
                           child: isSwitchView
                               ? Container(
-                            margin: EdgeInsets.only(bottom: 30),
-                            child: Row(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                Stack(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color:
-                                              Colors.grey.shade300),
-                                          borderRadius:
-                                          BorderRadius.circular(12)),
-                                      width: 70,
-                                      height: 60,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(),
+                                  margin: EdgeInsets.only(bottom: 30),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color:
+                                                        Colors.grey.shade300),
+                                                borderRadius:
+                                                    BorderRadius.circular(12)),
+                                            width: 70,
+                                            height: 60,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(),
+                                              child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                  child:
+                                                      // Image.network(
+                                                      //   user.merchantBranchImage!,
+                                                      //   fit: BoxFit.fill,
+                                                      //   loadingBuilder:
+                                                      //       (BuildContext context,
+                                                      //       Widget child,
+                                                      //       ImageChunkEvent?
+                                                      //       loadingProgress) {
+                                                      //     if (loadingProgress == null)
+                                                      //       return child;
+                                                      //     return Center(
+                                                      //
+                                                      //
+                                                      //     );
+                                                      //   },
+                                                      // ),
+                                                      CachedNetworkImage(
+                                                    imageUrl: user
+                                                        .merchantBranchImage!,
+                                                    fit: BoxFit.fill,
+                                                    errorWidget:
+                                                        (context, url, error) =>
+                                                            Icon(Icons.error),
+                                                  )),
+                                            ),
+                                          ),
+                                          user.openStatus == "Closed"
+                                              ? Container(
+                                                  width: 70,
+                                                  height: 60,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    color: Colors.black
+                                                        .withOpacity(0.6),
+                                                  ),
+                                                  child: Center(
+                                                      child: Text(
+                                                    "Closed",
+                                                    style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 12),
+                                                  )),
+                                                )
+                                              : user.openStatus == "No-Service"
+                                                  ? Container(
+                                                      width: 70,
+                                                      height: 60,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                        color: Colors.black
+                                                            .withOpacity(0.6),
+                                                      ),
+                                                      child: Center(
+                                                          child: Text(
+                                                        "    No\nservice",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 11),
+                                                      )),
+                                                    )
+                                                  : user.merchantBranchBusy ==
+                                                          "1"
+                                                      ? Container(
+                                                          width: 70,
+                                                          height: 60,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        12),
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.6),
+                                                          ),
+                                                          child: Center(
+                                                            child: Text(
+                                                              "Busy",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 12),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : Container()
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Expanded(
+                                        child: ProductDesc(
+                                          user: user,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Container(
+                                  margin: EdgeInsets.only(bottom: 20),
+                                  child: Column(children: [
+                                    Stack(children: [
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        width: Helper.getScreenWidth(context),
+                                        height: 150,
                                         child: ClipRRect(
                                           borderRadius:
-                                          BorderRadius.circular(8.0),
+                                              BorderRadius.circular(8.0),
                                           child: Image.network(
-                                            user.merchantBranchImage!,
+                                            (user.merchantBranchImage!),
                                             fit: BoxFit.fill,
                                             loadingBuilder:
                                                 (BuildContext context,
-                                                Widget child,
-                                                ImageChunkEvent?
-                                                loadingProgress) {
+                                                    Widget child,
+                                                    ImageChunkEvent?
+                                                        loadingProgress) {
                                               if (loadingProgress == null)
                                                 return child;
                                               return Center(
-
-
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color:
+                                                      Colors.deepOrangeAccent,
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                      : null,
+                                                ),
                                               );
                                             },
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    user.openStatus == "Closed"
-                                        ? Container(
-                                      width: 70,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.circular(
-                                            12),
-                                        color: Colors.black
-                                            .withOpacity(0.6),
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                            "Closed",
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontWeight:
-                                                FontWeight.w600,
-                                                fontSize: 12),
-                                          )),
-                                    )
-                                        : user.openStatus == "No-Service"
-                                        ? Container(
-                                      width: 70,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius
-                                            .circular(12),
-                                        color: Colors.black
-                                            .withOpacity(0.6),
-                                      ),
-                                      child: Center(
-                                          child: Text(
-                                            "    No\nservice",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight:
-                                                FontWeight.w600,
-                                                fontSize: 11),
-                                          )),
-                                    )
-                                        : user.merchantBranchBusy ==
-                                        "1"
-                                        ? Container(
-                                      width: 70,
-                                      height: 60,
-                                      decoration:
-                                      BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius
-                                            .circular(
-                                            12),
-                                        color: Colors.black
-                                            .withOpacity(
-                                            0.6),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "Busy",
-                                          style: TextStyle(
-                                              color: Colors
-                                                  .white,
-                                              fontWeight:
-                                              FontWeight
-                                                  .w600,
-                                              fontSize: 12),
-                                        ),
-                                      ),
-                                    )
-                                        : Container()
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Expanded(
-                                  child: ProductDesc(
-                                    user: user,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                              : Container(
-                              margin: EdgeInsets.only(bottom: 20),
-                              child: Column(children: [
-                                Stack(children: [
-                                  Container(
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    width: Helper.getScreenWidth(context),
-                                    height: 150,
-                                    child: ClipRRect(
-                                      borderRadius:
-                                      BorderRadius.circular(8.0),
-                                      child: Image.network(
-                                        (user.merchantBranchImage!),
-                                        fit: BoxFit.fill,
-                                        loadingBuilder:
-                                            (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent?
-                                            loadingProgress) {
-                                          if (loadingProgress == null)
-                                            return child;
-                                          return Center(
-                                            child:
-                                            CircularProgressIndicator(
-                                              color:
-                                              Colors.deepOrangeAccent,
-                                              value: loadingProgress
-                                                  .expectedTotalBytes !=
-                                                  null
-                                                  ? loadingProgress
-                                                  .cumulativeBytesLoaded /
-                                                  loadingProgress
-                                                      .expectedTotalBytes!
-                                                  : null,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  user.openStatus == "Closed"
-                                      ? Container(
-                                    height: 150,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(8.0),
-                                      color: Colors.black
-                                          .withOpacity(0.6),
-                                    ),
-                                    child: Center(
-                                        child: Text(
-                                          "Closed",
-                                          style: TextStyle(
-                                              color: Colors.red,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 20),
-                                        )),
-                                  )
-                                      : user.openStatus == "No-Service"
-                                      ? Container(
-                                    height: 150,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(
-                                          8.0),
-                                      color: Colors.black
-                                          .withOpacity(0.6),
-                                    ),
-                                    child: Center(
-                                        child: Text(
-                                          "No Service",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight:
-                                              FontWeight.w600,
-                                              fontSize: 20),
-                                        )),
-                                  )
-                                      : user.merchantBranchBusy == "1"
-                                      ? Container(
-                                    height: 150,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius
-                                          .circular(8.0),
-                                      color: Colors.black
-                                          .withOpacity(0.6),
-                                    ),
-                                    child: Center(
-                                        child: Text(
-                                          "Busy",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight:
-                                              FontWeight.w600,
-                                              fontSize: 20),
-                                        )),
-                                  )
-                                      : Container()
-                                ]),
-                                ProductDesc(user: user, isLoading: false),
-                              ])),
+                                      user.openStatus == "Closed"
+                                          ? Container(
+                                              height: 150,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                color: Colors.black
+                                                    .withOpacity(0.6),
+                                              ),
+                                              child: Center(
+                                                  child: Text(
+                                                "Closed",
+                                                style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 20),
+                                              )),
+                                            )
+                                          : user.openStatus == "No-Service"
+                                              ? Container(
+                                                  height: 150,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0),
+                                                    color: Colors.black
+                                                        .withOpacity(0.6),
+                                                  ),
+                                                  child: Center(
+                                                      child: Text(
+                                                    "No Service",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 20),
+                                                  )),
+                                                )
+                                              : user.merchantBranchBusy == "1"
+                                                  ? Container(
+                                                      height: 150,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.0),
+                                                        color: Colors.black
+                                                            .withOpacity(0.6),
+                                                      ),
+                                                      child: Center(
+                                                          child: Text(
+                                                        "Busy",
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 20),
+                                                      )),
+                                                    )
+                                                  : Container()
+                                    ]),
+                                    ProductDesc(user: user, isLoading: false),
+                                  ])),
                         );
                       });
                 } else {
@@ -483,8 +512,7 @@ class ProductDesc extends StatelessWidget {
       children: [
         Row(
           children: [
-
-             Text(
+            Text(
               user.merchantBranchName.toString(),
               style: TextStyle(
                   color: Colors.black,
@@ -493,22 +521,22 @@ class ProductDesc extends StatelessWidget {
             ),
             user.newTag == 1
                 ? Padding(
-                padding: EdgeInsets.only(left: 10),
-                child: Container(
-                  height: 22,
-                  width: 50,
-                  decoration: BoxDecoration(
-                      color: Colors.redAccent.withOpacity(.1),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Center(
-                    child: Text(
-                      "New",
-                      style: TextStyle(
-                          color: Colors.deepOrange,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ))
+                    padding: EdgeInsets.only(left: 10),
+                    child: Container(
+                      height: 22,
+                      width: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.redAccent.withOpacity(.1),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Center(
+                        child: Text(
+                          "New",
+                          style: TextStyle(
+                              color: Colors.deepOrange,
+                              fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ))
                 : Container(),
           ],
         ),
@@ -527,7 +555,7 @@ class ProductDesc extends StatelessWidget {
         ),
         Row(
           children: [
-           Icon(
+            Icon(
               Icons.tag_faces,
               color: Colors.orangeAccent,
               size: 20,
@@ -535,17 +563,17 @@ class ProductDesc extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-             user.avgReview == "1"
+            user.avgReview == "1"
                 ? Text("Amazing")
                 : user.avgReview == "2"
-                ? Text("Very Good")
-                : user.avgReview == "3"
-                ? Text("Good")
-                : user.avgReview == "4"
-                ? Text("OK")
-                : user.avgReview == "0"
-                ? Text("Not Yet")
-                : Container(),
+                    ? Text("Very Good")
+                    : user.avgReview == "3"
+                        ? Text("Good")
+                        : user.avgReview == "4"
+                            ? Text("OK")
+                            : user.avgReview == "0"
+                                ? Text("Not Yet")
+                                : Container(),
           ],
         ),
         SizedBox(
@@ -553,14 +581,14 @@ class ProductDesc extends StatelessWidget {
         ),
         Row(
           children: [
-             Icon(
+            Icon(
               Icons.access_time,
               size: 20,
             ),
             SizedBox(
               width: 5,
             ),
-             Text(
+            Text(
               user.merchantBranchOrderTime.toString() +
                   " mins" +
                   " | " +
@@ -573,7 +601,7 @@ class ProductDesc extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-           Container(
+            Container(
               child: CircleAvatar(
                 radius: 2,
                 backgroundColor: Colors.grey.shade400,
@@ -587,7 +615,7 @@ class ProductDesc extends StatelessWidget {
               color: Colors.grey.shade900,
               size: 20,
             ),
-             Text(
+            Text(
               'BD 0.40',
               style: TextStyle(
                 fontSize: 12,
@@ -612,9 +640,7 @@ class AllRestaurent {
     });
 
     final jsonData = jsonDecode(response.body);
-    var data = RestaurentModel
-        .fromJson(jsonData)
-        .results;
+    var data = RestaurentModel.fromJson(jsonData).results;
     return data;
   }
 }

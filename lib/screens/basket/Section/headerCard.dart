@@ -4,6 +4,7 @@ import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/applybutton.
 import 'package:foodzer_customer_app/Menu/Microfiles/ReviewSection/dividersection.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
+import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shimmerwidget.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/cartAddons.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/section/restaurantProductsList.dart';
 import 'package:provider/provider.dart';
@@ -21,13 +22,14 @@ class BasketHeader extends StatefulWidget {
 class _BasketHeaderState extends State<BasketHeader> {
   bool isAddons = false;
   bool isClick = false;
+  bool isLoading=false;
   int selectedCartItemIndex = -1;
 
 
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationProvider>(builder: (context, provider, child) {
-      return Container(
+      return isLoading?ShimmerWidget.rectangular(height: 80,width: Helper.getScreenWidth(context)):Container(
         padding: EdgeInsets.all(10),
         width: Helper.getScreenWidth(context) * 2,
         decoration: BoxDecoration(
@@ -107,7 +109,7 @@ class _BasketHeaderState extends State<BasketHeader> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
-                                    Text(
+                                        Text(
                                       "Customize",
                                       style: TextStyle(
                                           fontSize: 12,
@@ -399,4 +401,7 @@ class _BasketHeaderState extends State<BasketHeader> {
               ));
         });
   }
+
+
+
 }

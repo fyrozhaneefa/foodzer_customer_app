@@ -11,6 +11,7 @@ import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:vertical_scrollable_tabview/vertical_scrollable_tabview.dart';
 
@@ -93,6 +94,7 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                           .where((product) => (product.categoryId ==
                               provider.categoryList[index].categoryId))
                           .toList();
+
 
                     }
 
@@ -286,36 +288,38 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                                             ),
                                                             Expanded(
                                                               child: Container(
-                                                                child: Image.network(
-                                                                  // 'https://i5.peapod.com/c/NY/NYO1E.png',
-                                                                  itemModel.itemImage!,
-                                                                  height: 80,
-                                                                  width: 80,
-                                                                  fit: BoxFit.fill,
-                                                                  loadingBuilder: (BuildContext
-                                                                          context,
-                                                                      Widget child,
-                                                                      ImageChunkEvent?
-                                                                          loadingProgress) {
-                                                                    if (loadingProgress ==
-                                                                        null) return child;
-                                                                    return Center(
-                                                                      child:
-                                                                          CircularProgressIndicator(
-                                                                        color: Colors
-                                                                            .deepOrangeAccent,
-                                                                        value: loadingProgress
-                                                                                    .expectedTotalBytes !=
-                                                                                null
-                                                                            ? loadingProgress
-                                                                                    .cumulativeBytesLoaded /
-                                                                                loadingProgress
-                                                                                    .expectedTotalBytes!
-                                                                            : null,
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                ),
+                                                                // child: Image.network(
+                                                                //   // 'https://i5.peapod.com/c/NY/NYO1E.png',
+                                                                //   itemModel.itemImage!,
+                                                                //   height: 80,
+                                                                //   width: 80,
+                                                                //   fit: BoxFit.fill,
+                                                                //   loadingBuilder: (BuildContext
+                                                                //           context,
+                                                                //       Widget child,
+                                                                //       ImageChunkEvent?
+                                                                //           loadingProgress) {
+                                                                //     if (loadingProgress ==
+                                                                //         null) return child;
+                                                                //     return Center(
+                                                                //       child:
+                                                                //           CircularProgressIndicator(
+                                                                //         color: Colors
+                                                                //             .deepOrangeAccent,
+                                                                //         value: loadingProgress
+                                                                //                     .expectedTotalBytes !=
+                                                                //                 null
+                                                                //             ? loadingProgress
+                                                                //                     .cumulativeBytesLoaded /
+                                                                //                 loadingProgress
+                                                                //                     .expectedTotalBytes!
+                                                                //             : null,
+                                                                //       ),
+                                                                //     );
+                                                                //   },
+                                                                // ),
+                                                                child: CachedNetworkImage(width: 80,height: 80,imageUrl: itemModel.itemImage!,fit: BoxFit.fill),
+                                                                
                                                               ),
                                                               flex: 4,
                                                             )
