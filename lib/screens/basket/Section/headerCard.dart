@@ -22,7 +22,7 @@ class _BasketHeaderState extends State<BasketHeader> {
   bool isAddons = false;
   bool isClick = false;
   int selectedCartItemIndex = -1;
-  List<String>? addonNameList=[];
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +53,12 @@ class _BasketHeaderState extends State<BasketHeader> {
                 shrinkWrap: true,
                 itemCount: provider.cartModelList.length,
                 itemBuilder: (BuildContext context, int index) {
+                  List<String>? addonNameList=[];
                   if(provider.cartModelList[index].isAddon == 1 &&
                       null!=provider.cartModelList[index].addonsList &&provider.cartModelList[index].addonsList!.length >0) {
                     for (Addons addon in provider.cartModelList[index]
                         .addonsList!) {
-                      addonNameList!.add(addon.addonsSubTitleName.toString());
+                      addonNameList.add(addon.addonsSubTitleName.toString());
                     }
                   }
 
@@ -96,7 +97,7 @@ class _BasketHeaderState extends State<BasketHeader> {
                                 SizedBox(height: 5,),
                                 null != provider.cartModelList[index].isAddon &&
                                     provider.cartModelList[index].isAddon == 1
-                                    ? Text(addonNameList!.join(", ").toString(),
+                                    ? Text(addonNameList.join(", "),
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(fontSize: 12,color: Colors.grey),):Container(height: 0,),
                                 SizedBox(height: 5,),

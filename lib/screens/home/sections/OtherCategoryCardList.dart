@@ -43,7 +43,7 @@ class _OtherCategoryCardListState extends State<OtherCategoryCardList> {
                   cardName: item.merchantBranchName,
                   cardTime: item.merchantBranchOrderTime,
                   cardType: item.cuisines,
-                  rating: item.avgReview,
+                  rating:null!=item.avgReview && item.avgReview =="0"?"No reviews yet":item.avgReview,
                   deliveryCharge: '',
                   bannerName: item.merchantBranchImage,
                   discount: '',
@@ -87,47 +87,7 @@ class _OtherCategoryCardListState extends State<OtherCategoryCardList> {
         ),
       );
 
-      // SingleChildScrollView(
-      //   scrollDirection: Axis.horizontal,
-      //   child: Padding(
-      //     padding: const EdgeInsets.only(left: 20.0,right: 10),
-      //     child: Row(
-      //       mainAxisSize: MainAxisSize.min,
-      //       crossAxisAlignment: CrossAxisAlignment.start,
-      //       children: [
-      //         ...widget.categoryItem.restaurantDetails!.map((item) => OtherCategoryCard(
-      //           cardName: item.merchantBranchName,
-      //           cardTime: item.merchantBranchOrderTime,
-      //           cardType: item.cuisines,
-      //           rating: item.avgReview,
-      //           deliveryCharge: 'AED 4.00',
-      //           bannerName: item.merchantBranchImage,
-      //           discount: '34% off',
-      //           busy: item.merchantBranchBusy,
-      //           press: (){
-      //             if(item.merchantBranchBusy == "0") {
-      //               Navigator.of(context).push(MaterialPageRoute(
-      //                   builder: (BuildContext context) =>
-      //                       RestaurantDetailsScreen(item.merchantBranchId,item.lat,item.lng)));
-      //               // Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
-      //             } else {
-      //               Fluttertoast.showToast(
-      //                   msg: "Restaurant is busy!! Come back later...",
-      //                   toastLength: Toast.LENGTH_SHORT,
-      //                   gravity: ToastGravity.SNACKBAR,
-      //                   timeInSecForIosWeb: 1,
-      //                   backgroundColor: Colors.red,
-      //                   textColor: Colors.red,
-      //                   fontSize: 16.0
-      //               );
-      //             }
-      //           },
-      //         )).toList(),
 
-      //       ],
-      //     ),
-      //   ),
-      // );
 
   }
 

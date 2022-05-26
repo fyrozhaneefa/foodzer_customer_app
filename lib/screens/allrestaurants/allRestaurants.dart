@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/applybutton.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/popularfilters.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
+import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/popularRestNear.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurantServiceList.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurants.dart';
+import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../../Menu/Microfiles/CuisinesSection/cuisinesheader.dart';
 
@@ -71,6 +74,64 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
             ],
           ),
         ),
+        actions:
+        [
+          Padding(
+            padding:  EdgeInsets.all(10.0),
+            child: Container(
+              width: 35.0,
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: () {
+                  if( Provider.of<ApplicationProvider>(context, listen: false).cartModelList.length > 0) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            ItemBasketHome()));
+                  }
+                },
+                child:Consumer<ApplicationProvider>(builder: (context, provider, child) {
+                  return Stack
+                    (
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          Icons.shopping_basket_sharp,
+                          color: Colors.black,
+                        ),
+                        onPressed: null,
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              height: 20.0,
+                              width: 20.0,
+                              decoration:  BoxDecoration(
+                                color: Colors.deepOrange,
+                                shape: BoxShape.circle,
+                              ),
+                              child:  Center(
+                                child: Text(  provider.cartModelList.length>0?
+                                  provider.cartModelList.length.toString():"0",
+                                  style: TextStyle(
+                                    fontSize: 11.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+              ),
+            ),
+          ),
+        ],
         bottom: PreferredSize(
           child: Column(
             children: [

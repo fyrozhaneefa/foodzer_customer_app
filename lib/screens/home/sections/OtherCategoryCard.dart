@@ -144,9 +144,14 @@ class _OtherCategoryCardState extends State<OtherCategoryCard> {
               Container(
                   child:  Row(
                     children: [
-                      Icon(Icons.tag_faces_outlined),
+                      Icon(widget.rating == "No reviews yet" || widget.rating =="0"?
+                      Icons.sentiment_dissatisfied:
+                      Icons.tag_faces_outlined),
                       SizedBox(width: 5,),
-                      Text(widget.rating!,
+                      Text(widget.rating! == "1"?"Bad":
+                      widget.rating! == "2"?"OK":
+                      widget.rating! == "3"?"Good":
+                      widget.rating! == "4"?"Amazing":"No reviews yet",
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w500

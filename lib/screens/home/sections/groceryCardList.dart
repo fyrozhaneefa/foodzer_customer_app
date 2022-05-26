@@ -78,7 +78,7 @@ class _GroceryCardListState extends State<GroceryCardList> {
             initialPage: 0,
             enableInfiniteScroll: false,
             reverse: false,
-            autoPlay: true,
+            autoPlay: false,
             autoPlayInterval: Duration(seconds: 5),
             autoPlayAnimationDuration: Duration(milliseconds: 800),
             autoPlayCurve: Curves.linear,

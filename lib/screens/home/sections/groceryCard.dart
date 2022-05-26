@@ -90,6 +90,7 @@ class _GroceryCardState extends State<GroceryCard> {
                 ),
               ),
               Container(
+                width: double.infinity,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,

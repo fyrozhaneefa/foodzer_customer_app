@@ -24,6 +24,8 @@ class SingleItemView extends StatefulWidget {
 }
 
 class _SingleItemViewState extends State<SingleItemView> {
+  final addonKey = GlobalKey();
+  final priceOnKey = GlobalKey();
   // List<bool> isChecked = List.generate(
   //     Provider.of<ApplicationProvider>(context, listen: false)
   //         .addonModelList
@@ -33,8 +35,8 @@ class _SingleItemViewState extends State<SingleItemView> {
   int totalQty = 1;
   PriceOnItem selectedPriceOnItem = new PriceOnItem();
   int initialQty = 0;
-  double itemPrice=0;
-  double totalPrice=0;
+  double itemPrice = 0;
+  double totalPrice = 0;
   bool isChecked = false;
   List<Addons> addOnList = [];
   List<PriceOnItem> priceOnItemList = [];
@@ -76,6 +78,16 @@ class _SingleItemViewState extends State<SingleItemView> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+  }
+
+  Future scrollToAddon() async {
+    final addonContext = addonKey.currentContext!;
+    await Scrollable.ensureVisible(addonContext);
+  }
+
+  Future scrollToPriceOn() async {
+    final priceOnContext = priceOnKey.currentContext!;
+    await Scrollable.ensureVisible(priceOnContext);
   }
 
   @override
@@ -125,8 +137,7 @@ class _SingleItemViewState extends State<SingleItemView> {
                             topLeft: Radius.circular(14),
                             topRight: Radius.circular(14),
                           ),
-                          child:
-                          Image.network(
+                          child: Image.network(
                             widget.itemModel.itemImage!,
                             // 'https://mumbaimirror.indiatimes.com/photo/76424716.cms',
                             fit: BoxFit.fill,
@@ -166,10 +177,10 @@ class _SingleItemViewState extends State<SingleItemView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
+                                Text(widget.itemModel.isPriceon == 0?
                                     'INR ' +
                                         widget.itemModel.itemPrice!
-                                            .toStringAsFixed(2),
+                                            .toStringAsFixed(2):"Price on selection",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 16)),
@@ -190,23 +201,23 @@ class _SingleItemViewState extends State<SingleItemView> {
                                     children: [
                                       IconButton(
                                         onPressed: () {
-                                            if (totalQty == 1) {
-                                              Navigator.of(context).pop();
-                                            } else {
-                                              totalQty = totalQty - 1;
-                                              calculatePrice();
-                                              // Provider.of<ApplicationProvider>(
-                                              //     context,
-                                              //     listen: false)
-                                              //     .updateProduct( widget.itemModel, false, false);
-                                              // setState(() {
-                                              //   totalQty = widget.itemModel.enteredQty!;
-                                              //   totalPrice = double.parse(
-                                              //       totalPrice.toString()) -
-                                              //       double.parse(
-                                              //           itemPrice.toString());
-                                              // });
-                                            }
+                                          if (totalQty == 1) {
+                                            Navigator.of(context).pop();
+                                          } else {
+                                            totalQty = totalQty - 1;
+                                            calculatePrice();
+                                            // Provider.of<ApplicationProvider>(
+                                            //     context,
+                                            //     listen: false)
+                                            //     .updateProduct( widget.itemModel, false, false);
+                                            // setState(() {
+                                            //   totalQty = widget.itemModel.enteredQty!;
+                                            //   totalPrice = double.parse(
+                                            //       totalPrice.toString()) -
+                                            //       double.parse(
+                                            //           itemPrice.toString());
+                                            // });
+                                          }
 
                                           // else {
                                           //   showDeleteDialogForMultipleItem(
@@ -302,6 +313,7 @@ class _SingleItemViewState extends State<SingleItemView> {
                           ? Padding(
                               padding: const EdgeInsets.all(15.0),
                               child: Column(
+                                key: priceOnKey,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text("Price on Item",
@@ -311,7 +323,8 @@ class _SingleItemViewState extends State<SingleItemView> {
                                   SizedBox(
                                     height: 5,
                                   ),
-                                  null != priceOnItemList && priceOnItemList.length > 0
+                                  null != priceOnItemList &&
+                                          priceOnItemList.length > 0
                                       ? !isPOIMandatory
                                           ? Text('Choose 1',
                                               style: TextStyle(
@@ -351,9 +364,10 @@ class _SingleItemViewState extends State<SingleItemView> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Expanded(
-                                                child: Text(priceOnItemList[index]
-                                                    .priceonItemTitle
-                                                    .toString()),
+                                                child: Text(
+                                                    priceOnItemList[index]
+                                                        .priceonItemTitle
+                                                        .toString()),
                                               ),
                                               Text(
                                                   "(+ INR ${priceOnItemList[index].priceonItemPrice.toString()})"),
@@ -361,7 +375,8 @@ class _SingleItemViewState extends State<SingleItemView> {
                                                 activeColor:
                                                     Colors.deepOrangeAccent,
                                                 value: null !=
-                                                            priceOnItemList[index]
+                                                            priceOnItemList[
+                                                                    index]
                                                                 .isItemSelected &&
                                                         priceOnItemList[index]
                                                             .isItemSelected!
@@ -385,7 +400,8 @@ class _SingleItemViewState extends State<SingleItemView> {
                                                   //  totalPrice=totalPrice - priceOnItemList[
                                                   //  lastPriceOnItemIndex].priceonItemPrice!;
                                                   // }
-                                                  selectedPriceOnItem=priceOnItemList[index];
+                                                  selectedPriceOnItem =
+                                                      priceOnItemList[index];
 
                                                   lastPriceOnItemIndex = index;
                                                   calculatePrice();
@@ -400,173 +416,328 @@ class _SingleItemViewState extends State<SingleItemView> {
                               ),
                             )
                           : Container(),
-
-
                       null != addOnList && addOnList.length > 0
-                          ?   null!=widget.itemModel.isPriceon
-                          && widget.itemModel.isPriceon==1 &&
-                          null!=selectedPriceOnItem.priceonId
-                          && selectedPriceOnItem.priceonId!.isNotEmpty ||
-                          null==widget.itemModel.isPriceon
-                          || widget.itemModel.isPriceon==0?
-                      Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              null !=
-                                  addOnList
-                                      .where((element) =>
-                                  null != element.addonsType &&
-                                      element.addonsType == 2)
-                                      .toList() &&
-                                  addOnList
-                                      .where((element) =>
-                                  null != element.addonsType &&
-                                      element.addonsType == 2)
-                                      .toList()
-                                      .length >
-                                      0
-                                  ? Divider(
-                                  height: 15,
-                                  thickness: 6,
-                                  color: Colors.grey.shade300)
-                                  : Container(),
-                              null !=
-                                  addOnList
-                                      .where((element) =>
-                                  null != element.addonsType &&
-                                      element.addonsType == 2)
-                                      .toList() &&
-                                  addOnList
-                                      .where((element) =>
-                                  null != element.addonsType &&
-                                      element.addonsType == 2)
-                                      .toList()
-                                      .length >
-                                      0
-                                  ? Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Column(
+                          ? null != widget.itemModel.isPriceon &&
+                                      widget.itemModel.isPriceon == 1 &&
+                                      null != selectedPriceOnItem.priceonId &&
+                                      selectedPriceOnItem
+                                          .priceonId!.isNotEmpty ||
+                                  null == widget.itemModel.isPriceon ||
+                                  widget.itemModel.isPriceon == 0
+                              ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                        null !=
-                                            addOnList
-                                                .where((element) =>
-                                            null !=
-                                                element
-                                                    .addonsType &&
-                                                element.addonsType ==
-                                                    2)
-                                                .toList() &&
-                                            addOnList
-                                                .where((element) =>
-                                            null !=
-                                                element
-                                                    .addonsType &&
-                                                element.addonsType ==
-                                                    2)
-                                                .toList()
-                                                .length >
-                                                0
-                                            ? addOnList
-                                            .where((element) =>
-                                        null != element.addonsType &&
-                                            element.addonsType == 2)
-                                            .toList()
-                                            .first
-                                            .addonsName!
-                                            : "",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16)),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
                                     null !=
-                                        addOnList
-                                            .where((element) =>
-                                        null !=
-                                            element.addonsType &&
-                                            element.addonsType == 2)
-                                            .toList() &&
-                                        addOnList
-                                            .where((element) =>
-                                        null !=
-                                            element.addonsType &&
-                                            element.addonsType == 2)
-                                            .toList()
-                                            .length >
-                                            0
-                                        ? !isMandatory
-                                        ? Text('Choose 1',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.grey,
-                                            fontSize: 14))
-                                        : Row(
-                                      children: [
-                                        Icon(
-                                          Icons.warning_amber_outlined,
-                                          color: Colors.red,
-                                        ),
-                                        SizedBox(
-                                          width: 2,
-                                        ),
-                                        Text("Choose 1",
-                                            style: TextStyle(
-                                                fontWeight:
-                                                FontWeight.w600,
-                                                color: Colors.red,
-                                                fontSize: 15))
-                                      ],
-                                    )
-                                        : Container(
-                                      height: 0,
+                                                addOnList
+                                                    .where((element) =>
+                                                        null !=
+                                                            element
+                                                                .addonsType &&
+                                                        element.addonsType == 2)
+                                                    .toList() &&
+                                            addOnList
+                                                    .where((element) =>
+                                                        null !=
+                                                            element
+                                                                .addonsType &&
+                                                        element.addonsType == 2)
+                                                    .toList()
+                                                    .length >
+                                                0
+                                        ? Divider(
+                                            height: 15,
+                                            thickness: 6,
+                                            color: Colors.grey.shade300)
+                                        : Container(),
+                                    null !=
+                                                addOnList
+                                                    .where((element) =>
+                                                        null !=
+                                                            element
+                                                                .addonsType &&
+                                                        element.addonsType == 2)
+                                                    .toList() &&
+                                            addOnList
+                                                    .where((element) =>
+                                                        null !=
+                                                            element
+                                                                .addonsType &&
+                                                        element.addonsType == 2)
+                                                    .toList()
+                                                    .length >
+                                                0
+                                        ? Padding(
+                                            padding: const EdgeInsets.all(15.0),
+                                            child: Column(
+                                              key: addonKey,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    null !=
+                                                                addOnList
+                                                                    .where((element) =>
+                                                                        null !=
+                                                                            element
+                                                                                .addonsType &&
+                                                                        element.addonsType ==
+                                                                            2)
+                                                                    .toList() &&
+                                                            addOnList
+                                                                    .where((element) =>
+                                                                        null !=
+                                                                            element
+                                                                                .addonsType &&
+                                                                        element.addonsType ==
+                                                                            2)
+                                                                    .toList()
+                                                                    .length >
+                                                                0
+                                                        ? addOnList
+                                                            .where((element) =>
+                                                                null !=
+                                                                    element
+                                                                        .addonsType &&
+                                                                element.addonsType ==
+                                                                    2)
+                                                            .toList()
+                                                            .first
+                                                            .addonsName!
+                                                        : "",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 16)),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                null !=
+                                                            addOnList
+                                                                .where((element) =>
+                                                                    null !=
+                                                                        element
+                                                                            .addonsType &&
+                                                                    element.addonsType ==
+                                                                        2)
+                                                                .toList() &&
+                                                        addOnList
+                                                                .where((element) =>
+                                                                    null !=
+                                                                        element
+                                                                            .addonsType &&
+                                                                    element.addonsType ==
+                                                                        2)
+                                                                .toList()
+                                                                .length >
+                                                            0
+                                                    ? !isMandatory
+                                                        ? Text('Choose 1',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                color:
+                                                                    Colors.grey,
+                                                                fontSize: 14))
+                                                        : Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons
+                                                                    .warning_amber_outlined,
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 2,
+                                                              ),
+                                                              Text("Choose 1",
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      color: Colors
+                                                                          .red,
+                                                                      fontSize:
+                                                                          15))
+                                                            ],
+                                                          )
+                                                    : Container(
+                                                        height: 0,
+                                                      ),
+                                                ListView.builder(
+                                                    physics: ScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemCount: addOnList.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Visibility(
+                                                        visible: null !=
+                                                                addOnList[index]
+                                                                    .addonsType &&
+                                                            addOnList[index]
+                                                                    .addonsType ==
+                                                                2,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Expanded(
+                                                              child: Text(addOnList[
+                                                                      index]
+                                                                  .addonsSubTitleName
+                                                                  .toString()),
+                                                            ),
+                                                            Radio(
+                                                              activeColor: Colors
+                                                                  .deepOrangeAccent,
+                                                              value: null !=
+                                                                          addOnList[index]
+                                                                              .isSelected &&
+                                                                      addOnList[
+                                                                              index]
+                                                                          .isSelected!
+                                                                  ? 1
+                                                                  : 0,
+                                                              groupValue: 1,
+                                                              onChanged:
+                                                                  (value) {
+                                                                addOnList[index]
+                                                                        .isSelected =
+                                                                    true;
+
+                                                                if (lastAddonIndex !=
+                                                                    -1) {
+                                                                  addOnList[lastAddonIndex]
+                                                                          .isSelected =
+                                                                      false;
+                                                                }
+                                                                lastAddonIndex =
+                                                                    index;
+                                                                isMandatory =
+                                                                    false;
+                                                                calculatePrice();
+                                                                setState(() {});
+                                                              },
+                                                            )
+                                                          ],
+                                                        ),
+                                                      );
+                                                    })
+                                              ],
+                                            ),
+                                          )
+                                        : Container(),
+                                    Divider(
+                                        height: 1,
+                                        thickness: 6,
+                                        color: Colors.grey.shade300),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15.0, top: 15.0),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                              null !=
+                                                          addOnList
+                                                              .where((element) =>
+                                                                  null !=
+                                                                      element
+                                                                          .addonsType &&
+                                                                  element.addonsType ==
+                                                                      1)
+                                                              .toList() &&
+                                                      addOnList
+                                                              .where((element) =>
+                                                                  null !=
+                                                                      element
+                                                                          .addonsType &&
+                                                                  element.addonsType ==
+                                                                      1)
+                                                              .toList()
+                                                              .length >
+                                                          0
+                                                  ? addOnList
+                                                      .where((element) =>
+                                                          null !=
+                                                              element
+                                                                  .addonsType &&
+                                                          element.addonsType ==
+                                                              1)
+                                                      .toList()
+                                                      .first
+                                                      .addonsName!
+                                                  : "",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 16)),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 15.0),
+                                      child: Text('Choose items from the list',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.grey,
+                                              fontSize: 14)),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(15.0),
-                                      child: ListView.builder(
+                                      child: ListView.separated(
+                                          separatorBuilder: (context, index) {
+                                            return Divider();
+                                          },
                                           physics: ScrollPhysics(),
                                           shrinkWrap: true,
                                           itemCount: addOnList.length,
                                           itemBuilder: (context, index) {
                                             return Visibility(
                                               visible: null !=
-                                                  addOnList[index].addonsType &&
-                                                  addOnList[index].addonsType == 2,
+                                                      addOnList[index]
+                                                          .addonsType &&
+                                                  addOnList[index].addonsType ==
+                                                      1,
                                               child: Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   Expanded(
                                                     child: Text(addOnList[index]
                                                         .addonsSubTitleName
                                                         .toString()),
                                                   ),
-                                                  Radio(
-                                                    activeColor:
-                                                    Colors.deepOrangeAccent,
-                                                    value: null !=
-                                                        addOnList[index]
-                                                            .isSelected &&
-                                                        addOnList[index]
-                                                            .isSelected!
-                                                        ? 1
-                                                        : 0,
-                                                    groupValue: 1,
-                                                    onChanged: (value) {
-                                                      addOnList[index].isSelected =
-                                                      true;
-
-                                                      if (lastAddonIndex != -1) {
-                                                        addOnList[lastAddonIndex]
-                                                            .isSelected = false;
-                                                      }
-                                                      lastAddonIndex = index;
-                                                      isMandatory = false;
-                                                      calculatePrice();
-                                                      setState(() {});
-                                                    },
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                          '(+ INR ${addOnList[index].addonsSubTitlePrice})'),
+                                                      Checkbox(
+                                                        checkColor:
+                                                            Colors.white,
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(3),
+                                                        ),
+                                                        activeColor: Colors
+                                                            .deepOrangeAccent,
+                                                        value: addOnList[index]
+                                                            .isSelected,
+                                                        onChanged: (checked) {
+                                                          setState(
+                                                            () {
+                                                              addOnList[index]
+                                                                      .isSelected =
+                                                                  checked;
+                                                              calculatePrice();
+                                                            },
+                                                          );
+                                                        },
+                                                      ),
+                                                    ],
                                                   )
                                                 ],
                                               ),
@@ -574,124 +745,9 @@ class _SingleItemViewState extends State<SingleItemView> {
                                           }),
                                     )
                                   ],
-                                ),
-                              )
-                                  : Container(),
-                              Divider(
-                                  height: 1,
-                                  thickness: 6,
-                                  color: Colors.grey.shade300),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 15.0,top: 15.0),
-
-                                child: Row(
-                                  children: [
-                                    Text(
-                                        null !=
-                                                    addOnList
-                                                        .where((element) =>
-                                                            null !=
-                                                                element
-                                                                    .addonsType &&
-                                                            element.addonsType ==
-                                                                1)
-                                                        .toList() &&
-                                                addOnList
-                                                        .where((element) =>
-                                                            null !=
-                                                                element
-                                                                    .addonsType &&
-                                                            element.addonsType ==
-                                                                1)
-                                                        .toList()
-                                                        .length >
-                                                    0
-                                            ? addOnList
-                                                .where((element) =>
-                                                    null !=
-                                                        element.addonsType &&
-                                                    element.addonsType == 1)
-                                                .toList()
-                                                .first
-                                                .addonsName!
-                                            : "",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16)),
-                                  ],
-                                ),
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.only( left:15.0),
-                                child: Text('Choose items from the list',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.grey,
-                                        fontSize: 14)),
-                              ),
-
-
-                              Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: ListView.separated(
-                                    separatorBuilder: (context, index) {
-                                      return Divider();
-                                    },
-                                    physics: ScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: addOnList.length,
-                                    itemBuilder: (context, index) {
-                                      return Visibility(
-                                        visible: null !=
-                                                addOnList[index].addonsType &&
-                                            addOnList[index].addonsType == 1,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Text(addOnList[index]
-                                                  .addonsSubTitleName
-                                                  .toString()),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Text(
-                                                    '(+ INR ${addOnList[index].addonsSubTitlePrice})'),
-                                                Checkbox(
-                                                  checkColor: Colors.white,
-                                                  shape:
-                                                      RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            3),
-                                                  ),
-                                                  activeColor:
-                                                      Colors.deepOrangeAccent,
-                                                  value: addOnList[index]
-                                                      .isSelected,
-                                                  onChanged: (checked) {
-                                                    setState(
-                                                      () {
-                                                        addOnList[index]
-                                                                .isSelected =
-                                                            checked;
-                                                        calculatePrice();
-                                                      },
-                                                    );
-                                                  },
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    }),
-                              )
-                            ],
-                          )
-                          : Container():Container(),
+                                )
+                              : Container()
+                          : Container(),
                       Divider(
                           height: 15,
                           thickness: 6,
@@ -741,6 +797,7 @@ class _SingleItemViewState extends State<SingleItemView> {
                             widget.itemModel.isPriceon == 1 &&
                             lastPriceOnItemIndex == -1) {
                           isPOIMandatory = true;
+                          scrollToPriceOn();
                           setState(() {});
                         } else if (null != widget.itemModel.isAddon &&
                             widget.itemModel.isAddon == 1 &&
@@ -752,8 +809,21 @@ class _SingleItemViewState extends State<SingleItemView> {
                                 0 &&
                             lastAddonIndex == -1) {
                           isMandatory = true;
+                          scrollToAddon();
                           setState(() {});
-                        } else {
+                        } else if (Provider.of<ApplicationProvider>(context,
+                                    listen: false)
+                                .cartModelList
+                                .isEmpty ||
+                            Provider.of<ApplicationProvider>(context,
+                                        listen: false)
+                                    .cartModelList
+                                    .first
+                                    .itemMerchantBranch ==
+                                Provider.of<ApplicationProvider>(context,
+                                        listen: false)
+                                    .selectedRestModel
+                                    .merchantBranchId) {
                           if (null != widget.itemModel.isAddon &&
                               widget.itemModel.isAddon == 1) {
                             Item item = new Item();
@@ -767,10 +837,11 @@ class _SingleItemViewState extends State<SingleItemView> {
                                 .toList();
                             item.tempId = null;
                             item.enteredQty = totalQty;
-                            if(null != widget.itemModel.isPriceon &&
-                                widget.itemModel.isPriceon == 1){
-                              item.priceOnItemPrice=selectedPriceOnItem.priceonItemPrice;
-                              item.priceOnId=selectedPriceOnItem.priceonId;
+                            if (null != widget.itemModel.isPriceon &&
+                                widget.itemModel.isPriceon == 1) {
+                              item.priceOnItemPrice =
+                                  selectedPriceOnItem.priceonItemPrice;
+                              item.priceOnId = selectedPriceOnItem.priceonId;
                             }
 
                             Provider.of<ApplicationProvider>(context,
@@ -782,23 +853,26 @@ class _SingleItemViewState extends State<SingleItemView> {
                             Item item = new Item();
                             // if (widget.isNewItem) {
                             String kson =
-                            Item.ToPreferenceJson(widget.itemModel);
+                                Item.ToPreferenceJson(widget.itemModel);
                             var jsonData = json.decode(kson);
                             item = Item.fromJson(jsonData);
 
                             item.enteredQty = totalQty;
-                            if(null != widget.itemModel.isPriceon &&
-                                widget.itemModel.isPriceon == 1){
-                              item.priceOnItemPrice=selectedPriceOnItem.priceonItemPrice;
-                              item.priceOnId=selectedPriceOnItem.priceonId;
+                            if (null != widget.itemModel.isPriceon &&
+                                widget.itemModel.isPriceon == 1) {
+                              item.priceOnItemPrice =
+                                  selectedPriceOnItem.priceonItemPrice;
+                              item.priceOnId = selectedPriceOnItem.priceonId;
                             }
                             Provider.of<ApplicationProvider>(context,
                                     listen: false)
-                                .updateProduct(item,
-                                    totalQty > initialQty, false);
+                                .updateProduct(
+                                    item, totalQty > initialQty, false);
                             Navigator.of(context)
                                 .pop(widget.itemModel.enteredQty);
                           }
+                        } else {
+                          showAlertDialog(context);
                         }
                       },
                       child: Row(
@@ -833,39 +907,33 @@ class _SingleItemViewState extends State<SingleItemView> {
             ),
           );
   }
-  calculatePrice(){
-    totalPrice=0;
 
-    double itemPrice=0;
-    if(null != widget.itemModel.isPriceon &&
+  calculatePrice() {
+    totalPrice = 0;
+
+    double itemPrice = 0;
+    if (null != widget.itemModel.isPriceon &&
         widget.itemModel.isPriceon == 1 &&
-        null!=selectedPriceOnItem.priceonItemPrice){
+        null != selectedPriceOnItem.priceonItemPrice) {
       itemPrice = selectedPriceOnItem.priceonItemPrice!;
-    }else{
-      itemPrice=widget.itemModel.itemPrice!;
+    } else {
+      itemPrice = widget.itemModel.itemPrice!;
     }
-    itemPrice=itemPrice*totalQty;
-    for(Addons addon in addOnList){
-
+    itemPrice = itemPrice * totalQty;
+    for (Addons addon in addOnList) {
       // if(null!=widget.priceOnId && product.priceOnId!.isNotEmpty){
       //   itemPrice=product.priceOnItemPrice!;
       // }else{
       //   itemPrice=product.itemPrice!;
       // }
 
-
-        if (null != addon.isSelected && addon.isSelected!) {
-          if( null !=
-              addon.addonsType &&
-              addon.addonsType == 1) {
-            totalPrice = totalPrice + (addon
-                .addonsSubTitlePrice! * totalQty);
-          }
+      if (null != addon.isSelected && addon.isSelected!) {
+        if (null != addon.addonsType && addon.addonsType == 1) {
+          totalPrice = totalPrice + (addon.addonsSubTitlePrice! * totalQty);
         }
-
+      }
     }
-    totalPrice=totalPrice+itemPrice;
-
+    totalPrice = totalPrice + itemPrice;
   }
 
   void addNote(context) {
@@ -1092,21 +1160,71 @@ class _SingleItemViewState extends State<SingleItemView> {
               color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
         ),
         onPressed: () {
-          Provider.of<ApplicationProvider>(context, listen: false)
-              .cartModelList
-              .clear();
-          widget.itemModel.addonsList =
-              addOnList.where((element) => element.isSelected == true).toList();
-          widget.itemModel.enteredQty = totalQty;
-          Provider.of<ApplicationProvider>(context, listen: false)
-              .updateProduct(
-                  widget.itemModel,
-                  null == widget.itemModel.enteredQty ||
-                      null != widget.itemModel.enteredQty &&
-                          totalQty > widget.itemModel.enteredQty!,
-                  false);
-          Navigator.pop(context);
-          Navigator.pop(context);
+          if (null != widget.itemModel.isPriceon &&
+              widget.itemModel.isPriceon == 1 &&
+              lastPriceOnItemIndex == -1) {
+            isPOIMandatory = true;
+            scrollToPriceOn();
+            setState(() {});
+          } else if (null != widget.itemModel.isAddon &&
+              widget.itemModel.isAddon == 1 &&
+              addOnList
+                      .where((element) =>
+                          null != element.addonsType &&
+                          element.addonsType! == 2)
+                      .length >
+                  0 &&
+              lastAddonIndex == -1) {
+            isMandatory = true;
+            scrollToAddon();
+            setState(() {});
+          } else {
+            Provider.of<ApplicationProvider>(context, listen: false)
+                .cartModelList
+                .clear();
+            if (null != widget.itemModel.isAddon &&
+                widget.itemModel.isAddon == 1) {
+              Item item = new Item();
+              // if (widget.isNewItem) {
+              String kson = Item.ToPreferenceJson(widget.itemModel);
+              var jsonData = json.decode(kson);
+              item = Item.fromJson(jsonData);
+              item.addonsList = addOnList
+                  .where((element) => element.isSelected == true)
+                  .toList();
+              item.tempId = null;
+              item.enteredQty = totalQty;
+              if (null != widget.itemModel.isPriceon &&
+                  widget.itemModel.isPriceon == 1) {
+                item.priceOnItemPrice = selectedPriceOnItem.priceonItemPrice;
+                item.priceOnId = selectedPriceOnItem.priceonId;
+              }
+
+              Provider.of<ApplicationProvider>(context, listen: false)
+                  .updateProduct(item, true, false);
+              Navigator.of(context).pop(widget.itemModel.enteredQty);
+              Navigator.pop(context);
+            } else {
+              Item item = new Item();
+              // if (widget.isNewItem) {
+              String kson = Item.ToPreferenceJson(widget.itemModel);
+              var jsonData = json.decode(kson);
+              item = Item.fromJson(jsonData);
+
+              item.enteredQty = totalQty;
+              if (null != widget.itemModel.isPriceon &&
+                  widget.itemModel.isPriceon == 1) {
+                item.priceOnItemPrice = selectedPriceOnItem.priceonItemPrice;
+                item.priceOnId = selectedPriceOnItem.priceonId;
+              }
+              Provider.of<ApplicationProvider>(context, listen: false)
+                  .updateProduct(item, totalQty > initialQty, false);
+              Navigator.of(context).pop(widget.itemModel.enteredQty);
+              Navigator.pop(context);
+
+            }
+
+          }
         },
       ),
     );

@@ -24,6 +24,7 @@ class ApplicationProvider with ChangeNotifier {
   List<Item> cartModelList = [];
 
   List<Item> filteredLoadedProductModelList = [];
+  // List<Item> filteredItemList = [];
   List<Item> searchItemList = [];
   SingleRestModel selectedRestModel = new SingleRestModel();
   AddressModel selectedAddressModel = new AddressModel();

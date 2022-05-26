@@ -63,7 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
 
-
     super.initState();
   }
 
@@ -138,18 +137,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
                 },
-                child: Stack(
+                child:Consumer<ApplicationProvider>(builder: (context, provider, child) {
+              return Stack
+                (
                   children: <Widget>[
                      IconButton(
                       icon: Icon(
-                        null!= Provider.of<ApplicationProvider>(context, listen: false).cartModelList &&
-                            Provider.of<ApplicationProvider>(context, listen: false).cartModelList.length > 0?
+                        null!= provider.cartModelList &&
+                            provider.cartModelList.length > 0?
                         Icons.shopping_basket_sharp:Icons.search,
                         color: Colors.black,
                       ),
                       onPressed: null,
                     ),
-                    Provider.of<ApplicationProvider>(context, listen: false).cartModelList.length == 0
+                    provider.cartModelList.length == 0
                         ? Container()
                         : Positioned(
                       top: 0,
@@ -165,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             child:  Center(
                               child: Text(
-                                Provider.of<ApplicationProvider>(context, listen: false).cartModelList.length.toString(),
+                                provider.cartModelList.length.toString(),
                                 style: TextStyle(
                                   fontSize: 11.0,
                                   fontWeight: FontWeight.bold,
@@ -177,7 +178,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ],
-                ),
+                );
+                }),
               ),
             ),
           ),
