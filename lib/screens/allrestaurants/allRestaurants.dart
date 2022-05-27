@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/applybutton.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/popularfilters.dart';
+import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/popularRestNear.dart';
@@ -52,7 +53,7 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) =>
-                    GoogleMapScreen(isFromCart, LatLng(0, 0))));
+                    GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))));
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

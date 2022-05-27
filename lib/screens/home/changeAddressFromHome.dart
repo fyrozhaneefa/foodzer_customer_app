@@ -172,7 +172,7 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
                             selectedLocation = value;
                             Navigator.of(context).push(
                                 MaterialPageRoute(builder: (context) =>
-                                    GoogleMapScreen(isFromCart,
+                                    GoogleMapScreen(new AddressModel(),isFromCart,
                                       LatLng( selectedLocation.geometry!.location.lat,
                                         selectedLocation.geometry!.location.lng))));
                             // _getAddressFromLatLng(value.geometry!.location.lat,
@@ -209,7 +209,7 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
                               Navigator.of(context).push(
                                   MaterialPageRoute(builder: (context) =>
                                       HomeScreen()));
-                              UserPreference().setCurrentAddress(getAddressList[index].currentAddressLine.toString());
+                              UserPreference().setCurrentAddress(getAddressList[index].addressTitle.toString());
                               UserPreference().setLatLng(getAddressList[index].addressLat.toString(), getAddressList[index].addressLng.toString());
                             },
                             leading: Icon(

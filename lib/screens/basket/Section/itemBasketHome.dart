@@ -588,7 +588,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 15, top: 15),
-                  child: Text('₹${provider.taxData['totalTaxAmt']}'),
+                  child: Text('₹${provider.taxData['totalTaxAmt'].toStringAsFixed(2)}'),
                 ),
               ],
             ),

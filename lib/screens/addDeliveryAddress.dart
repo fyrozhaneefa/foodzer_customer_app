@@ -19,7 +19,8 @@ import 'package:provider/provider.dart';
 
 class AddDeliveryAddress extends StatefulWidget {
   String? locality, currentAddress;
-  AddDeliveryAddress(this.locality, this.latLongCurrent, this.currentAddress);
+  AddressModel addressModel=new AddressModel();
+  AddDeliveryAddress(this.locality, this.latLongCurrent, this.currentAddress,this.addressModel);
   LatLng latLongCurrent = LatLng(0, 0);
 
   @override
@@ -38,7 +39,14 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
+    if(null!=widget.addressModel.addressId && widget.addressModel.addressId!.isNotEmpty){
+      addressController.text=widget.addressModel.addressBuilding!;
+      placeController.text=widget.addressModel.adressApartmentNo!;
+      directionController.text=widget.addressModel.addressDirection!;
+      addressType=widget.addressModel.addressTitle;
+      selectedIndex=addressTitle.indexWhere((element) => element.toLowerCase()==addressType!.toLowerCase());
+    }
     UserPreference().getUserData().then((value) {
       userModel = value;
       setState(() {});
@@ -334,6 +342,8 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                 },
                 child: Container(
                   child: Text(
+                    null!=widget.addressModel.addressId && widget.addressModel.addressId!.isNotEmpty?
+                        "UPDATE ADDRESS":
                     addressController.text.length > 0 &&
                         null != addressType
                         ? "SAVE AND PROCEED"
@@ -366,23 +376,48 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
     isLoading = true;
     setState(() {});
     var map = new Map<String, dynamic>();
-    map['user_id'] = userModel.userId;
-    map['user_name'] = userModel.userName;
-    map['submit_type'] = "add";
-    map['property_type'] = "1";
-    map['address_title'] = addressType;
-    map['street'] = widget.locality;
-    map['floor'] = "";
-    map['building'] = addressController.text;
-    map['apartment_no'] = placeController.text;
-    map['additional_direction'] = directionController.text;
-    map['mob_no'] = userModel.userMobie;
-    map['address_lat'] = widget.latLongCurrent.latitude.toString();
-    map['address_lng'] = widget.latLongCurrent.longitude.toString();
-    map['address_id'] = "";
-    map['current_addressline'] = widget.currentAddress.toString();
+    if( null!=widget.addressModel.addressId && widget.addressModel.addressId!.isNotEmpty) {
+      map['user_id'] = userModel.userId;
+      map['user_name'] = userModel.userName;
+      map['submit_type'] = "edit";
+      map['property_type'] = "1";
+      map['address_title'] = addressType;
+      map['street'] = widget.locality;
+      map['floor'] = "";
+      map['building'] = addressController.text;
+      map['apartment_no'] = placeController.text;
+      map['additional_direction'] = directionController.text;
+      map['mob_no'] = userModel.userMobie;
+      map['address_lat'] = widget.latLongCurrent.latitude.toString();
+      map['address_lng'] = widget.latLongCurrent.longitude.toString();
+      map['address_id'] = widget.addressModel.addressId;
+      map['current_addressline'] = widget.currentAddress.toString();
+    }else{
+      map['user_id'] = userModel.userId;
+      map['user_name'] = userModel.userName;
+      map['submit_type'] = "add";
+      map['property_type'] = "1";
+      map['address_title'] = addressType;
+      map['street'] = widget.locality;
+      map['floor'] = "";
+      map['building'] = addressController.text;
+      map['apartment_no'] = placeController.text;
+      map['additional_direction'] = directionController.text;
+      map['mob_no'] = userModel.userMobie;
+      map['address_lat'] = widget.latLongCurrent.latitude.toString();
+      map['address_lng'] = widget.latLongCurrent.longitude.toString();
+      map['address_id'] = "";
+      map['current_addressline'] = widget.currentAddress.toString();
+    }
 
-    var response = await http.post(Uri.parse(ApiData.ADD_ADDRESS), body: map);
+    String api="";
+    if( null!=widget.addressModel.addressId && widget.addressModel.addressId!.isNotEmpty) {
+      api=ApiData.EDIT_ADDRESS;
+    }else{
+      api=ApiData.ADD_ADDRESS;
+    }
+
+    var response = await http.post(Uri.parse(api), body: map);
 
     var json = convert.jsonDecode(response.body);
     isLoading = false;
@@ -394,8 +429,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
         AddressModel addressModel = AddressModel.fromJson(json['address_list']);
         Provider.of<ApplicationProvider>(context, listen: false)
             .setAddressModel(addressModel);
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => ItemBasketHome()));
+        Navigator.of(context).pop();
       } else {
         Fluttertoast.showToast(
             msg: "Something happened please try again",

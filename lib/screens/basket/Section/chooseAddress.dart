@@ -129,7 +129,7 @@ class _ChooseAddressState extends State<ChooseAddress> {
               Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (context) =>
-                          GoogleMapScreen(
+                          GoogleMapScreen(new AddressModel(),
                               widget.isFromCart,LatLng(0, 0))));
             },
             child: ListTile(

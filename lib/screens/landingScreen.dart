@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
@@ -104,7 +105,7 @@ class _LandingScreenState extends State<LandingScreen> {
                           // });
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  GoogleMapScreen(isFromCart, LatLng(0, 0))));
+                                  GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))));
 
                         },
                         child: Stack(

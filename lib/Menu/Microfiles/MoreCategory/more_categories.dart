@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/MoreCategory/more_restaurents.dart';
+import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -46,7 +47,7 @@ class _MoreHomeState extends State<MoreHome> {
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) =>
-                    GoogleMapScreen(isFromCart, LatLng(0, 0))));
+                    GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))));
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

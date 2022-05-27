@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shimmerwidget.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
@@ -49,31 +50,27 @@ class _CategoryCardState extends State<CategoryCard> {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(14.0),
-                    child: Image.network(widget.cardImg!,
-                      width: double.infinity,
-                      fit:BoxFit.cover,
-                      height: double.infinity,
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return 
-
-                        //   Center(
-                        //   child: CircularProgressIndicator(
-                        //     color: Colors.deepOrangeAccent,
-                        //     value: loadingProgress.expectedTotalBytes != null
-                        //         ? loadingProgress.cumulativeBytesLoaded /
-                        //         loadingProgress.expectedTotalBytes!
-                        //         : null,
-                        //   ),
-                        // );
-                        
-                        ShimmerWidget.rectangular(height: 150,value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                            : null,);
-                      },
-                    ),
+                    child: CachedNetworkImage(
+                        fit:BoxFit.cover,
+                        width: double.infinity,
+                        height: double.infinity,
+                        filterQuality: FilterQuality.high,
+                        imageUrl:widget.cardImg!,
+                        ),
+                    // Image.network(widget.cardImg!,
+                    //   width: double.infinity,
+                    //   fit:BoxFit.cover,
+                    //   height: double.infinity,
+                    //   loadingBuilder: (BuildContext context, Widget child,
+                    //       ImageChunkEvent? loadingProgress) {
+                    //     if (loadingProgress == null) return child;
+                    //     return
+                    //     ShimmerWidget.rectangular(height: 150,value: loadingProgress.expectedTotalBytes != null
+                    //         ? loadingProgress.cumulativeBytesLoaded /
+                    //         loadingProgress.expectedTotalBytes!
+                    //         : null,);
+                    //   },
+                    // ),
                   ),
                   Container(
                       decoration: BoxDecoration(

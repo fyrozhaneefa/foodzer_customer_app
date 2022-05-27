@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
+import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
@@ -89,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }else {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      GoogleMapScreen(isFromCart, LatLng(0, 0))));
+                      GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))));
             }
           },
           child: Column(

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
@@ -46,26 +47,34 @@ class _ImageSliderState extends State<ImageSlider> {
                  // margin: EdgeInsets.only(left: 20,right: 20),
                  child: ClipRRect(
                        borderRadius: BorderRadius.circular(8.0),
-                       child: Image.network(
-                         item.sliderImage!,
-                         // 'https://www.pexels.com/photo/1640777/download/',
+                       child: CachedNetworkImage(
                          fit: BoxFit.fill,
-                         loadingBuilder: (BuildContext context, Widget child,
-                             ImageChunkEvent? loadingProgress) {
-                           if (loadingProgress == null) return child;
-                           return Center(
-                             child: CircularProgressIndicator(
-                               color: Colors.deepOrangeAccent,
-                               value: loadingProgress.expectedTotalBytes != null
-                                   ? loadingProgress.cumulativeBytesLoaded /
-                                   loadingProgress.expectedTotalBytes!
-                                   : null,
-                             ),
-                           );
-                         },
-                         height: double.infinity,
-                         width: double.infinity,
-                       )),
+                           height: double.infinity,
+                           width: double.infinity,
+                         filterQuality: FilterQuality.high,
+                         imageUrl:item.sliderImage!,
+                       ),
+                       // Image.network(
+                       //   item.sliderImage!,
+                       //   // 'https://www.pexels.com/photo/1640777/download/',
+                       //   fit: BoxFit.fill,
+                       //   loadingBuilder: (BuildContext context, Widget child,
+                       //       ImageChunkEvent? loadingProgress) {
+                       //     if (loadingProgress == null) return child;
+                       //     return Center(
+                       //       child: CircularProgressIndicator(
+                       //         color: Colors.deepOrangeAccent,
+                       //         value: loadingProgress.expectedTotalBytes != null
+                       //             ? loadingProgress.cumulativeBytesLoaded /
+                       //             loadingProgress.expectedTotalBytes!
+                       //             : null,
+                       //       ),
+                       //     );
+                       //   },
+                       //   height: double.infinity,
+                       //   width: double.infinity,
+                       // )
+                 ),
                ),
                    )).toList(),
                   options: CarouselOptions(
@@ -75,9 +84,9 @@ class _ImageSliderState extends State<ImageSlider> {
                     aspectRatio: 16 / 9,
                     // viewportFraction: 1,
                     initialPage: 0,
-                    enableInfiniteScroll: true,
+                    enableInfiniteScroll: slider.length>1? true:false,
                     reverse: false,
-                    autoPlay: true,
+                    autoPlay:true,
                     autoPlayInterval: Duration(seconds: 5),
                     autoPlayAnimationDuration: Duration(milliseconds: 800),
                     autoPlayCurve: Curves.linear,

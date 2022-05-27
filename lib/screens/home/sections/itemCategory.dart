@@ -48,6 +48,7 @@ class _ItemCategoryState extends State<ItemCategory> {
           ),
           SizedBox(height: 20),
           CategoryItems(),
+
         ],
       ),
     );

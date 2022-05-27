@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
@@ -47,26 +48,35 @@ class _OtherCategoryCardState extends State<OtherCategoryCard> {
                   borderRadius: BorderRadius.circular(8.0),
                   child: Stack(
                     children: [
-                      Image.network(
-                        widget.bannerName!,
-                        fit: BoxFit.fill,
+                      CachedNetworkImage(
                         height: double.infinity,
                         width: double.infinity,
                         alignment: Alignment.center,
-                        loadingBuilder: (BuildContext context, Widget child,
-                            ImageChunkEvent? loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.deepOrangeAccent,
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          );
-                        },
+
+                        fit: BoxFit.fill,
+                        filterQuality: FilterQuality.high,
+                        imageUrl: widget.bannerName!,
                       ),
+                      // Image.network(
+                      //   widget.bannerName!,
+                      //   fit: BoxFit.fill,
+                      //   height: double.infinity,
+                      //   width: double.infinity,
+                      //   alignment: Alignment.center,
+                      //   loadingBuilder: (BuildContext context, Widget child,
+                      //       ImageChunkEvent? loadingProgress) {
+                      //     if (loadingProgress == null) return child;
+                      //     return Center(
+                      //       child: CircularProgressIndicator(
+                      //         color: Colors.deepOrangeAccent,
+                      //         value: loadingProgress.expectedTotalBytes != null
+                      //             ? loadingProgress.cumulativeBytesLoaded /
+                      //             loadingProgress.expectedTotalBytes!
+                      //             : null,
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
                       widget.busy =="1" ?Container(
                         height: double.infinity,
                         width: double.infinity,

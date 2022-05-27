@@ -2,6 +2,7 @@ import 'dart:convert' as convert;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shimmerwidget.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:http/http.dart' as http;
 
@@ -41,7 +42,17 @@ class _SavedAddressState extends State<SavedAddress> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
+    return isLoading?
+   ListView.builder(
+     shrinkWrap: true,
+     itemCount: 5,
+       itemBuilder: (BuildContext context, int ind){
+         return ShimmerWidget.rectangular(
+           height: 150,
+           width: Helper.getScreenWidth(context),
+         );
+       })
+    :ListView.separated(
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
         physics: ScrollPhysics(),
@@ -71,7 +82,7 @@ class _SavedAddressState extends State<SavedAddress> {
                   Padding(
                     padding: EdgeInsets.only(top: 15),
                     child:
-                    Text("Home",
+                    Text(getAddressList[index].addressTitle.toString(),
 
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.w500),
@@ -80,18 +91,21 @@ class _SavedAddressState extends State<SavedAddress> {
 
                   ),
                   Padding(
-                      padding: EdgeInsets.only(top: 15),
+                      padding: EdgeInsets.only(top: 8),
                       child: Container(
                         width: Helper.getScreenWidth(context) * .8,
                         child: Text(
-                          getAddressList[index].addressStreetName!,
+                          getAddressList[index].addressBuilding.toString()+" "+
+                              getAddressList[index].adressApartmentNo.toString()+" "+
+                              getAddressList[index].addressStreetName.toString()+" "+
+                              getAddressList[index].currentAddressLine.toString(),
                           style: TextStyle(
                               color: Colors.black.withOpacity(.6),
                               fontSize: 12),
                         ),
                       )),
                   Padding(
-                    padding: EdgeInsets.only(top: 15),
+                    padding: EdgeInsets.only(top:8),
                     child: Text(
                         "Phone Number : " + getAddressList[index].addressMobNo!,
                         style: TextStyle(
@@ -103,6 +117,9 @@ class _SavedAddressState extends State<SavedAddress> {
                       Padding(
                         padding: EdgeInsets.only(top: 20, bottom: 20),
                         child: InkWell(
+                          onTap: (){
+
+                          },
                           child: Text(
                             "EDIT",
                             style: TextStyle(
@@ -115,6 +132,9 @@ class _SavedAddressState extends State<SavedAddress> {
                         padding: EdgeInsets.only(
                             top: 20, left: 20, bottom: 20),
                         child: InkWell(
+                          onTap: (){
+                            deleteUserAddress(getAddressList[index].addressId.toString());
+                          },
                           child: Text(
                             "DELETE",
                             style: TextStyle(
@@ -123,18 +143,18 @@ class _SavedAddressState extends State<SavedAddress> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 20, left: 20, bottom: 20),
-                        child: InkWell(
-                          child: Text(
-                            "SHARE",
-                            style: TextStyle(
-                                color: Colors.orange.shade600,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(
+                      //       top: 20, left: 20, bottom: 20),
+                      //   child: InkWell(
+                      //     child: Text(
+                      //       "SHARE",
+                      //       style: TextStyle(
+                      //           color: Colors.orange.shade600,
+                      //           fontWeight: FontWeight.bold),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ],
@@ -148,80 +168,22 @@ class _SavedAddressState extends State<SavedAddress> {
         itemCount: getAddressList.length);
   }
 
-  //   Row(
-  //   crossAxisAlignment: CrossAxisAlignment.start,
-  //   children: [
-  //     Padding(
-  //       padding: EdgeInsets.all(10),
-  //       child: Icon(
-  //         Icons.home_outlined,
-  //         size: 25,
-  //       ),
-  //     ),
-  //     Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Padding(
-  //           padding: EdgeInsets.only(top: 15),
-  //           child: Text(
-  //             "Home",
-  //             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-  //           ),
-  //         ),
-  //         Padding(
-  //           padding: EdgeInsets.only(top: 15),
-  //           child: Text(
-  //               "Kottarakkara,Mavoor Road,Calicut ,kerala,\n673004,india",
-  //               style: TextStyle(
-  //                   color: Colors.black.withOpacity(.6), fontSize: 12)),
-  //         ),
-  //         Padding(
-  //           padding: EdgeInsets.only(top: 15),
-  //           child: Text("Phone Number:8943123253", style: TextStyle(
-  //               color: Colors.black.withOpacity(.6), fontSize: 12)),
-  //         ),
-  //         Row(
-  //           children: [
-  //             Padding(
-  //               padding: EdgeInsets.only(top: 20, bottom: 20),
-  //               child: InkWell(
-  //                 child: Text(
-  //                   "EDIT",
-  //                   style: TextStyle(
-  //                       color: Colors.orange.shade600,
-  //                       fontWeight: FontWeight.bold),
-  //                 ),
-  //               ),
-  //             ),
-  //             Padding(
-  //               padding: EdgeInsets.only(top: 20, left: 20, bottom: 20),
-  //               child: InkWell(
-  //                 child: Text(
-  //                   "DELETE",
-  //                   style: TextStyle(
-  //                       color: Colors.orange.shade600,
-  //                       fontWeight: FontWeight.bold),
-  //                 ),
-  //               ),
-  //             ),
-  //             Padding(
-  //               padding: EdgeInsets.only(top: 20, left: 20, bottom: 20),
-  //               child: InkWell(
-  //                 child: Text(
-  //                   "SHARE",
-  //                   style: TextStyle(
-  //                       color: Colors.orange.shade600,
-  //                       fontWeight: FontWeight.bold),
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ],
-  //     ),
-  //   ],
-  // );
-
+  deleteUserAddress(String addressId) async{
+    isLoading = true;
+    setState(() {});
+    var map = new Map<String, dynamic>();
+    map['address_id'] = addressId;
+    var response =
+    await http.post(Uri.parse(ApiData.DELETE_ADDRESS), body: map);
+    var json = convert.jsonDecode(response.body);
+    isLoading = false;
+    setState(() {});
+    if(json["error_code"] == 0){
+      getUserAddress();
+    } else{
+      print("Some error occured");
+    }
+  }
 
   getUserAddress() async {
     isLoading = true;
@@ -235,14 +197,13 @@ class _SavedAddressState extends State<SavedAddress> {
     List dataList = json['address_list'];
     isLoading = false;
     setState(() {});
-    if (response.statusCode == 200) {
       if (null != dataList && dataList.length > 0) {
         getAddressList = dataList
             .map((address) => new AddressModel.fromJson(address))
             .toList();
         setState(() {});
       }
-    }
+
   }
 }
 

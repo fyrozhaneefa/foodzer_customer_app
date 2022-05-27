@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
@@ -38,24 +39,30 @@ class PopularBrandCard extends StatelessWidget {
                     Border.all(width: 1.0, color: Colors.grey.shade200)),
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Image.network(
-                    logo!,
-                    fit: BoxFit.contain,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.deepOrangeAccent,
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    },
+                  child:CachedNetworkImage(
                     repeat: ImageRepeat.noRepeat,
-                  ),
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.high,
+                    imageUrl:logo!,
+                  )
+                  // Image.network(
+                  //   logo!,
+                  //   fit: BoxFit.contain,
+                  //   loadingBuilder: (BuildContext context, Widget child,
+                  //       ImageChunkEvent? loadingProgress) {
+                  //     if (loadingProgress == null) return child;
+                  //     return Center(
+                  //       child: CircularProgressIndicator(
+                  //         color: Colors.deepOrangeAccent,
+                  //         value: loadingProgress.expectedTotalBytes != null
+                  //             ? loadingProgress.cumulativeBytesLoaded /
+                  //             loadingProgress.expectedTotalBytes!
+                  //             : null,
+                  //       ),
+                  //     );
+                  //   },
+                  //   repeat: ImageRepeat.noRepeat,
+                  // ),
                 ),
               ),
               SizedBox(

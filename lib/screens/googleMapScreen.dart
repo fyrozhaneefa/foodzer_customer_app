@@ -11,6 +11,7 @@ import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/addDeliveryAddress.dart';
+import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -27,7 +28,8 @@ class GoogleMapScreen extends StatefulWidget {
   static const routeName = "/googleMapScreen";
   bool isFromCart;
   LatLng latLongCurrent = LatLng(0, 0);
-  GoogleMapScreen(this.isFromCart, this.latLongCurrent);
+  AddressModel addressModel=new AddressModel();
+  GoogleMapScreen(this.addressModel,this.isFromCart, this.latLongCurrent);
 
   @override
   _GoogleMapScreenState createState() => _GoogleMapScreenState(latLongCurrent);
@@ -269,7 +271,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                       SizedBox(
                         height: 15,
                       ),
-                     FloatingActionButton(
+                      !widget.isFromCart?  FloatingActionButton(
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.black,
                         child: const Icon(
@@ -281,13 +283,14 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                           isPinMoving = false;
                           setState(() {});
                         },
-                      ),
+                      ):Container(),
                     ],
                   ),
                 ),
                 !widget.isFromCart &&
                         isPinMoving &&
-                        searchController.text.length == 0 && delNotDel == 0 || delNotDel ==0
+                        searchController.text.length == 0 && delNotDel == 0 ||
+                    !widget.isFromCart && delNotDel ==0
                     ? Container(
                         padding: EdgeInsets.only(
                             left: 20, right: 20, top: 20, bottom: 30),
@@ -385,7 +388,9 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                       )
                     :Container(),
                 // !widget.isFromCart && !isPinMoving && !isCameraMoving
-                !widget.isFromCart && !isCameraMoving && searchController.text.length == 0 && myLatLng == latLongCurrent || delNotDel == 1
+                !widget.isFromCart && !isCameraMoving && searchController.text.length == 0 && myLatLng == latLongCurrent
+                    ||
+                    !widget.isFromCart && delNotDel == 1
                     ? Container(
                         margin: EdgeInsets.all(15),
                         width: MediaQuery.of(context).size.width,
@@ -637,7 +642,16 @@ setState(() {
         enableDrag: true,
         context: context,
         builder: (context) {
-          return AddDeliveryAddress(locality,latLongCurrent,_currentAddress);
-        });
+          return AddDeliveryAddress(locality,latLongCurrent,_currentAddress,widget.addressModel);
+        }).then((value) {
+          // if(widget.isFromCart) {
+          //   Navigator.of(context)
+          //       .push(MaterialPageRoute(builder: (context) => ItemBasketHome()));
+          // }else{
+            Navigator.of(context).pop();
+
+
+          // }
+    });
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -287,7 +288,7 @@ bool isFromCart = false;
             }else{
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      GoogleMapScreen(isFromCart, LatLng(0, 0))));
+                      GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))));
             }
 
           } else {
