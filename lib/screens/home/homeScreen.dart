@@ -10,6 +10,7 @@ import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shim
 import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:foodzer_customer_app/screens/home/changeAddressFromHome.dart';
+import 'package:foodzer_customer_app/screens/home/components/homeshimmer.dart';
 import 'package:foodzer_customer_app/screens/home/sections/body.dart';
 import 'package:foodzer_customer_app/screens/search/mainSearch.dart';
 import 'package:foodzer_customer_app/widget/navigationDrawer.dart';
@@ -20,8 +21,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import '../../blocs/application_bloc.dart';
 import '../../utils/helper.dart';
-
-
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "/homeScreen";
@@ -37,27 +36,23 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoggedIn = false;
   bool isLoading = false;
   int? delNotDel;
+
   @override
-  void initState()  {
-
+  void initState() {
     UserPreference().getCurrentAddress().then((value) {
-
       finalAddress = value!;
-      setState(() {
-
-      });
+      setState(() {});
     });
     getDeliverableArea();
     UserPreference().getUserData().then((value) {
       userName = value.userName;
       userType = value.userType;
       print("value is $userName");
-      if(null!= value.userId){
+      if (null != value.userId) {
         setState(() {
           isLoggedIn = true;
         });
-
-      }else{
+      } else {
         setState(() {
           isLoggedIn = false;
         });
@@ -68,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void dispose()  {
+  void dispose() {
     super.dispose();
   }
 
@@ -81,13 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 3,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
-        title:InkWell(
-          onTap: (){
-            if(isLoggedIn){
+        title: InkWell(
+          onTap: () {
+            if (isLoggedIn) {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      ChangeAddressFromHome()));
-            }else {
+                  builder: (BuildContext context) => ChangeAddressFromHome()));
+            } else {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) =>
                       GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))));
@@ -96,90 +90,85 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               Container(
-                child:Text(
+                child: Text(
                   "Delivering to",
-                  style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14.0
-                  ),
+                  style: TextStyle(color: Colors.grey, fontSize: 14.0),
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Container(
-                  child:Text(
-                   null!=finalAddress? finalAddress:'Select a location',
-                    style: TextStyle(
-                        color:Colors.deepOrange,
-                        fontSize: 16
-                    ),
-                  )
-              )
+                  child: Text(
+                null != finalAddress ? finalAddress : 'Select a location',
+                style: TextStyle(color: Colors.deepOrange, fontSize: 16),
+              ))
             ],
           ),
         ),
-        actions:
-        [
+        actions: [
           Padding(
-            padding:  EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
             child: Container(
               width: 35.0,
               alignment: Alignment.center,
               child: GestureDetector(
                 onTap: () {
-                 if( Provider.of<ApplicationProvider>(context, listen: false).cartModelList.length > 0) {
-                   Navigator.of(context).push(MaterialPageRoute(
-                       builder: (BuildContext context) =>
-                           ItemBasketHome()));
-                 } else {
-                   Navigator.of(context).push(MaterialPageRoute(
-                       builder: (BuildContext context) =>
-                           MainSearchScreen()));
-                 }
-
-
+                  if (Provider.of<ApplicationProvider>(context, listen: false)
+                          .cartModelList
+                          .length >
+                      0) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => ItemBasketHome()));
+                  } else {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (BuildContext context) => MainSearchScreen()));
+                  }
                 },
-                child:Consumer<ApplicationProvider>(builder: (context, provider, child) {
-              return Stack
-                (
-                  children: <Widget>[
-                     IconButton(
-                      icon: Icon(
-                        null!= provider.cartModelList &&
-                            provider.cartModelList.length > 0?
-                        Icons.shopping_basket_sharp:Icons.search,
-                        color: Colors.black,
+                child: Consumer<ApplicationProvider>(
+                    builder: (context, provider, child) {
+                  return Stack(
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          null != provider.cartModelList &&
+                                  provider.cartModelList.length > 0
+                              ? Icons.shopping_basket_sharp
+                              : Icons.search,
+                          color: Colors.black,
+                        ),
+                        onPressed: null,
                       ),
-                      onPressed: null,
-                    ),
-                    provider.cartModelList.length == 0
-                        ? Container()
-                        : Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                            height: 20.0,
-                            width: 20.0,
-                            decoration:  BoxDecoration(
-                              color: Colors.deepOrange,
-                              shape: BoxShape.circle,
-                            ),
-                            child:  Center(
-                              child: Text(
-                                provider.cartModelList.length.toString(),
-                                style: TextStyle(
-                                  fontSize: 11.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                      provider.cartModelList.length == 0
+                          ? Container()
+                          : Positioned(
+                              top: 0,
+                              right: 0,
+                              child: Stack(
+                                children: <Widget>[
+                                  Container(
+                                    height: 20.0,
+                                    width: 20.0,
+                                    decoration: BoxDecoration(
+                                      color: Colors.deepOrange,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        provider.cartModelList.length
+                                            .toString(),
+                                        style: TextStyle(
+                                          fontSize: 11.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
+                    ],
+                  );
                 }),
               ),
             ),
@@ -225,65 +214,64 @@ class _HomeScreenState extends State<HomeScreen> {
         //  )
         // ],
       ),
-      body:
-      isLoading?
-     Center(child: CircularProgressIndicator(),
-
-      ):
-
-      delNotDel == 0 ?Body():Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-        Expanded(
-          child: Container(
-            width: Helper.getScreenWidth(context),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage("assets/images/real/nolocation1.jpg"),
-              ),
-            ),
-            child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-              Padding(
-                padding: EdgeInsets.only(bottom: 40),
-                child: Text("We are not present at this location yet! We will let you know as\n\n                                     soon as we are here ",style: TextStyle(fontSize: 12),),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  "CHANGE LOCATION",
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.deepOrange,
-                  fixedSize: Size(200, 40),
-                ),
-              ),
-            ]),
-          ),
-        )
-      ]),
+      body: isLoading
+          ? SingleChildScrollView(child:HomeShimmer())
+          : delNotDel == 0
+              ? Body()
+              : Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  Expanded(
+                    child: Container(
+                      width: Helper.getScreenWidth(context),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image:
+                              AssetImage("assets/images/real/nolocation1.jpg"),
+                        ),
+                      ),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 40),
+                              child: Text(
+                                "We are not present at this location yet! We will let you know as\n\n                                     soon as we are here ",
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {},
+                              child: Text(
+                                "CHANGE LOCATION",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.deepOrange,
+                                fixedSize: Size(200, 40),
+                              ),
+                            ),
+                          ]),
+                    ),
+                  )
+                ]),
     );
   }
 
   getDeliverableArea() async {
     isLoading = true;
-    setState(() {
-
-    });
-    SharedPreferences prefs=await SharedPreferences.getInstance();
+    setState(() {});
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     var map = new Map<String, dynamic>();
     map['lat'] = prefs.getString("latitude");
     map['lng'] = prefs.getString("longitude");
 
     var response =
-    await http.post(Uri.parse(ApiData.GET_DELIVERABLE_AREA), body: map);
+        await http.post(Uri.parse(ApiData.GET_DELIVERABLE_AREA), body: map);
     var jsonData = convert.jsonDecode(response.body);
-    isLoading =false;
+    isLoading = false;
     setState(() {
       delNotDel = jsonData;
     });
   }
-
-
 }
-
-
