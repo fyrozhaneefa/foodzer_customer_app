@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:foodzer_customer_app/Models/itemPriceOnModel.dart';
 
 SingleRestModel restaurantModelFromJson(String str) => SingleRestModel.fromJson(json.decode(str));
+String singleRestModelToJson(SingleRestModel data) => json.encode(data.toJson());
 
 
 class SingleRestModel {
@@ -41,37 +42,39 @@ class SingleRestModel {
   String? branchCuisine;
 
   factory SingleRestModel.fromJson(Map<String, dynamic> json) => SingleRestModel(
-    categories: List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
-    offerDetails: List<dynamic>.from(json["offer_details"].map((x) => x)),
-    timing: Timing.fromJson(json["timing"]),
-    items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+    categories: json.containsKey("categories")?
+    List<Category>.from(json["categories"].map((x) =>
+        Category.fromJson(x))):[],
+    offerDetails:json.containsKey("offer_details")?
+    List<dynamic>.from(json["offer_details"].map((x) => x)):[],
+    timing: json.containsKey("timing")?
+    Timing.fromJson(json["timing"]):new Timing(),
+    items:json.containsKey("items")?
+    List<Item>.from(json["items"].map((x) => Item.fromJson(x))):[],
     // items: List<List<Item>>.from(json["items"].map((x) => List<Item>.from(x.map((x) => Item.fromJson(x))))),
     avgQuality: json["avg_quality"],
     packageRating: json["package_rating"],
     deliveryRating: json["delivery_rating"],
     moneyRating: json["money_rating"],
     numOfRows: json["num_of_rows"],
-    reviews: Reviews.fromJson(json["reviews"]),
+    reviews: json.containsKey("reviews")?
+    Reviews.fromJson(json["reviews"]):new Reviews(),
     merchantBranchId: json["merchant_branch_id"],
     branchDetails: BranchDetails.fromJson(json["branch_details"]),
     branchCuisine: json["branch_cuisine"],
   );
   //
-  // Map<String, dynamic> toJson() => {
-  //   "categories": List<dynamic>.from(categories!.map((x) => x.toJson())),
-  //   "offer_details": List<dynamic>.from(offerDetails!.map((x) => x)),
-  //   "timing": timing!.toJson(),
-  //   "items": List<dynamic>.from(items!.map((x) => x.toJson())),
-  //   "avg_quality": avgQuality,
-  //   "package_rating": packageRating,
-  //   "delivery_rating": deliveryRating,
-  //   "money_rating": moneyRating,
-  //   "num_of_rows": numOfRows,
-  //   "reviews": reviews!.toJson(),
-  //   "merchant_branch_id": merchantBranchId,
-  //   "branch_details": branchDetails!.toJson(),
-  //   "branch_cuisine": branchCuisine,
-  // };
+  Map<String, dynamic> toJson() => {
+    "timing": timing!.toJson(),
+    "avg_quality": avgQuality,
+    "package_rating": packageRating,
+    "delivery_rating": deliveryRating,
+    "money_rating": moneyRating,
+    "num_of_rows": numOfRows,
+    "merchant_branch_id": merchantBranchId,
+    "branch_details": branchDetails!.toJson(),
+    "branch_cuisine": branchCuisine,
+  };
 }
 
 class BranchDetails {

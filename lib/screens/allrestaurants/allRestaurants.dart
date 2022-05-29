@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/applybutton.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/popularfilters.dart';
 import 'package:foodzer_customer_app/Models/AddressModel.dart';
+import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/popularRestNear.dart';
@@ -9,6 +10,7 @@ import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurantSe
 import 'package:foodzer_customer_app/screens/allrestaurants/section/restaurants.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
+import 'package:foodzer_customer_app/screens/home/changeAddressFromHome.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +32,25 @@ class AllRestaurantsScreen extends StatefulWidget {
 
 class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
   bool isFromCart = false;
+  bool isLoggedIn = false;
+
+  @override
+  void initState() {
+    UserPreference().getUserData().then((value) {
+
+      if (null != value.userId) {
+        setState(() {
+          isLoggedIn = true;
+        });
+      } else {
+        setState(() {
+          isLoggedIn = false;
+        });
+      }
+    });
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +72,14 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
         // leadingWidth: 30,
         title: InkWell(
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))));
+            if (isLoggedIn) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => ChangeAddressFromHome()));
+            } else {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))));
+            }
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

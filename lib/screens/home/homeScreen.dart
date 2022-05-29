@@ -43,6 +43,20 @@ class _HomeScreenState extends State<HomeScreen> {
       finalAddress = value!;
       setState(() {});
     });
+    // UserPreference().getCurrentRestaurant().then((value) {
+    //   if(null!=value.merchantBranchId && value.merchantBranchId!.isNotEmpty) {
+    //     Provider.of<ApplicationProvider>(context, listen: false)
+    //         .setCurrentRestModel(value);
+    //   }
+    //   setState(() {});
+    // });
+    // UserPreference().getCartItems().then((value) {
+    //   if(null!=value && value.length>0) {
+    //     Provider.of<ApplicationProvider>(context, listen: false)
+    //         .reloadCart(value);
+    //   }
+    //   setState(() {});
+    // });
     getDeliverableArea();
     UserPreference().getUserData().then((value) {
       userName = value.userName;

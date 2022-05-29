@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:foodzer_customer_app/Models/AddressModel.dart';
+import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -286,9 +287,8 @@ bool isFromCart = false;
                   builder: (BuildContext context) =>
                       ItemBasketHome()));
             }else{
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))));
+              checkUserAvailable();
+
             }
 
           } else {
@@ -320,7 +320,36 @@ bool isFromCart = false;
       });
     }
   }
+  checkUserAvailable() async {
+    setState(() {
+      isLoading =true;
+    });
+    var formData = FormData.fromMap({
+      "mobile": widget.mobileNumber
+    });
+    var response = await Dio().post(ApiData.CHECKMOBILE, data: formData);
+    if(response.statusCode == 200){
+      setState(() {
+        isLoading = false;
+      });
+      final responsebody = json.decode(response.data.toString());
 
+        final resData = responsebody['data'];
+        String userJson = jsonEncode(resData);
+        // userData userModel = userData.fromJson(jsonDecode(userJson));
+        UserPreference().setUserData(userJson);
+        UserPreference().getUserData().then((value)=>{
+          if(null!=value.userMobie && value.userMobie!.isNotEmpty){
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) =>
+                GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))))
+          } else{
+            print("user data is not stored")
+          }
+        });
+
+    }
+  }
   resentOTP() async {
     var map = new Map<String, dynamic>();
     map['mobile'] = widget.mobileNumber;

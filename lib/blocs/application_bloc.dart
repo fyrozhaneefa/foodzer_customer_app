@@ -6,6 +6,7 @@ import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Models/itemAddonModel.dart';
 import 'package:foodzer_customer_app/Models/place_search.dart';
+import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
 import 'package:geolocator/geolocator.dart';
@@ -88,6 +89,10 @@ class ApplicationProvider with ChangeNotifier {
   setAddressModel(AddressModel addressModel) async {
     this.selectedAddressModel = addressModel;
   }
+  reloadCart(List<Item> items) async {
+    this.cartModelList = items;
+    notifyListeners();
+  }
 
   setOrderId(String orderId) async {
     this.currentOrderId = orderId;
@@ -159,6 +164,7 @@ class ApplicationProvider with ChangeNotifier {
 
   setCurrentRestModel(SingleRestModel restModel) async {
     this.selectedRestModel = restModel;
+    UserPreference().setCurrentRestaurant(restModel);
     this.filteredLoadedProductModelList = [];
     this.selectedCategoryId = 0;
 

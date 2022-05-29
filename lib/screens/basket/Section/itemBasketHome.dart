@@ -33,7 +33,8 @@ class ItemBasketHome extends StatefulWidget {
   _ItemBasketHomeState createState() => _ItemBasketHomeState();
 }
 
-class _ItemBasketHomeState extends State<ItemBasketHome> {
+class _ItemBasketHomeState extends State<ItemBasketHome>
+    with WidgetsBindingObserver{
   bool isLoadingDeliveryCharge = false;
   int? deliveryType = 1;
   bool isFromCart = true;
@@ -50,6 +51,8 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
+
     getMerchantTaxPercentage();
     UserPreference().getUserData().then((value) {
       if(null!= value.userId && value.userId!.isNotEmpty){
@@ -70,312 +73,344 @@ class _ItemBasketHomeState extends State<ItemBasketHome> {
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+
+    if(null!=  Provider.of<ApplicationProvider>(context, listen: false)
+        .cartModelList &&   Provider.of<ApplicationProvider>(context, listen: false)
+        .cartModelList.length>0){
+      UserPreference().setCartItems( Provider.of<ApplicationProvider>(context, listen: false)
+          .cartModelList);
+
+    }
+    super.dispose();
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+
+    if(null!=  Provider.of<ApplicationProvider>(context, listen: false)
+        .cartModelList &&   Provider.of<ApplicationProvider>(context, listen: false)
+        .cartModelList.length>0){
+      UserPreference().setCartItems( Provider.of<ApplicationProvider>(context, listen: false)
+          .cartModelList);
+
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationProvider>(builder: (context, provider, child) {
-      return Scaffold(
+      return WillPopScope(
+        onWillPop: () async{
+          print("onWillPop");
+          return true ;
+        },
+        child: Scaffold(
 
-        appBar: null!= provider.cartModelList && provider.cartModelList.length > 0
-            ?AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(Icons.keyboard_backspace_outlined,
-                  color: Colors.black.withOpacity(.5), size: 30)),
-          title: Text(
-            provider.selectedRestModel.branchDetails!.merchantBranchName
-                .toString(),
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+          appBar: null!= provider.cartModelList && provider.cartModelList.length > 0
+              ?AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: Icon(Icons.keyboard_backspace_outlined,
+                    color: Colors.black.withOpacity(.5), size: 30)),
+            title: Text(
+              provider.selectedRestModel.branchDetails!.merchantBranchName
+                  .toString(),
+              style: TextStyle(
+                  color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            //     bottom:null!=provider.selectedRestModel.offerDetails? PreferredSize(
+            //       preferredSize: Size.fromHeight(80.0),
+            //       child: Padding(
+            //         padding: const EdgeInsets.all(8.0),
+            //         child: Container(
+            //           width: Helper.getScreenWidth(context),
+            //           decoration: BoxDecoration(
+            //             color: Colors.deepOrange.shade100,
+            //             borderRadius: BorderRadius.circular(20)
+            //           ),
+            //           child: Padding(
+            //             padding: const EdgeInsets.all(12.0),
+            //             child: Column(
+            //               crossAxisAlignment: CrossAxisAlignment.start,
+            //               children: [
+            //                 Text(
+            //                   'Rs.131 total savings',
+            //                   style: TextStyle(
+            //                     color: Colors.deepOrange,
+            //                     fontSize: 20,
+            //                     fontWeight: FontWeight.w600
+            //                   ),
+            //                 ),
+            //                 SizedBox(height: 7,),
+            //                 Text('indluding Rs.100 with WELCOME50 coupon',
+            //                 style: TextStyle(
+            //                   color: Colors.deepOrangeAccent,
+            //                   fontSize: 13,
+            //                   fontWeight: FontWeight.w500
+            //                 ),)
+            //               ],
+            //             ),
+            //           ),
+            //         ),
+            //       ) ):PreferredSize(
+            // preferredSize: Size.fromHeight(0.0), child: Container(),),
+          ):AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            toolbarHeight: 0,
+            toolbarOpacity: 0,
           ),
-          //     bottom:null!=provider.selectedRestModel.offerDetails? PreferredSize(
-          //       preferredSize: Size.fromHeight(80.0),
-          //       child: Padding(
-          //         padding: const EdgeInsets.all(8.0),
-          //         child: Container(
-          //           width: Helper.getScreenWidth(context),
-          //           decoration: BoxDecoration(
-          //             color: Colors.deepOrange.shade100,
-          //             borderRadius: BorderRadius.circular(20)
-          //           ),
-          //           child: Padding(
-          //             padding: const EdgeInsets.all(12.0),
-          //             child: Column(
-          //               crossAxisAlignment: CrossAxisAlignment.start,
-          //               children: [
-          //                 Text(
-          //                   'Rs.131 total savings',
-          //                   style: TextStyle(
-          //                     color: Colors.deepOrange,
-          //                     fontSize: 20,
-          //                     fontWeight: FontWeight.w600
-          //                   ),
-          //                 ),
-          //                 SizedBox(height: 7,),
-          //                 Text('indluding Rs.100 with WELCOME50 coupon',
-          //                 style: TextStyle(
-          //                   color: Colors.deepOrangeAccent,
-          //                   fontSize: 13,
-          //                   fontWeight: FontWeight.w500
-          //                 ),)
-          //               ],
-          //             ),
-          //           ),
-          //         ),
-          //       ) ):PreferredSize(
-          // preferredSize: Size.fromHeight(0.0), child: Container(),),
-        ):AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          toolbarHeight: 0,
-          toolbarOpacity: 0,
-        ),
-        body: null!= provider.cartModelList && provider.cartModelList.length > 0
-            ?SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: ListView(
-                  shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  children: [
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(
-                            top: 10, left: 20, right: 20, bottom: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Choose your delivery type",
+          body: null!= provider.cartModelList && provider.cartModelList.length > 0
+              ?SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    physics: ScrollPhysics(),
+                    children: [
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              top: 10, left: 20, right: 20, bottom: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Choose your delivery type",
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              deliveryType = 1;
+                                            });
+                                            provider.setDeliveryType(1);
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: deliveryType == 1
+                                                      ? Colors.deepOrangeAccent
+                                                      : Colors.transparent),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              color: deliveryType == 1?Colors.deepOrange.shade50:Colors.grey.shade100,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey.shade100,
+                                                    spreadRadius: 1,
+                                                    blurRadius: 1)
+                                              ],
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Image.network(
+                                                  'https://www.pngall.com/wp-content/uploads/11/Fast-Delivery-PNG.png',
+                                                  width: 50,
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  'Delivery',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        // deliveryType == 1
+                                        //     ? Align(
+                                        //         child: Icon(
+                                        //           Icons.check_circle,
+                                        //           size: 16,
+                                        //           color: Colors.deepOrangeAccent,
+                                        //         ),
+                                        //       )
+                                        //     : Container()
+                                      ],
+                                    ),
+                                    Stack(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            tipValue = 0;
+                                            selectedTip =-1;
+                                            setState(() {
+                                              deliveryType = 2;
+                                            });
+                                            provider.setDeliveryType(2);
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: deliveryType == 2
+                                                      ? Colors.deepOrangeAccent
+                                                      : Colors.transparent),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              color: deliveryType == 2?Colors.deepOrange.shade50:Colors.grey.shade100,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey.shade100,
+                                                    spreadRadius: 1,
+                                                    blurRadius: 1)
+                                              ],
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Image.network(
+                                                  'https://www.pngall.com/wp-content/uploads/11/Fast-Delivery-PNG.png',
+                                                  width: 50,
+                                                ),
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  'Pick up',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        // deliveryType == 2
+                                        //     ? Align(
+                                        //         child: Icon(
+                                        //           Icons.check_circle,
+                                        //           size: 16,
+                                        //           color: Colors.deepOrangeAccent,
+                                        //         ),
+                                        //       )
+                                        //     : Container()
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 15),
+                              BasketHeader(),
+                            ],
+                          )),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                            child: Text(
+                              "Offers & Benefits",
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Stack(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            deliveryType = 1;
-                                          });
-                                          provider.setDeliveryType(1);
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: deliveryType == 1
-                                                    ? Colors.deepOrangeAccent
-                                                    : Colors.transparent),
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            color: deliveryType == 1?Colors.deepOrange.shade50:Colors.grey.shade100,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.shade100,
-                                                  spreadRadius: 1,
-                                                  blurRadius: 1)
-                                            ],
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Image.network(
-                                                'https://www.pngall.com/wp-content/uploads/11/Fast-Delivery-PNG.png',
-                                                width: 50,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                'Delivery',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      // deliveryType == 1
-                                      //     ? Align(
-                                      //         child: Icon(
-                                      //           Icons.check_circle,
-                                      //           size: 16,
-                                      //           color: Colors.deepOrangeAccent,
-                                      //         ),
-                                      //       )
-                                      //     : Container()
-                                    ],
-                                  ),
-                                  Stack(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          tipValue = 0;
-                                          selectedTip =-1;
-                                          setState(() {
-                                            deliveryType = 2;
-                                          });
-                                          provider.setDeliveryType(2);
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: deliveryType == 2
-                                                    ? Colors.deepOrangeAccent
-                                                    : Colors.transparent),
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            color: deliveryType == 2?Colors.deepOrange.shade50:Colors.grey.shade100,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  color: Colors.grey.shade100,
-                                                  spreadRadius: 1,
-                                                  blurRadius: 1)
-                                            ],
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Image.network(
-                                                'https://www.pngall.com/wp-content/uploads/11/Fast-Delivery-PNG.png',
-                                                width: 50,
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
-                                                'Pick up',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      // deliveryType == 2
-                                      //     ? Align(
-                                      //         child: Icon(
-                                      //           Icons.check_circle,
-                                      //           size: 16,
-                                      //           color: Colors.deepOrangeAccent,
-                                      //         ),
-                                      //       )
-                                      //     : Container()
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 15),
-                            BasketHeader(),
-                          ],
-                        )),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding:
-                              EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                          child: Text(
-                            "Offers & Benefits",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
                           ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: 20, right: 20, top: 10, bottom: 10),
-                      child: SavedContainer(
-                        child: ListTile(
-                          title: Text(
-                            "Apply Coupon",
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          trailing:
-                              Icon(Icons.arrow_forward_ios_rounded, size: 15),
-                        ),
+                        ],
                       ),
-                    ),
-                   deliveryType == 1?Column(
-                     mainAxisSize: MainAxisSize.min,
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                       Padding(
-                         padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                         child: Text(
-                           "Tip Your hunger saviour",
-                           style: TextStyle(
-                               fontSize: 16, fontWeight: FontWeight.w600),
-                         ),
-                       ),
-                       Padding(
-                         padding: EdgeInsets.only(
-                             left: 20, right: 20, top: 10, bottom: 10),
-                         child: deliveryBoyTip(),
-                       ),
-                       Padding(
-                         padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                         child: Text(
-                           "Delivery instructions",
-                           style: TextStyle(
-                               fontSize: 16, fontWeight: FontWeight.w600),
-                         ),
-                       ),
-                       Padding(
-                         padding: EdgeInsets.only(left: 20, top: 20, bottom: 10,right:20),
-                         child: Container(
-                           height:100,
-                           child: DeliveryInstructions()
-                         ),
-                       ),
-                     ],
-                   ):Container(),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                      child: Text(
-                        "Bill Details",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    Padding(
+                      Padding(
                         padding: EdgeInsets.only(
-                            top: 10, left: 10, right: 10, bottom: 50),
-                        child: summaryView()),
-                  ],
+                            left: 20, right: 20, top: 10, bottom: 10),
+                        child: SavedContainer(
+                          child: ListTile(
+                            title: Text(
+                              "Apply Coupon",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            trailing:
+                                Icon(Icons.arrow_forward_ios_rounded, size: 15),
+                          ),
+                        ),
+                      ),
+                     deliveryType == 1?Column(
+                       mainAxisSize: MainAxisSize.min,
+                       crossAxisAlignment: CrossAxisAlignment.start,
+                       children: [
+                         Padding(
+                           padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                           child: Text(
+                             "Tip Your hunger saviour",
+                             style: TextStyle(
+                                 fontSize: 16, fontWeight: FontWeight.w600),
+                           ),
+                         ),
+                         Padding(
+                           padding: EdgeInsets.only(
+                               left: 20, right: 20, top: 10, bottom: 10),
+                           child: deliveryBoyTip(),
+                         ),
+                         Padding(
+                           padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                           child: Text(
+                             "Delivery instructions",
+                             style: TextStyle(
+                                 fontSize: 16, fontWeight: FontWeight.w600),
+                           ),
+                         ),
+                         Padding(
+                           padding: EdgeInsets.only(left: 20, top: 20, bottom: 10,right:20),
+                           child: Container(
+                             height:100,
+                             child: DeliveryInstructions()
+                           ),
+                         ),
+                       ],
+                     ):Container(),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                        child: Text(
+                          "Bill Details",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              top: 10, left: 10, right: 10, bottom: 50),
+                          child: summaryView()),
+                    ],
+                  ),
                 ),
-              ),
-              // ProceedToPay(),
-              proceedToPay(),
-            ],
-          ),
-        ):Container(
-            padding: EdgeInsets.only(left: 50,right: 50),
-            child: cartEmpty(context)),
-        backgroundColor: Colors.grey.shade200,
+                // ProceedToPay(),
+                proceedToPay(),
+              ],
+            ),
+          ):Container(
+              padding: EdgeInsets.only(left: 50,right: 50),
+              child: cartEmpty(context)),
+          backgroundColor: Colors.grey.shade200,
+        ),
       );
     });
   }
