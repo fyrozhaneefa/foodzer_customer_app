@@ -549,6 +549,7 @@ class ProductDesc extends StatelessWidget {
             fontSize: 12,
             color: Colors.grey.shade600,
           ),
+          overflow: TextOverflow.ellipsis,
         ),
         SizedBox(
           height: 8,
@@ -616,7 +617,7 @@ class ProductDesc extends StatelessWidget {
               size: 20,
             ),
             Text(
-              'BD 0.40',
+              'INR 0.0',
               style: TextStyle(
                 fontSize: 12,
               ),

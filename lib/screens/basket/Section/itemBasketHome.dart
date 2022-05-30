@@ -19,6 +19,8 @@ import 'package:foodzer_customer_app/screens/basket/Section/proceedToPay.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/savedcontainer.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/tipyourHungerSavior.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
+import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
+import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
 import 'package:foodzer_customer_app/screens/loginScreen.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +36,8 @@ class ItemBasketHome extends StatefulWidget {
 }
 
 class _ItemBasketHomeState extends State<ItemBasketHome>
-    with WidgetsBindingObserver{
+    with WidgetsBindingObserver {
+  TextEditingController tipController = new TextEditingController();
   bool isLoadingDeliveryCharge = false;
   int? deliveryType = 1;
   bool isFromCart = true;
@@ -44,371 +47,384 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
   double taxPercentage = 0;
   double toPayAmt = 0;
   double tipAmount = 0;
-  List<String> tips = ["1", "5", "10", "20"];
+  List<String> tips = ["20", "30", "50", "Other"];
   int? selectedTip = -1;
   int tipValue = 0;
   bool isLoggedIn = false;
+  bool customTip = false;
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
 
     getMerchantTaxPercentage();
     UserPreference().getUserData().then((value) {
-      if(null!= value.userId && value.userId!.isNotEmpty){
+      if (null != value.userId && value.userId!.isNotEmpty) {
         userModel = value;
         getUserAddress();
         setState(() {
           isLoggedIn = true;
         });
-      }else{
+      } else {
         setState(() {
           isLoggedIn = false;
         });
       }
-
     });
 
     super.initState();
   }
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-
-    if(null!=  Provider.of<ApplicationProvider>(context, listen: false)
-        .cartModelList &&   Provider.of<ApplicationProvider>(context, listen: false)
-        .cartModelList.length>0){
-      UserPreference().setCartItems( Provider.of<ApplicationProvider>(context, listen: false)
-          .cartModelList);
-
-    }
-    super.dispose();
-  }
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-
-    if(null!=  Provider.of<ApplicationProvider>(context, listen: false)
-        .cartModelList &&   Provider.of<ApplicationProvider>(context, listen: false)
-        .cartModelList.length>0){
-      UserPreference().setCartItems( Provider.of<ApplicationProvider>(context, listen: false)
-          .cartModelList);
-
-    }
-  }
-
-
-  @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationProvider>(builder: (context, provider, child) {
       return WillPopScope(
-        onWillPop: () async{
-          print("onWillPop");
-          return true ;
+        onWillPop: () async {
+          return true;
         },
         child: Scaffold(
-
-          appBar: null!= provider.cartModelList && provider.cartModelList.length > 0
-              ?AppBar(
-            elevation: 0,
-            backgroundColor: Colors.white,
-            leading: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: Icon(Icons.keyboard_backspace_outlined,
-                    color: Colors.black.withOpacity(.5), size: 30)),
-            title: Text(
-              provider.selectedRestModel.branchDetails!.merchantBranchName
-                  .toString(),
-              style: TextStyle(
-                  color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            //     bottom:null!=provider.selectedRestModel.offerDetails? PreferredSize(
-            //       preferredSize: Size.fromHeight(80.0),
-            //       child: Padding(
-            //         padding: const EdgeInsets.all(8.0),
-            //         child: Container(
-            //           width: Helper.getScreenWidth(context),
-            //           decoration: BoxDecoration(
-            //             color: Colors.deepOrange.shade100,
-            //             borderRadius: BorderRadius.circular(20)
-            //           ),
-            //           child: Padding(
-            //             padding: const EdgeInsets.all(12.0),
-            //             child: Column(
-            //               crossAxisAlignment: CrossAxisAlignment.start,
-            //               children: [
-            //                 Text(
-            //                   'Rs.131 total savings',
-            //                   style: TextStyle(
-            //                     color: Colors.deepOrange,
-            //                     fontSize: 20,
-            //                     fontWeight: FontWeight.w600
-            //                   ),
-            //                 ),
-            //                 SizedBox(height: 7,),
-            //                 Text('indluding Rs.100 with WELCOME50 coupon',
-            //                 style: TextStyle(
-            //                   color: Colors.deepOrangeAccent,
-            //                   fontSize: 13,
-            //                   fontWeight: FontWeight.w500
-            //                 ),)
-            //               ],
-            //             ),
-            //           ),
-            //         ),
-            //       ) ):PreferredSize(
-            // preferredSize: Size.fromHeight(0.0), child: Container(),),
-          ):AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            toolbarHeight: 0,
-            toolbarOpacity: 0,
-          ),
-          body: null!= provider.cartModelList && provider.cartModelList.length > 0
-              ?SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: ListView(
-                    shrinkWrap: true,
-                    physics: ScrollPhysics(),
+          appBar: null != provider.cartModelList &&
+                  provider.cartModelList.length > 0
+              ? AppBar(
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  leading: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: Icon(Icons.keyboard_backspace_outlined,
+                          color: Colors.black.withOpacity(.5), size: 30)),
+                  title: Text(
+                    provider.selectedRestModel.branchDetails!.merchantBranchName
+                        .toString(),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  ),
+                  //     bottom:null!=provider.selectedRestModel.offerDetails? PreferredSize(
+                  //       preferredSize: Size.fromHeight(80.0),
+                  //       child: Padding(
+                  //         padding: const EdgeInsets.all(8.0),
+                  //         child: Container(
+                  //           width: Helper.getScreenWidth(context),
+                  //           decoration: BoxDecoration(
+                  //             color: Colors.deepOrange.shade100,
+                  //             borderRadius: BorderRadius.circular(20)
+                  //           ),
+                  //           child: Padding(
+                  //             padding: const EdgeInsets.all(12.0),
+                  //             child: Column(
+                  //               crossAxisAlignment: CrossAxisAlignment.start,
+                  //               children: [
+                  //                 Text(
+                  //                   'Rs.131 total savings',
+                  //                   style: TextStyle(
+                  //                     color: Colors.deepOrange,
+                  //                     fontSize: 20,
+                  //                     fontWeight: FontWeight.w600
+                  //                   ),
+                  //                 ),
+                  //                 SizedBox(height: 7,),
+                  //                 Text('indluding Rs.100 with WELCOME50 coupon',
+                  //                 style: TextStyle(
+                  //                   color: Colors.deepOrangeAccent,
+                  //                   fontSize: 13,
+                  //                   fontWeight: FontWeight.w500
+                  //                 ),)
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ) ):PreferredSize(
+                  // preferredSize: Size.fromHeight(0.0), child: Container(),),
+                )
+              : AppBar(
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  toolbarHeight: 0,
+                  toolbarOpacity: 0,
+                ),
+          body: null != provider.cartModelList &&
+                  provider.cartModelList.length > 0
+              ? SafeArea(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              top: 10, left: 20, right: 20, bottom: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Choose your delivery type",
+                      Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
+                          physics: ScrollPhysics(),
+                          children: [
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    top: 10, left: 20, right: 20, bottom: 15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Choose your delivery type",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Stack(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    deliveryType = 1;
+                                                  });
+                                                  provider.setDeliveryType(1);
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: deliveryType == 1
+                                                            ? Colors
+                                                                .deepOrangeAccent
+                                                            : Colors
+                                                                .transparent),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    color: deliveryType == 1
+                                                        ? Colors
+                                                            .deepOrange.shade50
+                                                        : Colors.grey.shade100,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                          color: Colors
+                                                              .grey.shade100,
+                                                          spreadRadius: 1,
+                                                          blurRadius: 1)
+                                                    ],
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Image.network(
+                                                        'https://www.pngall.com/wp-content/uploads/11/Fast-Delivery-PNG.png',
+                                                        width: 50,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        'Delivery',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              // deliveryType == 1
+                                              //     ? Align(
+                                              //         child: Icon(
+                                              //           Icons.check_circle,
+                                              //           size: 16,
+                                              //           color: Colors.deepOrangeAccent,
+                                              //         ),
+                                              //       )
+                                              //     : Container()
+                                            ],
+                                          ),
+                                          Stack(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  tipValue = 0;
+                                                  selectedTip = -1;
+                                                  setState(() {
+                                                    deliveryType = 2;
+                                                  });
+                                                  provider.setDeliveryType(2);
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: deliveryType == 2
+                                                            ? Colors
+                                                                .deepOrangeAccent
+                                                            : Colors
+                                                                .transparent),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    color: deliveryType == 2
+                                                        ? Colors
+                                                            .deepOrange.shade50
+                                                        : Colors.grey.shade100,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                          color: Colors
+                                                              .grey.shade100,
+                                                          spreadRadius: 1,
+                                                          blurRadius: 1)
+                                                    ],
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Image.network(
+                                                        'https://www.pngall.com/wp-content/uploads/11/Fast-Delivery-PNG.png',
+                                                        width: 50,
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text(
+                                                        'Pick up',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              // deliveryType == 2
+                                              //     ? Align(
+                                              //         child: Icon(
+                                              //           Icons.check_circle,
+                                              //           size: 16,
+                                              //           color: Colors.deepOrangeAccent,
+                                              //         ),
+                                              //       )
+                                              //     : Container()
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 15),
+                                    itemList(),
+                                  ],
+                                )),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 20, top: 20, bottom: 10),
+                                  child: Text(
+                                    "Offers & Benefits",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 20, right: 20, top: 10, bottom: 10),
+                              child: SavedContainer(
+                                child: ListTile(
+                                  title: Text(
+                                    "Apply Coupon",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                  trailing: Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      size: 15),
+                                ),
+                              ),
+                            ),
+                            deliveryType == 1
+                                ? Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 20, top: 20, bottom: 10),
+                                        child: Text(
+                                          "Tip Your hunger saviour",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: deliveryBoyTip(),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 20, top: 20, bottom: 10),
+                                        child: Text(
+                                          "Delivery instructions",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 20,
+                                            top: 20,
+                                            bottom: 10,
+                                            right: 20),
+                                        child: Container(
+                                            height: 100,
+                                            child: DeliveryInstructions()),
+                                      ),
+                                    ],
+                                  )
+                                : Container(),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 20, top: 20, bottom: 10),
+                              child: Text(
+                                "Bill Details",
                                 style: TextStyle(
                                     fontSize: 16, fontWeight: FontWeight.w600),
                               ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Stack(
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              deliveryType = 1;
-                                            });
-                                            provider.setDeliveryType(1);
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: deliveryType == 1
-                                                      ? Colors.deepOrangeAccent
-                                                      : Colors.transparent),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              color: deliveryType == 1?Colors.deepOrange.shade50:Colors.grey.shade100,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: Colors.grey.shade100,
-                                                    spreadRadius: 1,
-                                                    blurRadius: 1)
-                                              ],
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Image.network(
-                                                  'https://www.pngall.com/wp-content/uploads/11/Fast-Delivery-PNG.png',
-                                                  width: 50,
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  'Delivery',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        // deliveryType == 1
-                                        //     ? Align(
-                                        //         child: Icon(
-                                        //           Icons.check_circle,
-                                        //           size: 16,
-                                        //           color: Colors.deepOrangeAccent,
-                                        //         ),
-                                        //       )
-                                        //     : Container()
-                                      ],
-                                    ),
-                                    Stack(
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            tipValue = 0;
-                                            selectedTip =-1;
-                                            setState(() {
-                                              deliveryType = 2;
-                                            });
-                                            provider.setDeliveryType(2);
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: deliveryType == 2
-                                                      ? Colors.deepOrangeAccent
-                                                      : Colors.transparent),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              color: deliveryType == 2?Colors.deepOrange.shade50:Colors.grey.shade100,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: Colors.grey.shade100,
-                                                    spreadRadius: 1,
-                                                    blurRadius: 1)
-                                              ],
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Image.network(
-                                                  'https://www.pngall.com/wp-content/uploads/11/Fast-Delivery-PNG.png',
-                                                  width: 50,
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  'Pick up',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        // deliveryType == 2
-                                        //     ? Align(
-                                        //         child: Icon(
-                                        //           Icons.check_circle,
-                                        //           size: 16,
-                                        //           color: Colors.deepOrangeAccent,
-                                        //         ),
-                                        //       )
-                                        //     : Container()
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 15),
-                              BasketHeader(),
-                            ],
-                          )),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                            child: Text(
-                              "Offers & Benefits",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w600),
                             ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: 20, right: 20, top: 10, bottom: 10),
-                        child: SavedContainer(
-                          child: ListTile(
-                            title: Text(
-                              "Apply Coupon",
-                              style: TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            trailing:
-                                Icon(Icons.arrow_forward_ios_rounded, size: 15),
-                          ),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    top: 10, left: 10, right: 10, bottom: 50),
+                                child: summaryView()),
+                          ],
                         ),
                       ),
-                     deliveryType == 1?Column(
-                       mainAxisSize: MainAxisSize.min,
-                       crossAxisAlignment: CrossAxisAlignment.start,
-                       children: [
-                         Padding(
-                           padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                           child: Text(
-                             "Tip Your hunger saviour",
-                             style: TextStyle(
-                                 fontSize: 16, fontWeight: FontWeight.w600),
-                           ),
-                         ),
-                         Padding(
-                           padding: EdgeInsets.only(
-                               left: 20, right: 20, top: 10, bottom: 10),
-                           child: deliveryBoyTip(),
-                         ),
-                         Padding(
-                           padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                           child: Text(
-                             "Delivery instructions",
-                             style: TextStyle(
-                                 fontSize: 16, fontWeight: FontWeight.w600),
-                           ),
-                         ),
-                         Padding(
-                           padding: EdgeInsets.only(left: 20, top: 20, bottom: 10,right:20),
-                           child: Container(
-                             height:100,
-                             child: DeliveryInstructions()
-                           ),
-                         ),
-                       ],
-                     ):Container(),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                        child: Text(
-                          "Bill Details",
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              top: 10, left: 10, right: 10, bottom: 50),
-                          child: summaryView()),
+                      // ProceedToPay(),
+                      proceedToPay(),
                     ],
                   ),
-                ),
-                // ProceedToPay(),
-                proceedToPay(),
-              ],
-            ),
-          ):Container(
-              padding: EdgeInsets.only(left: 50,right: 50),
-              child: cartEmpty(context)),
+                )
+              : Container(
+                  padding: EdgeInsets.only(left: 50, right: 50),
+                  child: cartEmpty(context)),
           backgroundColor: Colors.grey.shade200,
         ),
       );
@@ -417,7 +433,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
 
   Widget deliveryBoyTip() {
     return Container(
-      height: 120,
+      // height: 140,
       width: Helper.getScreenWidth(context) * 1,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -437,56 +453,174 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
               ),
             ),
           ),
-          Container(
-            height: 40,
-            child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: tips.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: EdgeInsets.only(left: 10, top: 10),
-                    child: GestureDetector(
-                      onTap: () {
-                        if(selectedTip == index){
-                          selectedTip = -1;
-                          tipValue = 0;
-                              setState(() {
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
+                height: 40,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: tips.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: EdgeInsets.only(left: 10, top: 10),
+                        child: GestureDetector(
+                            onTap: () {
+                              if (tips[index] == "Other") {
+                                if (selectedTip == index) {
+                                  selectedTip = -1;
+                                  tipValue = 0;
+                                  customTip = false;
+                                } else {
+                                  selectedTip = index;
+                                  tipValue = 0;
+                                  customTip = true;
+                                }
+                                setState(() {});
+                              } else {
+                                if (selectedTip == index) {
+                                  selectedTip = -1;
+                                  tipValue = 0;
+                                  customTip = false;
+                                  setState(() {});
+                                } else {
+                                  selectedTip = index;
+                                  tipValue = int.parse(tips[index]);
+                                  customTip = false;
+                                  setState(() {});
+                                }
+                              }
 
-                              });
-                        } else{
-                          selectedTip = index;
-                          tipValue = int.parse(tips[index]);
+                              // if(index == 3){
+                              //   customTip= true;
+                              //   setState(() {
+                              //
+                              //   });
+                              // }else{
+                              //   setState(() {
+                              //     customTip = false;
+                              //   });
+                              // }
+                              Provider.of<ApplicationProvider>(context,
+                                      listen: false)
+                                  .setTipValue(tipValue);
+                            },
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Container(
+                                    width: 65,
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.grey.shade100,
+                                            spreadRadius: 1,
+                                            blurRadius: 1)
+                                      ],
+                                      color: index == selectedTip
+                                          ? Colors.deepOrange.shade50
+                                          : Colors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                      border: Border.all(
+                                          color: index == selectedTip
+                                              ? Colors.deepOrangeAccent
+                                              : Colors.grey.shade200,
+                                          width: 1),
+                                    ),
+                                    child: Center(
+                                      child: Text('₹${tips[index]}'),
+                                    )),
+                                index == 1
+                                    ? Positioned(
+                                        bottom: -5,
+                                        child: Container(
+                                          padding: EdgeInsets.all(2),
+                                          width: 65,
+                                          decoration: BoxDecoration(
+                                            color: Colors.deepOrangeAccent,
+                                            borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(8),
+                                                bottomRight:
+                                                    Radius.circular(8)),
+                                          ),
+                                          child: Text(
+                                            "Most Tipped",
+                                            style: TextStyle(
+                                                fontSize: 11.0,
+                                                color: Colors.white),
+                                            maxLines: 1,
+                                            softWrap: true,
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        height: 0,
+                                      )
+                              ],
+                            )),
+                      );
+                    }),
+              ),
+              Visibility(
+                visible: customTip,
+                child: Container(
+                  padding:
+                      EdgeInsets.only(left: 10, top: 10, bottom: 10, right: 10),
+                  child: TextFormField(
+                      controller: tipController,
+                      decoration: InputDecoration(
+                          alignLabelWithHint: true,
+                          counterText: "",
+                          fillColor: Colors.white,
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: const BorderSide(
+                                color: Colors.deepOrangeAccent, width: 2.0),
+                          ),
+                          labelText: 'Enter Tip Amount',
+                          labelStyle: TextStyle(color: Colors.grey)),
+                      onChanged: (value) async {
+                        if (null!= value && value.isNotEmpty) {
+                          tipValue = int.parse(value);
                           setState(() {
 
                           });
+                          Provider.of<ApplicationProvider>(context,
+                              listen: false)
+                              .setTipValue(tipValue);
+                        } else{
+                          tipValue = 0;
+                          setState(() {
 
+                          });
+                          Provider.of<ApplicationProvider>(context,
+                              listen: false)
+                              .setTipValue(tipValue);
                         }
-                        Provider.of<ApplicationProvider>(context, listen: false).setTipValue(tipValue);
-
-
-
-                      },
-                      child: Container(
-                          width: 65,
-                          decoration: BoxDecoration(boxShadow: [
-                            BoxShadow(color: Colors.grey.shade100,spreadRadius: 1,blurRadius: 1)
-                          ],
-                            color: index==selectedTip?Colors.deepOrange.shade50:Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: index==selectedTip?Colors.deepOrangeAccent
-                                :
-                            Colors.grey.shade200,width: 1),
-                          ),
-                          child: Center(child:Text('₹${tips[index]}'),))
-                    ),
-                  );
-                }),
+                      }),
+                ),
+              ),
+            ],
           ),
-
         ],
       ),
     );
+  }
+
+  Widget itemList() {
+    if (null !=
+            Provider.of<ApplicationProvider>(context, listen: false)
+                .cartModelList &&
+        Provider.of<ApplicationProvider>(context, listen: false)
+                .cartModelList
+                .length >
+            0) {
+      UserPreference().setCartItems(
+          Provider.of<ApplicationProvider>(context, listen: false)
+              .cartModelList);
+    }
+    return BasketHeader();
   }
 
   Widget summaryView() {
@@ -537,19 +671,10 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                     Padding(
                       padding: EdgeInsets.only(left: 15, top: 15),
                       // child: Text("Delivery Fee | 1.7 kms"),
-                      child: Tooltip(
-                        decoration: BoxDecoration(
-                          color: Colors.deepOrange.shade50,
-                          borderRadius: BorderRadius.circular(12),
-                          // border: Border.all(color: Colors.black)
-                        ),
-                        preferBelow: false,
-                        margin: EdgeInsets.only(left: 20),
-                        height: 50,
-                        message: 'Delivery Fee : ₹'+provider.deliveryFee.toString(),
-                        textStyle: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.w500),
-                        triggerMode: TooltipTriggerMode.tap,
+                      child: InkWell(
+                        onTap: () {
+                          deliverFeeDialog(context);
+                        },
                         child: Text('Delivery Fee',
                             style: TextStyle(
                               decorationStyle: TextDecorationStyle.dotted,
@@ -561,7 +686,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                     ),
                     Padding(
                       padding: EdgeInsets.only(right: 15, top: 15),
-                      child: Text("₹"+provider.deliveryFee.toString()),
+                      child: Text("₹" + provider.deliveryFee.toString()),
                     )
                   ],
                 ),
@@ -599,20 +724,10 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
               children: [
                 Padding(
                   padding: EdgeInsets.only(left: 15, top: 15),
-                  child: Tooltip(
-                    decoration: BoxDecoration(
-                      color: Colors.deepOrange.shade50,
-                      borderRadius: BorderRadius.circular(12),
-                      // border: Border.all(color: Colors.black)
-                    ),
-                    preferBelow: false,
-                    margin: EdgeInsets.only(left: 20),
-                    height: 50,
-                    message:
-                        'Restaurant GST : ₹${provider.taxData['totalTaxAmt']}',
-                    textStyle: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w500),
-                    triggerMode: TooltipTriggerMode.tap,
+                  child: InkWell(
+                    onTap: () {
+                      taxAndChargeDialog(context);
+                    },
                     child: Text('Tax and Charges',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
@@ -623,7 +738,8 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 15, top: 15),
-                  child: Text('₹${provider.taxData['totalTaxAmt'].toStringAsFixed(2)}'),
+                  child: Text(
+                      '₹${provider.taxData['totalTaxAmt'].toStringAsFixed(2)}'),
                 ),
               ],
             ),
@@ -656,6 +772,88 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
     });
   }
 
+  deliverFeeDialog(BuildContext context) {
+    showDialog(
+      barrierColor: Colors.transparent,
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          insetPadding: EdgeInsets.only(left: 50, right: 50, bottom: 60),
+          titlePadding: EdgeInsets.zero,
+          elevation: 5,
+          contentPadding: EdgeInsets.all(40),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                  bottomRight: Radius.circular(15))),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                  'Delivery Fee',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    bottom: 15.0, left: 15.0, right: 15.0),
+                child: Text(
+                  'Delivery fee : ₹${Provider.of<ApplicationProvider>(context, listen: false).deliveryFee}',
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  taxAndChargeDialog(BuildContext context) {
+    showDialog(
+      barrierColor: Colors.transparent,
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          insetPadding: EdgeInsets.only(top: 170, left: 50, right: 50),
+          titlePadding: EdgeInsets.zero,
+          elevation: 5,
+          contentPadding: EdgeInsets.all(40),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                  bottomRight: Radius.circular(15))),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                  'Tax and charges',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    bottom: 15.0, left: 15.0, right: 15.0),
+                child: Text(
+                  'Restaurant GST : ₹${Provider.of<ApplicationProvider>(context, listen: false).taxData['totalTaxAmt']}',
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget proceedToPay() {
     return Consumer<ApplicationProvider>(builder: (context, provider, child) {
       // for(Item item in provider.cartModelList){
@@ -679,7 +877,8 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: isLoggedIn && null !=
+                        child: isLoggedIn &&
+                                null !=
                                     provider.selectedAddressModel.addressId &&
                                 provider
                                     .selectedAddressModel.addressId!.isNotEmpty
@@ -695,14 +894,17 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                                   ),
                                 ),
                                 subtitle: Text(
-                                  provider.selectedAddressModel.addressBuilding! +
+                                  provider.selectedAddressModel
+                                          .addressBuilding! +
                                       ", " +
                                       provider.selectedAddressModel
                                           .adressApartmentNo! +
                                       ", " +
                                       provider.selectedAddressModel
-                                          .addressStreetName! + ", " +
-                                      provider.selectedAddressModel.currentAddressLine!,
+                                          .addressStreetName! +
+                                      ", " +
+                                      provider.selectedAddressModel
+                                          .currentAddressLine!,
                                   style: TextStyle(
                                       color: Colors.grey, fontSize: 12),
                                 ),
@@ -740,8 +942,9 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                                                         isFromCart,
                                                         getAddressList);
                                                   }).then((value) {
-                                                Provider.of<ApplicationProvider>(context,
-                                                    listen: false)
+                                                Provider.of<ApplicationProvider>(
+                                                        context,
+                                                        listen: false)
                                                     .calculateTotal();
                                                 setState(() {});
                                               });
@@ -754,67 +957,73 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                                       ]),
                                 ),
                               )
-                            :!isLoggedIn? Container(): InkWell(
-                                onTap: () {
-                                  showModalBottomSheet(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(14),
-                                          topRight: Radius.circular(14),
-                                        ),
-                                      ),
-                                      isScrollControlled: true,
-                                      context: context,
-                                      builder: (context) {
-                                        return ChooseAddress(
-                                            isFromCart, getAddressList);
-                                      }).then((value) {
-                                    //qty will be incremented from cart
-                                    Provider.of<ApplicationProvider>(context,
-                                        listen: false)
-                                        .calculateTotal();
-                                    setState(() {});
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all( 15.0),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.grey),
-                                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Icon(
-                                            Icons.add,
-                                            color: Colors.deepOrangeAccent,
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          alignment: Alignment.centerLeft,
-                                          width: Helper.getScreenWidth(context),
-                                          child: Text(
-                                            "Add a delivery address",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
-                                              color:
-                                                  Colors.deepOrange,
+                            : !isLoggedIn
+                                ? Container()
+                                : InkWell(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(14),
+                                              topRight: Radius.circular(14),
                                             ),
                                           ),
-                                        ),
+                                          isScrollControlled: true,
+                                          context: context,
+                                          builder: (context) {
+                                            return ChooseAddress(
+                                                isFromCart, getAddressList);
+                                          }).then((value) {
+                                        //qty will be incremented from cart
+                                        Provider.of<ApplicationProvider>(
+                                                context,
+                                                listen: false)
+                                            .calculateTotal();
+                                        setState(() {});
+                                      });
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.grey),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(8)),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Icon(
+                                                Icons.add,
+                                                color: Colors.deepOrangeAccent,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              width: Helper.getScreenWidth(
+                                                  context),
+                                              child: Text(
+                                                "Add a delivery address",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.deepOrange,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                              ),
                       )
                     ],
                   )
@@ -827,21 +1036,33 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
               child: MySeparator(),
             ),
             ListTile(
-              title:
-              Container(
+              title: Container(
                 height: 45,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    // UserPreference().getCurrentRestaurant().then((value) {
+                    //   if(null!=value.merchantBranchId && value.merchantBranchId!.isNotEmpty) {
+                    //     Navigator.of(context).push(MaterialPageRoute(
+                    //         builder: (BuildContext context) =>
+                    //             RestaurantDetailsScreen(
+                    //               value.branchDetails!.merchantBranchId,
+                    //               value.branchDetails!.lat,
+                    //               value.branchDetails!.lng
+                    //             )));
+                    //   } else{
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                HomeScreen()));
+                    //   }
+                    //   setState(() {});
+                    // });
                   },
                   child: Text(
-                  "Add Items",
-                    style:
-                    TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                    "Add Items",
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary:Colors.deepOrange,
-
+                    primary: Colors.deepOrange,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -867,17 +1088,18 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                 padding: const EdgeInsets.all(5),
                 child: ElevatedButton(
                   onPressed: () {
-                    if (isLoggedIn && null != provider.selectedAddressModel.addressId &&
-                        provider.selectedAddressModel.addressId!.isNotEmpty &&
-                        deliveryType == 1 || deliveryType == 2) {
+                    if (isLoggedIn &&
+                            null != provider.selectedAddressModel.addressId &&
+                            provider
+                                .selectedAddressModel.addressId!.isNotEmpty &&
+                            deliveryType == 1 ||
+                        deliveryType == 2) {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => PaymentSection(deliveryType!)));
-                    }
-                    else if(!isLoggedIn){
+                    } else if (!isLoggedIn) {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => LoginScreen(isFromCart)));
-                    }
-                   else {
+                    } else {
                       Fluttertoast.showToast(
                           msg: "Select a delivery address to continue",
                           toastLength: Toast.LENGTH_SHORT,
@@ -888,20 +1110,23 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                           fontSize: 16.0);
                     }
                   },
-                  child: Text( isLoggedIn?
-                    "Proceed to Pay":"Log in to continue",
-                    style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  child: Text(
+                    isLoggedIn ? "Proceed to Pay" : "Log in to continue",
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary:
-                     isLoggedIn && null != provider.selectedAddressModel.addressId &&
+                    primary: isLoggedIn &&
+                                null !=
+                                    provider.selectedAddressModel.addressId &&
                                 provider.selectedAddressModel.addressId!
                                     .isNotEmpty &&
-                                deliveryType == 1 || deliveryType == 2
-                            ? Colors.deepOrange: !isLoggedIn? Colors.deepOrange
+                                deliveryType == 1 ||
+                            deliveryType == 2
+                        ? Colors.deepOrange
+                        : !isLoggedIn
+                            ? Colors.deepOrange
                             : Colors.deepOrange.shade100,
-                    fixedSize: Size(Helper.getScreenWidth(context)/2, 58),
+                    fixedSize: Size(Helper.getScreenWidth(context) / 2, 58),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -992,61 +1217,66 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
         await http.post(Uri.parse(ApiData.MERCHANT_BRANCH_TAX), body: map);
     var json = convert.jsonDecode(response.body);
     taxPercentage = double.parse(json['tax_details']);
-    Provider.of<ApplicationProvider>(context, listen: false).setTaxPercentage(taxPercentage);
+    Provider.of<ApplicationProvider>(context, listen: false)
+        .setTaxPercentage(taxPercentage);
     setState(() {});
   }
 }
-Widget? cartEmpty(context){
+
+Widget? cartEmpty(context) {
   return Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           height: 200,
-          child: Image.asset( Helper.getAssetName('empty-cart.png', 'virtual'),
-            fit: BoxFit.fill,),
+          child: Image.asset(
+            Helper.getAssetName('empty-cart.png', 'virtual'),
+            fit: BoxFit.fill,
+          ),
         ),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         Text(
           'Your Cart is Empty',
           style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.bold
-          ),
+              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         Text(
           "Looks like you haven't added anything to your cart yet",
           textAlign: TextAlign.center,
           maxLines: 2,
           textScaleFactor: 1,
           style: TextStyle(
-            height: 1.3,
-            fontSize: 16,
+              height: 1.3,
+              fontSize: 16,
               color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500
-          ),
+              fontWeight: FontWeight.w500),
         ),
-        SizedBox(height: 30,),
+        SizedBox(
+          height: 30,
+        ),
         Container(
           height: 50,
-          width: Helper.getScreenWidth(context)*0.45,
+          width: Helper.getScreenWidth(context) * 0.45,
           child: ElevatedButton(
-            onPressed: (){
+            onPressed: () {
               Navigator.pop(context);
             },
             child: Text(
               'Back to menu',
-              style: TextStyle(
-                  fontSize: 16
-              ),
+              style: TextStyle(fontSize: 16),
             ),
             style: ElevatedButton.styleFrom(
               primary: Colors.deepOrange.shade600,
               shape: new RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(10.0),
-              ),),
+              ),
+            ),
           ),
         )
       ],

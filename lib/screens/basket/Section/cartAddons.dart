@@ -587,7 +587,7 @@ class _CartAddonsState extends State<CartAddons> {
               onPressed: () {
                 Item item = new Item();
                 if (widget.isNewItem) {
-                  String kson = Item.ToPreferenceJson(widget.itemModel);
+                  String kson = Item.toDataJson(widget.itemModel);
                   var jsonData = json.decode(kson);
                   item = Item.fromJson(jsonData);
                   item.addonsList = addonModelList

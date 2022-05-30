@@ -27,9 +27,6 @@ class _ChooseAddressState extends State<ChooseAddress> {
 
   @override
   void initState() {
-    // TODO: implement initState
-
-
     super.initState();
   }
 

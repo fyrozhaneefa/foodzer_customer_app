@@ -13,6 +13,7 @@ import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:foodzer_customer_app/utils/paymentUtils.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import 'package:validators/validators.dart';
@@ -385,7 +386,7 @@ class _AddNewCardState extends State<AddNewCard> {
                           textColor: Colors.white,
                           fontSize: 16.0);
                     } else {
-                      WidgetsBinding.instance.focusManager.primaryFocus
+                      WidgetsBinding.instance!.focusManager.primaryFocus
                           ?.unfocus();
                       orderCheckout();
                     }
@@ -497,6 +498,7 @@ class _AddNewCardState extends State<AddNewCard> {
       isLoading = false;
       setState(() {});
       if (value!['txStatus'] == "SUCCESS") {
+        UserPreference().clearCartPreference();
         Provider.of<ApplicationProvider>(context, listen: false).clearData();
         Provider.of<ApplicationProvider>(context, listen: false).setOrderId(itemOrderId.toString());
         // Navigator.of(context).pushAndRemoveUntil(

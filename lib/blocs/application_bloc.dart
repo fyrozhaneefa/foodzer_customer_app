@@ -308,7 +308,7 @@ class ApplicationProvider with ChangeNotifier {
       }
     }
     Item item = new Item();
-    String kson = Item.ToPreferenceJson(product);
+    String kson = Item.toDataJson(product);
     var jsonData = json.decode(kson);
     item = Item.fromJson(jsonData);
     item.lastItemTempId=product.tempId;

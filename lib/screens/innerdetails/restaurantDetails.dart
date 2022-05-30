@@ -54,7 +54,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
 
   @override
   void dispose() {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       Provider.of<ApplicationProvider>(context, listen: false)
           .setCurrentRestModel(new SingleRestModel());
     });
@@ -388,7 +388,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                                     Border(
                                                       right: null !=
                                                           itemModel
-                                                              .enteredQty
+                                                              .enteredQty && itemModel.enteredQty! >0
                                                           ? BorderSide(
                                                           color: Colors
                                                               .deepOrangeAccent,
@@ -430,7 +430,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                                                   width: 5,
                                                                 ),
                                                                 Text(
-                                                                  null != itemModel.enteredQty ? '${itemModel.enteredQty.toString()}x' : "",
+                                                                  null != itemModel.enteredQty && itemModel.enteredQty! >0 ? '${itemModel.enteredQty.toString()}x' : "",
                                                                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.deepOrange),
                                                                 ),
                                                                 SizedBox(

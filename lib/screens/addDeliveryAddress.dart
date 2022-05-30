@@ -31,6 +31,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
   TextEditingController addressController = new TextEditingController();
   TextEditingController placeController = new TextEditingController();
   TextEditingController directionController = new TextEditingController();
+  FocusNode directionToReachNode=new FocusNode();
   bool isLoading = false;
   UserData userModel = new UserData();
   List<String> addressTitle = ["HOME", "WORK", "FRIENDS", "OTHER"];
@@ -46,6 +47,8 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
       directionController.text=widget.addressModel.addressDirection!;
       addressType=widget.addressModel.addressTitle;
       selectedIndex=addressTitle.indexWhere((element) => element.toLowerCase()==addressType!.toLowerCase());
+      directionToReachNode.requestFocus();
+
     }
     UserPreference().getUserData().then((value) {
       userModel = value;
@@ -209,6 +212,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                           textInputAction: TextInputAction.done,
                           maxLength: 200,
                           controller: directionController,
+                          focusNode: directionToReachNode,
                           maxLines: 6,
                           keyboardType: TextInputType.multiline,
                           decoration: InputDecoration(

@@ -43,26 +43,26 @@ class _HomeScreenState extends State<HomeScreen> {
       finalAddress = value!;
       setState(() {});
     });
-    // UserPreference().getCurrentRestaurant().then((value) {
-    //   if(null!=value.merchantBranchId && value.merchantBranchId!.isNotEmpty) {
-    //     Provider.of<ApplicationProvider>(context, listen: false)
-    //         .setCurrentRestModel(value);
-    //   }
-    //   setState(() {});
-    // });
-    // UserPreference().getCartItems().then((value) {
-    //   if(null!=value && value.length>0) {
-    //     Provider.of<ApplicationProvider>(context, listen: false)
-    //         .reloadCart(value);
-    //   }
-    //   setState(() {});
-    // });
+    UserPreference().getCurrentRestaurant().then((value) {
+      if(null!=value.merchantBranchId && value.merchantBranchId!.isNotEmpty) {
+        Provider.of<ApplicationProvider>(context, listen: false)
+            .setCurrentRestModel(value);
+      }
+      setState(() {});
+    });
+    UserPreference().getCartItems().then((value) {
+      if(null!=value && value.length>0) {
+        Provider.of<ApplicationProvider>(context, listen: false)
+            .reloadCart(value);
+      }
+      setState(() {});
+    });
     getDeliverableArea();
     UserPreference().getUserData().then((value) {
       userName = value.userName;
       userType = value.userType;
       print("value is $userName");
-      if (null != value.userId) {
+      if (null != value.userMobie && value.userMobie!.isNotEmpty) {
         setState(() {
           isLoggedIn = true;
         });
@@ -92,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
         iconTheme: IconThemeData(color: Colors.black),
         title: InkWell(
           onTap: () {
+
             if (isLoggedIn) {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => ChangeAddressFromHome()));
@@ -128,6 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
               alignment: Alignment.center,
               child: GestureDetector(
                 onTap: () {
+
+
                   if (Provider.of<ApplicationProvider>(context, listen: false)
                           .cartModelList
                           .length >

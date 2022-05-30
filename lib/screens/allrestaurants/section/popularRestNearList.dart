@@ -66,7 +66,7 @@ class PopularRestNearList extends StatelessWidget {
                               cardName: nearrestaurent.merchantBranchName!,
                               cardTime:
                                   nearrestaurent.deliveryAreaDeliveryTime!,
-                              cardType: nearrestaurent.cuisines!,
+                              cardType: null!=nearrestaurent.cuisines && nearrestaurent.cuisines!.isNotEmpty? nearrestaurent.cuisines : "",
                               cardSubType: '',
                               rating: nearrestaurent.avgReview!,
                               deliveryCharge:

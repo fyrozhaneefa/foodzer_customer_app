@@ -168,6 +168,7 @@ class _AddNewUpiState extends State<AddNewUpi> {
       setState(() {});
 
       if (value!['txStatus'] == "SUCCESS") {
+        UserPreference().clearCartPreference();
         Provider.of<ApplicationProvider>(context, listen: false).clearData();
         // Navigator.of(context).pushAndRemoveUntil(
         //     MaterialPageRoute(builder: (context) =>

@@ -56,9 +56,14 @@ class _SingleItemViewState extends State<SingleItemView> {
     } else {
       totalPrice = widget.itemModel.itemPrice!;
     }
-    if (null != widget.itemModel.enteredQty) {
+    if (null != widget.itemModel.enteredQty && widget.itemModel.enteredQty! >0) {
       totalQty = widget.itemModel.enteredQty!;
       initialQty = widget.itemModel.enteredQty!;
+    } else {
+      totalQty = 1;
+      setState(() {
+
+      });
     }
     if (widget.itemModel.isAddon == 1) {
       getAddons();
@@ -793,6 +798,8 @@ class _SingleItemViewState extends State<SingleItemView> {
                     height: 60,
                     child: ElevatedButton(
                       onPressed: () {
+                        // Provider.of<ApplicationProvider>(context, listen: false)
+                        //     .setCurrentRestModel(new SingleRestModel());
                         if (null != widget.itemModel.isPriceon &&
                             widget.itemModel.isPriceon == 1 &&
                             lastPriceOnItemIndex == -1) {
@@ -829,7 +836,7 @@ class _SingleItemViewState extends State<SingleItemView> {
                             Item item = new Item();
                             // if (widget.isNewItem) {
                             String kson =
-                                Item.ToPreferenceJson(widget.itemModel);
+                                Item.toDataJson(widget.itemModel);
                             var jsonData = json.decode(kson);
                             item = Item.fromJson(jsonData);
                             item.addonsList = addOnList
@@ -853,7 +860,7 @@ class _SingleItemViewState extends State<SingleItemView> {
                             Item item = new Item();
                             // if (widget.isNewItem) {
                             String kson =
-                                Item.ToPreferenceJson(widget.itemModel);
+                                Item.toDataJson(widget.itemModel);
                             var jsonData = json.decode(kson);
                             item = Item.fromJson(jsonData);
 
@@ -1186,7 +1193,7 @@ class _SingleItemViewState extends State<SingleItemView> {
                 widget.itemModel.isAddon == 1) {
               Item item = new Item();
               // if (widget.isNewItem) {
-              String kson = Item.ToPreferenceJson(widget.itemModel);
+              String kson = Item.toDataJson(widget.itemModel);
               var jsonData = json.decode(kson);
               item = Item.fromJson(jsonData);
               item.addonsList = addOnList
@@ -1207,7 +1214,7 @@ class _SingleItemViewState extends State<SingleItemView> {
             } else {
               Item item = new Item();
               // if (widget.isNewItem) {
-              String kson = Item.ToPreferenceJson(widget.itemModel);
+              String kson = Item.toDataJson(widget.itemModel);
               var jsonData = json.decode(kson);
               item = Item.fromJson(jsonData);
 

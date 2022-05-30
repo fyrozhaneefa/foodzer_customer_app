@@ -14,6 +14,7 @@ import 'package:foodzer_customer_app/screens/home/changeAddressFromHome.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Menu/Microfiles/CuisinesSection/cuisinesheader.dart';
 
@@ -36,19 +37,9 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
 
   @override
   void initState() {
-    UserPreference().getUserData().then((value) {
-
-      if (null != value.userId) {
-        setState(() {
-          isLoggedIn = true;
-        });
-      } else {
-        setState(() {
-          isLoggedIn = false;
-        });
-      }
-    });
     super.initState();
+    loggedInStatus();
+
   }
 
 
@@ -376,5 +367,18 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
             ],
           );
         });
+  }
+ Future loggedInStatus() async {
+    UserPreference().getUserData().then((value) {
+      if (null != value.userMobie && value.userMobie!.isNotEmpty) {
+        setState(() {
+          isLoggedIn = true;
+        });
+      } else {
+        setState(() {
+          isLoggedIn = false;
+        });
+      }
+    });
   }
 }

@@ -11,6 +11,7 @@ import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import 'Constants/radiobutton.dart';
@@ -179,7 +180,7 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
     });
 
     if (jsonData['error_code'] == 0) {
-
+      UserPreference().clearCartPreference();
       Provider.of<ApplicationProvider>(context, listen: false).clearData();
       Provider.of<ApplicationProvider>(context, listen: false).setOrderId(itemOrderId.toString());
       showOrderPlaceDialogue();
