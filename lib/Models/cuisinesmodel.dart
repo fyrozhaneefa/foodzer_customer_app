@@ -1,30 +1,6 @@
+
+
 class CuisinesModel {
-  int? errorCode;
-  List<CuisineList>? cuisineList;
-
-  CuisinesModel({this.errorCode, this.cuisineList});
-
-  CuisinesModel.fromJson(Map<String, dynamic> json) {
-    errorCode = json['error_code'];
-    if (json['cuisine_list'] != null) {
-      cuisineList = <CuisineList>[];
-      json['cuisine_list'].forEach((v) {
-        cuisineList!.add(new CuisineList.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['error_code'] = this.errorCode;
-    if (this.cuisineList != null) {
-      data['cuisine_list'] = this.cuisineList!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class CuisineList {
   String? cuisineId;
   String? cuisineName;
   String? cuisineNameArabic;
@@ -34,8 +10,9 @@ class CuisineList {
   String? cusineModifiedOn;
   String? cuisineDeleteStatus;
   String? displayOrder;
+  bool? isChecked;
 
-  CuisineList(
+  CuisinesModel(
       {this.cuisineId,
         this.cuisineName,
         this.cuisineNameArabic,
@@ -44,9 +21,10 @@ class CuisineList {
         this.cuisineAddedDate,
         this.cusineModifiedOn,
         this.cuisineDeleteStatus,
-        this.displayOrder});
+        this.displayOrder,
+      this.isChecked});
 
-  CuisineList.fromJson(Map<String, dynamic> json) {
+  CuisinesModel.fromJson(Map<String, dynamic> json) {
     cuisineId = json['cuisine_id'];
     cuisineName = json['cuisine_name'];
     cuisineNameArabic = json['cuisine_name_arabic'];
@@ -56,6 +34,7 @@ class CuisineList {
     cusineModifiedOn = json['cusine_modified_on'];
     cuisineDeleteStatus = json['cuisine_delete_status'];
     displayOrder = json['display_order'];
+    isChecked = false;
   }
 
   Map<String, dynamic> toJson() {

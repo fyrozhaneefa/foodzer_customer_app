@@ -581,21 +581,17 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                           labelText: 'Enter Tip Amount',
                           labelStyle: TextStyle(color: Colors.grey)),
                       onChanged: (value) async {
-                        if (null!= value && value.isNotEmpty) {
+                        if (null != value && value.isNotEmpty) {
                           tipValue = int.parse(value);
-                          setState(() {
-
-                          });
+                          setState(() {});
                           Provider.of<ApplicationProvider>(context,
-                              listen: false)
+                                  listen: false)
                               .setTipValue(tipValue);
-                        } else{
+                        } else {
                           tipValue = 0;
-                          setState(() {
-
-                          });
+                          setState(() {});
                           Provider.of<ApplicationProvider>(context,
-                              listen: false)
+                                  listen: false)
                               .setTipValue(tipValue);
                         }
                       }),
@@ -1040,22 +1036,32 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                 height: 45,
                 child: ElevatedButton(
                   onPressed: () {
-                    // UserPreference().getCurrentRestaurant().then((value) {
-                    //   if(null!=value.merchantBranchId && value.merchantBranchId!.isNotEmpty) {
-                    //     Navigator.of(context).push(MaterialPageRoute(
-                    //         builder: (BuildContext context) =>
-                    //             RestaurantDetailsScreen(
-                    //               value.branchDetails!.merchantBranchId,
-                    //               value.branchDetails!.lat,
-                    //               value.branchDetails!.lng
-                    //             )));
-                    //   } else{
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                HomeScreen()));
-                    //   }
-                    //   setState(() {});
-                    // });
+                    if (null !=
+                            Provider.of<ApplicationProvider>(context,
+                                    listen: false)
+                                .categoryList &&
+                        Provider.of<ApplicationProvider>(context, listen: false)
+                                .categoryList
+                                .length >
+                            0) {
+                      Navigator.of(context).pop();
+                    } else {
+                      UserPreference().getCurrentRestaurant().then((value) {
+                        if (null != value.merchantBranchId &&
+                            value.merchantBranchId!.isNotEmpty) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  RestaurantDetailsScreen(
+                                      value.branchDetails!.merchantBranchId,
+                                      value.branchDetails!.lat,
+                                      value.branchDetails!.lng)));
+                        }else{
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  HomeScreen()));
+                        }
+                      });
+                    }
                   },
                   child: Text(
                     "Add Items",

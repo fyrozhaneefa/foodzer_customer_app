@@ -7,6 +7,7 @@ import 'package:foodzer_customer_app/Models/place.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
+import 'package:foodzer_customer_app/screens/allrestaurants/allRestaurants.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:geolocator/geolocator.dart';
@@ -17,7 +18,8 @@ import 'dart:convert';
 import 'package:flutter_geocoder/geocoder.dart' as geoCo;
 
 class ChangeAddressFromHome extends StatefulWidget {
-  const ChangeAddressFromHome({Key? key}) : super(key: key);
+  bool isFromHomePage;
+  ChangeAddressFromHome(this.isFromHomePage);
 
   @override
   State<ChangeAddressFromHome> createState() => _ChangeAddressFromHomeState();
@@ -31,7 +33,7 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
   bool isLoading = false;
   bool isFromCart = false;
   int? delNotDel;
-  LatLng? _center ;
+  LatLng? myLocation ;
   Position? currentLocation;
   String? currentAddress;
   @override
@@ -105,11 +107,17 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
               InkWell(
                 onTap: (){
                  if(delNotDel == 0){
-                   UserPreference().setLatLng(_center!.latitude.toString(), _center!.longitude.toString());
-                   UserPreference().setCurrentAddress(currentAddress!);
-                   Navigator.of(context).push(
-                       MaterialPageRoute(builder: (context) =>
-                           HomeScreen()));
+                   UserPreference().setLatLng(myLocation!.latitude.toString(), myLocation!.longitude.toString());
+                   UserPreference().setCurrentAddress(currentAddress.toString());
+                  if(widget.isFromHomePage) {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) =>
+                            HomeScreen()));
+                  } else{
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) =>
+                            AllRestaurantsScreen()));
+                  }
                  }
                   },
                 child: ListTile(
@@ -206,12 +214,18 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
                             onTap: (){
                               Provider.of<ApplicationProvider>(context, listen: false)
                                   .setAddressModel(getAddressList[index]);
-                              Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) =>
-                                      HomeScreen()));
                               UserPreference().setCurrentAddress(getAddressList[index].addressTitle.toString());
                               UserPreference().setLatLng(getAddressList[index].addressLat.toString(), getAddressList[index].addressLng.toString());
-                            },
+                              if(widget.isFromHomePage) {
+                                Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) =>
+                                        HomeScreen()));
+                              } else{
+                                Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (context) =>
+                                        AllRestaurantsScreen()));
+                              }
+                              },
                             leading: Icon(
                            getAddressList[index].addressTitle == "HOME"?
                             Icons.home:
@@ -247,17 +261,17 @@ class _ChangeAddressFromHomeState extends State<ChangeAddressFromHome> {
   getUserLocation() async {
     currentLocation = await locateUser();
     setState(() {
-      _center = LatLng(currentLocation!.latitude, currentLocation!.longitude);
+      myLocation = LatLng(currentLocation!.latitude, currentLocation!.longitude);
     });
-    final cords = geoCo.Coordinates(_center!.latitude, _center!.longitude);
+    final cords = geoCo.Coordinates(myLocation!.latitude, myLocation!.longitude);
     var address =
     await geoCo.Geocoder.local.findAddressesFromCoordinates(cords);
     currentAddress = address[0].addressLine;
     setState(() {
 
     });
-    getDeliverableArea(_center!.latitude.toString(), _center!.longitude.toString());
-    print('center $_center');
+    getDeliverableArea(myLocation!.latitude.toString(), myLocation!.longitude.toString());
+    print('center $myLocation');
   }
   getDeliverableArea(String lat,String lng) async {
 

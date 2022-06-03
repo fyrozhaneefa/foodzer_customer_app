@@ -126,7 +126,14 @@ class PopularRestNearCard extends StatelessWidget {
                 height: 8,
               ),
               Container(
-                child: Text(cardType + ',' + ' ' + cardSubType),
+                child: Text(
+                    cardType + ',' + ' ' + cardSubType,
+                  style: TextStyle(
+                    fontSize: 12,
+                    overflow: TextOverflow.ellipsis
+                  ),
+
+                ),
               ),
               SizedBox(
                 height: 8,

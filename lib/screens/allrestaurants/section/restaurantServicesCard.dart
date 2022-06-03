@@ -15,9 +15,7 @@ class RestaurantServices extends StatelessWidget {
       padding: const EdgeInsets.only(left:20,top: 10),
       child:isLoading ? ShimmerWidget.rectangular(height: 100): Container(
         width: Helper.getScreenWidth(context)*0.22,
-
-
-        decoration: BoxDecoration(
+         decoration: BoxDecoration(
           color: Colors.blue.shade50,
           borderRadius: BorderRadius.circular(9),
         ),

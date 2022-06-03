@@ -36,7 +36,7 @@ class _GroceryCardState extends State<GroceryCard> {
       child: InkWell(
         onTap: widget.press,
         child: Container(
-          margin: EdgeInsets.only(bottom: 30),
+          // margin: EdgeInsets.only(bottom: 30),
           width: Helper.getScreenWidth(context)*0.85,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,7 +148,10 @@ class _GroceryCardState extends State<GroceryCard> {
               SizedBox(height: 8,),
               Container(
                 child:   Text(
-                    widget.cardType!
+                    widget.cardType!,
+                  style: TextStyle(
+                    overflow: TextOverflow.ellipsis
+                  ),
                 ),
               ),
               SizedBox(height: 8,),

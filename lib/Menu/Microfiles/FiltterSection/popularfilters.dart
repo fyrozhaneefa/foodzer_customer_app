@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../CuisinesSection/checkbox.dart';
 import 'constants/divider.dart';
 
 class PopularFilter extends StatefulWidget {
@@ -35,7 +34,8 @@ class _PopularFilterState extends State<PopularFilter> {
                   style: TextStyle(
                     fontSize: 14,
                   )),
-              trailing: CheckBoxSection());
+              // trailing: CheckBoxSection()
+          );
         }, separatorBuilder:(context,index){
 
           return Dividersection();

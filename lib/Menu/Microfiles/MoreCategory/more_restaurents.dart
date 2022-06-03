@@ -17,7 +17,19 @@ class MoreRestaurents extends StatefulWidget {
 }
 
 class _MoreRestaurentsState extends State<MoreRestaurents> {
+
+
   bool isSwitchView = true;
+  List<RestaurentModel> restaurantList=[];
+  List<RestaurentModel> filteredRestaurantList=[];
+  bool isloading=false;
+
+  @override
+  void initState() {
+  getRestaurent();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -85,46 +97,41 @@ class _MoreRestaurentsState extends State<MoreRestaurents> {
           SizedBox(
             height: 30,
           ),
-          FutureBuilder(
-              future: AllRestaurent().getRestaurent(),
-              builder: (context, AsyncSnapshot<List<Results>?> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting)
-                  return Center(
+           isloading?
+                   Center(
                       child: CircularProgressIndicator(
                         color: Colors.deepOrange,
-                      ));
-                else if (snapshot.hasData) {
-                  return ListView.builder(
+                      )): (null!=filteredRestaurantList && filteredRestaurantList.length>0) ?
+                   ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount:
-                      null != snapshot.data ? snapshot.data!.length : 0,
+                      itemCount:filteredRestaurantList.length,
                       itemBuilder: (BuildContext context, int index) {
-                        Results user = snapshot.data!.elementAt(index);
+                        RestaurentModel restmodel = filteredRestaurantList[index];
                         return InkWell(
                           onTap: () {
-                            if (user.openStatus == "Open") {
+                            if (restmodel.openStatus == "Open") {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       RestaurantDetailsScreen(
-                                          user.merchantBranchId,
-                                          user.lat,
-                                          user.lng)));
-                            } else if (user.openStatus == "Closed") {
+                                          restmodel.merchantBranchId,
+                                          restmodel.lat,
+                                          restmodel.lng)));
+                            } else if (restmodel.openStatus == "Closed") {
                               Fluttertoast.showToast(
                                   msg: "Closed",
                                   toastLength: Toast.LENGTH_LONG,
                                   fontSize: 14,
                                   backgroundColor: Colors.grey.shade300,
                                   textColor: Colors.red);
-                            } else if (user.openStatus == "No-Service") {
+                            } else if (restmodel.openStatus == "No-Service") {
                               Fluttertoast.showToast(
                                   msg: "No Service",
                                   toastLength: Toast.LENGTH_LONG,
                                   fontSize: 14,
                                   backgroundColor: Colors.greenAccent,
                                   textColor: Colors.black);
-                            } else if (user.merchantBranchBusy == "1") {
+                            } else if (restmodel.merchantBranchBusy == "1") {
                               Fluttertoast.showToast(
                                   msg: "Busy",
                                   toastLength: Toast.LENGTH_LONG,
@@ -157,7 +164,7 @@ class _MoreRestaurentsState extends State<MoreRestaurents> {
                                           borderRadius:
                                           BorderRadius.circular(8.0),
                                           child: Image.network(
-                                            user.merchantBranchImage!,
+                                            restmodel.merchantBranchImage!,
                                             fit: BoxFit.fill,
                                             loadingBuilder:
                                                 (BuildContext context,
@@ -186,7 +193,7 @@ class _MoreRestaurentsState extends State<MoreRestaurents> {
                                         ),
                                       ),
                                     ),
-                                    user.openStatus == "Closed"
+                                    restmodel.openStatus == "Closed"
                                         ? Container(
                                       width: 70,
                                       height: 60,
@@ -207,7 +214,7 @@ class _MoreRestaurentsState extends State<MoreRestaurents> {
                                                 fontSize: 12),
                                           )),
                                     )
-                                        : user.openStatus == "No-Service"
+                                        : restmodel.openStatus == "No-Service"
                                         ? Container(
                                       width: 70,
                                       height: 60,
@@ -228,7 +235,7 @@ class _MoreRestaurentsState extends State<MoreRestaurents> {
                                                 fontSize: 11),
                                           )),
                                     )
-                                        : user.merchantBranchBusy ==
+                                        : restmodel.merchantBranchBusy ==
                                         "1"
                                         ? Container(
                                       width: 70,
@@ -264,7 +271,7 @@ class _MoreRestaurentsState extends State<MoreRestaurents> {
                                 ),
                                 Expanded(
                                   child: ProductDesc(
-                                    user: user,
+                                    user: restmodel,
                                   ),
                                 ),
                               ],
@@ -282,7 +289,7 @@ class _MoreRestaurentsState extends State<MoreRestaurents> {
                                       borderRadius:
                                       BorderRadius.circular(8.0),
                                       child: Image.network(
-                                        (user.merchantBranchImage!),
+                                        (restmodel.merchantBranchImage!),
                                         fit: BoxFit.fill,
                                         loadingBuilder:
                                             (BuildContext context,
@@ -310,7 +317,7 @@ class _MoreRestaurentsState extends State<MoreRestaurents> {
                                       ),
                                     ),
                                   ),
-                                  user.openStatus == "Closed"
+                                  restmodel.openStatus == "Closed"
                                       ? Container(
                                     height: 150,
                                     decoration: BoxDecoration(
@@ -328,7 +335,7 @@ class _MoreRestaurentsState extends State<MoreRestaurents> {
                                               fontSize: 20),
                                         )),
                                   )
-                                      : user.openStatus == "No-Service"
+                                      : restmodel.openStatus == "No-Service"
                                       ? Container(
                                     height: 150,
                                     decoration: BoxDecoration(
@@ -348,7 +355,7 @@ class _MoreRestaurentsState extends State<MoreRestaurents> {
                                               fontSize: 20),
                                         )),
                                   )
-                                      : user.merchantBranchBusy == "1"
+                                      : restmodel.merchantBranchBusy == "1"
                                       ? Container(
                                     height: 150,
                                     decoration: BoxDecoration(
@@ -370,23 +377,44 @@ class _MoreRestaurentsState extends State<MoreRestaurents> {
                                   )
                                       : Container()
                                 ]),
-                                ProductDesc(user: user),
+                                ProductDesc(user: restmodel),
                               ])),
                         );
-                      });
-                } else
-                {
-                  return Center(child: Text('some error occured!!'));
-                }
-              })
+                      }):Center(child: Text('No data found'))
+
         ],
       ),
     );
   }
+  Future getRestaurent() async {
+    isloading=true;
+    setState(() {
+
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final response = await http.post(Uri.parse(ApiData.All_Restaurent), body: {
+      'lat': prefs.getString('latitude'),
+      'lng': prefs.getString('longitude'),
+      'delivery_type': 'delivery'
+    }, headers: {
+      'Cookie': ' ci_session=445a8129f0edc2b81b72086233c20f2744cc4e92'
+    });
+    isloading=false;
+    setState(() {
+
+    });
+    final json = jsonDecode(response.body);
+    if (json['results'] != null) {
+      filteredRestaurantList = List<RestaurentModel>.from(json["results"].map((x) => RestaurentModel.fromJson(x)));
+      restaurantList = filteredRestaurantList;
+
+  }
+
+  }
 }
 
 class ProductDesc extends StatelessWidget {
-  Results user;
+  RestaurentModel user;
 
   ProductDesc({Key? key, required this.user}) : super(key: key);
 
@@ -511,23 +539,8 @@ class ProductDesc extends StatelessWidget {
       ],
     );
   }
+
 }
 
-class AllRestaurent {
-  Future<List<Results>?> getRestaurent() async {
-    SharedPreferences prefs=await SharedPreferences.getInstance();
-    final response = await http.post(Uri.parse(ApiData.All_Restaurent), body: {
-      'lat': prefs.getString('latitude'),
-      'lng': prefs.getString('longitude'),
-      'delivery_type': 'delivery'
-    }, headers: {
-      'Cookie': ' ci_session=445a8129f0edc2b81b72086233c20f2744cc4e92'
-    });
-
-    final jsonData = jsonDecode(response.body);
-    var data = RestaurentModel.fromJson(jsonData).results;
-    return data;
-  }
-}
 
 

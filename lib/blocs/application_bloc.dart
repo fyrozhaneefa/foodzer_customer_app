@@ -6,6 +6,7 @@ import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Models/itemAddonModel.dart';
 import 'package:foodzer_customer_app/Models/place_search.dart';
+import 'package:foodzer_customer_app/Models/restaurentmodel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
@@ -14,6 +15,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
+
+import '../Models/cuisinesmodel.dart';
 
 class ApplicationProvider with ChangeNotifier {
   final geoLocatorService = GeolocatorService();
@@ -45,6 +48,39 @@ class ApplicationProvider with ChangeNotifier {
   int deliveryType = 0;
   var taxData = {};
   double setTexPercentage = 0;
+
+  bool isFastDelivery=false;
+  bool isFreeDelivery=false;
+  bool isLowAvgPrice=false;
+  bool isTopRated=false;
+  bool isNoMinOrder=false;
+  List<String> selectedCuisinesIds=[];
+
+  List<RestaurentModel> restaurantList=[];
+  List<RestaurentModel> filteredRestaurantList=[];
+  List<CuisinesModel> cuisinesModelList=[];
+
+
+
+  setCuisineChecked(int index,bool isChecked){
+    cuisinesModelList[index].isChecked=isChecked;
+    notifyListeners();
+  }
+  filterRestaurants(List<String> selectedCuisinesIds){
+    this.selectedCuisinesIds=selectedCuisinesIds;
+    
+    // filteredRestaurantList=restaurantList.where((element) =>
+    // selectedCuisinesIds.contains(element.cuisineId)).toList();
+    notifyListeners();
+  }
+  setAllRestaurant(List<RestaurentModel> list){
+    restaurantList=list;
+    filteredRestaurantList=list;
+  }
+  setAllCuisines(List<CuisinesModel> list){
+    cuisinesModelList=list;
+  }
+
   ApplicationProvider() {
     setCurrentLocation();
   }
@@ -164,7 +200,6 @@ class ApplicationProvider with ChangeNotifier {
 
   setCurrentRestModel(SingleRestModel restModel) async {
     this.selectedRestModel = restModel;
-    UserPreference().setCurrentRestaurant(restModel);
     this.filteredLoadedProductModelList = [];
     this.selectedCategoryId = 0;
 

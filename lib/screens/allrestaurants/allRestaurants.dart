@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/applybutton.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/popularfilters.dart';
 import 'package:foodzer_customer_app/Models/AddressModel.dart';
+import 'package:foodzer_customer_app/Models/cuisinesmodel.dart';
+import 'package:foodzer_customer_app/Models/specialcategorymode.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
@@ -18,7 +20,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Menu/Microfiles/CuisinesSection/cuisinesheader.dart';
 
-import '../../Menu/Microfiles/CuisinesSection/cuisinesitems.dart';
 import '../../Menu/Microfiles/FiltterSection/dealsandoffers.dart';
 import '../../Menu/Microfiles/FiltterSection/sortby.dart';
 
@@ -39,9 +40,11 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
   void initState() {
     super.initState();
     loggedInStatus();
-
+    UserPreference().getCurrentAddress().then((value) {
+      finalAddress = value!;
+      setState(() {});
+    });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +68,12 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
           onTap: () {
             if (isLoggedIn) {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => ChangeAddressFromHome()));
+                  builder: (BuildContext context) =>
+                      ChangeAddressFromHome(false)));
             } else {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))));
+                  builder: (BuildContext context) => GoogleMapScreen(
+                      new AddressModel(), isFromCart, LatLng(0, 0))));
             }
           },
           child: Column(
@@ -92,24 +96,25 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
             ],
           ),
         ),
-        actions:
-        [
+        actions: [
           Padding(
-            padding:  EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10.0),
             child: Container(
               width: 35.0,
               alignment: Alignment.center,
               child: GestureDetector(
                 onTap: () {
-                  if( Provider.of<ApplicationProvider>(context, listen: false).cartModelList.length > 0) {
+                  if (Provider.of<ApplicationProvider>(context, listen: false)
+                          .cartModelList
+                          .length >
+                      0) {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            ItemBasketHome()));
+                        builder: (BuildContext context) => ItemBasketHome()));
                   }
                 },
-                child:Consumer<ApplicationProvider>(builder: (context, provider, child) {
-                  return Stack
-                    (
+                child: Consumer<ApplicationProvider>(
+                    builder: (context, provider, child) {
+                  return Stack(
                     children: <Widget>[
                       IconButton(
                         icon: Icon(
@@ -126,13 +131,15 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                             Container(
                               height: 20.0,
                               width: 20.0,
-                              decoration:  BoxDecoration(
+                              decoration: BoxDecoration(
                                 color: Colors.deepOrange,
                                 shape: BoxShape.circle,
                               ),
-                              child:  Center(
-                                child: Text(  provider.cartModelList.length>0?
-                                  provider.cartModelList.length.toString():"0",
+                              child: Center(
+                                child: Text(
+                                  provider.cartModelList.length > 0
+                                      ? provider.cartModelList.length.toString()
+                                      : "0",
                                   style: TextStyle(
                                     fontSize: 11.0,
                                     fontWeight: FontWeight.bold,
@@ -175,7 +182,7 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                             ),
                             InkWell(
                               onTap: () {
-                               filterSheet();
+                                filterSheet();
                               },
                               child: Text(
                                 'Filters',
@@ -214,26 +221,26 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                         ),
                       ),
                       VerticalDivider(thickness: 1),
-                      InkWell(child: Container(
-                        child: Row(
-                          children: [
-                            Icon(Icons.search_outlined),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Search',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400),
-                            )
-                          ],
+                      InkWell(
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Icon(Icons.search_outlined),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Search',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400),
+                              )
+                            ],
+                          ),
                         ),
+                        onTap: () {},
                       ),
-                      onTap: (){
-
-                      },),
                     ],
                   ),
                 ),
@@ -260,32 +267,67 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
       isScrollControlled: false,
       context: context,
       builder: (context) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Headersection(),
-            Expanded(
-              child: CuisinesItems(),
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  "Apply",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.deepOrange,
-                  fixedSize: Size(Helper.getScreenWidth(context), 55),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+        return Consumer<ApplicationProvider>(
+            builder: (context, provider, child) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Headersection(),
+              Expanded(
+                child: ListView.separated(
+                    itemCount: provider.cuisinesModelList.length,
+                    itemBuilder: (BuildContext context, int index) {
+
+                      return ListTile(
+                        title: Text(provider.cuisinesModelList[index].cuisineName!,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 14)),
+                        trailing: Checkbox(
+                          value: provider.cuisinesModelList[index].isChecked,
+                          onChanged: (value) {
+                            setState(() {
+                              provider.setCuisineChecked(index,value!);
+                              String selectVal = "SelectedValues";
+                            });
+                          },
+                          activeColor: Colors.deepOrange,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(3),
+                          ),
+                          side: BorderSide(width: 1, color: Colors.grey),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) => Divider()),
+              ),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: ElevatedButton(
+                  onPressed: () {
+                    List<String> checkedList=[];
+                    for(CuisinesModel tuple in provider.cuisinesModelList){
+                      if(tuple.isChecked!){
+                        checkedList.add(tuple.cuisineId!);
+                      }
+                    }
+                    Provider.of<ApplicationProvider>(context ,listen: false).filterRestaurants(checkedList);
+                  },
+                  child: Text(
+                    "Apply",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.deepOrange,
+                    fixedSize: Size(Helper.getScreenWidth(context), 55),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
-        );
+              )
+            ],
+          );
+        });
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -297,23 +339,21 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
   }
 
   filterSheet() {
-  showModalBottomSheet(isScrollControlled: false,
+    showModalBottomSheet(
+        isScrollControlled: false,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
         context: (context),
         builder: (context) {
-
-
           return Column(
             children: [
-
-
               Padding(
                   padding: const EdgeInsets.only(top: 20),
                   child: Expanded(
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
                           height: 45,
@@ -352,23 +392,24 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
               Expanded(
                 child: Container(
                   color: Colors.white,
-                  child: ListView(shrinkWrap: true,scrollDirection: Axis.vertical,
+                  child: ListView(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
                     children: [
-
                       PopularFilter(),
                       FiltterItems(),
-
                       SortBy(),
                     ],
                   ),
                 ),
               ),
-              ApplyButton(buttonname: "Apply", radius:10)
+              ApplyButton(buttonname: "Apply", radius: 10)
             ],
           );
         });
   }
- Future loggedInStatus() async {
+
+  Future loggedInStatus() async {
     UserPreference().getUserData().then((value) {
       if (null != value.userMobie && value.userMobie!.isNotEmpty) {
         setState(() {

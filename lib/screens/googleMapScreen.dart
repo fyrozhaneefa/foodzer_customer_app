@@ -248,7 +248,8 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                     !widget.isFromCart? FloatingActionButton(
+                     // !widget.isFromCart?
+                     FloatingActionButton(
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.black,
                         child: map
@@ -267,11 +268,13 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                                 map ? MapType.satellite : MapType.normal;
                           });
                         },
-                      ):Container(),
+                      ),
+                         // :Container(),
                       SizedBox(
                         height: 15,
                       ),
-                      !widget.isFromCart?  FloatingActionButton(
+                      // !widget.isFromCart?
+                      FloatingActionButton(
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.black,
                         child: const Icon(
@@ -283,7 +286,8 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                           isPinMoving = false;
                           setState(() {});
                         },
-                      ):Container(),
+                      ),
+                          // :Container(),
                     ],
                   ),
                 ),

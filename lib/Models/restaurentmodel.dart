@@ -1,33 +1,6 @@
-
 class RestaurentModel {
-  int? errorCode;
-  List<Results>? results;
-
-
-  RestaurentModel.fromJson(Map<String, dynamic> json) {
-    if (json['results'] != null) {
-      results = <Results>[];
-      json['results'].forEach((v) {
-        results!.add(new Results.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['error_code'] = this.errorCode;
-    if (this.results != null) {
-      data['results'] = this.results!.map((v) => v.toJson()).toList();
-    }
-
-    return data;
-  }
-}
-
-
-class Results {
   String? cuisines;
-  Null reviewAvgRating;
+  String? reviewAvgRating;
   String? reviewCount;
   String? avgReview;
   String? cuisineName;
@@ -55,6 +28,7 @@ class Results {
   String? merchantBranchMinWalletAmnt;
   String? merchantBranchPaymnetMode;
   String? merchantBranchImage;
+  String? merchantBranchCoverImage;
   String? merchantBranchOrderTime;
   String? merchantBranchTaxOn;
   String? merchantBranchTaxPercentage;
@@ -82,7 +56,7 @@ class Results {
   String? openStatus;
   OfferTag? offerTag;
 
-  Results(
+  RestaurentModel(
       {this.cuisines,
         this.reviewAvgRating,
         this.reviewCount,
@@ -112,6 +86,7 @@ class Results {
         this.merchantBranchMinWalletAmnt,
         this.merchantBranchPaymnetMode,
         this.merchantBranchImage,
+        this.merchantBranchCoverImage,
         this.merchantBranchOrderTime,
         this.merchantBranchTaxOn,
         this.merchantBranchTaxPercentage,
@@ -139,7 +114,7 @@ class Results {
         this.openStatus,
         this.offerTag});
 
-  Results.fromJson(Map<String, dynamic> json) {
+  RestaurentModel.fromJson(Map<String, dynamic> json) {
     cuisines = json['cuisines'];
     reviewAvgRating = json['review_avg_rating'];
     reviewCount = json['review_count'];
@@ -170,6 +145,7 @@ class Results {
     merchantBranchMinWalletAmnt = json['merchant_branch_min_wallet_amnt'];
     merchantBranchPaymnetMode = json['merchant_branch_paymnet_mode'];
     merchantBranchImage = json['merchant_branch_image'];
+    merchantBranchCoverImage = json['merchant_branch_cover_image'];
     merchantBranchOrderTime = json['merchant_branch_order_time'];
     merchantBranchTaxOn = json['merchant_branch_tax_on'];
     merchantBranchTaxPercentage = json['merchant_branch_tax_percentage'];
@@ -232,6 +208,7 @@ class Results {
     data['merchant_branch_min_wallet_amnt'] = this.merchantBranchMinWalletAmnt;
     data['merchant_branch_paymnet_mode'] = this.merchantBranchPaymnetMode;
     data['merchant_branch_image'] = this.merchantBranchImage;
+    data['merchant_branch_cover_image'] = this.merchantBranchCoverImage;
     data['merchant_branch_order_time'] = this.merchantBranchOrderTime;
     data['merchant_branch_tax_on'] = this.merchantBranchTaxOn;
     data['merchant_branch_tax_percentage'] = this.merchantBranchTaxPercentage;

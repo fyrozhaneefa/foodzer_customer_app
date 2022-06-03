@@ -10,7 +10,6 @@ import '../../../screens/allrestaurants/section/restaurantServiceList.dart';
 import '../../../screens/allrestaurants/section/restaurants.dart';
 import '../../../utils/helper.dart';
 import '../CuisinesSection/cuisinesheader.dart';
-import '../CuisinesSection/cuisinesitems.dart';
 import '../FiltterSection/applybutton.dart';
 import '../FiltterSection/dealsandoffers.dart';
 import '../FiltterSection/popularfilters.dart';
@@ -186,9 +185,9 @@ class _MoreHomeState extends State<MoreHome> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Headersection(),
-            Expanded(
-              child: CuisinesItems(),
-            ),
+            // Expanded(
+            //   // child: CuisinesItems(),
+            // ),
             Padding(
               padding: EdgeInsets.all(10),
               child: ElevatedButton(

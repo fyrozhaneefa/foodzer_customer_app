@@ -147,7 +147,10 @@ class _OtherCategoryCardState extends State<OtherCategoryCard> {
               SizedBox(height: 8,),
               Container(
                 child:   Text(null!=widget.cardType?
-                    widget.cardType.toString():""
+                    widget.cardType.toString():"",
+                  style: TextStyle(
+                      overflow: TextOverflow.ellipsis
+                  ),
                 ),
               ),
               SizedBox(height: 8,),

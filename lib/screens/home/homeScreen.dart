@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             if (isLoggedIn) {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => ChangeAddressFromHome()));
+                  builder: (BuildContext context) => ChangeAddressFromHome(true)));
             } else {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) =>
@@ -191,45 +191,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
-        // [
-        //  Stack(
-        //    alignment: Alignment.center,
-        //    children: [
-        //      IconButton(
-        //        onPressed:(){
-        //          Navigator.of(context).push(MaterialPageRoute(
-        //              builder: (BuildContext context) =>
-        //                  MainSearchScreen()));
-        //        },
-        //        icon: Icon(
-        //          null!= Provider.of<ApplicationProvider>(context, listen: false).cartModelList
-        //              && Provider.of<ApplicationProvider>(context, listen: false).cartModelList.length>0?
-        //          Icons.shopping_basket_sharp:Icons.search,
-        //          size: 30,
-        //          color: Colors.black,
-        //        ),
-        //      ),
-        //      Positioned(
-        //        right: 0,
-        //        bottom: 0,
-        //        child: Container(
-        //          padding: EdgeInsets.all(4),
-        //          decoration: BoxDecoration(
-        //              color: Colors.deepOrange,
-        //            shape: BoxShape.circle
-        //          ),
-        //          child: Text(
-        //            "2",
-        //            style: TextStyle(
-        //              fontSize: 11,
-        //              color: Colors.white
-        //            ),
-        //          ),
-        //        ),
-        //      )
-        //    ],
-        //  )
-        // ],
       ),
       body: isLoading
           ? SingleChildScrollView(child:HomeShimmer())

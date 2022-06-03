@@ -7,6 +7,7 @@ import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/Constants/sa
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Models/itemAddonModel.dart';
 import 'package:foodzer_customer_app/Models/itemPriceOnModel.dart';
+import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/cartAddons.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
@@ -798,8 +799,9 @@ class _SingleItemViewState extends State<SingleItemView> {
                     height: 60,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Provider.of<ApplicationProvider>(context, listen: false)
-                        //     .setCurrentRestModel(new SingleRestModel());
+
+                        UserPreference().setCurrentRestaurant( Provider.of<ApplicationProvider>(context, listen: false).selectedRestModel);
+
                         if (null != widget.itemModel.isPriceon &&
                             widget.itemModel.isPriceon == 1 &&
                             lastPriceOnItemIndex == -1) {
@@ -1167,6 +1169,8 @@ class _SingleItemViewState extends State<SingleItemView> {
               color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
         ),
         onPressed: () {
+          UserPreference().setCurrentRestaurant( Provider.of<ApplicationProvider>(context, listen: false).selectedRestModel);
+
           if (null != widget.itemModel.isPriceon &&
               widget.itemModel.isPriceon == 1 &&
               lastPriceOnItemIndex == -1) {

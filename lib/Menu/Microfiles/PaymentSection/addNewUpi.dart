@@ -66,7 +66,11 @@ class _AddNewUpiState extends State<AddNewUpi> {
                 ))
           ]);
         }),
-        leading: Icon(Icons.arrow_back_rounded, color: Colors.black),
+        leading: InkWell(
+            onTap: (){
+              Navigator.of(context).pop();
+            },
+            child: Icon(Icons.arrow_back_rounded, color: Colors.black)),
       ),
       body: SingleChildScrollView(
         child: Column(

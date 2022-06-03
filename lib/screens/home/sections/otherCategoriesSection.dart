@@ -44,7 +44,7 @@ class _OtherCategoriesSectionState extends State<OtherCategoriesSection> {
               children: [
                 Container(
                     margin: EdgeInsets.only(
-                        top: 10.0, right: 20.0, bottom: 5.0, left: 20.0),
+                         right: 20.0, bottom: 5.0, left: 20.0),
                     child: Text(
                       // "Popular restaurants near you",
                       categoryItem.categoryName!,

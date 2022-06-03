@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:foodzer_customer_app/Menu/Microfiles/CuisinesSection/checkbox.dart';
 
 import '../../../Models/sortandfilttermodel.dart';
 import 'constants/divider.dart';
@@ -64,7 +63,8 @@ class _FiltterItemsState extends State<FiltterItems> {
                   style: TextStyle(
                     fontSize: 14,
                   )),
-              trailing: CheckBoxSection());
+              // trailing: CheckBoxSection()
+          );
 
         }),
         // ListTile(
