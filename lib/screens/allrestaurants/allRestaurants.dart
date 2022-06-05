@@ -311,6 +311,7 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                       }
                     }
                     Provider.of<ApplicationProvider>(context ,listen: false).filterRestaurants(checkedList);
+                    Navigator.of(context).pop();
                   },
                   child: Text(
                     "Apply",
@@ -376,14 +377,20 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                                 fontSize: 18,
                               )),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: Text(
-                            "Clear all",
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.deepOrangeAccent),
+                        InkWell(
+                          onTap: (){
+
+
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Text(
+                              "Clear all",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.deepOrangeAccent),
+                            ),
                           ),
                         ),
                       ],

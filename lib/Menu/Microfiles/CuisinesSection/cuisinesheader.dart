@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:foodzer_customer_app/blocs/application_bloc.dart';
+import 'package:provider/provider.dart';
 import '../FiltterSection/constants/sizedbox.dart';
 
 class Headersection extends StatelessWidget {
@@ -18,7 +20,10 @@ class Headersection extends StatelessWidget {
           title:
               Text("Cuisines", style: TextStyle(fontWeight: FontWeight.w600)),
           trailing: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Provider.of<ApplicationProvider>(context ,listen: false).filterRestaurants([]);
+              Navigator.of(context).pop();
+            },
             child: Text(
               "Clear all",
               style: TextStyle(

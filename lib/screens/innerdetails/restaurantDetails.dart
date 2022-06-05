@@ -58,6 +58,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       Provider.of<ApplicationProvider>(context, listen: false)
           .setCurrentRestModel(new SingleRestModel());
+      tabController!.dispose();
     });
     super.dispose();
   }

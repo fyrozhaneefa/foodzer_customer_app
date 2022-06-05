@@ -66,11 +66,31 @@ class ApplicationProvider with ChangeNotifier {
     cuisinesModelList[index].isChecked=isChecked;
     notifyListeners();
   }
-  filterRestaurants(List<String> selectedCuisinesIds){
-    this.selectedCuisinesIds=selectedCuisinesIds;
-    
-    // filteredRestaurantList=restaurantList.where((element) =>
-    // selectedCuisinesIds.contains(element.cuisineId)).toList();
+  filterRestaurants(List<String> cuisinesIds){
+    if(cuisinesIds.length>0) {
+      this.selectedCuisinesIds = cuisinesIds;
+      filteredRestaurantList = [];
+
+      for (RestaurentModel ss in restaurantList) {
+        List<String> cuisionlist = null != ss.merchantBranchCuisine ?
+        ss.merchantBranchCuisine!.split(",") : [];
+
+        if (cuisionlist.length > 0) {
+          for (String tuple in cuisionlist) {
+            if (selectedCuisinesIds.contains(tuple)) {
+              filteredRestaurantList.add(ss);
+            }
+          }
+        }
+      }
+    }else{
+      for (CuisinesModel tuple in cuisinesModelList) {
+        tuple.isChecked=false;
+      }
+      filteredRestaurantList=restaurantList;
+    }
+
+
     notifyListeners();
   }
   setAllRestaurant(List<RestaurentModel> list){
@@ -201,6 +221,7 @@ class ApplicationProvider with ChangeNotifier {
   setCurrentRestModel(SingleRestModel restModel) async {
     this.selectedRestModel = restModel;
     this.filteredLoadedProductModelList = [];
+    // this.categoryList = [];
     this.selectedCategoryId = 0;
 
     notifyListeners();
