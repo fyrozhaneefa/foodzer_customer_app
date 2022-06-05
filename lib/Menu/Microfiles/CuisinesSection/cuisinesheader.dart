@@ -21,7 +21,8 @@ class Headersection extends StatelessWidget {
               Text("Cuisines", style: TextStyle(fontWeight: FontWeight.w600)),
           trailing: TextButton(
             onPressed: () {
-              Provider.of<ApplicationProvider>(context ,listen: false).filterRestaurants([]);
+              Provider.of<ApplicationProvider>(context ,listen: false)
+                  .filterRestaurants([],"");
               Navigator.of(context).pop();
             },
             child: Text(

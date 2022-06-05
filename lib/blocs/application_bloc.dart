@@ -66,7 +66,7 @@ class ApplicationProvider with ChangeNotifier {
     cuisinesModelList[index].isChecked=isChecked;
     notifyListeners();
   }
-  filterRestaurants(List<String> cuisinesIds){
+  filterRestaurants(List<String> cuisinesIds,String searchText){
     if(cuisinesIds.length>0) {
       this.selectedCuisinesIds = cuisinesIds;
       filteredRestaurantList = [];
@@ -83,11 +83,21 @@ class ApplicationProvider with ChangeNotifier {
           }
         }
       }
+      filteredRestaurantList=filteredRestaurantList.where((element) =>
+      element.merchantBranchName!.toLowerCase()
+          .contains(searchText.toLowerCase())).toList();
     }else{
       for (CuisinesModel tuple in cuisinesModelList) {
         tuple.isChecked=false;
       }
-      filteredRestaurantList=restaurantList;
+      if(searchText.isNotEmpty){
+        filteredRestaurantList=restaurantList.where((element) =>
+            element.merchantBranchName!.toLowerCase()
+                .contains(searchText.toLowerCase())).toList();
+      }else {
+
+        filteredRestaurantList = restaurantList;
+      }
     }
 
 

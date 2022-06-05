@@ -1044,18 +1044,19 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                         Provider.of<ApplicationProvider>(context, listen: false)
                                 .categoryList
                                 .length >
-                            0 ) {
+                            0 && null !=
+                        Provider.of<ApplicationProvider>(context,
+                            listen: false)
+                            .cartModelList &&
+                        Provider.of<ApplicationProvider>(context, listen: false)
+                            .cartModelList
+                            .length > 0  &&  Provider.of<ApplicationProvider>(context, listen: false)
+                        .cartModelList[0].itemMerchantBranch== Provider.of<ApplicationProvider>(context, listen: false)
+                        .selectedRestModel.merchantBranchId) {
+                      
                       Navigator.of(context).pop();
                     } else {
-                    // && null !=
-                    // Provider.of<ApplicationProvider>(context,
-                    // listen: false)
-                    //     .cartModelList &&
-                    // Provider.of<ApplicationProvider>(context, listen: false)
-                    //     .cartModelList
-                    //     .length > 0  &&  Provider.of<ApplicationProvider>(context, listen: false)
-                    //     .cartModelList[0].itemMerchantBranch== Provider.of<ApplicationProvider>(context, listen: false)
-                    //     .selectedRestModel.merchantBranchId
+
 
                       UserPreference().getCurrentRestaurant().then((value) {
                         if (null != value.merchantBranchId &&

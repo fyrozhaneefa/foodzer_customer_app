@@ -18,7 +18,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class Restaurants extends StatefulWidget {
-  const Restaurants({Key? key}) : super(key: key);
+  const Restaurants();
 
   @override
   _RestaurantsState createState() => _RestaurantsState();
