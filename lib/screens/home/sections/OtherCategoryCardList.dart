@@ -45,7 +45,7 @@ class _OtherCategoryCardListState extends State<OtherCategoryCardList> {
                   cardType: item.cuisines,
                   rating:null!=item.avgReview && item.avgReview =="0"?"No reviews yet":item.avgReview,
                   deliveryCharge: '',
-                  bannerName: item.merchantBranchImage,
+                  bannerName: null!=item.merchantBranchCoverImage ? item.merchantBranchCoverImage : item.merchantBranchImage,
                   discount: '',
                   busy: item.merchantBranchBusy,
                   press: (){

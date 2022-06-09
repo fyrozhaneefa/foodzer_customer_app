@@ -338,8 +338,8 @@ class _RestaurantsState extends State<Restaurants> {
                                   BorderRadius.circular(8.0),
                                   child:
                                   CachedNetworkImage(
-                                    imageUrl: restmodel
-                                        .merchantBranchImage!,
+                                    imageUrl: null!=restmodel.merchantBranchCoverImage?
+                                    restmodel.merchantBranchCoverImage!:restmodel.merchantBranchImage!,
                                     fit: BoxFit.fill,
                                     errorWidget:
                                         (context, url, error) =>

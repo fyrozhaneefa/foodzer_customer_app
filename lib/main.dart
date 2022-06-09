@@ -105,29 +105,27 @@ class SignInDemoState extends State<SignInDemo>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Container(
-          width: Helper.getScreenWidth(context),
-          height: Helper.getScreenHeight(context),
-          child: Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                child: Image.asset(
-                  Helper.getAssetName('splashIcon.png', 'virtual'),
-                  fit: BoxFit.fill,
-                  color: Colors.deepOrange,
-                ),
-              ),
-              Align(
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    Helper.getAssetName("foodzer-logo.png", "virtual"),
-                    fit: BoxFit.cover,
-                  )
-              ),
-            ],
-          )),
+      body:Stack(
+        children: [
+          Container(
+            width: Helper.getScreenWidth(context),
+            height: Helper.getScreenHeight(context),
+            color: Colors.deepOrange,
+            // child: Image.asset(
+            //   Helper.getAssetName('splashIcon.png', 'virtual'),
+            //   fit: BoxFit.fill,
+            //   color: Colors.deepOrange,
+            // ),
+          ),
+          Align(
+              alignment: Alignment.center,
+              child: Image.asset(
+                Helper.getAssetName("foodzer.png", "virtual"),
+                fit: BoxFit.cover,
+              )
+          ),
+        ],
+      ),
     );
   }
 }

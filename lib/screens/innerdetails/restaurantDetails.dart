@@ -782,7 +782,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                     size: 25,
                                   ),
                                   SizedBox(width: 10),
-                                  Text('2 RO Off Orders 7 Rials or More!',
+                                  Text('Currently offers are not available',
                                       style: TextStyle(
                                         color: Colors.pinkAccent,
                                         fontWeight: FontWeight.w500,

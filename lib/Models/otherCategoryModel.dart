@@ -115,6 +115,7 @@ class RestaurantDetails {
     this.merchantPackChargeType,
     this.merchantPackCharge,
     this.distance,
+    this.merchantBranchCoverImage
   });
 
   String? cuisines;
@@ -166,6 +167,7 @@ class RestaurantDetails {
   String? merchantPackChargeType;
   String? merchantPackCharge;
   String? distance;
+  String? merchantBranchCoverImage;
 
   factory RestaurantDetails.fromJson(Map<String, dynamic> json) => RestaurantDetails(
     cuisines: json["cuisines"] == null ? null : json["cuisines"],
@@ -217,6 +219,8 @@ class RestaurantDetails {
     merchantPackChargeType: json["merchant_pack_charge_type"] == null ? null : json["merchant_pack_charge_type"],
     merchantPackCharge: json["merchant_pack_charge"] == null ? null : json["merchant_pack_charge"],
     distance: json["distance"] == null ? null : json["distance"],
+    merchantBranchCoverImage: json["merchant_branch_cover_image"] == null ? null : json["merchant_branch_cover_image"],
+
   );
 
   Map<String, dynamic> toJson() => {
@@ -269,6 +273,7 @@ class RestaurantDetails {
     "merchant_pack_charge_type": merchantPackChargeType == null ? null : merchantPackChargeType,
     "merchant_pack_charge": merchantPackCharge == null ? null : merchantPackCharge,
     "distance": distance == null ? null : distance,
+    "merchant_branch_cover_image" : merchantBranchCoverImage == null ? null : merchantBranchCoverImage
   };
 }
 

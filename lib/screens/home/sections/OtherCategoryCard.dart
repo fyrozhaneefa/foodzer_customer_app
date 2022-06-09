@@ -111,7 +111,6 @@ class _OtherCategoryCardState extends State<OtherCategoryCard> {
                           width: Helper.getScreenWidth(context)*0.45,
                           child: Text(
                             widget.cardName!,
-                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 16,
