@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/AllRestaurentSearch/allrestaurantsearchhome.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/applybutton.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/popularfilters.dart';
 import 'package:foodzer_customer_app/Models/AddressModel.dart';
@@ -238,8 +239,13 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                               )
                             ],
                           ),
+
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  AllRestaurentSearch()));
+                        },
                       ),
                     ],
                   ),
@@ -310,7 +316,8 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
                         checkedList.add(tuple.cuisineId!);
                       }
                     }
-                    Provider.of<ApplicationProvider>(context ,listen: false).filterRestaurants(checkedList);
+                    Provider.of<ApplicationProvider>(context ,listen: false)
+                        .filterRestaurants(checkedList,"");
                     Navigator.of(context).pop();
                   },
                   child: Text(
