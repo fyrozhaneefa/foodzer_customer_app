@@ -110,7 +110,7 @@ class SignInDemoState extends State<SignInDemo>
           Container(
             width: Helper.getScreenWidth(context),
             height: Helper.getScreenHeight(context),
-            color: Colors.deepOrange,
+            color:  Color(0xFFF15E22),
             // child: Image.asset(
             //   Helper.getAssetName('splashIcon.png', 'virtual'),
             //   fit: BoxFit.fill,
@@ -120,7 +120,8 @@ class SignInDemoState extends State<SignInDemo>
           Align(
               alignment: Alignment.center,
               child: Image.asset(
-                Helper.getAssetName("foodzer.png", "virtual"),
+                Helper.getAssetName("foodz.png", "virtual"),
+                width: Helper.getScreenWidth(context)*.7,
                 fit: BoxFit.cover,
               )
           ),

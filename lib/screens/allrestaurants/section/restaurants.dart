@@ -544,13 +544,13 @@ class ProductDesc extends StatelessWidget {
               width: 5,
             ),
             restModel!.avgReview == "1"
-                ? Text("Amazing")
+                ? Text("Bad")
                 : restModel!.avgReview == "2"
-                    ? Text("Very Good")
+                    ? Text("OK")
                     : restModel!.avgReview == "3"
                         ? Text("Good")
                         : restModel!.avgReview == "4"
-                            ? Text("OK")
+                            ? Text("Amazing")
                             : restModel!.avgReview == "0"
                                 ? Text("Not Yet")
                                 : Container(),

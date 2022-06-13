@@ -327,7 +327,7 @@ bool isFromCart = false;
     var formData = FormData.fromMap({
       "mobile": widget.mobileNumber
     });
-    var response = await Dio().post(ApiData.CHECKMOBILE, data: formData);
+    var response = await Dio().post(ApiData.GET_USER_DETAILS, data: formData);
     if(response.statusCode == 200){
       setState(() {
         isLoading = false;

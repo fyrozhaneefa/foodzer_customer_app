@@ -390,7 +390,7 @@ class _AddNewCardState extends State<AddNewCard> {
                           textColor: Colors.white,
                           fontSize: 16.0);
                     } else {
-                      WidgetsBinding.instance.focusManager.primaryFocus
+                      WidgetsBinding.instance!.focusManager.primaryFocus
                           ?.unfocus();
                       orderCheckout();
                     }

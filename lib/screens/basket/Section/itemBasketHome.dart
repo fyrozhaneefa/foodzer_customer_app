@@ -1111,7 +1111,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                             provider
                                 .selectedAddressModel.addressId!.isNotEmpty &&
                             deliveryType == 1 ||
-                        deliveryType == 2) {
+                        isLoggedIn && deliveryType == 2) {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => PaymentSection(deliveryType!)));
                     } else if (!isLoggedIn) {

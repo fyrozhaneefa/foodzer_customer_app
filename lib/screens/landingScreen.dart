@@ -55,7 +55,7 @@ class _LandingScreenState extends State<LandingScreen> {
               height: Helper.getScreenHeight(context) *0.3,
               child: Align(
                 alignment: Alignment.center,
-                child: Image.asset(Helper.getAssetName("foodzer-logo.png", "virtual")),
+                child: Image.asset(Helper.getAssetName("template.png", "virtual")),
               ),
             ),
             Padding(

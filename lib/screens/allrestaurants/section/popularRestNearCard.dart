@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shimmerwidget.dart';
@@ -51,27 +52,35 @@ class PopularRestNearCard extends StatelessWidget {
                 height: 125,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    bannerName,
+                  child:   CachedNetworkImage(
+                      height: double.infinity,
+                      width: double.infinity,
+                      alignment: Alignment.center,
                     fit: BoxFit.fill,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.deepOrangeAccent,
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-
-                      );
-                    },
-                    height: double.infinity,
-                    width: double.infinity,
-                    alignment: Alignment.center,
+                    filterQuality: FilterQuality.high,
+                    imageUrl: bannerName,
                   ),
+                  // Image.network(
+                  //   bannerName,
+                  //   fit: BoxFit.fill,
+                  //   loadingBuilder: (BuildContext context, Widget child,
+                  //       ImageChunkEvent? loadingProgress) {
+                  //     if (loadingProgress == null) return child;
+                  //     return Center(
+                  //       child: CircularProgressIndicator(
+                  //         color: Colors.deepOrangeAccent,
+                  //         value: loadingProgress.expectedTotalBytes != null
+                  //             ? loadingProgress.cumulativeBytesLoaded /
+                  //             loadingProgress.expectedTotalBytes!
+                  //             : null,
+                  //       ),
+                  //
+                  //     );
+                  //   },
+                  //   height: double.infinity,
+                  //   width: double.infinity,
+                  //   alignment: Alignment.center,
+                  // ),
                 ),
               ),
               Container(
@@ -141,12 +150,16 @@ class PopularRestNearCard extends StatelessWidget {
               Container(
                   child: Row(
                 children: [
-                  Icon(Icons.tag_faces_outlined),
+                  Icon(rating == "No reviews yet" || rating =="0"?
+                  Icons.sentiment_dissatisfied:
+                  Icons.tag_faces_outlined),
                   SizedBox(
                     width: 5,
                   ),
-                  Text(
-                    rating,
+                  Text(rating == "1"?"Bad":
+                  rating == "2"?"OK":
+                  rating == "3"?"Good":
+                  rating == "4"?"Amazing":"No reviews yet",
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.w500),
                   ),
