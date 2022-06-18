@@ -55,7 +55,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
 
   @override
   void dispose() {
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       Provider.of<ApplicationProvider>(context, listen: false)
           .setCurrentRestModel(new SingleRestModel());
       tabController!.dispose();
@@ -472,6 +472,11 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
 
                                                             filterQuality: FilterQuality.high,
                                                             imageUrl: itemModel.itemImage!,
+                                                              errorWidget:
+                                                                  (context, url, error) =>
+                                                                  Image.asset(
+                                                                    Helper.getAssetName("blank.jpg", "virtual"),
+                                                                  )
                                                           ),
                                                           // Image
                                                           //     .network(

@@ -58,7 +58,7 @@ class _AddNewUpiState extends State<AddNewUpi> {
                   color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
             ),
             SizedBox(height: 3,),
-            Text("${provider.cartModelList.length} item . Total: ₹${provider.totalWithoutTax}",
+            Text("${provider.cartModelList.length} item . Total: ₹${provider.toPayAmt}",
                 style: TextStyle(
                   color: Colors.grey.shade500,
                   fontSize: 12,
@@ -133,73 +133,7 @@ class _AddNewUpiState extends State<AddNewUpi> {
       ),
     );
   }
-  proceedPayment(String token) {
-    isLoading = true;
-    setState(() {});
 
-    String orderId = "1154851";
-    String stage = "TEST";
-    String orderAmount = "500";
-    String tokenData = token;
-    String customerName = "Customer Name";
-    String orderNote = "Test order";
-    String orderCurrency = "INR";
-    String appId = "712906953878b39c66ddcff9809217";
-    String customerPhone = "9688521025";
-    String customerEmail = "sample@gmail.com";
-    String notifyUrl = "https://test.gocashfree.com/notify";
-
-    Map<String, dynamic> inputParams = {
-      "orderId": itemOrderId,
-      "orderAmount": Provider.of<ApplicationProvider>(context, listen: false)
-          .totalWithoutTax
-          .toString(),
-      "customerName": customerName,
-      "orderNote": orderNote,
-      "orderCurrency": orderCurrency,
-      "appId": appId,
-      "customerPhone": customerPhone,
-      "customerEmail": customerEmail,
-      "stage": stage,
-      "tokenData": tokenData,
-      "notifyUrl": notifyUrl,
-      "paymentOption": "upi",
-      "upi_vpa": upiController.text
-    };
-
-    CashfreePGSDK.doPayment(inputParams).then((value) {
-      isLoading = false;
-      setState(() {});
-
-      if (value!['txStatus'] == "SUCCESS") {
-        UserPreference().clearCartPreference();
-        Provider.of<ApplicationProvider>(context, listen: false).clearData();
-        // Navigator.of(context).pushAndRemoveUntil(
-        //     MaterialPageRoute(builder: (context) =>
-        //         HomeScreen()), (Route<dynamic> route) => false);
-        showOrderPlaceDialogue();
-
-        Fluttertoast.showToast(
-            msg: value['txStatus'],
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.deepOrangeAccent,
-            textColor: Colors.white,
-            fontSize: 16.0);
-      } else {
-        Fluttertoast.showToast(
-            msg: value['txStatus'],
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-      }
-      //Do something with the result
-    });
-  }
 
   orderCheckout() async {
     setState(() {
@@ -299,6 +233,98 @@ class _AddNewUpiState extends State<AddNewUpi> {
           fontSize: 16.0);
     }
     setState(() {});
+  }
+  proceedPayment(String token) {
+    isLoading = true;
+    setState(() {});
+
+    String? orderId = itemOrderId;
+    String? orderAmount = Provider.of<ApplicationProvider>(context, listen: false)
+        .toPayAmt.toString();
+    String? stage = "PROD";
+    String? tokenData = token;
+    String? customerName = userModel.userName;
+    String? orderNote = "Test order";
+    String? orderCurrency = "INR";
+    String? appId = "117476780192ee56b9dad7efbb674711";
+    String? customerPhone = userModel.userMobie;
+    String? customerEmail = userModel.userEmail;
+
+    Map<String, dynamic> inputParams = {
+      "orderId": orderId,
+      "tokenData": tokenData,
+      "orderAmount": orderAmount,
+      "customerName": customerName,
+      "orderNote": orderNote,
+      "orderCurrency": orderCurrency,
+      "appId": appId,
+      "customerPhone": customerPhone,
+      "customerEmail": customerEmail,
+      "stage": stage,
+      "paymentOption": "upi",
+      "upi_vpa": upiController.text
+    };
+
+    CashfreePGSDK.doPayment(inputParams).then((value) {
+      isLoading = false;
+      setState(() {});
+      if (value!['txStatus'] == "SUCCESS") {
+        UserPreference().clearCartPreference();
+        Provider.of<ApplicationProvider>(context, listen: false).clearData();
+        Provider.of<ApplicationProvider>(context, listen: false).setOrderId(itemOrderId.toString());
+        onPaymentSuccess(value['orderId'],value['signature'],value['referenceId'],value['paymentMode'],value['orderAmount']);
+        // Navigator.of(context).pushAndRemoveUntil(
+        //     MaterialPageRoute(builder: (context) =>
+        //         HomeScreen()), (Route<dynamic> route) => false);
+        // showOrderPlaceDialogue();
+
+        Fluttertoast.showToast(
+            msg: value['txStatus'],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.deepOrangeAccent,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      } else {
+        Fluttertoast.showToast(
+            msg: value['txStatus'],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+      //Do something with the result
+    });
+  }
+
+  onPaymentSuccess(String orderId, signature, refNo, paymentMode, orderAmount) async {
+    var map = {
+      "order_id": orderId,
+      "signature": signature,
+      "ref_no": refNo,
+      "payment_mode": paymentMode,
+      "order_status": "1",
+      "order_amount": orderAmount,
+    };
+    String body = json.encode(map);
+    print('body is $body');
+    var response =
+    await http.post(Uri.parse(ApiData.ORDER_SUCCESS), body: body);
+    print(response.statusCode);
+    if(response.statusCode == 200){
+      print('response ${response.body}');
+      var resp = json.decode(response.body);
+      if(resp['errorcode'] == 0){
+        showOrderPlaceDialogue();
+      } else{
+        print('Something went wrong');
+      }
+    }
+
+
   }
 
   showOrderPlaceDialogue(){

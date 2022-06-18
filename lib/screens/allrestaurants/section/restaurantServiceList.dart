@@ -20,7 +20,7 @@ class RestaurantServicesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(right: 20.0, bottom: 25.0),
+        padding: const EdgeInsets.only(right: 10.0, bottom: 25.0),
         child: FutureBuilder(
             future: SpecialCategory().getSpecialCategory(),
             builder:
@@ -57,22 +57,25 @@ class RestaurantServicesList extends StatelessWidget {
                 );
               else if (snapshot.hasData) {
                 return
-                  Row(children: [
-                  Container(
-                      height: 100,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemCount: (snapshot.data!.length),
-                          itemBuilder: (BuildContext context, int index) {
-                            SpecialCategories restaurentdata =
-                                snapshot.data!.elementAt(index);
-                            return RestaurantServices(
-                              serviceImage: restaurentdata.categoryImage,
-                              serviceName: restaurentdata.categoryName,
-                            );
-                          }))
-                ]);
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(children: [
+                    Container(
+                        height: 120,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemCount: (snapshot.data!.length),
+                            itemBuilder: (BuildContext context, int index) {
+                              SpecialCategories restaurentdata =
+                                  snapshot.data!.elementAt(index);
+                              return RestaurantServices(
+                                serviceImage: restaurentdata.categoryImage,
+                                serviceName: restaurentdata.categoryName,
+                              );
+                            }))
+                ]),
+                  );
               } else {
                 return Center(child: Text("no data"));
               }

@@ -157,7 +157,7 @@ class _FiltterItemsState extends State<FiltterItems> {
 class GetFilter {
   Future<SortAndFiltterModel> getFilter() async {
     var response = await http.post(
-        Uri.parse("https://opine.cloud/foodzer_test/mob_food_new/filter"),
+        Uri.parse("https://www.foodzer.com/Mob_food_new/filter"),
         headers: {
           'Cookie': 'ci_session=9ac58a3de1c4ad2d2c0d86cec5e3f9b86e7db259'
         },

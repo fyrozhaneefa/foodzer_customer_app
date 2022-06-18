@@ -1,3 +1,4 @@
+import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/Constants/images.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/addNewCard.dart';
@@ -20,6 +21,20 @@ class PaymentSection extends StatefulWidget {
 }
 
 class _PaymentSectionState extends State<PaymentSection> {
+  // var _selectedApp;
+  @override
+  void initState() {
+    // getUPIApps();
+    super.initState();
+  }
+  //
+  // void getUPIApps() {
+  //   CashfreePGSDK.getUPIApps().then((value) => {
+  //     if(value != null && value.length > 0) {
+  //       _selectedApp = value[0]
+  //     }
+  //   });
+  // }
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationProvider>(builder: (context, provider, child) {

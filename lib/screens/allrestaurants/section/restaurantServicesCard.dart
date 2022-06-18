@@ -12,7 +12,7 @@ class RestaurantServices extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left:20,top: 10),
+      padding: const EdgeInsets.only(left:20,top: 10,),
       child:isLoading ? ShimmerWidget.rectangular(height: 100): Container(
         width: Helper.getScreenWidth(context)*0.22,
          decoration: BoxDecoration(

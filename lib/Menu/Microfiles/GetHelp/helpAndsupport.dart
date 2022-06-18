@@ -209,7 +209,7 @@ class HelpAndSupport extends StatelessWidget {
 class GetHelp {
   Future<List<IssueCategory>?> gethelp() async {
     final response = await http.post(
-        Uri.parse("https://opine.cloud/foodzer_test/Mob_food_new/get_help"),
+        Uri.parse("https://www.foodzer.com/Mob_food_new/get_help"),
         headers: {
           "Cookie": "ci_session=bc80efca67175946a5930832b77052939362357a"
         });

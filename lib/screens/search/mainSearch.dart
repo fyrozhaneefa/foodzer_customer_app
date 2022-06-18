@@ -342,7 +342,7 @@ class MainSearch {
   Future<List<Results>?> getMainSearch() async {
     final response = await http.post(
         Uri.parse(
-            "https://opine.cloud/foodzer_test/Mob_food_new/get_search_inner"),
+            "https://www.foodzer.com/Mob_food_new/get_search_inner"),
         body: {
           'search': 'foodzer',
           'lat': '10.98065659',

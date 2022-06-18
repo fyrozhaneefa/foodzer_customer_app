@@ -36,7 +36,7 @@ class RecommededPayments extends StatelessWidget {
                   child: Card(color: Colors.grey.shade300,
                       child: Image(
                           image: NetworkImage(
-                              "https://www.foodzer.com/uploads/items/noitem_image.png"))),
+                              "https://www.foodzer.com/Mob_food_new/uploads/items/noitem_image.png"))),
                 ),
                 subtitle: Text(
                   "Please complete KYC to enable Foodzer Pay",

@@ -53,6 +53,11 @@ class _ImageSliderState extends State<ImageSlider> {
                            width: double.infinity,
                          filterQuality: FilterQuality.high,
                          imageUrl:item.sliderImage!,
+                           errorWidget:
+                               (context, url, error) =>
+                               Image.asset(
+                                 Helper.getAssetName("blank.jpg", "virtual"),
+                               )
                        ),
                        // Image.network(
                        //   item.sliderImage!,

@@ -58,7 +58,7 @@ class SignInDemoState extends State<SignInDemo>
   var _visible = true;
 
   startTime() async {
-    var _duration = new Duration(seconds: 2);
+    var _duration = new Duration(seconds: 3);
     return new Timer(_duration, navigationPage);
   }
   Future<void> navigationPage() async {
@@ -121,7 +121,7 @@ class SignInDemoState extends State<SignInDemo>
               alignment: Alignment.center,
               child: Image.asset(
                 Helper.getAssetName("foodz.png", "virtual"),
-                width: Helper.getScreenWidth(context)*.7,
+                width: Helper.getScreenWidth(context)*.5,
                 fit: BoxFit.cover,
               )
           ),

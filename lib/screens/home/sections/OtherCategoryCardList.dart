@@ -40,12 +40,14 @@ class _OtherCategoryCardListState extends State<OtherCategoryCardList> {
 
       CarouselSlider(
         items: widget.categoryItem.restaurantDetails!.map((item) => OtherCategoryCard(
-                  cardName: item.merchantBranchName,
-                  cardTime: item.merchantBranchOrderTime,
-                  cardType: item.cuisines,
+                  cardName: null!=item.merchantBranchName?item.merchantBranchName:"",
+                  cardTime: null!=item.merchantBranchOrderTime?item.merchantBranchOrderTime:"",
+                  cardType: null!=item.cuisines?item.cuisines:"",
                   rating:null!=item.avgReview && item.avgReview =="0"?"No reviews yet":item.avgReview,
                   deliveryCharge: '',
-                  bannerName: null!=item.merchantBranchCoverImage ? item.merchantBranchCoverImage : item.merchantBranchImage,
+                  bannerName: null!=item.merchantBranchCoverImage ? item.merchantBranchCoverImage :
+                      // "https://media.cntraveler.com/photos/5b22bfea9a9e466ba59f567a/master/w_4000,h_2857,c_limit/Pukka_Catherine-Hendry_2018_overhead-hands.jpg",
+                 item.merchantBranchImage ,
                   discount: '',
                   busy: item.merchantBranchBusy,
                   press: (){

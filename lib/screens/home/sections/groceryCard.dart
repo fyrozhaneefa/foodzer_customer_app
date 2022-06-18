@@ -56,6 +56,11 @@ class _GroceryCardState extends State<GroceryCard> {
                         fit: BoxFit.fill,
                         filterQuality: FilterQuality.high,
                         imageUrl: widget.bannerName!,
+                        errorWidget:
+                            (context, url, error) =>
+                            Image.asset(
+                              Helper.getAssetName("blank.jpg", "virtual"),
+                            )
                       ),
                       // Image.network(
                       //   widget.bannerName!,

@@ -51,11 +51,16 @@ class _CategoryCardState extends State<CategoryCard> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(14.0),
                     child: CachedNetworkImage(
-                        fit:BoxFit.cover,
+                        fit:BoxFit.fill,
                         width: double.infinity,
                         height: double.infinity,
                         filterQuality: FilterQuality.high,
                         imageUrl:widget.cardImg!,
+                        errorWidget:
+                            (context, url, error) =>
+                            Image.asset(
+                              Helper.getAssetName("blank.jpg", "virtual"),
+                            )
                         ),
                     // Image.network(widget.cardImg!,
                     //   width: double.infinity,
@@ -84,7 +89,6 @@ class _CategoryCardState extends State<CategoryCard> {
                         widget.cardName!,
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18.0,
                             fontWeight: FontWeight.w600),
                       ))
                 ],

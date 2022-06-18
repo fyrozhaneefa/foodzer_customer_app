@@ -317,7 +317,7 @@ class LocationScreenState extends State<LocationScreen> {
   }
 
   void getLocationResults(String input) async {
-    String kPLACES_API_KEY = "AIzaSyDkqhaT1weCdUwCPuUT9OqKsGbCQPGsMM8";
+    String kPLACES_API_KEY = "AIzaSyCzJV498CgnaMfwp1CdVkl6INwAy_ekPQI";
     String type = "(regions)";
     String baseURL = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
     String request = "$baseURL?input=$input&types=(cities)&key=$kPLACES_API_KEY";

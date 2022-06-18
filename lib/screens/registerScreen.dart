@@ -214,14 +214,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         String responseData=response.body.toString();
 
         final responsebody = json.decode(responseData);
+        setState(() {
+          isLoading = false;
+        });
         if (responsebody['error_code'] == 0) {
-          setState(() {
-            isLoading = false;
-          });
           Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) =>
                   OtpScreen(widget.mobileNumber,widget.isFromCart)));
         } else {
+          Navigator.of(context).pop();
           Fluttertoast.showToast(
               msg: "Failed to register",
               toastLength: Toast.LENGTH_SHORT,

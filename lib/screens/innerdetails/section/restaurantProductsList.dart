@@ -318,7 +318,16 @@ class _RestaurantProductsListState extends State<RestaurantProductsList> {
                                                                 //     );
                                                                 //   },
                                                                 // ),
-                                                                child: CachedNetworkImage(width: 80,height: 80,imageUrl: itemModel.itemImage!,fit: BoxFit.fill),
+                                                                child: CachedNetworkImage(
+                                                                    width: 80,
+                                                                    height: 80,
+                                                                    imageUrl: itemModel.itemImage!,
+                                                                    fit: BoxFit.fill,
+                                                                    errorWidget:
+                                                                        (context, url, error) =>
+                                                                        Image.asset(
+                                                                          Helper.getAssetName("blank.jpg", "virtual"),
+                                                                        )),
                                                                 
                                                               ),
                                                               flex: 4,

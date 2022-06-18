@@ -187,7 +187,6 @@ bool isLoading = false;
             builder: (BuildContext context) =>
                 RegisterScreen(mobileController.text,widget.isFromCart)));
       } else {
-
         final resData = responsebody['data'];
         String userJson = jsonEncode(resData);
         // userData userModel = userData.fromJson(jsonDecode(userJson));

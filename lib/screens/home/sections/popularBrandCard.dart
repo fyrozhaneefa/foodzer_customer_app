@@ -44,6 +44,11 @@ class PopularBrandCard extends StatelessWidget {
                     fit: BoxFit.contain,
                     filterQuality: FilterQuality.high,
                     imageUrl:logo!,
+                      errorWidget:
+                          (context, url, error) =>
+                          Image.asset(
+                            Helper.getAssetName("blank.jpg", "virtual"),
+                          )
                   )
                   // Image.network(
                   //   logo!,

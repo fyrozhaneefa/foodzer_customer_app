@@ -1,3 +1,4 @@
+import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -52,11 +53,10 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
   int tipValue = 0;
   bool isLoggedIn = false;
   bool customTip = false;
-
+  var _selectedApp;
   @override
   void initState() {
-    WidgetsBinding.instance!.addObserver(this);
-
+    WidgetsBinding.instance.addObserver(this);
     getMerchantTaxPercentage();
     UserPreference().getUserData().then((value) {
       if (null != value.userId && value.userId!.isNotEmpty) {
@@ -174,150 +174,100 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                                     SizedBox(
                                       height: 15,
                                     ),
-                                    Container(
-                                      padding: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Stack(
-                                            children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    deliveryType = 1;
-                                                  });
-                                                  provider.setDeliveryType(1);
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.all(10),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: deliveryType == 1
-                                                            ? Colors
-                                                                .deepOrangeAccent
-                                                            : Colors
-                                                                .transparent),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                deliveryType = 1;
+                                              });
+                                              provider.setDeliveryType(1);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
                                                     color: deliveryType == 1
                                                         ? Colors
-                                                            .deepOrange.shade50
-                                                        : Colors.grey.shade100,
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          color: Colors
-                                                              .grey.shade100,
-                                                          spreadRadius: 1,
-                                                          blurRadius: 1)
-                                                    ],
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      Image.network(
-                                                        'https://www.pngall.com/wp-content/uploads/11/Fast-Delivery-PNG.png',
-                                                        width: 50,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(
-                                                        'Delivery',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
+                                                            .deepOrangeAccent
+                                                        : Colors
+                                                            .transparent),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        12),
+                                                color: deliveryType == 1
+                                                    ? Colors
+                                                        .deepOrange.shade50
+                                                    : Colors.grey.shade100,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors
+                                                          .grey.shade100,
+                                                      spreadRadius: 1,
+                                                      blurRadius: 1)
+                                                ],
                                               ),
-                                              // deliveryType == 1
-                                              //     ? Align(
-                                              //         child: Icon(
-                                              //           Icons.check_circle,
-                                              //           size: 16,
-                                              //           color: Colors.deepOrangeAccent,
-                                              //         ),
-                                              //       )
-                                              //     : Container()
-                                            ],
+                                              child:ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    12),
+                                                child: Image.asset(
+                                                  Helper.getAssetName("delivery.png", "virtual"),
+                                                ),
+                                              )
+                                            ),
                                           ),
-                                          Stack(
-                                            children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  tipValue = 0;
-                                                  selectedTip = -1;
-                                                  setState(() {
-                                                    deliveryType = 2;
-                                                  });
-                                                  provider.setDeliveryType(2);
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.all(10),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: deliveryType == 2
-                                                            ? Colors
-                                                                .deepOrangeAccent
-                                                            : Colors
-                                                                .transparent),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
+                                        ),
+                                        SizedBox(width: 5,),
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () {
+                                              tipValue = 0;
+                                              selectedTip = -1;
+                                              setState(() {
+                                                deliveryType = 2;
+                                              });
+                                              provider.setDeliveryType(2);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
                                                     color: deliveryType == 2
                                                         ? Colors
-                                                            .deepOrange.shade50
-                                                        : Colors.grey.shade100,
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          color: Colors
-                                                              .grey.shade100,
-                                                          spreadRadius: 1,
-                                                          blurRadius: 1)
-                                                    ],
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      Image.network(
-                                                        'https://www.pngall.com/wp-content/uploads/11/Fast-Delivery-PNG.png',
-                                                        width: 50,
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Text(
-                                                        'Pick up',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
+                                                            .deepOrangeAccent
+                                                        : Colors
+                                                            .transparent),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        12),
+                                                color: deliveryType == 2
+                                                    ? Colors
+                                                        .deepOrange.shade50
+                                                    : Colors.grey.shade100,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Colors
+                                                          .grey.shade100,
+                                                      spreadRadius: 1,
+                                                      blurRadius: 1)
+                                                ],
                                               ),
-                                              // deliveryType == 2
-                                              //     ? Align(
-                                              //         child: Icon(
-                                              //           Icons.check_circle,
-                                              //           size: 16,
-                                              //           color: Colors.deepOrangeAccent,
-                                              //         ),
-                                              //       )
-                                              //     : Container()
-                                            ],
-                                          )
-                                        ],
-                                      ),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    12),
+                                                child: Image.asset(
+                                                  Helper.getAssetName("pickup.png", "virtual"),
+                                                ),
+                                              )
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     ),
                                     SizedBox(height: 15),
                                     itemList(),

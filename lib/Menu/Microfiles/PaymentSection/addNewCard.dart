@@ -73,7 +73,7 @@ class _AddNewCardState extends State<AddNewCard> {
                   color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
             ),
             SizedBox(height: 3,),
-            Text("${provider.cartModelList.length} item . Total: ₹${provider.totalWithoutTax}",
+            Text("${provider.cartModelList.length} item . Total: ₹${provider.toPayAmt}",
                 style: TextStyle(
                   color: Colors.grey.shade500,
                   fontSize: 12,
@@ -142,6 +142,9 @@ class _AddNewCardState extends State<AddNewCard> {
                         )
                       : null,
                   label: Text("Card Number"),
+                  labelStyle: TextStyle(
+                    color: Color(0xff557EAE),
+                  ),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide(color: Colors.red)),
@@ -328,6 +331,9 @@ class _AddNewCardState extends State<AddNewCard> {
               child: TextFormField(
                 decoration: InputDecoration(
                   label: Text("Card Nickname (for easy indentification"),
+                  labelStyle: TextStyle(
+                    color: Color(0xff557EAE),
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -390,7 +396,7 @@ class _AddNewCardState extends State<AddNewCard> {
                           textColor: Colors.white,
                           fontSize: 16.0);
                     } else {
-                      WidgetsBinding.instance!.focusManager.primaryFocus
+                      WidgetsBinding.instance.focusManager.primaryFocus
                           ?.unfocus();
                       orderCheckout();
                     }
@@ -460,27 +466,44 @@ class _AddNewCardState extends State<AddNewCard> {
   //   }));
   // }
   //
-  proceedPayment(String token) {
+  // "notifyUrl": notifyUrl,
+  // "card_number": "4706131211212123",
+  // "card_expiryMonth": "07",
+  // "card_expiryYear": "2023",
+  // "card_holder": "Test",
+  // "card_cvv": "123"
+  Future<void> proceedPayment(String token) async {
     isLoading = true;
     setState(() {});
 
-    String orderId = "1154851";
-    String stage = "TEST";
-    String orderAmount = "500";
-    String tokenData = token;
-    String customerName = "Customer Name";
-    String orderNote = "Test order";
-    String orderCurrency = "INR";
-    String appId = "712906953878b39c66ddcff9809217";
-    String customerPhone = "9688521025";
-    String customerEmail = "sample@gmail.com";
-    String notifyUrl = "https://test.gocashfree.com/notify";
+    String? orderId = itemOrderId;
+    String? orderAmount = Provider.of<ApplicationProvider>(context, listen: false)
+        .toPayAmt.toString();
+    String? stage = "PROD";
+    String? tokenData = token;
+    String? customerName = userModel.userName;
+    String? orderNote = "Test order";
+    String? orderCurrency = "INR";
+    String? appId = "117476780192ee56b9dad7efbb674711";
+    String? customerPhone = userModel.userMobie;
+    String? customerEmail = userModel.userEmail;
+    // String? notifyUrl = "https://test.gocashfree.com/notify";
+    // String orderId = "1154851";
+    // String stage = "PROD";
+    // String orderAmount = "500";
+    // String tokenData = token;
+    // String customerName = "Customer Name";
+    // String orderNote = "Test order";
+    // String orderCurrency = "INR";
+    // String appId = "117476780192ee56b9dad7efbb674711";
+    // String customerPhone = "9688521025";
+    // String customerEmail = "sample@gmail.com";
+    // String notifyUrl = "https://test.gocashfree.com/notify";
 
     Map<String, dynamic> inputParams = {
-      "orderId": itemOrderId,
-      "orderAmount": Provider.of<ApplicationProvider>(context, listen: false)
-          .totalWithoutTax
-          .toString(),
+      "orderId": orderId,
+      "tokenData": tokenData,
+      "orderAmount": orderAmount,
       "customerName": customerName,
       "orderNote": orderNote,
       "orderCurrency": orderCurrency,
@@ -488,17 +511,26 @@ class _AddNewCardState extends State<AddNewCard> {
       "customerPhone": customerPhone,
       "customerEmail": customerEmail,
       "stage": stage,
-      "tokenData": tokenData,
-      "notifyUrl": notifyUrl,
       "paymentOption": "card",
-      "card_number": "4706131211212123",
-      "card_expiryMonth": "07",
-      "card_expiryYear": "2023",
-      "card_holder": "Test",
-      "card_cvv": "123"
+      "card_number": cardNumber!.replaceAll(" ",""),
+      "card_expiryMonth": month,
+      "card_expiryYear": year,
+      "card_holder": cardHolderName,
+      "card_cvv": cvv
+      // "notifyUrl": notifyUrl,
+
+
+
+      // "card_number": "4706131211212123",
+      // "card_expiryMonth": "07",
+      // "card_expiryYear": "2023",
+      // "card_holder": "Test",
+      // "card_cvv": "123"
+
+
     };
 
-    CashfreePGSDK.doPayment(inputParams).then((value) {
+    CashfreePGSDK.doPayment(inputParams).then((value){
       isLoading = false;
       setState(() {});
       if (value!['txStatus'] == "SUCCESS") {
@@ -634,7 +666,7 @@ class _AddNewCardState extends State<AddNewCard> {
     });
     var map = new Map<String, dynamic>();
     map['amount'] = Provider.of<ApplicationProvider>(context, listen: false)
-        .totalWithoutTax
+        .toPayAmt
         .toString();
     map['order_id'] = itemOrderId;
 

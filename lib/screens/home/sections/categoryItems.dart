@@ -39,49 +39,53 @@ class _CategoryItemsState extends State<CategoryItems> {
 
   Widget build(BuildContext context) {
     return
-     Container(
-        padding: const EdgeInsets.only(left: 20.0,right: 10),
-        height: 115,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          itemCount: categoryList.length,
-          itemBuilder: (context, index) {
-            return CategoryCard(
-                          color: categoryList[index].name == "Food"? Colors.deepOrangeAccent
-                              :categoryList[index].name == "Groceries"? Colors.teal.shade400:Colors.blue,
-                          cardImg: categoryList[index].image,
-                          cardName:categoryList[index].name,
-                          press: (){
-                            if(categoryList[index].name == "Food"){
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      AllRestaurantsScreen()));
-                            } else if(categoryList[index].name == "Groceries"){
-                              Fluttertoast.showToast(
-                                  msg: "Groceries are currently not available",
-                                  toastLength: Toast.LENGTH_LONG,
-                                  fontSize: 14,
-                                  gravity: ToastGravity.CENTER,
-                                  backgroundColor: Colors.grey.shade300,
-                                  textColor: Colors.red
-                              );
-                            } else if(categoryList[index].name == "Cakes"){
-                              Fluttertoast.showToast(
-                                  msg: "Cakes are currently not available",
-                                  toastLength: Toast.LENGTH_LONG,
-                                  fontSize: 14,
-                                  gravity: ToastGravity.CENTER,
-                                  backgroundColor: Colors.grey.shade300,
-                                  textColor: Colors.red
-                              );
-                            }
+     Padding(
+       padding:  EdgeInsets.only(left: 20,right: 10),
+       child: Container(
+          // padding: const EdgeInsets.only(left: 20.0,right: 10),
+         // margin: EdgeInsets.only(left: 20,right: 10),
+          height: 115,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            itemCount: categoryList.length,
+            itemBuilder: (context, index) {
+              return CategoryCard(
+                            color: categoryList[index].name == "Food"? Colors.deepOrangeAccent
+                                :categoryList[index].name == "Groceries"? Colors.teal.shade400:Colors.blue,
+                            cardImg: categoryList[index].image,
+                            cardName:categoryList[index].name,
+                            press: (){
+                              if(categoryList[index].name == "Food"){
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        AllRestaurantsScreen()));
+                              } else if(categoryList[index].name == "Groceries"){
+                                Fluttertoast.showToast(
+                                    msg: "Groceries are currently not available",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    fontSize: 14,
+                                    gravity: ToastGravity.CENTER,
+                                    backgroundColor: Colors.grey.shade300,
+                                    textColor: Colors.red
+                                );
+                              } else if(categoryList[index].name == "Cakes"){
+                                Fluttertoast.showToast(
+                                    msg: "Cakes are currently not available",
+                                    toastLength: Toast.LENGTH_LONG,
+                                    fontSize: 14,
+                                    gravity: ToastGravity.CENTER,
+                                    backgroundColor: Colors.grey.shade300,
+                                    textColor: Colors.red
+                                );
+                              }
 
-                          },);
-          },
+                            },);
+            },
+          ),
         ),
-      );
+     );
 
   }
   getCategoryList() async {

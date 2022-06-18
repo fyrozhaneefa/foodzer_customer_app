@@ -59,6 +59,11 @@ class PopularRestNearCard extends StatelessWidget {
                     fit: BoxFit.fill,
                     filterQuality: FilterQuality.high,
                     imageUrl: bannerName,
+                      errorWidget:
+                          (context, url, error) =>
+                          Image.asset(
+                            Helper.getAssetName("blank.jpg", "virtual"),
+                          )
                   ),
                   // Image.network(
                   //   bannerName,

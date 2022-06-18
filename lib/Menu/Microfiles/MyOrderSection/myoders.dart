@@ -133,17 +133,29 @@ class _MyOrdersState extends State<MyOrders> {
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (BuildContext context, int position) {
                           return Padding(
-                            padding: EdgeInsets.only(left: 10, top: 10),
-                            child: Text(
-                              orderList[index]
-                                  .itemDetails![position]
-                                  .itemName
-                                  .toString() + "  x" + orderList[index]
-                                  .itemDetails![position]
-                                  .orderDetailsQty
-                                  .toString(),
-                              style: TextStyle(
-                                  fontSize: 13, color: Colors.grey.shade700),
+                            padding: EdgeInsets.only(left: 10, top: 10,right:10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  orderList[index]
+                                      .itemDetails![position]
+                                      .itemName
+                                      .toString() + "  x" + orderList[index]
+                                      .itemDetails![position]
+                                      .orderDetailsQty
+                                      .toString(),
+                                  style: TextStyle(
+                                      fontSize: 13, color: Colors.grey.shade700),
+                                ),
+                                Text( orderList[index].orderPaymentStatus == "0"?
+                                  "Payment Failed":"",
+                                  style: TextStyle(
+                                    color: Colors.deepOrange,
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                )
+                              ],
                             ),
                           );
                         }),
@@ -156,7 +168,7 @@ class _MyOrdersState extends State<MyOrders> {
                         style: TextStyle(fontSize: 11, color: Colors.grey),
                       ),
                     ),
-                    Row(
+                 orderList[index].orderPaymentStatus != "0"?  Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
@@ -265,7 +277,7 @@ class _MyOrdersState extends State<MyOrders> {
                           ),
                         ),
                       ],
-                    ),
+                    ):Container(height: 0,),
                   ],
                 );
               },

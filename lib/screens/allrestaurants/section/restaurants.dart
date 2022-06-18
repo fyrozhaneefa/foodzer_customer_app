@@ -235,9 +235,11 @@ class _RestaurantsState extends State<Restaurants> {
                                         imageUrl: restmodel
                                             .merchantBranchImage!,
                                         fit: BoxFit.fill,
-                                        errorWidget:
-                                            (context, url, error) =>
-                                            Icon(Icons.error),
+                                          errorWidget:
+                                              (context, url, error) =>
+                                              Image.asset(
+                                                Helper.getAssetName("blank.jpg", "virtual"),
+                                              )
                                       )),
                                 ),
                               ),
@@ -341,9 +343,11 @@ class _RestaurantsState extends State<Restaurants> {
                                     imageUrl: null!=restmodel.merchantBranchCoverImage?
                                     restmodel.merchantBranchCoverImage!:restmodel.merchantBranchImage!,
                                     fit: BoxFit.fill,
-                                    errorWidget:
-                                        (context, url, error) =>
-                                        Icon(Icons.error),
+                                      errorWidget:
+                                          (context, url, error) =>
+                                          Image.asset(
+                                            Helper.getAssetName("blank.jpg", "virtual"),
+                                          )
                                   )
                                 // Image.network(
                                 //   (user.merchantBranchImage!),
@@ -595,14 +599,23 @@ class ProductDesc extends StatelessWidget {
               color: Colors.grey.shade900,
               size: 20,
             ),
-            Text(
-              'INR 0.0',
-              style: TextStyle(
-                fontSize: 12,
-              ),
-            )
+            // Text(
+            //   'INR 0.0',
+            //   style: TextStyle(
+            //     fontSize: 12,
+            //   ),
+            // )
           ],
-        )
+        ),
+        null!=restModel!.merchantBranchBusyEndTime && restModel!.merchantBranchBusy=="1"?Text(
+          "Next available at ${restModel!.merchantBranchBusyEndTime.toString() }",
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: Colors.deepOrange,
+            height: 1.5
+          ),
+        ):Container(height:0)
       ],
     );
   }

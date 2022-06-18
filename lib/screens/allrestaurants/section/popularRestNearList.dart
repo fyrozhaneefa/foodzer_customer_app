@@ -174,7 +174,7 @@ List<PopularRest> popularRest = [];
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final response = await http.post(
-      Uri.parse("https://opine.cloud/foodzer_test/mob_food_new/restaurants"),
+      Uri.parse("https://www.foodzer.com/Mob_food_new/restaurants"),
       body: {
         'lat': prefs.getString('latitude'),
         'lng': prefs.getString('longitude'),
@@ -203,7 +203,7 @@ List<PopularRest> popularRest = [];
 //   Future<List<PopularRest>?> getPupularRestaurent() async {
 //     SharedPreferences prefs = await SharedPreferences.getInstance();
 //     final response = await http.post(
-//       Uri.parse("https://opine.cloud/foodzer_test/mob_food_new/restaurants"),
+//       Uri.parse("https://www.foodzer.com/Mob_food_new/restaurants"),
 //       body: {
 //         'lat': prefs.getString('latitude'),
 //         'lng': prefs.getString('longitude'),

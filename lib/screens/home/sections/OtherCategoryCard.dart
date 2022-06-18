@@ -55,7 +55,12 @@ class _OtherCategoryCardState extends State<OtherCategoryCard> {
 
                         fit: BoxFit.fill,
                         filterQuality: FilterQuality.high,
-                        imageUrl: widget.bannerName!,
+                        imageUrl:widget.bannerName!,
+                          errorWidget:
+                              (context, url, error) =>
+                              Image.asset(
+                                Helper.getAssetName("blank.jpg", "virtual"),
+                              )
                       ),
                       // Image.network(
                       //   widget.bannerName!,

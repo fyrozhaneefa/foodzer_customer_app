@@ -46,46 +46,7 @@ class _PopularBrandCardListState extends State<PopularBrandCardList> {
               },
             )).toList()
 
-            // PopularBrandCard(
-            //   logo: 'https://www.byswhk.com/uae/wp-content/uploads/sites/2/2020/05/Amigovio.png',
-            //   brandName: 'AMIGOVIO - Mexican',
-            //   time: '37 mins',
-            //   press: (){
-            //     print('item printed');
-            //   },
-            // ),
-            // PopularBrandCard(
-            //   logo: 'https://download.logo.wine/logo/IHOP/IHOP-Logo.wine.png',
-            //   brandName: 'IHOP',
-            //   time: '37 mins',
-            //   press: (){
-            //     print('item printed');
-            //   },
-            // ),
-            // PopularBrandCard(
-            //   logo: 'https://download.logo.wine/logo/IHOP/IHOP-Logo.wine.png',
-            //   brandName: 'IHOP',
-            //   time: '37 mins',
-            //   press: (){
-            //     print('item printed');
-            //   },
-            // ),
-            // PopularBrandCard(
-            //   logo: 'https://www.byswhk.com/uae/wp-content/uploads/sites/2/2020/05/Amigovio.png',
-            //   brandName: 'AMIGOVIO - Mexican',
-            //   time: '37 mins',
-            //   press: (){
-            //     print('item printed');
-            //   },
-            // ),
-            // PopularBrandCard(
-            //   logo: 'https://download.logo.wine/logo/IHOP/IHOP-Logo.wine.png',
-            //   brandName: 'IHOP',
-            //   time: '37 mins',
-            //   press: (){
-            //     print('item printed');
-            //   },
-            // ),
+
           ],
         ),
       ),
