@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_geocoder/geocoder.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
@@ -13,6 +14,7 @@ import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/addDeliveryAddress.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
@@ -580,13 +582,19 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       setState(() {
         myLatLng = LatLng(position.latitude,position.longitude);
       });
+
       if (latitude == 0 && longitude == 0) {
         latitude = position.latitude;
         longitude = position.longitude;
       }
+
       final cords = geoCo.Coordinates(latitude, longitude);
-      var address =
-          await geoCo.Geocoder.local.findAddressesFromCoordinates(cords);
+      //     await geoCo.Geocoder.google("AIzaSyCzJV498CgnaMfwp1CdVkl6INwAy_ekPQI").findAddressesFromCoordinates(cords);
+      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+
+      print(placemarks[0]);
+      Placemark place = placemarks[0];
+      // var address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
       // List<Placemark> placemark = await Geolocator.placemarkFromCoordinates(
       //     latitude, longitude);
       //
@@ -602,8 +610,9 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       }
       getDeliverableArea(latLongCurrent.latitude.toString(), latLongCurrent.longitude.toString());
       setState(() {
-        _currentAddress = address[0].addressLine;
-        locality= address[0].locality;
+
+        _currentAddress = place.name;
+        locality= place.locality;
         // "${place.name},${place.locality}, ${place.postalCode}, ${place
         //     .country}";
         addressController.text = _currentAddress!;
