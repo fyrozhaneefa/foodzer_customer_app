@@ -18,7 +18,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_geocoder/geocoder.dart' as geoCo;
+// import 'package:flutter_geocoder/geocoder.dart' as geoCo;
 // import 'package:flutter_bloc/flutter_bloc.dart';
 import '../Models/place.dart';
 import '../Services/geolocator_service.dart';
@@ -587,18 +587,18 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         latitude = position.latitude;
         longitude = position.longitude;
       }
-
-      final cords = geoCo.Coordinates(latitude, longitude);
-      //     await geoCo.Geocoder.google("AIzaSyCzJV498CgnaMfwp1CdVkl6INwAy_ekPQI").findAddressesFromCoordinates(cords);
-      List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+      final cords = Coordinates(latitude, longitude);
+      List<Address> placemarks=   await Geocoder.google("AIzaSyCzJV498CgnaMfwp1CdVkl6INwAy_ekPQI")
+              .findAddressesFromCoordinates(cords);
+      // List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
 
       print(placemarks[0]);
-      Placemark place = placemarks[0];
+      // Placemark place = placemarks[0];
       // var address = '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
       // List<Placemark> placemark = await Geolocator.placemarkFromCoordinates(
       //     latitude, longitude);
       //
-      // Placemark place = placemark[0];
+      Address place = placemarks[0];
       latLongCurrent = LatLng(latitude, longitude);
       if (null == latLongCurrent) {
         // handle first time open...in first time open move zoom camera to current position...
@@ -611,7 +611,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       getDeliverableArea(latLongCurrent.latitude.toString(), latLongCurrent.longitude.toString());
       setState(() {
 
-        _currentAddress = place.name;
+        _currentAddress = place.addressLine;
         locality= place.locality;
         // "${place.name},${place.locality}, ${place.postalCode}, ${place
         //     .country}";
