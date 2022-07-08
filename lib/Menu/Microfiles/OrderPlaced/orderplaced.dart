@@ -69,10 +69,10 @@ class _OrderPlacedHomeState extends State<OrderPlacedHome> {
                 width: Helper.getScreenWidth(context),
                 padding: EdgeInsets.all(20),child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) =>
-                          OrderTracking(Provider.of<ApplicationProvider>(context, listen: false)
-                              .currentOrderId!,true)));
+                  // Navigator.of(context).push(
+                  //     MaterialPageRoute(builder: (context) =>
+                  //         OrderTracking(Provider.of<ApplicationProvider>(context, listen: false)
+                  //             .currentOrderId!,true)));
                 },
                 child: Text(
                   // "Track Your Order",
