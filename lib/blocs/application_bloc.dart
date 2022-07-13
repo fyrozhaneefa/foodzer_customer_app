@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
@@ -284,29 +286,39 @@ class ApplicationProvider with ChangeNotifier {
 
   updateProduct(Item product, bool isIncrement, bool isRepeatLastItem
       ) {
-    if(isRepeatLastItem){
-      product.addonsList=cartModelList
-          .where((element) => element.lastItemTempId
-          == product.tempId).single.addonsList!;
-      //if repeate last item qty is managed from provider
-      product.enteredQty=cartModelList
-          .where((element) => element.lastItemTempId
-          == product.tempId).single.enteredQty!+1;
 
-    }
-    int filteredItemIndex = filteredLoadedProductModelList
-        .indexWhere((element) => element.itemId == product.itemId);
-    int cartIndex = null != product.tempId && product.tempId!.isNotEmpty
-        ? cartModelList
-            .indexWhere((element) => element.tempId == product.tempId)
-        : -1;
-    if (filteredItemIndex != -1) {
-      if (isIncrement) {
-        // filteredLoadedProductModelList[cartIndex].enteredQty = enteredQty;
-        if (null != cartModelList && cartModelList.length > 0) {
-          if (cartIndex == -1) {
-            product.tempId = getTempId();
-            product.lastItemTempId=product.tempId;
+    if (selectedRestModel.branchDetails!.openStatus != "Open") {
+      Fluttertoast.showToast(
+          msg: selectedRestModel.branchDetails!.openStatus!,
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: 14,
+          backgroundColor: Colors.grey.shade300,
+          textColor: Colors.red);
+    }else {
+      if (isRepeatLastItem) {
+        product.addonsList = cartModelList
+            .where((element) =>
+        element.lastItemTempId
+            == product.tempId).single.addonsList!;
+        //if repeate last item qty is managed from provider
+        product.enteredQty = cartModelList
+            .where((element) =>
+        element.lastItemTempId
+            == product.tempId).single.enteredQty! + 1;
+      }
+      int filteredItemIndex = filteredLoadedProductModelList
+          .indexWhere((element) => element.itemId == product.itemId);
+      int cartIndex = null != product.tempId && product.tempId!.isNotEmpty
+          ? cartModelList
+          .indexWhere((element) => element.tempId == product.tempId)
+          : -1;
+      if (filteredItemIndex != -1) {
+        if (isIncrement) {
+          // filteredLoadedProductModelList[cartIndex].enteredQty = enteredQty;
+          if (null != cartModelList && cartModelList.length > 0) {
+            if (cartIndex == -1) {
+              product.tempId = getTempId();
+              product.lastItemTempId = product.tempId;
 
             product = calculateValue(product);
 
@@ -380,14 +392,14 @@ class ApplicationProvider with ChangeNotifier {
     item.lastItemTempId=product.tempId;
     item.enteredQty=qty;
 
-    if (allItemIndex > -1) {
-    filteredLoadedProductModelList[filteredItemIndex] =
-        calculateValue(item);
-    selectedRestModel.items![allItemIndex] =
-        calculateValue(item);
-
+      if (allItemIndex > -1) {
+        filteredLoadedProductModelList[filteredItemIndex] =
+            calculateValue(item);
+        selectedRestModel.items![allItemIndex] =
+            calculateValue(item);
+      }
+      calculateTotal();
     }
-    calculateTotal();
     notifyListeners();
   }
 
