@@ -1,32 +1,32 @@
-// class PopularrestNearModel {
-//   int? errorCode;
-//   List<PopularRest>? popularRest;
-//
-//   PopularrestNearModel({this.errorCode, this.popularRest});
-//
-//   PopularrestNearModel.fromJson(Map<String, dynamic> json) {
-//     errorCode = json['error_code'];
-//     if (json['popular_rest'] != null) {
-//       popularRest = <PopularRest>[];
-//       json['popular_rest'].forEach((v) {
-//         popularRest!.add(new PopularRest.fromJson(v));
-//       });
-//     }
-//   }
-//
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['error_code'] = this.errorCode;
-//     if (this.popularRest != null) {
-//       data['popular_rest'] = this.popularRest!.map((v) => v.toJson()).toList();
-//     }
-//     return data;
-//   }
-// }
+class PopularrestNearModel {
+  int? errorCode;
+  List<PopularRest>? popularRest;
+
+  PopularrestNearModel({this.errorCode, this.popularRest});
+
+  PopularrestNearModel.fromJson(Map<String, dynamic> json) {
+    errorCode = json['error_code'];
+    if (json['popular_rest'] != null) {
+      popularRest = <PopularRest>[];
+      json['popular_rest'].forEach((v) {
+        popularRest!.add(new PopularRest.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['error_code'] = this.errorCode;
+    if (this.popularRest != null) {
+      data['popular_rest'] = this.popularRest!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
 
 class PopularRest {
   String? cuisines;
-  String? reviewAvgRating;
+  Null? reviewAvgRating;
   String? reviewCount;
   String? avgReview;
   String? merchantBranchId;
@@ -77,12 +77,9 @@ class PopularRest {
   String? merchantPackCharge;
   String? deliveryAreaDeliveryTime;
   String? distance;
-  String? merchantBranchCoverImage;
-  String? rating;
 
   PopularRest(
       {this.cuisines,
-        this.rating,
         this.reviewAvgRating,
         this.reviewCount,
         this.avgReview,
@@ -133,11 +130,9 @@ class PopularRest {
         this.merchantPackChargeType,
         this.merchantPackCharge,
         this.deliveryAreaDeliveryTime,
-        this.distance,
-        this.merchantBranchCoverImage});
+        this.distance});
 
   PopularRest.fromJson(Map<String, dynamic> json) {
-    rating= json['rating'];
     cuisines = json['cuisines'];
     reviewAvgRating = json['review_avg_rating'];
     reviewCount = json['review_count'];
@@ -191,14 +186,10 @@ class PopularRest {
     merchantPackCharge = json['merchant_pack_charge'];
     deliveryAreaDeliveryTime = json['delivery_area_delivery_time'];
     distance = json['distance'];
-    merchantBranchCoverImage = json['merchant_branch_cover_image'];
-
-
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['rating'] = this.rating;
     data['cuisines'] = this.cuisines;
     data['review_avg_rating'] = this.reviewAvgRating;
     data['review_count'] = this.reviewCount;
@@ -252,7 +243,6 @@ class PopularRest {
     data['merchant_pack_charge'] = this.merchantPackCharge;
     data['delivery_area_delivery_time'] = this.deliveryAreaDeliveryTime;
     data['distance'] = this.distance;
-    data['merchant_branch_cover_image'] = this.merchantBranchCoverImage;
     return data;
   }
 }

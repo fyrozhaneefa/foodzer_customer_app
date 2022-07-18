@@ -21,6 +21,8 @@ class SingleRestModel {
     this.packageRating,
     this.deliveryRating,
     this.moneyRating,
+    this.restNextAvilableDay,
+    this.restNextAvilableTime,
     this.numOfRows,
     this.reviews,
     this.merchantBranchId,
@@ -36,6 +38,8 @@ class SingleRestModel {
   int? packageRating;
   int? deliveryRating;
   int? moneyRating;
+  String? restNextAvilableDay;
+  String? restNextAvilableTime;
   int? numOfRows;
   Reviews? reviews;
   String? merchantBranchId;
@@ -69,6 +73,8 @@ class SingleRestModel {
         merchantBranchId: json["merchant_branch_id"],
         branchDetails: BranchDetails.fromJson(json["branch_details"]),
         branchCuisine: json["branch_cuisine"],
+        restNextAvilableDay: json["rest_next_avilable_day"],
+        restNextAvilableTime: json["rest_next_avilable_time"],
       );
   //
   Map<String, dynamic> toJson() => {
@@ -81,6 +87,8 @@ class SingleRestModel {
         "merchant_branch_id": merchantBranchId,
         "branch_details": branchDetails!.toJson(),
         "branch_cuisine": branchCuisine,
+        "rest_next_avilable_day":restNextAvilableDay,
+        "rest_next_avilable_time":restNextAvilableTime,
       };
 }
 
@@ -101,6 +109,7 @@ class BranchDetails {
       this.merchantBranchBusy,
       this.merchantBranchPaymnetMode,
       this.merchantBranchImage,
+
       this.merchantPackCharge,
       this.merchantPackChargeType,
       this.countryCurrency,
@@ -126,6 +135,7 @@ class BranchDetails {
   String? merchantBranchBusy;
   String? merchantBranchPaymnetMode;
   String? merchantBranchImage;
+
   String? merchantPackCharge;
   String? merchantPackChargeType;
   String? countryCurrency;
@@ -152,6 +162,7 @@ class BranchDetails {
         merchantBranchBusy: json["merchant_branch_busy"],
         merchantBranchPaymnetMode: json["merchant_branch_paymnet_mode"],
         merchantBranchImage: json["merchant_branch_image"],
+
         merchantBranchCoverImage: json["merchant_branch_cover_image"],
         merchantPackCharge: json["merchant_pack_charge"],
         merchantPackChargeType: json["merchant_pack_charge_type"],
@@ -180,6 +191,7 @@ class BranchDetails {
         "merchant_branch_busy": merchantBranchBusy,
         "merchant_branch_paymnet_mode": merchantBranchPaymnetMode,
         "merchant_branch_image": merchantBranchImage,
+
         "merchant_branch_cover_image": merchantBranchCoverImage,
         "merchant_pack_charge": merchantPackCharge,
         "merchant_pack_charge_type": merchantPackChargeType,

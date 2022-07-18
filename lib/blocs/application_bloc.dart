@@ -19,6 +19,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 
 import '../Models/cuisinesmodel.dart';
+import '../Models/popularrestaurentNearmodel.dart';
 
 class ApplicationProvider with ChangeNotifier {
   final geoLocatorService = GeolocatorService();
@@ -61,6 +62,8 @@ class ApplicationProvider with ChangeNotifier {
   List<RestaurentModel> restaurantList=[];
   List<RestaurentModel> filteredRestaurantList=[];
   List<CuisinesModel> cuisinesModelList=[];
+  List<PopularrestNearModel>poplarResList=[];
+
 
 
 

@@ -37,7 +37,8 @@ class PopularBrandCard extends StatelessWidget {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     border:
                     Border.all(width: 1.0, color: Colors.grey.shade200)),
-                child: ClipRRect(
+                child:
+                ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child:CachedNetworkImage(
                     repeat: ImageRepeat.noRepeat,

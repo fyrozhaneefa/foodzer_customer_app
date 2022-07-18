@@ -2,7 +2,6 @@
 
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // import 'package:foodzer_customer_app/Menu/Microfiles/CuisinesSection/cuisineshome.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
@@ -22,13 +21,10 @@ import 'package:foodzer_customer_app/screens/otpValidation.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
 import './screens/landingScreen.dart';
+import 'Menu/Microfiles/MoreCategory/more_categories.dart';
 import 'screens/home/homeScreen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<ApplicationProvider>(
@@ -36,11 +32,15 @@ Future<void> main() async {
   ], child: MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'Foodzer',
+
+
     home: SignInDemo(),
+
     theme: ThemeData(
         fontFamily: 'Metropolis',
         scaffoldBackgroundColor: Colors.white,
         textTheme: TextTheme(
+
           bodyText2: TextStyle(color: Colors.black),
         )),
   )));
@@ -62,17 +62,14 @@ class SignInDemoState extends State<SignInDemo>
     return new Timer(_duration, navigationPage);
   }
   Future<void> navigationPage() async {
-    UserPreference().getUserData().then((userValue) {
-      UserPreference().getCurrentAddress().then((value) {
-        if (null!=value && value.isNotEmpty
-            ||null!=userValue.userType && userValue.userType!.isNotEmpty) {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (BuildContext context) => HomeScreen()));
-        } else {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (BuildContext context) => LandingScreen()));
-        }
-      });
+    UserPreference().getUserData().then((value) {
+      if (null!=value.userType && value.userType!.isNotEmpty) {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => HomeScreen()));
+      } else {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => LandingScreen()));
+      }
     });
   }
 

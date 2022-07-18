@@ -31,11 +31,9 @@ class RestaurantDetailsScreen extends StatefulWidget {
   static const routeName = "/restaurantDetails";
   String? merchantBranchId, lat, lng;
 
-  RestaurantDetailsScreen(
-      this.merchantBranchId,
+  RestaurantDetailsScreen(this.merchantBranchId,
       this.lat,
-      this.lng,
-      );
+      this.lng,);
 
   @override
   State<RestaurantDetailsScreen> createState() =>
@@ -52,10 +50,11 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
   List<Item> filteredList = [];
   List<Item> filteredLoadedProductModelList = [];
   TabController? tabController;
+  List<RestaurentModel> resmodel = [];
 
   @override
   void dispose() {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance?.addPostFrameCallback((_) {
       Provider.of<ApplicationProvider>(context, listen: false)
           .setCurrentRestModel(new SingleRestModel());
       tabController!.dispose();
@@ -217,776 +216,979 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                       }))
             ],
           )
-              : Consumer<ApplicationProvider>(builder: (context, provider, child) {
-            return Stack(
-              children: [
-                !isRestContainItems
-                    ? Center(child: Text("No item found"))
-                    : VerticalScrollableTabView(
-                  tabController: tabController!,
-                  listItemData: provider.categoryList,
-                  verticalScrollPosition: VerticalScrollPosition.begin,
-                  eachItemChild: (object, index) {
-                    // print(index.toString());
-                    List<Item> filteredList = [];
-                    if (provider.categoryList[index].categoryId == 0) {
-                      filteredList = provider.selectedRestModel.items!;
-                    } else {
-                      filteredList = provider.selectedRestModel.items!
-                          .where((product) => (product.categoryId ==
-                          provider.categoryList[index].categoryId))
-                          .toList();
-                    }
-                    if(isVegMode){
-                      filteredList.retainWhere((element) => element.itemVegNonveg=="1");
-                    }
-                    return Theme(
-                      data: ThemeData()
-                          .copyWith(dividerColor: Colors.transparent),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          index==0?
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'VEG',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600),
+              : Consumer<ApplicationProvider>(
+              builder: (context, provider, child) {
+                return Stack(
+                  children: [
+                    !isRestContainItems
+                        ? Center(child: Text("No item found"))
+                        : VerticalScrollableTabView(
+                      tabController: tabController!,
+                      listItemData: provider.categoryList,
+                      verticalScrollPosition: VerticalScrollPosition.begin,
+                      eachItemChild: (object, index) {
+                        // print(index.toString());
+                        List<Item> filteredList = [];
+                        if (provider.categoryList[index].categoryId == 0) {
+                          filteredList = provider.selectedRestModel.items!;
+                        } else {
+                          filteredList = provider.selectedRestModel.items!
+                              .where((product) =>
+                          (product.categoryId ==
+                              provider.categoryList[index].categoryId))
+                              .toList();
+                        }
+                        if (isVegMode) {
+                          filteredList.retainWhere(
+                                  (element) => element.itemVegNonveg == "1");
+                        }
+                        return Theme(
+                          data: ThemeData()
+                              .copyWith(dividerColor: Colors.transparent),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              index == 0
+                                  ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'VEG',
+                                      style: TextStyle(
+                                          fontWeight:
+                                          FontWeight.w600),
+                                    ),
+                                    Switch(
+                                      value: isVegMode,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          isVegMode = value;
+                                        });
+                                      },
+                                      activeTrackColor:
+                                      Colors.green.shade100,
+                                      activeColor:
+                                      Colors.green.shade300,
+                                    ),
+                                  ],
                                 ),
-                                Switch(
-                                  value: isVegMode,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      isVegMode = value;
-                                    });
-                                  },
-                                  activeTrackColor: Colors.green.shade100,
-                                  activeColor: Colors.green.shade300,
-                                ),
-                              ],
-                            ),
-                          ):Container(height: 0,),
-                          !isVegMode && index!=0?Divider(height: 1, color: Colors.grey[300],):Container(height: 0,),
-                          isVegMode && (null==filteredList || filteredList.length==0)?
-                              Container(height: 0,):
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: Material(
-                                color: Colors.white,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(20),
-                                        topLeft: Radius.circular(20))),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 8),
-                                  child: Text(
-                                    provider.categoryList[index]
-                                        .categoryName!,
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18),
-                                  ),
-                                ),
+                              )
+                                  : Container(
+                                height: 0,
                               ),
-                            ),
-                          ),
-
-                          (null == filteredList ||
-                              filteredList.length == 0) && !isVegMode
-                              ? Center(
-                            child: CircularProgressIndicator(),
-                          )
-                              : Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 20.0),
-                            child: ListView.separated(
-                              separatorBuilder: (context, index) {
-                                return Divider(
-                                  height: 1,
-                                  thickness: 1,
-                                  color: Colors.grey[300],
-                                );
-                              },
-                              // scrollDirection: Axis.vertical,
-                              // controller: scrollController,
-                              physics:
-                              NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: filteredList.length,
-                              itemBuilder: (BuildContext context,
-                                  int index) {
-                                Item itemModel =
-                                filteredList[index];
-                                // Future.delayed(Duration.zero, () async {
-                                //   provider
-                                //       .currentSelectedCategory(itemModel.categoryId!);                });
-
-                                return Container(
-                                  height: 120,
-                                  child: Padding(
-                                    padding: const EdgeInsets
-                                        .symmetric(
-                                        horizontal: 12.0),
-                                    child: Material(
-                                      color: Colors.white,
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: index ==
-                                              filteredList
-                                                  .length -
-                                                  1
-                                              ? BorderRadius.only(
-                                              bottomLeft: Radius
-                                                  .circular(
-                                                  20),
-                                              bottomRight:
-                                              Radius
-                                                  .circular(
-                                                  20))
-                                              : BorderRadius
-                                              .zero),
-                                      child: Padding(
-                                        padding:
-                                        const EdgeInsets.all(
-                                            2.0),
-                                        child: InkWell(
-                                          onTap: () {
-                                            if (null==itemModel.enteredQty ||
-                                                itemModel.enteredQty == 0 || (itemModel.enteredQty! > 0 &&
-                                                itemModel.isAddon == 0)) {
-                                              singleItemDetails(context, itemModel);
-
-
-                                            }  else {
-                                              addDuplicateItem(itemModel);
-                                            }
-                                            // provider.getItemId(itemModel.itemId!);
-                                            // if (itemModel.isAddon == 1) {
-                                            //   getAddons();
-                                            // }
-                                          },
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .center,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment
-                                                .center,
-                                            children: [
-                                              Container(
-                                                  decoration:
-                                                  BoxDecoration(
-                                                    border:
-                                                    Border(
-                                                      right: null !=
-                                                          itemModel
-                                                              .enteredQty && itemModel.enteredQty! >0
-                                                          ? BorderSide(
-                                                          color: Colors
-                                                              .deepOrangeAccent,
-                                                          width:
-                                                          5)
-                                                          : BorderSide
-                                                          .none,
-                                                    ),
-                                                    // borderRadius: BorderRadius.only( topRight: Radius.circular(20),bottomRight: Radius.circular(20))
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .start,
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment
-                                                        .start,
-                                                    children: [
-                                                      Expanded(
-                                                        child:
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
-                                                          children: [
-                                                            Row(
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment.start,
-                                                              children: [
-                                                                itemModel.itemVegNonveg == "1"
-                                                                    ? Image.asset(
-                                                                  Helper.getAssetName("veg.png", "virtual"),
-                                                                  height: 15,
-                                                                )
-                                                                    : Image.asset(
-                                                                  Helper.getAssetName("non-veg.png", "virtual"),
-                                                                  height: 15,
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 5,
-                                                                ),
-                                                                Text(
-                                                                  null != itemModel.enteredQty && itemModel.enteredQty! >0 ? '${itemModel.enteredQty.toString()}x' : "",
-                                                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.deepOrange),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 3,
-                                                                ),
-                                                                Expanded(
-                                                                  child: Text(itemModel.itemName!, style: TextStyle(fontWeight: FontWeight.w600, height: 1.3)),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            SizedBox(
-                                                              height:
-                                                              5,
-                                                            ),
-                                                            Text(
-                                                                itemModel.itemDescription!,
-                                                                style: TextStyle(fontSize: 12, color: Colors.grey.shade700)),
-                                                            SizedBox(
-                                                              height:
-                                                              5,
-                                                            ),
-                                                            Text(itemModel.isPriceon == 0?
-                                                                'INR ${itemModel.itemPrice}':"Price on selection",
-                                                                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
-                                                          ],
-                                                        ),
-                                                        flex: 9,
-                                                      ),
-                                                      Expanded(
-                                                        child:
-                                                        Container(
-                                                          child:
-                                                          CachedNetworkImage(
-                                                              height: 80,
-                                                              width: 80,
-                                                            fit: BoxFit.fill,
-
-                                                            filterQuality: FilterQuality.high,
-                                                            imageUrl: itemModel.itemImage!,
-                                                              errorWidget:
-                                                                  (context, url, error) =>
-                                                                  Image.asset(
-                                                                    Helper.getAssetName("blank.jpg", "virtual"),
-                                                                  )
-                                                          ),
-                                                          // Image
-                                                          //     .network(
-                                                          //   // 'https://i5.peapod.com/c/NY/NYO1E.png',
-                                                          //   itemModel
-                                                          //       .itemImage!,
-                                                          //   height:
-                                                          //   80,
-                                                          //   width:
-                                                          //   80,
-                                                          //   fit: BoxFit
-                                                          //       .fill,
-                                                          //   loadingBuilder: (BuildContext context,
-                                                          //       Widget child,
-                                                          //       ImageChunkEvent? loadingProgress) {
-                                                          //     if (loadingProgress ==
-                                                          //         null)
-                                                          //       return child;
-                                                          //     return Center(
-                                                          //       child: CircularProgressIndicator(
-                                                          //         color: Colors.deepOrangeAccent,
-                                                          //         value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                          //       ),
-                                                          //     );
-                                                          //   },
-                                                          // ),
-                                                        ),
-                                                        flex: 4,
-                                                      )
-                                                    ],
-                                                  )),
-                                              // SizedBox(height:5),
-                                              // Container(height: 1,color: Colors.grey[400],)
-                                            ],
-                                          ),
-                                        ),
+                              !isVegMode && index != 0
+                                  ? Divider(
+                                height: 1,
+                                color: Colors.grey[300],
+                              )
+                                  : Container(
+                                height: 0,
+                              ),
+                              isVegMode &&
+                                  (null == filteredList ||
+                                      filteredList.length == 0)
+                                  ? Container(
+                                height: 0,
+                              )
+                                  : Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0),
+                                child: Container(
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width,
+                                  child: Material(
+                                    color: Colors.white,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.only(
+                                            topRight:
+                                            Radius.circular(
+                                                20),
+                                            topLeft:
+                                            Radius.circular(
+                                                20))),
+                                    child: Padding(
+                                      padding:
+                                      const EdgeInsets.symmetric(
+                                          vertical: 8.0,
+                                          horizontal: 8),
+                                      child: Text(
+                                        provider.categoryList[index]
+                                            .categoryName!,
+                                        style: TextStyle(
+                                            fontWeight:
+                                            FontWeight.w600,
+                                            fontSize: 18),
                                       ),
                                     ),
                                   ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  slivers: [
-                    SliverLayoutBuilder(
-                      builder: (context, constraints) {
-                        return SliverAppBar(
-                          elevation: 0,
-                          expandedHeight: 150,
-                          backgroundColor: Colors.white,
-                          pinned: true,
-                          leading: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10.0, top: 10.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                icon: Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.black,
-                                  size: 30,
                                 ),
                               ),
-                            ),
-                          ),
-                          actions: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 10.0, top: 10.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SearchDetails()));
+                              (null == filteredList ||
+                                  filteredList.length == 0) &&
+                                  !isVegMode
+                                  ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                                  : Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 20.0),
+                                child: ListView.separated(
+                                  separatorBuilder: (context, index) {
+                                    return Divider(
+                                      height: 1,
+                                      thickness: 1,
+                                      color: Colors.grey[300],
+                                    );
                                   },
-                                  icon: Icon(
-                                    Icons.search,
-                                    color: Colors.black,
-                                    size: 30,
-                                  ),
+                                  // scrollDirection: Axis.vertical,
+                                  // controller: scrollController,
+                                  physics:
+                                  NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: filteredList.length,
+                                  itemBuilder: (BuildContext context,
+                                      int index) {
+                                    Item itemModel =
+                                    filteredList[index];
+                                    // Future.delayed(Duration.zero, () async {
+                                    //   provider
+                                    //       .currentSelectedCategory(itemModel.categoryId!);                });
+
+                                    return Container(
+                                      height: 120,
+                                      child: Padding(
+                                        padding: const EdgeInsets
+                                            .symmetric(
+                                            horizontal: 12.0),
+                                        child: Material(
+                                          color: Colors.white,
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius: index ==
+                                                  filteredList
+                                                      .length -
+                                                      1
+                                                  ? BorderRadius.only(
+                                                  bottomLeft: Radius
+                                                      .circular(
+                                                      20),
+                                                  bottomRight:
+                                                  Radius
+                                                      .circular(
+                                                      20))
+                                                  : BorderRadius
+                                                  .zero),
+                                          child: Padding(
+                                            padding:
+                                            const EdgeInsets.all(
+                                                2.0),
+                                            child: InkWell(
+                                              onTap: () {
+                                                if (null ==
+                                                    itemModel
+                                                        .enteredQty ||
+                                                    itemModel
+                                                        .enteredQty ==
+                                                        0 ||
+                                                    (itemModel.enteredQty! >
+                                                        0 &&
+                                                        itemModel
+                                                            .isAddon ==
+                                                            0)) {
+                                                  singleItemDetails(
+                                                      context,
+                                                      itemModel);
+                                                } else {
+                                                  addDuplicateItem(
+                                                      itemModel);
+                                                }
+                                                // provider.getItemId(itemModel.itemId!);
+                                                // if (itemModel.isAddon == 1) {
+                                                //   getAddons();
+                                                // }
+                                              },
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .center,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment
+                                                    .center,
+                                                children: [
+                                                  Container(
+                                                      decoration:
+                                                      BoxDecoration(
+                                                        border:
+                                                        Border(
+                                                          right: null !=
+                                                              itemModel
+                                                                  .enteredQty &&
+                                                              itemModel
+                                                                  .enteredQty! >
+                                                                  0
+                                                              ? BorderSide(
+                                                              color: Colors
+                                                                  .deepOrangeAccent,
+                                                              width:
+                                                              5)
+                                                              : BorderSide
+                                                              .none,
+                                                        ),
+                                                        // borderRadius: BorderRadius.only( topRight: Radius.circular(20),bottomRight: Radius.circular(20))
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .start,
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                        children: [
+                                                          Expanded(
+                                                            child:
+                                                            Column(
+                                                              crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                              children: [
+                                                                Row(
+                                                                  crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                                  children: [
+                                                                    itemModel
+                                                                        .itemVegNonveg ==
+                                                                        "1"
+                                                                        ? Image
+                                                                        .asset(
+                                                                      Helper
+                                                                          .getAssetName(
+                                                                          "veg.png",
+                                                                          "virtual"),
+                                                                      height: 15,
+                                                                    )
+                                                                        : Image
+                                                                        .asset(
+                                                                      Helper
+                                                                          .getAssetName(
+                                                                          "non-veg.png",
+                                                                          "virtual"),
+                                                                      height: 15,
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: 5,
+                                                                    ),
+                                                                    Text(
+                                                                      null !=
+                                                                          itemModel
+                                                                              .enteredQty &&
+                                                                          itemModel
+                                                                              .enteredQty! >
+                                                                              0
+                                                                          ? '${itemModel
+                                                                          .enteredQty
+                                                                          .toString()}x'
+                                                                          : "",
+                                                                      style: TextStyle(
+                                                                          fontSize: 12,
+                                                                          fontWeight: FontWeight
+                                                                              .w500,
+                                                                          color: Colors
+                                                                              .deepOrange),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: 3,
+                                                                    ),
+                                                                    Expanded(
+                                                                      child: Text(
+                                                                          itemModel
+                                                                              .itemName!,
+                                                                          style: TextStyle(
+                                                                              fontWeight: FontWeight
+                                                                                  .w600,
+                                                                              height: 1.3)),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height:
+                                                                  5,
+                                                                ),
+                                                                Text(
+                                                                    itemModel
+                                                                        .itemDescription!,
+                                                                    style: TextStyle(
+                                                                        fontSize: 12,
+                                                                        color: Colors
+                                                                            .grey
+                                                                            .shade700)),
+                                                                SizedBox(
+                                                                  height:
+                                                                  5,
+                                                                ),
+                                                                Text(
+                                                                    itemModel
+                                                                        .isPriceon ==
+                                                                        0
+                                                                        ? 'INR ${itemModel
+                                                                        .itemPrice}'
+                                                                        : "Price on selection",
+                                                                    style: TextStyle(
+                                                                        fontWeight: FontWeight
+                                                                            .w500,
+                                                                        fontSize: 16)),
+                                                              ],
+                                                            ),
+                                                            flex: 9,
+                                                          ),
+                                                          Expanded(
+                                                            child:
+                                                            Container(
+                                                              child: CachedNetworkImage(
+                                                                  height: 80,
+                                                                  width: 80,
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                  filterQuality: FilterQuality
+                                                                      .high,
+                                                                  imageUrl: itemModel
+                                                                      .itemImage!,
+                                                                  errorWidget: (
+                                                                      context,
+                                                                      url,
+                                                                      error) =>
+                                                                      Image
+                                                                          .asset(
+                                                                        Helper
+                                                                            .getAssetName(
+                                                                            "blank.jpg",
+                                                                            "virtual"),
+                                                                      )),
+                                                              // Image
+                                                              //     .network(
+                                                              //   // 'https://i5.peapod.com/c/NY/NYO1E.png',
+                                                              //   itemModel
+                                                              //       .itemImage!,
+                                                              //   height:
+                                                              //   80,
+                                                              //   width:
+                                                              //   80,
+                                                              //   fit: BoxFit
+                                                              //       .fill,
+                                                              //   loadingBuilder: (BuildContext context,
+                                                              //       Widget child,
+                                                              //       ImageChunkEvent? loadingProgress) {
+                                                              //     if (loadingProgress ==
+                                                              //         null)
+                                                              //       return child;
+                                                              //     return Center(
+                                                              //       child: CircularProgressIndicator(
+                                                              //         color: Colors.deepOrangeAccent,
+                                                              //         value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                              //       ),
+                                                              //     );
+                                                              //   },
+                                                              // ),
+                                                            ),
+                                                            flex: 4,
+                                                          )
+                                                        ],
+                                                      )),
+                                                  // SizedBox(height:5),
+                                                  // Container(height: 1,color: Colors.grey[400],)
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
-                            ),
-                          ],
-                          centerTitle: true,
-                          title: Text(
-                            null !=
-                                provider
-                                    .selectedRestModel.branchDetails
-                                ? provider.selectedRestModel
-                                .branchDetails!.merchantBranchName!
-                                : "",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          flexibleSpace: FlexibleSpaceBar(
-                            collapseMode: CollapseMode.parallax,
-                            background: Image.network(
-                              null !=
-                                  provider
-                                      .selectedRestModel
-                                      .branchDetails!
-                                      .merchantBranchCoverImage
-                                  ? provider
-                                  .selectedRestModel
-                                  .branchDetails!
-                                  .merchantBranchCoverImage!
-                                  : provider
-                                  .selectedRestModel
-                                  .branchDetails!
-                                  .merchantBranchImage!,
-
-                              // _singleRestModel.branchDetails!.merchantBranchImage!,
-                              // 'https://cdn-prod.medicalnewstoday.com/content/images/articles/314/314819/delicious-buffet-foods.jpg',
-                              fit: BoxFit.cover,
-                            ),
+                            ],
                           ),
                         );
                       },
-
-                    ),
-            SliverList(
-            delegate: SliverChildListDelegate([
-                            Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20.0,
-                              right: 20.0,
-                              bottom: 10,
-                              top: 20.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    // Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.branchDetails!.merchantBranchName!,
-                                      provider
-                                          .selectedRestModel
-                                          .branchDetails!
-                                          .merchantBranchName!,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext
-                                              context) =>
-                                                  RestaurantInfoScreen(
-                                                      provider
-                                                          .selectedRestModel)));
+                      slivers: [
+                        SliverLayoutBuilder(
+                          builder: (context, constraints) {
+                            return SliverAppBar(
+                              elevation: 0,
+                              expandedHeight: 150,
+                              backgroundColor: Colors.white,
+                              pinned: true,
+                              leading: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10.0, top: 10.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
                                     },
-                                    child: Text(
-                                      'Info',
-                                      style: TextStyle(
-                                          color: Colors.deepOrange,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(provider
-                                  .selectedRestModel.branchCuisine!),
-                              SizedBox(
-                                height: 25,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    null !=
-                                        provider.selectedRestModel
-                                            .reviews!.numOfRows &&
-                                        provider.selectedRestModel
-                                            .reviews!.numOfRows ==
-                                            0
-                                        ? Icons.sentiment_dissatisfied
-                                        : Icons.tag_faces,
-                                    color: null !=
-                                        provider.selectedRestModel
-                                            .reviews!.numOfRows &&
-                                        provider.selectedRestModel
-                                            .reviews!.numOfRows ==
-                                            0
-                                        ? Colors.yellow[600]
-                                        : Colors.grey.shade700,
-                                    size: 25,
-                                  ),
-                                  SizedBox(width: 10),
-                                  RichText(
-                                    text: new TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: null !=
-                                              provider
-                                                  .selectedRestModel
-                                                  .reviews!
-                                                  .numOfRows &&
-                                              provider
-                                                  .selectedRestModel
-                                                  .reviews!
-                                                  .numOfRows ==
-                                                  0
-                                              ? "No review yet "
-                                              : provider
-                                              .selectedRestModel
-                                              .reviews!
-                                              .branchAvgRating
-                                              .toString(),
-                                          style: new TextStyle(
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        new TextSpan(
-                                          text:
-                                          'Based on (${provider.selectedRestModel.reviews!.numOfRows}) ratings ',
-                                          style: new TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ],
+                                    icon: Icon(
+                                      Icons.arrow_back,
+                                      color: Colors.black,
+                                      size: 30,
                                     ),
                                   ),
-                                  Expanded(
-                                    child: InkWell(
-                                      onTap: () {
+                                ),
+                              ),
+                              actions: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 10.0, top: 10.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: IconButton(
+                                      onPressed: () {
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
-                                                builder: (BuildContext
-                                                context) =>
-                                                    ReviewRestaurent()));
+                                                builder: (context) =>
+                                                    SearchDetails()));
                                       },
-                                      child: Text(
-                                        'Reviews',
-                                        style: TextStyle(
-                                            color: Colors.deepOrange,
-                                            fontWeight: FontWeight.w600),
-                                        textAlign: TextAlign.right,
+                                      icon: Icon(
+                                        Icons.search,
+                                        color: Colors.black,
+                                        size: 30,
                                       ),
                                     ),
                                   ),
-                                ],
+                                ),
+                              ],
+                              centerTitle: true,
+                              title: Text(
+                                null !=
+                                    provider.selectedRestModel
+                                        .branchDetails
+                                    ? provider
+                                    .selectedRestModel
+                                    .branchDetails!
+                                    .merchantBranchName!
+                                    : "",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600),
                               ),
-                              Divider(
-                                height: 25,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.access_time,
-                                    color: Colors.grey.shade700,
-                                    size: 25,
-                                  ),
-                                  SizedBox(width: 10),
-                                  RichText(
-                                    text: new TextSpan(
-                                      children: [
-                                        new TextSpan(
-                                          text:
-                                          'Within ${provider.selectedRestModel.branchDetails!.merchantBranchOrderTime} mins ',
-                                          style: new TextStyle(
-                                              color: Colors.black),
+                              flexibleSpace: FlexibleSpaceBar(
+                                collapseMode: CollapseMode.parallax,
+                                background: Stack(
+
+                                    fit: StackFit.expand,
+                                    children: [
+                                      Image.network(
+                                        null !=
+                                            provider
+                                                .selectedRestModel
+                                                .branchDetails!
+                                                .merchantBranchCoverImage
+                                            ? provider
+                                            .selectedRestModel
+                                            .branchDetails!
+                                            .merchantBranchCoverImage!
+                                            : provider
+                                            .selectedRestModel
+                                            .branchDetails!
+                                            .merchantBranchImage!,
+
+                                        // _singleRestModel.branchDetails!.merchantBranchImage!,
+                                        // 'https://cdn-prod.medicalnewstoday.com/content/images/articles/314/314819/delicious-buffet-foods.jpg',
+                                        fit: BoxFit.fill,
+                                      ),
+                                      provider.selectedRestModel.branchDetails!
+                                          .openStatus == "Closed" ? Container(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Stack(
+
+                                          alignment:
+                                          Alignment.bottomCenter,
+                                          children: [
+                                            Image.asset(
+                                              "assets/images/virtual/banner-closed.png",
+                                              width: 160,
+                                            ),
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets
+                                                  .only(
+                                                  bottom: 8),
+                                              child: Text(
+                                                  "Next available at " +
+                                                      provider
+                                                          .selectedRestModel
+                                                          .restNextAvilableDay
+                                                          .toString()+" "+ provider
+                                                          .selectedRestModel
+                                                          .restNextAvilableTime
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .white,
+                                                      fontSize: 8,fontWeight: FontWeight.w500)),
+                                            )
+                                          ],
                                         ),
-                                        // new TextSpan(
-                                        //   text:
-                                        //       '(${provider.selectedRestModel.branchDetails!.countryCurrency} 0.590 delivery) ',
-                                        //   style: new TextStyle(
-                                        //       fontSize: 12,
-                                        //       color: Colors.grey),
-                                        // ),
+                                      ) : provider.selectedRestModel
+                                          .branchDetails!.openStatus == "Busy"
+                                          ? Container(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Stack(
+
+                                          alignment:
+                                          Alignment.bottomCenter,
+                                          children: [
+                                            Image.asset(
+                                              "assets/images/virtual/banner-busy.png",
+                                              width: 160,
+                                            ),
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets
+                                                  .only(
+                                                  bottom: 8),
+                                              child: Text(
+                                                  "Next available at " +
+                                                      provider
+                                                          .selectedRestModel
+                                                          .restNextAvilableDay
+                                                          .toString() +" "+
+                                                      provider
+                                                          .selectedRestModel
+                                                          .restNextAvilableTime
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .white,
+                                                      fontSize:8,fontWeight: FontWeight.w500)),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                          : provider.selectedRestModel
+                                          .branchDetails!.openStatus ==
+                                          "No-service" ?
+
+                                      Align(alignment: Alignment.bottomCenter,
+                                        child: Image.asset(
+                                            "assets/images/virtual/banner-unservice.png",width: 150,),):Container(child: null,)
+                                    ]
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        SliverList(
+                            delegate: SliverChildListDelegate([
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 20.0,
+                                    right: 20.0,
+                                    bottom: 10,
+                                    top: 20.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          // Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.branchDetails!.merchantBranchName!,
+                                            provider
+                                                .selectedRestModel
+                                                .branchDetails!
+                                                .merchantBranchName!,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold)),
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                    context) =>
+                                                        RestaurantInfoScreen(
+                                                            provider
+                                                                .selectedRestModel)));
+                                          },
+                                          child: Text(
+                                            'Info',
+                                            style: TextStyle(
+                                                color: Colors.deepOrange,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        )
                                       ],
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Text(provider
+                                        .selectedRestModel.branchCuisine!),
+                                    SizedBox(
+                                      height: 25,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          null !=
+                                              provider.selectedRestModel
+                                                  .reviews!.numOfRows &&
+                                              provider.selectedRestModel
+                                                  .reviews!.numOfRows ==
+                                                  0
+                                              ? Icons.sentiment_dissatisfied
+                                              : Icons.tag_faces,
+                                          color: null !=
+                                              provider.selectedRestModel
+                                                  .reviews!.numOfRows &&
+                                              provider.selectedRestModel
+                                                  .reviews!.numOfRows ==
+                                                  0
+                                              ? Colors.yellow[600]
+                                              : Colors.grey.shade700,
+                                          size: 25,
+                                        ),
+                                        SizedBox(width: 10),
+                                        RichText(
+                                          text: new TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: null !=
+                                                    provider
+                                                        .selectedRestModel
+                                                        .reviews!
+                                                        .numOfRows &&
+                                                    provider
+                                                        .selectedRestModel
+                                                        .reviews!
+                                                        .numOfRows ==
+                                                        0
+                                                    ? "No review yet "
+                                                    : provider
+                                                    .selectedRestModel
+                                                    .reviews!
+                                                    .branchAvgRating
+                                                    .toString(),
+                                                style: new TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              new TextSpan(
+                                                text:
+                                                'Based on (${provider
+                                                    .selectedRestModel.reviews!
+                                                    .numOfRows}) ratings ',
+                                                style: new TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                      context) =>
+                                                          ReviewRestaurent()));
+                                            },
+                                            child: Text(
+                                              'Reviews',
+                                              style: TextStyle(
+                                                  color: Colors.deepOrange,
+                                                  fontWeight: FontWeight.w600),
+                                              textAlign: TextAlign.right,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Divider(
+                                      height: 25,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.access_time,
+                                          color: Colors.grey.shade700,
+                                          size: 25,
+                                        ),
+                                        SizedBox(width: 10),
+                                        RichText(
+                                          text: new TextSpan(
+                                            children: [
+                                              new TextSpan(
+                                                text:
+                                                'Within ${provider
+                                                    .selectedRestModel
+                                                    .branchDetails!
+                                                    .merchantBranchOrderTime} mins ',
+                                                style: new TextStyle(
+                                                    color: Colors.black),
+                                              ),
+                                              // new TextSpan(
+                                              //   text:
+                                              //       '(${provider.selectedRestModel.branchDetails!.countryCurrency} 0.590 delivery) ',
+                                              //   style: new TextStyle(
+                                              //       fontSize: 12,
+                                              //       color: Colors.grey),
+                                              // ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Divider(
+                                      height: 25,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.local_offer_outlined,
+                                          color: Colors.pinkAccent,
+                                          size: 25,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                            'Currently offers are not available',
+                                            style: TextStyle(
+                                              color: Colors.pinkAccent,
+                                              fontWeight: FontWeight.w500,
+                                            ))
+                                      ],
+                                    ),
+                                    Divider(
+                                      height: 25,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(15),
+                                      width: Helper.getScreenWidth(context),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(12.0),
+                                          color: Colors.grey.shade100),
+                                      child: Text(
+                                        'Delivered by us, with live tracking',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+
+                                    // ProductCategoryItem(widget.merchantBranchId,
+                                    //     widget.lat, widget.lng),
+                                  ],
+                                ),
+                              )
+                            ])),
+                        SliverPersistentHeader(
+                          floating: false,
+                          delegate: PersistentHeader(
+                              TabBar(
+                                indicatorWeight: 2.0,
+                                onTap: (int val) {
+                                  print(VerticalScrollableTabBarStatus
+                                      .isOnTapIndex
+                                      .toString());
+                                  print(val.toString());
+                                  // if(val<VerticalScrollableTabBarStatus.isOnTapIndex) {
+                                  VerticalScrollableTabBarStatus.setIndex(
+                                      val);
+                                  // }else{
+                                  //   VerticalScrollableTabBarStatus.setIndex(
+                                  //       val );
+                                  // }
+                                  // // tabController!.animateTo(val);
+                                  // tabController!
+                                  //     .animateTo((0) % 10);
+                                  // tabController!.animateTo((tabController!.index + 1) % 2);
+                                },
+                                physics:
+                                const AlwaysScrollableScrollPhysics(),
+                                isScrollable: true,
+                                labelColor: Colors.white,
+                                unselectedLabelColor: Colors.black,
+                                indicatorColor: Colors.transparent,
+                                padding: EdgeInsets.zero,
+                                controller: tabController,
+                                indicator:
+                                DesignConfig.boxDecorationContainer(
+                                    Colors.red, 10.0),
+                                labelStyle: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500),
+                                tabs: provider.categoryList
+                                    .map((t) =>
+                                    Tab(
+                                      text: t.categoryName,
+                                    ))
+                                    .toList(),
                               ),
-                              Divider(
-                                height: 25,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.local_offer_outlined,
-                                    color: Colors.pinkAccent,
-                                    size: 25,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text('Currently offers are not available',
+                              tabController!),
+                          pinned: true,
+                        ),
+                      ],
+                    ),
+
+                    Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 100.0),
+                          child: Container(
+                            height: 0,
+                          ),
+                        )),
+                    // provider.selectedRestModel.merchantBranchId == (null!=
+                    //     provider.cartModelList && provider.cartModelList.length>0?
+                    // provider.cartModelList.first.itemMerchantBranch:"")?
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        height: 60,
+                        padding: EdgeInsets.only(
+                            left: 20, right: 20, bottom: 10),
+                        width: double.infinity,
+                        child: provider.selectedRestModel.branchDetails!
+                            .openStatus ==
+                            "Open"
+                            ? ElevatedButton(
+                          onPressed: () {
+                            if (provider.cartModelList.length > 0) {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ItemBasketHome()))
+                                  .then((value) {
+                                if (provider.selectedCategoryId == 0) {
+                                  filteredList =
+                                  provider.selectedRestModel.items!;
+                                  filteredList.sort((a, b) =>
+                                      a
+                                          .categoryName!
+                                          .compareTo(b.categoryName!));
+                                } else {
+                                  filteredList = provider
+                                      .selectedRestModel.items!
+                                      .where((product) =>
+                                  (product.categoryId ==
+                                      provider.selectedCategoryId!))
+                                      .toList();
+                                  filteredList.sort((a, b) =>
+                                      a
+                                          .categoryName!
+                                          .compareTo(b.categoryName!));
+                                }
+                                // Provider.of<ApplicationProvider>(context, listen: false).clearItems();
+                                Provider.of<ApplicationProvider>(context,
+                                    listen: false)
+                                    .setItemLoading(true);
+                                loadedItemCount = 0;
+                                _loadData();
+                              });
+                            }
+                          },
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          width: 2, //
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          provider.cartModelList.length
+                                              .toString(),
+                                          style: TextStyle(fontSize: 20),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                    Text(
+                                      'View basket',
                                       style: TextStyle(
-                                        color: Colors.pinkAccent,
-                                        fontWeight: FontWeight.w500,
-                                      ))
-                                ],
-                              ),
-                              Divider(
-                                height: 25,
+                                          color: Colors.white,
+                                          fontSize: 18),
+                                    ),
+                                  ],
+                                ),
                               ),
                               Container(
-                                padding: EdgeInsets.all(15),
-                                width: Helper.getScreenWidth(context),
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(12.0),
-                                    color: Colors.grey.shade100),
-                                child: Text(
-                                  'Delivered by us, with live tracking',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Total',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      null != provider.totalWithoutTax
+                                          ? '₹${provider.totalWithoutTax}'
+                                          : "₹0",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                  ],
                                 ),
-                              ),
-
-                              // ProductCategoryItem(widget.merchantBranchId,
-                              //     widget.lat, widget.lng),
+                              )
                             ],
                           ),
-                        )]
-
-
-                    )),
-                    SliverPersistentHeader(
-                      floating: false,
-                      delegate: PersistentHeader(
-                          TabBar(
-                            indicatorWeight: 2.0,
-                            onTap: (int val) {
-                              print(VerticalScrollableTabBarStatus.isOnTapIndex.toString());
-                              print(val.toString());
-                              // if(val<VerticalScrollableTabBarStatus.isOnTapIndex) {
-                              VerticalScrollableTabBarStatus.setIndex(
-                                  val );
-                              // }else{
-                              //   VerticalScrollableTabBarStatus.setIndex(
-                              //       val );
-                              // }
-                              // // tabController!.animateTo(val);
-                              // tabController!
-                              //     .animateTo((0) % 10);
-                              // tabController!.animateTo((tabController!.index + 1) % 2);
-                            },
-
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            isScrollable: true,
-                            labelColor: Colors.white,
-                            unselectedLabelColor: Colors.black,
-                            indicatorColor: Colors.transparent,
-                            padding: EdgeInsets.zero,
-                            controller: tabController,
-                            indicator: DesignConfig.boxDecorationContainer(Colors.red, 10.0),
-                            labelStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                            tabs: provider.categoryList
-                                .map((t) => Tab(
-                              text: t.categoryName,
-                            ))
-                                .toList(),
-                          ),tabController!
-                      ),
-                      pinned: true,
-                    ),
-                  ],
-                ),
-
-                Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 100.0),
-                      child: Container(
-                        height: 0,
-                      ),
-                    )),
-               // provider.selectedRestModel.merchantBranchId == (null!=
-               //     provider.cartModelList && provider.cartModelList.length>0?
-               // provider.cartModelList.first.itemMerchantBranch:"")?
-               Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    height: 60,
-                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (provider.cartModelList.length > 0) {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  ItemBasketHome()))
-                              .then((value) {
-                            if (provider.selectedCategoryId == 0) {
-                              filteredList =
-                              provider.selectedRestModel.items!;
-                              filteredList.sort((a, b) =>
-                                  a.categoryName!.compareTo(b.categoryName!));
-                            } else {
-                              filteredList = provider.selectedRestModel.items!
-                                  .where((product) => (product.categoryId ==
-                                  provider.selectedCategoryId!))
-                                  .toList();
-                              filteredList.sort((a, b) =>
-                                  a.categoryName!.compareTo(b.categoryName!));
-                            }
-                            // Provider.of<ApplicationProvider>(context, listen: false).clearItems();
-                            Provider.of<ApplicationProvider>(context,
-                                listen: false)
-                                .setItemLoading(true);
-                            loadedItemCount = 0;
-                            _loadData();
-                          });
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      width: 2, //
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      provider.cartModelList.length
-                                          .toString(),
-                                      style: TextStyle(fontSize: 20),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 15,
-                                ),
-                                Text(
-                                  'View basket',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18),
-                                ),
-                              ],
+                          style: ElevatedButton.styleFrom(
+                            primary: provider.cartModelList.length > 0
+                                ? Colors.deepOrange
+                                : Colors.deepOrange.shade200,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.circular(12), // <-- Radius
                             ),
                           ),
-                          Container(
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Total',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 16),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  null != provider.totalWithoutTax
-                                      ? '₹${provider.totalWithoutTax}'
-                                      : "₹0",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
+                        )
+                            : Container(),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        primary: provider.cartModelList.length > 0
-                            ? Colors.deepOrange
-                            : Colors.deepOrange.shade200,
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.circular(12), // <-- Radius
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-                   // : Container(height:0)
-              ],
-            );
-          }),
+                    )
+                    // : Container(height:0)
+                  ],
+                );
+              }),
         ));
   }
+
   void singleItemDetails(context, Item itemModel) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -1001,7 +1203,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
           return SingleItemView(itemModel);
         });
   }
-  void addDuplicateItem( Item itemModel) {
+
+  void addDuplicateItem(Item itemModel) {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -1056,7 +1259,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context).pop();
-                              itemModel.enteredQty=1;
+                              itemModel.enteredQty = 1;
                               singleItemDetails(context, itemModel);
 
                               // showModalBottomSheet(
@@ -1126,12 +1329,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                               //           .where((element) =>
                               //       element.isSelected == true)
                               //           .toList();
-                              itemModel.enteredQty = itemModel.enteredQty!+1;
+                              itemModel.enteredQty = itemModel.enteredQty! + 1;
                               Provider.of<ApplicationProvider>(context,
                                   listen: false)
-                                  .updateProduct(
-                                  itemModel,true,
-                                  true);
+                                  .updateProduct(itemModel, true, true);
                               Navigator.pop(context);
                               //       isMandatory = false;
                               //       setState(() {});
@@ -1232,7 +1433,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
   Future _loadData() async {
     int endIndex = 7;
     // perform fetching data delay
-    if (Provider.of<ApplicationProvider>(context, listen: false)
+    if (Provider
+        .of<ApplicationProvider>(context, listen: false)
         .isItemLoading &&
         null != filteredList &&
         filteredList.length > 0) {
@@ -1241,7 +1443,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
       setState(() {
         if (loadedItemCount! <= filteredList.length) {
           if (loadedItemCount! + endIndex <= filteredList.length) {
-            Provider.of<ApplicationProvider>(context, listen: false)
+            Provider
+                .of<ApplicationProvider>(context, listen: false)
                 .filteredLoadedProductModelList
                 .addAll(filteredList.getRange(
                 loadedItemCount!, loadedItemCount! + endIndex));
@@ -1250,7 +1453,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
             loadedItemCount = loadedItemCount! + endIndex;
           } else {
             endIndex = filteredList.length - loadedItemCount!;
-            Provider.of<ApplicationProvider>(context, listen: false)
+            Provider
+                .of<ApplicationProvider>(context, listen: false)
                 .filteredLoadedProductModelList
                 .addAll(filteredList.getRange(
                 loadedItemCount!, loadedItemCount! + endIndex));
@@ -1404,8 +1608,8 @@ class PersistentHeader extends SliverPersistentHeaderDelegate {
   double get maxExtent => tabBar.preferredSize.height;
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset,
+      bool overlapsContent) {
     return Container(
         padding: const EdgeInsets.only(
             left: 20.0, right: 20.0, top: 8.0, bottom: 8.0),
@@ -1440,7 +1644,8 @@ class PersistentHeader extends SliverPersistentHeaderDelegate {
                                           }),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(top: 25, bottom: 20),
+                                      padding: EdgeInsets.only(
+                                          top: 25, bottom: 20),
                                       child: Text(
                                         "Menu categories",
                                         style: TextStyle(
@@ -1460,14 +1665,16 @@ class PersistentHeader extends SliverPersistentHeaderDelegate {
                                       List<Item> filteredList = [];
                                       filteredList = provider
                                           .selectedRestModel.items!
-                                          .where((product) => (product.categoryId ==
+                                          .where((product) =>
+                                      (product.categoryId ==
                                           provider
                                               .categoryList[index].categoryId))
                                           .toList();
                                       return ListTile(
                                         onTap: () {
                                           controller.animateTo(index);
-                                          VerticalScrollableTabBarStatus.setIndex(
+                                          VerticalScrollableTabBarStatus
+                                              .setIndex(
                                               index);
                                           Navigator.of(context).pop();
                                         },
@@ -1512,6 +1719,7 @@ class PersistentHeader extends SliverPersistentHeaderDelegate {
     return false;
   }
 }
+
 class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   SliverAppBarDelegate(this.tabBar);
 
@@ -1519,13 +1727,16 @@ class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   double get minExtent => tabBar.preferredSize.height;
+
   @override
   double get maxExtent => tabBar.preferredSize.height;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset,
+      bool overlapsContent) {
     return Container(
-      padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 8.0, bottom: 8.0),
+      padding:
+      const EdgeInsets.only(left: 20.0, right: 20.0, top: 8.0, bottom: 8.0),
       color: Colors.white,
       child: tabBar,
     );
@@ -1555,13 +1766,15 @@ class Delegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => maxHeight;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset,
+      bool overlapsContent) {
     return SizedBox.expand(child: child);
   }
 
   @override
   bool shouldRebuild(Delegate oldDelegate) {
-    return maxHeight != oldDelegate.maxHeight || minHeight != oldDelegate.minHeight || child != oldDelegate.child;
+    return maxHeight != oldDelegate.maxHeight ||
+        minHeight != oldDelegate.minHeight ||
+        child != oldDelegate.child;
   }
 }
-

@@ -56,7 +56,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
   var _selectedApp;
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
     getMerchantTaxPercentage();
     UserPreference().getUserData().then((value) {
       if (null != value.userId && value.userId!.isNotEmpty) {
