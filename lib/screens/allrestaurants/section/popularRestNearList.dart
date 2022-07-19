@@ -72,7 +72,7 @@ class PopularRestNearList extends StatelessWidget {
                               rating: nearrestaurent.avgReview!,
                               deliveryCharge:
                                   nearrestaurent.merchantPackCharge!,
-                              bannerName: nearrestaurent.merchantBranchImage!,
+                              bannerName: nearrestaurent.merchantBranchCoverImage,
                               discount: '34% off',
                               press: () {
                                 Navigator.of(context).push(MaterialPageRoute(

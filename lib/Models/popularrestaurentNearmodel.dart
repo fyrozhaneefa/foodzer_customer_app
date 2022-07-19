@@ -53,6 +53,8 @@ class PopularRest {
   String? merchantBranchMinWalletAmnt;
   String? merchantBranchPaymnetMode;
   String? merchantBranchImage;
+  String? merchantBranchCoverImage;
+
   String? merchantBranchOrderTime;
   String? merchantBranchTaxOn;
   String? merchantBranchTaxPercentage;
@@ -107,6 +109,7 @@ class PopularRest {
         this.merchantBranchMinWalletAmnt,
         this.merchantBranchPaymnetMode,
         this.merchantBranchImage,
+        this.merchantBranchCoverImage,
         this.merchantBranchOrderTime,
         this.merchantBranchTaxOn,
         this.merchantBranchTaxPercentage,
@@ -162,6 +165,7 @@ class PopularRest {
     merchantBranchMinWalletAmnt = json['merchant_branch_min_wallet_amnt'];
     merchantBranchPaymnetMode = json['merchant_branch_paymnet_mode'];
     merchantBranchImage = json['merchant_branch_image'];
+    merchantBranchCoverImage = json['merchant_branch_cover_image'];
     merchantBranchOrderTime = json['merchant_branch_order_time'];
     merchantBranchTaxOn = json['merchant_branch_tax_on'];
     merchantBranchTaxPercentage = json['merchant_branch_tax_percentage'];
@@ -219,6 +223,7 @@ class PopularRest {
     data['merchant_branch_min_wallet_amnt'] = this.merchantBranchMinWalletAmnt;
     data['merchant_branch_paymnet_mode'] = this.merchantBranchPaymnetMode;
     data['merchant_branch_image'] = this.merchantBranchImage;
+    data['merchant_branch_cover_image'] = this.merchantBranchCoverImage;
     data['merchant_branch_order_time'] = this.merchantBranchOrderTime;
     data['merchant_branch_tax_on'] = this.merchantBranchTaxOn;
     data['merchant_branch_tax_percentage'] = this.merchantBranchTaxPercentage;
