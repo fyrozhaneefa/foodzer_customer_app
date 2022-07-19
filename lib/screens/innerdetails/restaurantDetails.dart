@@ -19,6 +19,7 @@ import 'package:foodzer_customer_app/screens/innerdetails/section/singleItemView
 import 'package:foodzer_customer_app/utils/designConfig.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:foodzer_customer_app/utils/shimmer.dart';
+import 'package:flutter_animator/flutter_animator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:vertical_scrollable_tabview/vertical_scrollable_tabview.dart';
@@ -31,9 +32,11 @@ class RestaurantDetailsScreen extends StatefulWidget {
   static const routeName = "/restaurantDetails";
   String? merchantBranchId, lat, lng;
 
-  RestaurantDetailsScreen(this.merchantBranchId,
-      this.lat,
-      this.lng,);
+  RestaurantDetailsScreen(
+    this.merchantBranchId,
+    this.lat,
+    this.lng,
+  );
 
   @override
   State<RestaurantDetailsScreen> createState() =>
@@ -73,727 +76,690 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-          child: isLoading
-              ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ShimmerWidget.rectangular(
-                height: 150,
-                width: Helper.getScreenWidth(context),
-              ),
-              Padding(
-                  padding: EdgeInsets.all(10),
-                  child: ShimmerWidget.rectangular(
-                    height: 20,
-                    width: 250,
-                  )),
-              Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: ShimmerWidget.rectangular(
-                    height: 20,
-                    width: 100,
-                  )),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 10, top: 20),
-                    child: ShimmerWidget.rectangular(
-                      height: 20,
-                      width: 180,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 10, top: 20),
-                    child: ShimmerWidget.rectangular(
-                      height: 20,
-                      width: 90,
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 10, top: 30),
-                child: ShimmerWidget.rectangular(
-                  height: 30,
-                  width: 180,
-                ),
-              ),
-              Padding(
-                padding:
-                EdgeInsets.only(left: 10, top: 40, right: 10, bottom: 10),
-                child: ShimmerWidget.rectangular(
-                  height: 40,
+      child: isLoading
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ShimmerWidget.rectangular(
+                  height: 150,
                   width: Helper.getScreenWidth(context),
-                  shapeBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
                 ),
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: 10, top: 10, right: 10, bottom: 10),
+                Padding(
+                    padding: EdgeInsets.all(10),
                     child: ShimmerWidget.rectangular(
-                      height: 30,
+                      height: 20,
+                      width: 250,
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: ShimmerWidget.rectangular(
+                      height: 20,
                       width: 100,
-                      shapeBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: 10, top: 10, right: 10, bottom: 10),
-                    child: ShimmerWidget.rectangular(
-                      height: 30,
-                      width: 120,
-                      shapeBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: 10, top: 10, right: 10, bottom: 10),
-                    child: ShimmerWidget.rectangular(
-                      height: 30,
-                      width: 100,
-                      shapeBorder: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(thickness: 2),
-              Padding(
-                padding: EdgeInsets.only(top: 10, left: 10, bottom: 20),
-                child: ShimmerWidget.rectangular(
-                  height: 30,
-                  width: 180,
-                ),
-              ),
-              Expanded(
-                  child: ListView.separated(
-                      separatorBuilder: (context, index) {
-                        return Divider();
-                      },
-                      itemCount: 3,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 10, top: 10),
-                                  child: ShimmerWidget.rectangular(
-                                    height: 20,
-                                    width: 100,
-                                  ),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 10),
-                                      child: ShimmerWidget.rectangular(
-                                        height: 20,
-                                        width: 180,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                      EdgeInsets.only(right: 10, bottom: 10),
-                                      child: ShimmerWidget.rectangular(
-                                        height: 80,
-                                        width: 80,
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ));
-                      }))
-            ],
-          )
-              : Consumer<ApplicationProvider>(
-              builder: (context, provider, child) {
-                return Stack(
+                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    !isRestContainItems
-                        ? Center(child: Text("No item found"))
-                        : VerticalScrollableTabView(
-                      tabController: tabController!,
-                      listItemData: provider.categoryList,
-                      verticalScrollPosition: VerticalScrollPosition.begin,
-                      eachItemChild: (object, index) {
-                        // print(index.toString());
-                        List<Item> filteredList = [];
-                        if (provider.categoryList[index].categoryId == 0) {
-                          filteredList = provider.selectedRestModel.items!;
-                        } else {
-                          filteredList = provider.selectedRestModel.items!
-                              .where((product) =>
-                          (product.categoryId ==
-                              provider.categoryList[index].categoryId))
-                              .toList();
-                        }
-                        if (isVegMode) {
-                          filteredList.retainWhere(
-                                  (element) => element.itemVegNonveg == "1");
-                        }
-                        return Theme(
-                          data: ThemeData()
-                              .copyWith(dividerColor: Colors.transparent),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                    Padding(
+                      padding: EdgeInsets.only(left: 10, top: 20),
+                      child: ShimmerWidget.rectangular(
+                        height: 20,
+                        width: 180,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(right: 10, top: 20),
+                      child: ShimmerWidget.rectangular(
+                        height: 20,
+                        width: 90,
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10, top: 30),
+                  child: ShimmerWidget.rectangular(
+                    height: 30,
+                    width: 180,
+                  ),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.only(left: 10, top: 40, right: 10, bottom: 10),
+                  child: ShimmerWidget.rectangular(
+                    height: 40,
+                    width: Helper.getScreenWidth(context),
+                    shapeBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 10, top: 10, right: 10, bottom: 10),
+                      child: ShimmerWidget.rectangular(
+                        height: 30,
+                        width: 100,
+                        shapeBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 10, top: 10, right: 10, bottom: 10),
+                      child: ShimmerWidget.rectangular(
+                        height: 30,
+                        width: 120,
+                        shapeBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 10, top: 10, right: 10, bottom: 10),
+                      child: ShimmerWidget.rectangular(
+                        height: 30,
+                        width: 100,
+                        shapeBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
+                      ),
+                    ),
+                  ],
+                ),
+                Divider(thickness: 2),
+                Padding(
+                  padding: EdgeInsets.only(top: 10, left: 10, bottom: 20),
+                  child: ShimmerWidget.rectangular(
+                    height: 30,
+                    width: 180,
+                  ),
+                ),
+                Expanded(
+                    child: ListView.separated(
+                        separatorBuilder: (context, index) {
+                          return Divider();
+                        },
+                        itemCount: 3,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Container(
+                              child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              index == 0
-                                  ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12.0),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'VEG',
-                                      style: TextStyle(
-                                          fontWeight:
-                                          FontWeight.w600),
-                                    ),
-                                    Switch(
-                                      value: isVegMode,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          isVegMode = value;
-                                        });
-                                      },
-                                      activeTrackColor:
-                                      Colors.green.shade100,
-                                      activeColor:
-                                      Colors.green.shade300,
-                                    ),
-                                  ],
+                              Padding(
+                                padding: EdgeInsets.only(left: 10, top: 10),
+                                child: ShimmerWidget.rectangular(
+                                  height: 20,
+                                  width: 100,
                                 ),
-                              )
-                                  : Container(
-                                height: 0,
                               ),
-                              !isVegMode && index != 0
-                                  ? Divider(
-                                height: 1,
-                                color: Colors.grey[300],
-                              )
-                                  : Container(
-                                height: 0,
-                              ),
-                              isVegMode &&
-                                  (null == filteredList ||
-                                      filteredList.length == 0)
-                                  ? Container(
-                                height: 0,
-                              )
-                                  : Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0),
-                                child: Container(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width,
-                                  child: Material(
-                                    color: Colors.white,
-                                    elevation: 0,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.only(
-                                            topRight:
-                                            Radius.circular(
-                                                20),
-                                            topLeft:
-                                            Radius.circular(
-                                                20))),
-                                    child: Padding(
-                                      padding:
-                                      const EdgeInsets.symmetric(
-                                          vertical: 8.0,
-                                          horizontal: 8),
-                                      child: Text(
-                                        provider.categoryList[index]
-                                            .categoryName!,
-                                        style: TextStyle(
-                                            fontWeight:
-                                            FontWeight.w600,
-                                            fontSize: 18),
-                                      ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: ShimmerWidget.rectangular(
+                                      height: 20,
+                                      width: 180,
                                     ),
                                   ),
-                                ),
-                              ),
-                              (null == filteredList ||
-                                  filteredList.length == 0) &&
-                                  !isVegMode
-                                  ? Center(
-                                child: CircularProgressIndicator(),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(right: 10, bottom: 10),
+                                    child: ShimmerWidget.rectangular(
+                                      height: 80,
+                                      width: 80,
+                                    ),
+                                  )
+                                ],
                               )
-                                  : Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 20.0),
-                                child: ListView.separated(
-                                  separatorBuilder: (context, index) {
-                                    return Divider(
-                                      height: 1,
-                                      thickness: 1,
-                                      color: Colors.grey[300],
-                                    );
-                                  },
-                                  // scrollDirection: Axis.vertical,
-                                  // controller: scrollController,
-                                  physics:
-                                  NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: filteredList.length,
-                                  itemBuilder: (BuildContext context,
-                                      int index) {
-                                    Item itemModel =
-                                    filteredList[index];
-                                    // Future.delayed(Duration.zero, () async {
-                                    //   provider
-                                    //       .currentSelectedCategory(itemModel.categoryId!);                });
-
-                                    return Container(
-                                      height: 120,
-                                      child: Padding(
-                                        padding: const EdgeInsets
-                                            .symmetric(
-                                            horizontal: 12.0),
-                                        child: Material(
-                                          color: Colors.white,
-                                          elevation: 0,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: index ==
-                                                  filteredList
-                                                      .length -
-                                                      1
-                                                  ? BorderRadius.only(
-                                                  bottomLeft: Radius
-                                                      .circular(
-                                                      20),
-                                                  bottomRight:
-                                                  Radius
-                                                      .circular(
-                                                      20))
-                                                  : BorderRadius
-                                                  .zero),
-                                          child: Padding(
-                                            padding:
-                                            const EdgeInsets.all(
-                                                2.0),
-                                            child: InkWell(
-                                              onTap: () {
-                                                if (null ==
-                                                    itemModel
-                                                        .enteredQty ||
-                                                    itemModel
-                                                        .enteredQty ==
-                                                        0 ||
-                                                    (itemModel.enteredQty! >
-                                                        0 &&
-                                                        itemModel
-                                                            .isAddon ==
-                                                            0)) {
-                                                  singleItemDetails(
-                                                      context,
-                                                      itemModel);
-                                                } else {
-                                                  addDuplicateItem(
-                                                      itemModel);
-                                                }
-                                                // provider.getItemId(itemModel.itemId!);
-                                                // if (itemModel.isAddon == 1) {
-                                                //   getAddons();
-                                                // }
-                                              },
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .center,
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment
-                                                    .center,
-                                                children: [
-                                                  Container(
-                                                      decoration:
-                                                      BoxDecoration(
-                                                        border:
-                                                        Border(
-                                                          right: null !=
-                                                              itemModel
-                                                                  .enteredQty &&
-                                                              itemModel
-                                                                  .enteredQty! >
-                                                                  0
-                                                              ? BorderSide(
-                                                              color: Colors
-                                                                  .deepOrangeAccent,
-                                                              width:
-                                                              5)
-                                                              : BorderSide
-                                                              .none,
-                                                        ),
-                                                        // borderRadius: BorderRadius.only( topRight: Radius.circular(20),bottomRight: Radius.circular(20))
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .start,
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                        children: [
-                                                          Expanded(
-                                                            child:
-                                                            Column(
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                              children: [
-                                                                Row(
-                                                                  crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                                  children: [
-                                                                    itemModel
-                                                                        .itemVegNonveg ==
-                                                                        "1"
-                                                                        ? Image
-                                                                        .asset(
-                                                                      Helper
-                                                                          .getAssetName(
-                                                                          "veg.png",
-                                                                          "virtual"),
-                                                                      height: 15,
-                                                                    )
-                                                                        : Image
-                                                                        .asset(
-                                                                      Helper
-                                                                          .getAssetName(
-                                                                          "non-veg.png",
-                                                                          "virtual"),
-                                                                      height: 15,
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 5,
-                                                                    ),
-                                                                    Text(
-                                                                      null !=
-                                                                          itemModel
-                                                                              .enteredQty &&
-                                                                          itemModel
-                                                                              .enteredQty! >
-                                                                              0
-                                                                          ? '${itemModel
-                                                                          .enteredQty
-                                                                          .toString()}x'
-                                                                          : "",
-                                                                      style: TextStyle(
-                                                                          fontSize: 12,
-                                                                          fontWeight: FontWeight
-                                                                              .w500,
-                                                                          color: Colors
-                                                                              .deepOrange),
-                                                                    ),
-                                                                    SizedBox(
-                                                                      width: 3,
-                                                                    ),
-                                                                    Expanded(
-                                                                      child: Text(
-                                                                          itemModel
-                                                                              .itemName!,
-                                                                          style: TextStyle(
-                                                                              fontWeight: FontWeight
-                                                                                  .w600,
-                                                                              height: 1.3)),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                  height:
-                                                                  5,
-                                                                ),
-                                                                Text(
-                                                                    itemModel
-                                                                        .itemDescription!,
-                                                                    style: TextStyle(
-                                                                        fontSize: 12,
-                                                                        color: Colors
-                                                                            .grey
-                                                                            .shade700)),
-                                                                SizedBox(
-                                                                  height:
-                                                                  5,
-                                                                ),
-                                                                Text(
-                                                                    itemModel
-                                                                        .isPriceon ==
-                                                                        0
-                                                                        ? 'INR ${itemModel
-                                                                        .itemPrice}'
-                                                                        : "Price on selection",
-                                                                    style: TextStyle(
-                                                                        fontWeight: FontWeight
-                                                                            .w500,
-                                                                        fontSize: 16)),
-                                                              ],
-                                                            ),
-                                                            flex: 9,
-                                                          ),
-                                                          Expanded(
-                                                            child:
-                                                            Container(
-                                                              child: CachedNetworkImage(
-                                                                  height: 80,
-                                                                  width: 80,
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                  filterQuality: FilterQuality
-                                                                      .high,
-                                                                  imageUrl: itemModel
-                                                                      .itemImage!,
-                                                                  errorWidget: (
-                                                                      context,
-                                                                      url,
-                                                                      error) =>
-                                                                      Image
-                                                                          .asset(
-                                                                        Helper
-                                                                            .getAssetName(
-                                                                            "blank.jpg",
-                                                                            "virtual"),
-                                                                      )),
-                                                              // Image
-                                                              //     .network(
-                                                              //   // 'https://i5.peapod.com/c/NY/NYO1E.png',
-                                                              //   itemModel
-                                                              //       .itemImage!,
-                                                              //   height:
-                                                              //   80,
-                                                              //   width:
-                                                              //   80,
-                                                              //   fit: BoxFit
-                                                              //       .fill,
-                                                              //   loadingBuilder: (BuildContext context,
-                                                              //       Widget child,
-                                                              //       ImageChunkEvent? loadingProgress) {
-                                                              //     if (loadingProgress ==
-                                                              //         null)
-                                                              //       return child;
-                                                              //     return Center(
-                                                              //       child: CircularProgressIndicator(
-                                                              //         color: Colors.deepOrangeAccent,
-                                                              //         value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                              //       ),
-                                                              //     );
-                                                              //   },
-                                                              // ),
-                                                            ),
-                                                            flex: 4,
-                                                          )
-                                                        ],
-                                                      )),
-                                                  // SizedBox(height:5),
-                                                  // Container(height: 1,color: Colors.grey[400],)
-                                                ],
+                            ],
+                          ));
+                        }))
+              ],
+            )
+          : Consumer<ApplicationProvider>(builder: (context, provider, child) {
+              return Stack(
+                children: [
+                  !isRestContainItems
+                      ? Center(child: Text("No item found"))
+                      : VerticalScrollableTabView(
+                          tabController: tabController!,
+                          listItemData: provider.categoryList,
+                          verticalScrollPosition: VerticalScrollPosition.begin,
+                          eachItemChild: (object, index) {
+                            // print(index.toString());
+                            List<Item> filteredList = [];
+                            if (provider.categoryList[index].categoryId == 0) {
+                              filteredList = provider.selectedRestModel.items!;
+                            } else {
+                              filteredList = provider.selectedRestModel.items!
+                                  .where((product) => (product.categoryId ==
+                                      provider.categoryList[index].categoryId))
+                                  .toList();
+                            }
+                            if (isVegMode) {
+                              filteredList.retainWhere(
+                                  (element) => element.itemVegNonveg == "1");
+                            }
+                            return Theme(
+                              data: ThemeData()
+                                  .copyWith(dividerColor: Colors.transparent),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  index == 0
+                                      ? Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 12.0),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                'VEG',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              Switch(
+                                                value: isVegMode,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    isVegMode = value;
+                                                  });
+                                                },
+                                                activeTrackColor:
+                                                    Colors.green.shade100,
+                                                activeColor:
+                                                    Colors.green.shade300,
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Container(
+                                          height: 0,
+                                        ),
+                                  !isVegMode && index != 0
+                                      ? Divider(
+                                          height: 1,
+                                          color: Colors.grey[300],
+                                        )
+                                      : Container(
+                                          height: 0,
+                                        ),
+                                  isVegMode &&
+                                          (null == filteredList ||
+                                              filteredList.length == 0)
+                                      ? Container(
+                                          height: 0,
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: Material(
+                                              color: Colors.white,
+                                              elevation: 0,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  20),
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  20))),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8.0,
+                                                        horizontal: 8),
+                                                child: Text(
+                                                  provider.categoryList[index]
+                                                      .categoryName!,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 18),
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      slivers: [
-                        SliverLayoutBuilder(
-                          builder: (context, constraints) {
-                            return SliverAppBar(
-                              elevation: 0,
-                              expandedHeight: 150,
-                              backgroundColor: Colors.white,
-                              pinned: true,
-                              leading: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 10.0, top: 10.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    icon: Icon(
-                                      Icons.arrow_back,
-                                      color: Colors.black,
-                                      size: 30,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              actions: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 10.0, top: 10.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: IconButton(
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SearchDetails()));
-                                      },
-                                      icon: Icon(
-                                        Icons.search,
-                                        color: Colors.black,
-                                        size: 30,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                              centerTitle: true,
-                              title: Text(
-                                null !=
-                                    provider.selectedRestModel
-                                        .branchDetails
-                                    ? provider
-                                    .selectedRestModel
-                                    .branchDetails!
-                                    .merchantBranchName!
-                                    : "",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              flexibleSpace: FlexibleSpaceBar(
-                                collapseMode: CollapseMode.parallax,
-                                background: Stack(
+                                  (null == filteredList ||
+                                              filteredList.length == 0) &&
+                                          !isVegMode
+                                      ? Center(
+                                          child: CircularProgressIndicator(),
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 20.0),
+                                          child: ListView.separated(
+                                            separatorBuilder: (context, index) {
+                                              return Divider(
+                                                height: 1,
+                                                thickness: 1,
+                                                color: Colors.grey[300],
+                                              );
+                                            },
+                                            // scrollDirection: Axis.vertical,
+                                            // controller: scrollController,
+                                            physics:
+                                                NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount: filteredList.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              Item itemModel =
+                                                  filteredList[index];
+                                              // Future.delayed(Duration.zero, () async {
+                                              //   provider
+                                              //       .currentSelectedCategory(itemModel.categoryId!);                });
 
-                                    fit: StackFit.expand,
-                                    children: [
+                                              return Container(
+                                                height: 120,
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 12.0),
+                                                  child: Material(
+                                                    color: Colors.white,
+                                                    elevation: 0,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: index ==
+                                                                filteredList
+                                                                        .length -
+                                                                    1
+                                                            ? BorderRadius.only(
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        20),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            20))
+                                                            : BorderRadius
+                                                                .zero),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          if (null ==
+                                                                  itemModel
+                                                                      .enteredQty ||
+                                                              itemModel
+                                                                      .enteredQty ==
+                                                                  0 ||
+                                                              (itemModel.enteredQty! >
+                                                                      0 &&
+                                                                  itemModel
+                                                                          .isAddon ==
+                                                                      0)) {
+                                                            singleItemDetails(
+                                                                context,
+                                                                itemModel);
+                                                          } else {
+                                                            addDuplicateItem(
+                                                                itemModel);
+                                                          }
+                                                          // provider.getItemId(itemModel.itemId!);
+                                                          // if (itemModel.isAddon == 1) {
+                                                          //   getAddons();
+                                                          // }
+                                                        },
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border:
+                                                                      Border(
+                                                                    right: null != itemModel.enteredQty &&
+                                                                            itemModel.enteredQty! >
+                                                                                0
+                                                                        ? BorderSide(
+                                                                            color: Colors
+                                                                                .deepOrangeAccent,
+                                                                            width:
+                                                                                5)
+                                                                        : BorderSide
+                                                                            .none,
+                                                                  ),
+                                                                  // borderRadius: BorderRadius.only( topRight: Radius.circular(20),bottomRight: Radius.circular(20))
+                                                                ),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .start,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Expanded(
+                                                                      child:
+                                                                          Column(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        children: [
+                                                                          Row(
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.start,
+                                                                            children: [
+                                                                              itemModel.itemVegNonveg == "1"
+                                                                                  ? Image.asset(
+                                                                                      Helper.getAssetName("veg.png", "virtual"),
+                                                                                      height: 15,
+                                                                                    )
+                                                                                  : Image.asset(
+                                                                                      Helper.getAssetName("non-veg.png", "virtual"),
+                                                                                      height: 15,
+                                                                                    ),
+                                                                              SizedBox(
+                                                                                width: 5,
+                                                                              ),
+                                                                              Text(
+                                                                                null != itemModel.enteredQty && itemModel.enteredQty! > 0 ? '${itemModel.enteredQty.toString()}x' : "",
+                                                                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.deepOrange),
+                                                                              ),
+                                                                              SizedBox(
+                                                                                width: 3,
+                                                                              ),
+                                                                              Expanded(
+                                                                                child: Text(itemModel.itemName!, style: TextStyle(fontWeight: FontWeight.w600, height: 1.3)),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                5,
+                                                                          ),
+                                                                          Text(
+                                                                              itemModel.itemDescription!,
+                                                                              style: TextStyle(fontSize: 12, color: Colors.grey.shade700)),
+                                                                          SizedBox(
+                                                                            height:
+                                                                                5,
+                                                                          ),
+                                                                          Text(
+                                                                              itemModel.isPriceon == 0 ? 'INR ${itemModel.itemPrice}' : "Price on selection",
+                                                                              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
+                                                                        ],
+                                                                      ),
+                                                                      flex: 9,
+                                                                    ),
+                                                                    Expanded(
+                                                                      child:
+                                                                          Container(
+                                                                        child: CachedNetworkImage(
+                                                                            height: 80,
+                                                                            width: 80,
+                                                                            fit: BoxFit.fill,
+                                                                            filterQuality: FilterQuality.high,
+                                                                            imageUrl: itemModel.itemImage!,
+                                                                            errorWidget: (context, url, error) => Image.asset(
+                                                                                  Helper.getAssetName("blank.jpg", "virtual"),
+                                                                                )),
+                                                                        // Image
+                                                                        //     .network(
+                                                                        //   // 'https://i5.peapod.com/c/NY/NYO1E.png',
+                                                                        //   itemModel
+                                                                        //       .itemImage!,
+                                                                        //   height:
+                                                                        //   80,
+                                                                        //   width:
+                                                                        //   80,
+                                                                        //   fit: BoxFit
+                                                                        //       .fill,
+                                                                        //   loadingBuilder: (BuildContext context,
+                                                                        //       Widget child,
+                                                                        //       ImageChunkEvent? loadingProgress) {
+                                                                        //     if (loadingProgress ==
+                                                                        //         null)
+                                                                        //       return child;
+                                                                        //     return Center(
+                                                                        //       child: CircularProgressIndicator(
+                                                                        //         color: Colors.deepOrangeAccent,
+                                                                        //         value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+                                                                        //       ),
+                                                                        //     );
+                                                                        //   },
+                                                                        // ),
+                                                                      ),
+                                                                      flex: 4,
+                                                                    )
+                                                                  ],
+                                                                )),
+                                                            // SizedBox(height:5),
+                                                            // Container(height: 1,color: Colors.grey[400],)
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            );
+                          },
+                          slivers: [
+                            SliverLayoutBuilder(
+                              builder: (context, constraints) {
+                                return SliverAppBar(
+                                  elevation: 0,
+                                  expandedHeight: 150,
+                                  backgroundColor: Colors.white,
+                                  pinned: true,
+                                  leading: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10.0, top: 10.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: IconButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        icon: Icon(
+                                          Icons.arrow_back,
+                                          color: Colors.black,
+                                          size: 30,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  actions: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          right: 10.0, top: 10.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: IconButton(
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        SearchDetails()));
+                                          },
+                                          icon: Icon(
+                                            Icons.search,
+                                            color: Colors.black,
+                                            size: 30,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                  centerTitle: true,
+                                  title: Text(
+                                    null !=
+                                            provider
+                                                .selectedRestModel.branchDetails
+                                        ? provider.selectedRestModel
+                                            .branchDetails!.merchantBranchName!
+                                        : "",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  flexibleSpace: FlexibleSpaceBar(
+                                    collapseMode: CollapseMode.parallax,
+                                    background:
+                                        Stack(fit: StackFit.expand, children: [
                                       Image.network(
                                         null !=
-                                            provider
+                                                provider
+                                                    .selectedRestModel
+                                                    .branchDetails!
+                                                    .merchantBranchCoverImage
+                                            ? provider
                                                 .selectedRestModel
                                                 .branchDetails!
-                                                .merchantBranchCoverImage
-                                            ? provider
-                                            .selectedRestModel
-                                            .branchDetails!
-                                            .merchantBranchCoverImage!
+                                                .merchantBranchCoverImage!
                                             : provider
-                                            .selectedRestModel
-                                            .branchDetails!
-                                            .merchantBranchImage!,
+                                                .selectedRestModel
+                                                .branchDetails!
+                                                .merchantBranchImage!,
 
                                         // _singleRestModel.branchDetails!.merchantBranchImage!,
                                         // 'https://cdn-prod.medicalnewstoday.com/content/images/articles/314/314819/delicious-buffet-foods.jpg',
                                         fit: BoxFit.fill,
                                       ),
                                       provider.selectedRestModel.branchDetails!
-                                          .openStatus == "Closed" ? Container(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Stack(
-
-                                          alignment:
-                                          Alignment.bottomCenter,
-                                          children: [
-                                            Image.asset(
-                                              "assets/images/virtual/banner-closed.png",
-                                              width: 160,
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets
-                                                  .only(
-                                                  bottom: 8),
-                                              child: Text(
-                                                  "Next available at " +
-                                                      provider
-                                                          .selectedRestModel
-                                                          .restNextAvilableDay
-                                                          .toString()+" "+ provider
-                                                          .selectedRestModel
-                                                          .restNextAvilableTime
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors
-                                                          .white,
-                                                      fontSize: 8,fontWeight: FontWeight.w500)),
-                                            )
-                                          ],
-                                        ),
-                                      ) : provider.selectedRestModel
-                                          .branchDetails!.openStatus == "Busy"
+                                                  .openStatus ==
+                                              "Closed"
                                           ? Container(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Stack(
-
-                                          alignment:
-                                          Alignment.bottomCenter,
-                                          children: [
-                                            Image.asset(
-                                              "assets/images/virtual/banner-busy.png",
-                                              width: 160,
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets
-                                                  .only(
-                                                  bottom: 8),
-                                              child: Text(
-                                                  "Next available at " +
-                                                      provider
+                                              alignment: Alignment.bottomCenter,
+                                              child: AnimatorWidget(
+                                                definition: SwingAnimation(
+                                                  preferences:
+                                                      AnimationPreferences(magnitude: 2,
+                                                    duration:
+                                                        Duration(minutes: 2),
+                                                  ),
+                                                ),
+                                                child: Stack(
+                                                  alignment:
+                                                      Alignment.bottomCenter,
+                                                  children: [
+                                                    Image.asset(
+                                                      "assets/images/virtual/Closed_banner.png",
+                                                      width: 160,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              bottom: 8),
+                                                      child: Text(
+                                                          "Next available at " +
+                                                              provider
+                                                                  .selectedRestModel
+                                                                  .restNextAvilableDay
+                                                                  .toString() +
+                                                              " " +
+                                                              provider
+                                                                  .selectedRestModel
+                                                                  .restNextAvilableTime
+                                                                  .toString(),
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 8,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500)),
+                                                    )
+                                                  ],
+                                                ),
+                                              ))
+                                          : provider
+                                                      .selectedRestModel
+                                                      .branchDetails!
+                                                      .openStatus ==
+                                                  "Busy"
+                                              ? Container(
+                                                  alignment:
+                                                      Alignment.bottomCenter,
+                                                  child: Stack(
+                                                    alignment:
+                                                        Alignment.bottomCenter,
+                                                    children: [
+                                                      Image.asset(
+                                                        "assets/images/virtual/Busy_banner.png",
+                                                        width: 160,
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .only(
+                                                                bottom: 8),
+                                                        child: Text(
+                                                            "Next available at " +
+                                                                provider
+                                                                    .selectedRestModel
+                                                                    .restNextAvilableDay
+                                                                    .toString() +
+                                                                " " +
+                                                                provider
+                                                                    .selectedRestModel
+                                                                    .restNextAvilableTime
+                                                                    .toString(),
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 8,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500)),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              : provider
                                                           .selectedRestModel
-                                                          .restNextAvilableDay
-                                                          .toString() +" "+
-                                                      provider
-                                                          .selectedRestModel
-                                                          .restNextAvilableTime
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors
-                                                          .white,
-                                                      fontSize:8,fontWeight: FontWeight.w500)),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                          : provider.selectedRestModel
-                                          .branchDetails!.openStatus ==
-                                          "No-service" ?
-
-                                      Align(alignment: Alignment.bottomCenter,
-                                        child: Image.asset(
-                                            "assets/images/virtual/banner-unservice.png",width: 150,),):Container(child: null,)
-                                    ]
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        SliverList(
-                            delegate: SliverChildListDelegate([
+                                                          .branchDetails!
+                                                          .openStatus ==
+                                                      "No-service"
+                                                  ? Align(
+                                                      alignment: Alignment
+                                                          .bottomCenter,
+                                                      child: Image.asset(
+                                                        "assets/images/virtual/Unservice_banner.png",
+                                                        width: 150,
+                                                      ),
+                                                    )
+                                                  : Container(
+                                                      child: null,
+                                                    )
+                                    ]),
+                                  ),
+                                );
+                              },
+                            ),
+                            SliverList(
+                                delegate: SliverChildListDelegate([
                               Padding(
                                 padding: const EdgeInsets.only(
                                     left: 20.0,
@@ -805,10 +771,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          // Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.branchDetails!.merchantBranchName!,
+                                            // Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.branchDetails!.merchantBranchName!,
                                             provider
                                                 .selectedRestModel
                                                 .branchDetails!
@@ -821,7 +787,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                             Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                     builder: (BuildContext
-                                                    context) =>
+                                                            context) =>
                                                         RestaurantInfoScreen(
                                                             provider
                                                                 .selectedRestModel)));
@@ -847,19 +813,19 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                       children: [
                                         Icon(
                                           null !=
-                                              provider.selectedRestModel
-                                                  .reviews!.numOfRows &&
-                                              provider.selectedRestModel
-                                                  .reviews!.numOfRows ==
-                                                  0
+                                                      provider.selectedRestModel
+                                                          .reviews!.numOfRows &&
+                                                  provider.selectedRestModel
+                                                          .reviews!.numOfRows ==
+                                                      0
                                               ? Icons.sentiment_dissatisfied
                                               : Icons.tag_faces,
                                           color: null !=
-                                              provider.selectedRestModel
-                                                  .reviews!.numOfRows &&
-                                              provider.selectedRestModel
-                                                  .reviews!.numOfRows ==
-                                                  0
+                                                      provider.selectedRestModel
+                                                          .reviews!.numOfRows &&
+                                                  provider.selectedRestModel
+                                                          .reviews!.numOfRows ==
+                                                      0
                                               ? Colors.yellow[600]
                                               : Colors.grey.shade700,
                                           size: 25,
@@ -870,30 +836,28 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                             children: [
                                               TextSpan(
                                                 text: null !=
-                                                    provider
-                                                        .selectedRestModel
-                                                        .reviews!
-                                                        .numOfRows &&
-                                                    provider
-                                                        .selectedRestModel
-                                                        .reviews!
-                                                        .numOfRows ==
-                                                        0
+                                                            provider
+                                                                .selectedRestModel
+                                                                .reviews!
+                                                                .numOfRows &&
+                                                        provider
+                                                                .selectedRestModel
+                                                                .reviews!
+                                                                .numOfRows ==
+                                                            0
                                                     ? "No review yet "
                                                     : provider
-                                                    .selectedRestModel
-                                                    .reviews!
-                                                    .branchAvgRating
-                                                    .toString(),
+                                                        .selectedRestModel
+                                                        .reviews!
+                                                        .branchAvgRating
+                                                        .toString(),
                                                 style: new TextStyle(
                                                   color: Colors.black,
                                                 ),
                                               ),
                                               new TextSpan(
                                                 text:
-                                                'Based on (${provider
-                                                    .selectedRestModel.reviews!
-                                                    .numOfRows}) ratings ',
+                                                    'Based on (${provider.selectedRestModel.reviews!.numOfRows}) ratings ',
                                                 style: new TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.grey,
@@ -908,7 +872,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                       builder: (BuildContext
-                                                      context) =>
+                                                              context) =>
                                                           ReviewRestaurent()));
                                             },
                                             child: Text(
@@ -938,10 +902,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                             children: [
                                               new TextSpan(
                                                 text:
-                                                'Within ${provider
-                                                    .selectedRestModel
-                                                    .branchDetails!
-                                                    .merchantBranchOrderTime} mins ',
+                                                    'Within ${provider.selectedRestModel.branchDetails!.merchantBranchOrderTime} mins ',
                                                 style: new TextStyle(
                                                     color: Colors.black),
                                               ),
@@ -984,7 +945,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                       width: Helper.getScreenWidth(context),
                                       decoration: BoxDecoration(
                                           borderRadius:
-                                          BorderRadius.circular(12.0),
+                                              BorderRadius.circular(12.0),
                                           color: Colors.grey.shade100),
                                       child: Text(
                                         'Delivered by us, with live tracking',
@@ -1001,192 +962,188 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                 ),
                               )
                             ])),
-                        SliverPersistentHeader(
-                          floating: false,
-                          delegate: PersistentHeader(
-                              TabBar(
-                                indicatorWeight: 2.0,
-                                onTap: (int val) {
-                                  print(VerticalScrollableTabBarStatus
-                                      .isOnTapIndex
-                                      .toString());
-                                  print(val.toString());
-                                  // if(val<VerticalScrollableTabBarStatus.isOnTapIndex) {
-                                  VerticalScrollableTabBarStatus.setIndex(
-                                      val);
-                                  // }else{
-                                  //   VerticalScrollableTabBarStatus.setIndex(
-                                  //       val );
-                                  // }
-                                  // // tabController!.animateTo(val);
-                                  // tabController!
-                                  //     .animateTo((0) % 10);
-                                  // tabController!.animateTo((tabController!.index + 1) % 2);
-                                },
-                                physics:
-                                const AlwaysScrollableScrollPhysics(),
-                                isScrollable: true,
-                                labelColor: Colors.white,
-                                unselectedLabelColor: Colors.black,
-                                indicatorColor: Colors.transparent,
-                                padding: EdgeInsets.zero,
-                                controller: tabController,
-                                indicator:
-                                DesignConfig.boxDecorationContainer(
-                                    Colors.red, 10.0),
-                                labelStyle: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500),
-                                tabs: provider.categoryList
-                                    .map((t) =>
-                                    Tab(
-                                      text: t.categoryName,
-                                    ))
-                                    .toList(),
-                              ),
-                              tabController!),
-                          pinned: true,
-                        ),
-                      ],
-                    ),
-
-                    Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 100.0),
-                          child: Container(
-                            height: 0,
-                          ),
-                        )),
-                    // provider.selectedRestModel.merchantBranchId == (null!=
-                    //     provider.cartModelList && provider.cartModelList.length>0?
-                    // provider.cartModelList.first.itemMerchantBranch:"")?
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        height: 60,
-                        padding: EdgeInsets.only(
-                            left: 20, right: 20, bottom: 10),
-                        width: double.infinity,
-                        child: provider.selectedRestModel.branchDetails!
-                            .openStatus ==
-                            "Open"
-                            ? ElevatedButton(
-                          onPressed: () {
-                            if (provider.cartModelList.length > 0) {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      ItemBasketHome()))
-                                  .then((value) {
-                                if (provider.selectedCategoryId == 0) {
-                                  filteredList =
-                                  provider.selectedRestModel.items!;
-                                  filteredList.sort((a, b) =>
-                                      a
-                                          .categoryName!
-                                          .compareTo(b.categoryName!));
-                                } else {
-                                  filteredList = provider
-                                      .selectedRestModel.items!
-                                      .where((product) =>
-                                  (product.categoryId ==
-                                      provider.selectedCategoryId!))
-                                      .toList();
-                                  filteredList.sort((a, b) =>
-                                      a
-                                          .categoryName!
-                                          .compareTo(b.categoryName!));
-                                }
-                                // Provider.of<ApplicationProvider>(context, listen: false).clearItems();
-                                Provider.of<ApplicationProvider>(context,
-                                    listen: false)
-                                    .setItemLoading(true);
-                                loadedItemCount = 0;
-                                _loadData();
-                              });
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          width: 2, //
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          provider.cartModelList.length
-                                              .toString(),
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 15,
-                                    ),
-                                    Text(
-                                      'View basket',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'Total',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16),
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      null != provider.totalWithoutTax
-                                          ? '₹${provider.totalWithoutTax}'
-                                          : "₹0",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: provider.cartModelList.length > 0
-                                ? Colors.deepOrange
-                                : Colors.deepOrange.shade200,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(12), // <-- Radius
+                            SliverPersistentHeader(
+                              floating: false,
+                              delegate: PersistentHeader(
+                                  TabBar(
+                                    indicatorWeight: 2.0,
+                                    onTap: (int val) {
+                                      print(VerticalScrollableTabBarStatus
+                                          .isOnTapIndex
+                                          .toString());
+                                      print(val.toString());
+                                      // if(val<VerticalScrollableTabBarStatus.isOnTapIndex) {
+                                      VerticalScrollableTabBarStatus.setIndex(
+                                          val);
+                                      // }else{
+                                      //   VerticalScrollableTabBarStatus.setIndex(
+                                      //       val );
+                                      // }
+                                      // // tabController!.animateTo(val);
+                                      // tabController!
+                                      //     .animateTo((0) % 10);
+                                      // tabController!.animateTo((tabController!.index + 1) % 2);
+                                    },
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    isScrollable: true,
+                                    labelColor: Colors.white,
+                                    unselectedLabelColor: Colors.black,
+                                    indicatorColor: Colors.transparent,
+                                    padding: EdgeInsets.zero,
+                                    controller: tabController,
+                                    indicator:
+                                        DesignConfig.boxDecorationContainer(
+                                            Colors.red, 10.0),
+                                    labelStyle: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500),
+                                    tabs: provider.categoryList
+                                        .map((t) => Tab(
+                                              text: t.categoryName,
+                                            ))
+                                        .toList(),
+                                  ),
+                                  tabController!),
+                              pinned: true,
                             ),
-                          ),
-                        )
-                            : Container(),
-                      ),
-                    )
-                    // : Container(height:0)
-                  ],
-                );
-              }),
-        ));
+                          ],
+                        ),
+
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 100.0),
+                        child: Container(
+                          height: 0,
+                        ),
+                      )),
+                  // provider.selectedRestModel.merchantBranchId == (null!=
+                  //     provider.cartModelList && provider.cartModelList.length>0?
+                  // provider.cartModelList.first.itemMerchantBranch:"")?
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      height: 60,
+                      padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                      width: double.infinity,
+                      child: provider.selectedRestModel.branchDetails!
+                                  .openStatus ==
+                              "Open"
+                          ? ElevatedButton(
+                              onPressed: () {
+                                if (provider.cartModelList.length > 0) {
+                                  Navigator.of(context)
+                                      .push(MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              ItemBasketHome()))
+                                      .then((value) {
+                                    if (provider.selectedCategoryId == 0) {
+                                      filteredList =
+                                          provider.selectedRestModel.items!;
+                                      filteredList.sort((a, b) => a
+                                          .categoryName!
+                                          .compareTo(b.categoryName!));
+                                    } else {
+                                      filteredList = provider
+                                          .selectedRestModel.items!
+                                          .where((product) =>
+                                              (product.categoryId ==
+                                                  provider.selectedCategoryId!))
+                                          .toList();
+                                      filteredList.sort((a, b) => a
+                                          .categoryName!
+                                          .compareTo(b.categoryName!));
+                                    }
+                                    // Provider.of<ApplicationProvider>(context, listen: false).clearItems();
+                                    Provider.of<ApplicationProvider>(context,
+                                            listen: false)
+                                        .setItemLoading(true);
+                                    loadedItemCount = 0;
+                                    _loadData();
+                                  });
+                                }
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              width: 2, //
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              provider.cartModelList.length
+                                                  .toString(),
+                                              style: TextStyle(fontSize: 20),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        Text(
+                                          'View basket',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'Total',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          null != provider.totalWithoutTax
+                                              ? '₹${provider.totalWithoutTax}'
+                                              : "₹0",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: provider.cartModelList.length > 0
+                                    ? Colors.deepOrange
+                                    : Colors.deepOrange.shade200,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(12), // <-- Radius
+                                ),
+                              ),
+                            )
+                          : Container(),
+                    ),
+                  )
+                  // : Container(height:0)
+                ],
+              );
+            }),
+    ));
   }
 
   void singleItemDetails(context, Item itemModel) {
@@ -1224,13 +1181,13 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                   ListTile(
                     leading: itemModel.itemVegNonveg == "1"
                         ? Image.asset(
-                      Helper.getAssetName("veg.png", "virtual"),
-                      height: 15,
-                    )
+                            Helper.getAssetName("veg.png", "virtual"),
+                            height: 15,
+                          )
                         : Image.asset(
-                      Helper.getAssetName("non-veg.png", "virtual"),
-                      height: 15,
-                    ),
+                            Helper.getAssetName("non-veg.png", "virtual"),
+                            height: 15,
+                          ),
                     minLeadingWidth: 2,
                     title: Text(
                       itemModel.itemName.toString(),
@@ -1331,7 +1288,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                               //           .toList();
                               itemModel.enteredQty = itemModel.enteredQty! + 1;
                               Provider.of<ApplicationProvider>(context,
-                                  listen: false)
+                                      listen: false)
                                   .updateProduct(itemModel, true, true);
                               Navigator.pop(context);
                               //       isMandatory = false;
@@ -1433,9 +1390,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
   Future _loadData() async {
     int endIndex = 7;
     // perform fetching data delay
-    if (Provider
-        .of<ApplicationProvider>(context, listen: false)
-        .isItemLoading &&
+    if (Provider.of<ApplicationProvider>(context, listen: false)
+            .isItemLoading &&
         null != filteredList &&
         filteredList.length > 0) {
       await new Future.delayed(new Duration(seconds: 1));
@@ -1443,21 +1399,19 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
       setState(() {
         if (loadedItemCount! <= filteredList.length) {
           if (loadedItemCount! + endIndex <= filteredList.length) {
-            Provider
-                .of<ApplicationProvider>(context, listen: false)
+            Provider.of<ApplicationProvider>(context, listen: false)
                 .filteredLoadedProductModelList
                 .addAll(filteredList.getRange(
-                loadedItemCount!, loadedItemCount! + endIndex));
+                    loadedItemCount!, loadedItemCount! + endIndex));
             Provider.of<ApplicationProvider>(context, listen: false)
                 .setItemLoading(false);
             loadedItemCount = loadedItemCount! + endIndex;
           } else {
             endIndex = filteredList.length - loadedItemCount!;
-            Provider
-                .of<ApplicationProvider>(context, listen: false)
+            Provider.of<ApplicationProvider>(context, listen: false)
                 .filteredLoadedProductModelList
                 .addAll(filteredList.getRange(
-                loadedItemCount!, loadedItemCount! + endIndex));
+                    loadedItemCount!, loadedItemCount! + endIndex));
             Provider.of<ApplicationProvider>(context, listen: false)
                 .setItemLoading(false);
             loadedItemCount = loadedItemCount! + 7;
@@ -1531,7 +1485,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                     child: Text(
                       "Menu categories",
                       style:
-                      TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ],
@@ -1608,8 +1562,8 @@ class PersistentHeader extends SliverPersistentHeaderDelegate {
   double get maxExtent => tabBar.preferredSize.height;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset,
-      bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
         padding: const EdgeInsets.only(
             left: 20.0, right: 20.0, top: 8.0, bottom: 8.0),
@@ -1628,73 +1582,70 @@ class PersistentHeader extends SliverPersistentHeaderDelegate {
                     builder: (context) {
                       return Consumer<ApplicationProvider>(
                           builder: (context, provider, _) {
-                            return Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
+                        return Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.all(20),
-                                      child: InkWell(
-                                          child: Icon(Icons.clear_outlined),
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                          }),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          top: 25, bottom: 20),
-                                      child: Text(
-                                        "Menu categories",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                  ],
+                                Padding(
+                                  padding: EdgeInsets.all(20),
+                                  child: InkWell(
+                                      child: Icon(Icons.clear_outlined),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      }),
                                 ),
-                                Flexible(
-                                  child: ListView.separated(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    physics: ScrollPhysics(),
-                                    itemCount: provider.categoryList.length,
-                                    itemBuilder: (context, index) {
-                                      List<Item> filteredList = [];
-                                      filteredList = provider
-                                          .selectedRestModel.items!
-                                          .where((product) =>
-                                      (product.categoryId ==
-                                          provider
-                                              .categoryList[index].categoryId))
-                                          .toList();
-                                      return ListTile(
-                                        onTap: () {
-                                          controller.animateTo(index);
-                                          VerticalScrollableTabBarStatus
-                                              .setIndex(
-                                              index);
-                                          Navigator.of(context).pop();
-                                        },
-                                        title: Text(provider
-                                            .categoryList[index].categoryName
-                                            .toString()),
-                                        trailing:
-                                        Text(filteredList.length.toString()),
-                                        // trailing: Text("${count.length}"),
-                                        // trailing: Text('5'),
-                                      );
-                                    },
-                                    separatorBuilder: (context, index) {
-                                      return Dividersection();
-                                    },
+                                Padding(
+                                  padding: EdgeInsets.only(top: 25, bottom: 20),
+                                  child: Text(
+                                    "Menu categories",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ],
-                            );
-                          });
+                            ),
+                            Flexible(
+                              child: ListView.separated(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                itemCount: provider.categoryList.length,
+                                itemBuilder: (context, index) {
+                                  List<Item> filteredList = [];
+                                  filteredList = provider
+                                      .selectedRestModel.items!
+                                      .where((product) => (product.categoryId ==
+                                          provider
+                                              .categoryList[index].categoryId))
+                                      .toList();
+                                  return ListTile(
+                                    onTap: () {
+                                      controller.animateTo(index);
+                                      VerticalScrollableTabBarStatus.setIndex(
+                                          index);
+                                      Navigator.of(context).pop();
+                                    },
+                                    title: Text(provider
+                                        .categoryList[index].categoryName
+                                        .toString()),
+                                    trailing:
+                                        Text(filteredList.length.toString()),
+                                    // trailing: Text("${count.length}"),
+                                    // trailing: Text('5'),
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return Dividersection();
+                                },
+                              ),
+                            ),
+                          ],
+                        );
+                      });
                     },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
@@ -1732,11 +1683,11 @@ class SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => tabBar.preferredSize.height;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset,
-      bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       padding:
-      const EdgeInsets.only(left: 20.0, right: 20.0, top: 8.0, bottom: 8.0),
+          const EdgeInsets.only(left: 20.0, right: 20.0, top: 8.0, bottom: 8.0),
       color: Colors.white,
       child: tabBar,
     );
@@ -1766,8 +1717,8 @@ class Delegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => maxHeight;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset,
-      bool overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return SizedBox.expand(child: child);
   }
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/EditAccountSection/editaccount.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/GetHelp/gethelphome.dart';
+import 'package:foodzer_customer_app/Menu/Microfiles/GetHelp/gethelptext.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/MyOrderSection//myAccountHome.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/MyOrderSection/myoders.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/OfferSection/offerHome.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
+import 'package:foodzer_customer_app/screens/home/components/test.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:foodzer_customer_app/screens/navigationdrawerpages/foodzerPay.dart';
 import 'package:foodzer_customer_app/screens/navigationdrawerpages/userOrders.dart';
@@ -165,8 +167,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             buildMenuItem(
                 text: 'About',
                 icon: Icons.perm_device_information_rounded,
-                onClicked:() => selectedItem(context, 6)
-            ),
+                onClicked:() => selectedItem(context, 6)),
           ],
         ),
       ),
