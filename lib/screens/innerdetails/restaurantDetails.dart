@@ -26,6 +26,8 @@ import 'package:provider/provider.dart';
 import '../../Menu/Microfiles/ReviewSection/review.dart';
 import '../../Models/restaurentmodel.dart';
 import '../basket/Section/itemBasketHome.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_animator/flutter_animator.dart';
 
 class RestaurantDetailsScreen extends StatefulWidget {
   static const routeName = "/restaurantDetails";
@@ -685,109 +687,138 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600),
                               ),
-                              flexibleSpace: FlexibleSpaceBar(
-                                collapseMode: CollapseMode.parallax,
-                                background: Stack(
-
-                                    fit: StackFit.expand,
-                                    children: [
-                                      Image.network(
-                                        null !=
-                                            provider
-                                                .selectedRestModel
-                                                .branchDetails!
-                                                .merchantBranchCoverImage
-                                            ? provider
+                              flexibleSpace: Stack(
+                                alignment: Alignment.center,
+                                clipBehavior: Clip.none,
+                                children:[
+                                  FlexibleSpaceBar(
+                                  collapseMode: CollapseMode.parallax,
+                                  background: Image.network(
+                                    null !=
+                                        provider
                                             .selectedRestModel
                                             .branchDetails!
-                                            .merchantBranchCoverImage!
-                                            : provider
-                                            .selectedRestModel
-                                            .branchDetails!
-                                            .merchantBranchImage!,
+                                            .merchantBranchCoverImage
+                                        ? provider
+                                        .selectedRestModel
+                                        .branchDetails!
+                                        .merchantBranchCoverImage!
+                                        : provider
+                                        .selectedRestModel
+                                        .branchDetails!
+                                        .merchantBranchImage!,
 
-                                        // _singleRestModel.branchDetails!.merchantBranchImage!,
-                                        // 'https://cdn-prod.medicalnewstoday.com/content/images/articles/314/314819/delicious-buffet-foods.jpg',
-                                        fit: BoxFit.fill,
-                                      ),
-                                      provider.selectedRestModel.branchDetails!
-                                          .openStatus == "Closed" ? Container(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Stack(
-
-                                          alignment:
-                                          Alignment.bottomCenter,
-                                          children: [
-                                            Image.asset(
-                                              "assets/images/virtual/banner-closed.png",
-                                              width: 160,
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets
-                                                  .only(
-                                                  bottom: 8),
-                                              child: Text(
-                                                  "Next available at " +
-                                                      provider
-                                                          .selectedRestModel
-                                                          .restNextAvilableDay
-                                                          .toString()+" "+ provider
-                                                          .selectedRestModel
-                                                          .restNextAvilableTime
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors
-                                                          .white,
-                                                      fontSize: 8,fontWeight: FontWeight.w500)),
+                                    // _singleRestModel.branchDetails!.merchantBranchImage!,
+                                    // 'https://cdn-prod.medicalnewstoday.com/content/images/articles/314/314819/delicious-buffet-foods.jpg',
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                                  provider.selectedRestModel.branchDetails!
+                                      .openStatus == "Closed" ? Positioned(
+                                        bottom: -20,
+                                        child: AnimatorWidget(
+                                          definition: SwingAnimation(
+                                            preferences: AnimationPreferences(
+                                              magnitude: 2,
+                                              autoPlay: AnimationPlayStates.Loop,
+                                              duration: Duration(seconds: 4),
+                                              offset: Duration(seconds:2)
                                             )
-                                          ],
+                                          ),
+                                          child: Stack(
+                                            alignment:
+                                            Alignment.bottomCenter,
+                                            children: [
+                                              Image.asset(
+                                                "assets/images/virtual/banner-closed.png",
+                                                width: 140,
+                                              ),
+                                              Padding(
+                                                padding:
+                                                const EdgeInsets
+                                                    .only(
+                                                    bottom: 8),
+                                                child: Text(
+                                                    "Next available at " +
+                                                        provider
+                                                            .selectedRestModel
+                                                            .restNextAvilableDay
+                                                            .toString()+" "+ provider
+                                                        .selectedRestModel
+                                                        .restNextAvilableTime
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                        color: Colors
+                                                            .white,
+                                                        fontSize: 8,fontWeight: FontWeight.w500)),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ) : provider.selectedRestModel
-                                          .branchDetails!.openStatus == "Busy"
-                                          ? Container(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Stack(
+                                      .branchDetails!.openStatus == "Busy"
+                                      ? Positioned(
+                                    bottom: -20,
+                                    child: AnimatorWidget(
+                                      definition: SwingAnimation(
+                                          preferences: AnimationPreferences(
+                                              magnitude: 2,
+                                              autoPlay: AnimationPlayStates.Loop,
+                                              duration: Duration(seconds: 4),
+                                              offset: Duration(seconds:2)
+                                          )
+                                      ),
+                                      child: Stack(
 
-                                          alignment:
-                                          Alignment.bottomCenter,
-                                          children: [
-                                            Image.asset(
-                                              "assets/images/virtual/banner-busy.png",
-                                              width: 160,
-                                            ),
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets
-                                                  .only(
-                                                  bottom: 8),
-                                              child: Text(
-                                                  "Next available at " +
-                                                      provider
-                                                          .selectedRestModel
-                                                          .restNextAvilableDay
-                                                          .toString() +" "+
-                                                      provider
-                                                          .selectedRestModel
-                                                          .restNextAvilableTime
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                      color: Colors
-                                                          .white,
-                                                      fontSize:8,fontWeight: FontWeight.w500)),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                          : provider.selectedRestModel
-                                          .branchDetails!.openStatus ==
-                                          "No-service" ?
+                                        alignment:
+                                        Alignment.bottomCenter,
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/virtual/banner-busy.png",
+                                            width: 160,
+                                          ),
+                                          Padding(
+                                            padding:
+                                            const EdgeInsets
+                                                .only(
+                                                bottom: 8),
+                                            child: Text(
+                                                "Next available at " +
+                                                    provider
+                                                        .selectedRestModel
+                                                        .restNextAvilableDay
+                                                        .toString() +" "+
+                                                    provider
+                                                        .selectedRestModel
+                                                        .restNextAvilableTime
+                                                        .toString(),
+                                                style: TextStyle(
+                                                    color: Colors
+                                                        .white,
+                                                    fontSize:8,fontWeight: FontWeight.w500)),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                      : provider.selectedRestModel
+                                      .branchDetails!.openStatus ==
+                                      "No-service" ?
 
-                                      Align(alignment: Alignment.bottomCenter,
-                                        child: Image.asset(
-                                            "assets/images/virtual/banner-unservice.png",width: 150,),):Container(child: null,)
-                                    ]
-                                ),
+                                  Positioned(bottom: -20,
+                                    child: AnimatorWidget(
+                                      definition: SwingAnimation(
+                                          preferences: AnimationPreferences(
+                                              magnitude: 2,
+                                              autoPlay: AnimationPlayStates.Loop,
+                                              duration: Duration(seconds: 4),
+                                              offset: Duration(seconds:2)
+                                          )
+                                      ),
+                                      child: Image.asset(
+                                        "assets/images/virtual/banner-unservice.png",width: 150,),
+                                    ),):Container(child: null,)
+                                ]
                               ),
                             );
                           },
