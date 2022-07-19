@@ -38,10 +38,10 @@ class _ImageSliderState extends State<ImageSlider> {
                items:  slider
                    .map((item) => InkWell(
                  onTap: (){
-                   print(item.sliderMerchantId);
+                   print(item.sliderMerchantBranchId);
                    Navigator.of(context).push(MaterialPageRoute(
                        builder: (BuildContext context) =>
-                           RestaurantDetailsScreen(item.sliderMerchantId,item.lat,item.lng)));
+                           RestaurantDetailsScreen(item.sliderMerchantBranchId,item.lat,item.lng)));
                  },
                      child: Container(
                  // margin: EdgeInsets.only(left: 20,right: 20),
@@ -53,11 +53,6 @@ class _ImageSliderState extends State<ImageSlider> {
                            width: double.infinity,
                          filterQuality: FilterQuality.high,
                          imageUrl:item.sliderImage!,
-                           errorWidget:
-                               (context, url, error) =>
-                               Image.asset(
-                                 Helper.getAssetName("blank.jpg", "virtual"),
-                               )
                        ),
                        // Image.network(
                        //   item.sliderImage!,

@@ -1,13 +1,13 @@
-class OrderListModel {
-  List<OrderList>? orderList;
+class OrderModelData {
+  List<OrderModel>? orderList;
 
-  OrderListModel({this.orderList});
+  OrderModelData({this.orderList});
 
-  OrderListModel.fromJson(Map<String, dynamic> json) {
+  OrderModelData.fromJson(Map<String, dynamic> json) {
     if (json['order_list'] != null) {
-      orderList = <OrderList>[];
+      orderList = <OrderModel>[];
       json['order_list'].forEach((v) {
-        orderList!.add(new OrderList.fromJson(v));
+        orderList!.add(new OrderModel.fromJson(v));
       });
     }
   }
@@ -21,7 +21,7 @@ class OrderListModel {
   }
 }
 
-class OrderList {
+class OrderModel {
   String? merchantBranchId;
   String? merchantBranchName;
   String? merchantBranchNameArabi;
@@ -42,9 +42,10 @@ class OrderList {
   String? orderPaymentStatus;
   String? orderDeliveryTime;
   String? orderDeclineReason;
+  double? merchantLat,merchantLng,userLat,userLng;
   List<ItemDetails>? itemDetails;
 
-  OrderList(
+  OrderModel(
       {this.merchantBranchId,
         this.merchantBranchName,
         this.merchantBranchNameArabi,
@@ -65,9 +66,10 @@ class OrderList {
         this.orderPaymentStatus,
         this.orderDeliveryTime,
         this.orderDeclineReason,
-        this.itemDetails});
+        this.itemDetails,this.merchantLat,
+        this.merchantLng,this.userLat,this.userLng});
 
-  OrderList.fromJson(Map<String, dynamic> json) {
+  OrderModel.fromJson(Map<String, dynamic> json) {
     merchantBranchId = json['merchant_branch_id'];
     merchantBranchName = json['merchant_branch_name'];
     merchantBranchNameArabi = json['merchant_branch_name_arabi'];
@@ -88,6 +90,11 @@ class OrderList {
     orderPaymentStatus = json['order_payment_status'];
     orderDeliveryTime = json['order_delivery_time'];
     orderDeclineReason = json['order_decline_reason'];
+    merchantLat = double.parse(json['merchant_lat'].toString());
+    merchantLng = double.parse(json['merchant_lng'].toString());
+    userLat = double.parse(json['user_lat'].toString());
+    userLng = double.parse(json['user_lng'].toString());
+
     if (json['item_details'] != null) {
       itemDetails = <ItemDetails>[];
       json['item_details'].forEach((v) {

@@ -24,7 +24,7 @@ class MyOrders extends StatefulWidget {
 class _MyOrdersState extends State<MyOrders> {
   bool isFromCart = false;
   bool isLoading = false;
-  List<OrderList> orderList = [];
+  List<OrderModel> orderList = [];
   UserData userModel = new UserData();
 
   @override
@@ -181,7 +181,7 @@ class _MyOrdersState extends State<MyOrders> {
                                       orderList[index].orderStatus == "1" ||  orderList[index].orderStatus == "3"){
                                     Navigator.of(context).push(
                                         MaterialPageRoute(builder: (context) =>
-                                            OrderTracking(orderList[index].orderId.toString(), true)));
+                                            OrderTracking(orderList[index], true)));
                                   }
                                 },
                                 child: Text(orderList[index].orderStatus == "0"
@@ -310,7 +310,7 @@ class _MyOrdersState extends State<MyOrders> {
       List dataList = jsonData['order_list'];
       if (null != dataList && dataList.length > 0) {
         orderList =
-            dataList.map((items) => new OrderList.fromJson(items)).toList();
+            dataList.map((items) => new OrderModel.fromJson(items)).toList();
         setState(() {});
       }
     } else {

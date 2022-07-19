@@ -282,14 +282,12 @@ bool isFromCart = false;
                 textColor: Colors.white,
                 fontSize: 16.0
             );
-            if(widget.fromCart){
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      ItemBasketHome()));
-            }else{
+            // if(widget.fromCart){
+            //
+            // }else{
               checkUserAvailable();
 
-            }
+            // }
 
           } else {
             Fluttertoast.showToast(
@@ -340,9 +338,17 @@ bool isFromCart = false;
         UserPreference().setUserData(userJson);
         UserPreference().getUserData().then((value)=>{
           if(null!=value.userMobie && value.userMobie!.isNotEmpty){
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) =>
-                GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))))
+            if(widget.fromCart){
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        ItemBasketHome()))
+            }else
+              {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        GoogleMapScreen(
+                            new AddressModel(), isFromCart, LatLng(0, 0))))
+              }
           } else{
             print("user data is not stored")
           }

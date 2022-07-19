@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:foodzer_customer_app/Models/OrderModel.dart';
+import 'package:foodzer_customer_app/Models/orderlistmodel.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:foodzer_customer_app/utils/designConfig.dart';
@@ -22,9 +24,10 @@ const inProgressColor = Color(0xff5ec792);
 const todoColor = Color(0xffd1d2d7);
 
 class OrderTracking extends StatefulWidget {
-  final String orderId;
+  // final String orderId;
   bool isPaymentDone;
-  OrderTracking(this.orderId, this.isPaymentDone);
+  OrderModel orderModel=new OrderModel();
+  OrderTracking(this.orderModel, this.isPaymentDone);
   @override
   _OrderTrackingState createState() => _OrderTrackingState();
 }
@@ -397,32 +400,12 @@ class _OrderTrackingState extends State<OrderTracking> {
   _getPolyline() async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleApiKey,
-        PointLatLng(
-          double.parse(Provider.of<ApplicationProvider>(context, listen: false)
-              .selectedRestModel
-              .branchDetails!
-              .lat!),
-          double.parse(Provider.of<ApplicationProvider>(context, listen: false)
-              .selectedRestModel
-              .branchDetails!
-              .lng!),
-        ),
-        PointLatLng(
-            double.parse(
-                Provider.of<ApplicationProvider>(context, listen: false)
-                    .selectedAddressModel
-                    .addressLat!),
-            double.parse(
-                Provider.of<ApplicationProvider>(context, listen: false)
-                    .selectedAddressModel
-                    .addressLng!)),
+        PointLatLng(widget.orderModel.merchantLat!,widget.orderModel.merchantLng!),
+        PointLatLng(widget.orderModel.userLat!,widget.orderModel.userLng!),
         travelMode: TravelMode.driving,
         wayPoints: [
           PolylineWayPoint(
-              location: Provider.of<ApplicationProvider>(context, listen: false)
-                  .selectedAddressModel
-                  .currentAddressLine
-                  .toString())
+              location: widget.orderModel.orderAddress!)
         ]);
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
@@ -472,7 +455,7 @@ class _OrderTrackingState extends State<OrderTracking> {
     // setState(() {});
     //
     List<DocumentSnapshot> docs;
-    String id=widget.orderId.substring(6,widget.orderId.length);
+    String id=widget.orderModel.orderId!.substring(6,widget.orderModel.orderId!.length);
 
     DocumentReference eventsReference =  FirebaseFirestore.instance.collection('location').doc(id);
     _eventsSubscription = eventsReference.snapshots().listen((event) async {

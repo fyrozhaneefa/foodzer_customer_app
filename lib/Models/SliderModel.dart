@@ -15,6 +15,7 @@ class SliderModel {
     this.sliderType,
     this.sliderDisplayOrder,
     this.sliderMerchantId,
+    this.sliderMerchantBranchId,
     this.sliderImage,
     this.sliderDays,
     this.sliderStartDate,
@@ -27,7 +28,7 @@ class SliderModel {
     this.sliderModifiedType,
     this.distance,
     this.lat,
-    this.lng
+    this.lng,
   });
 
   String? sliderId;
@@ -35,6 +36,7 @@ class SliderModel {
   String? sliderType;
   String? sliderDisplayOrder;
   String? sliderMerchantId;
+  String? sliderMerchantBranchId;
   String? sliderImage;
   String? sliderDays;
   DateTime? sliderStartDate;
@@ -55,6 +57,7 @@ class SliderModel {
     sliderType: json["slider_type"] == null ? null : json["slider_type"],
     sliderDisplayOrder: json["slider_display_order"] == null ? null : json["slider_display_order"],
     sliderMerchantId: json["slider_merchant_id"] == null ? null : json["slider_merchant_id"],
+    sliderMerchantBranchId: json["merchant_branch_id"] == null ? null : json["merchant_branch_id"],
     sliderImage: json["slider_image"] == null ? null : json["slider_image"],
     sliderDays: json["slider_days"] == null ? null : json["slider_days"],
     sliderStartDate: json["slider_start_date"] == null ? null : DateTime.parse(json["slider_start_date"]),
@@ -76,6 +79,7 @@ class SliderModel {
     "slider_type": sliderType == null ? null : sliderType,
     "slider_display_order": sliderDisplayOrder == null ? null : sliderDisplayOrder,
     "slider_merchant_id": sliderMerchantId == null ? null : sliderMerchantId,
+    "merchant_branch_id": sliderMerchantBranchId == null ? null : sliderMerchantBranchId,
     "slider_image": sliderImage == null ? null : sliderImage,
     "slider_days": sliderDays == null ? null : sliderDays,
     "slider_start_date": sliderStartDate == null ? null : sliderStartDate,

@@ -55,6 +55,8 @@ dependencies:
   vertical_scrollable_tabview: ^0.0.7
   intl:
   flutter_launcher_icons: ^0.9.3
+  geocoding: ^2.0.4
+  dotted_line:
 
 
 flutter_icons:
