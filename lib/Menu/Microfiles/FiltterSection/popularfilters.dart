@@ -26,7 +26,7 @@ class _PopularFilterState extends State<PopularFilter> {
           ),
         ),
 
-        ListView.separated(shrinkWrap: true,itemBuilder: (context,index){
+        ListView.separated(physics: ScrollPhysics(),shrinkWrap: true,itemBuilder: (context,index){
 
           return ListTile(
               title: Text(Popular.elementAt(index),

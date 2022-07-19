@@ -54,7 +54,7 @@ class _FiltterItemsState extends State<FiltterItems> {
           ),
         ),
 
-        ListView.builder(shrinkWrap: true,itemCount: Deals.length,itemBuilder: (context,index){
+        ListView.builder(physics: ScrollPhysics(),shrinkWrap: true,itemCount: Deals.length,itemBuilder: (context,index){
 
 
 

@@ -34,7 +34,7 @@ class _SortByState extends State<SortBy> {
           ),
         ),
 
-        ListView.separated(shrinkWrap: true,
+        ListView.separated(shrinkWrap: true,physics: ScrollPhysics(),
             itemBuilder: (context, index) {
               return RadioListTile<int>(
                 controlAffinity: ListTileControlAffinity.trailing,
