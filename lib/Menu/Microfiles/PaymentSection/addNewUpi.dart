@@ -58,7 +58,7 @@ class _AddNewUpiState extends State<AddNewUpi> {
                   color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
             ),
             SizedBox(height: 3,),
-            Text("${provider.cartModelList.length} item . Total: ₹${provider.toPayAmt}",
+            Text("${provider.cartModelList.length} item . Total: ₹${provider.toPayAmt.toStringAsFixed(2)}",
                 style: TextStyle(
                   color: Colors.grey.shade500,
                   fontSize: 12,

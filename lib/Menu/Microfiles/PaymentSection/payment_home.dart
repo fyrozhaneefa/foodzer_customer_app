@@ -73,7 +73,7 @@ class _PaymentSectionState extends State<PaymentSection> {
                       style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                     Text(
-                      "Total:₹${provider.toPayAmt}",
+                      "Total:₹${provider.toPayAmt.toStringAsFixed(2)}",
                       style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                   ],

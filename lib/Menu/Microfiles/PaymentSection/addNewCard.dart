@@ -73,7 +73,7 @@ class _AddNewCardState extends State<AddNewCard> {
                   color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
             ),
             SizedBox(height: 3,),
-            Text("${provider.cartModelList.length} item . Total: ₹${provider.toPayAmt}",
+            Text("${provider.cartModelList.length} item . Total: ₹${provider.toPayAmt.toStringAsFixed(2)}",
                 style: TextStyle(
                   color: Colors.grey.shade500,
                   fontSize: 12,
@@ -396,7 +396,7 @@ class _AddNewCardState extends State<AddNewCard> {
                           textColor: Colors.white,
                           fontSize: 16.0);
                     } else {
-                      WidgetsBinding.instance.focusManager.primaryFocus
+                      WidgetsBinding.instance!.focusManager.primaryFocus
                           ?.unfocus();
                       orderCheckout();
                     }
