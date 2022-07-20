@@ -37,12 +37,12 @@ class _GroceryCardState extends State<GroceryCard> {
         onTap: widget.press,
         child: Container(
           // margin: EdgeInsets.only(bottom: 30),
-          width: Helper.getScreenWidth(context)*0.85,
+          width: Helper.getScreenWidth(context)*.95,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.only(bottom: 10,right:10),
+                margin: EdgeInsets.only(bottom: 10),
                 height: 125,
                 child:ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
@@ -105,7 +105,7 @@ class _GroceryCardState extends State<GroceryCard> {
                 ),
               ),
               Container(
-                width: Helper.getScreenWidth(context)*0.85,
+                width: Helper.getScreenWidth(context)*0.95,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +129,7 @@ class _GroceryCardState extends State<GroceryCard> {
                       ],
                     ),
                     Container(
-                      margin: EdgeInsets.only(right: 10),
+                      margin: EdgeInsets.only(right:5),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -161,25 +161,34 @@ class _GroceryCardState extends State<GroceryCard> {
               ),
               SizedBox(height: 8,),
               Container(
-                  child:  Row(
+                  child:  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(widget.rating == "No reviews yet"||widget.rating == "0" ?Icons.sentiment_dissatisfied:
-                      Icons.tag_faces_outlined),
-                      SizedBox(width: 5,),
-                      Text(widget.rating! == "1"?"Bad":
-                      widget.rating! == "2"?"OK":
-                      widget.rating! == "3"?"Good":
-                      widget.rating! == "4"?"Amazing":"No reviews yet",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500
-                        ),),
-                      SizedBox(width: 25,),
-                      Text(widget.deliveryCharge!.isNotEmpty? 'Delivery:'+' '+widget.deliveryCharge!:"Delivery : ₹0",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500
-                        ),),
+                      Row(
+                        children: [
+                          Icon(widget.rating == "No reviews yet"||widget.rating == "0" ?Icons.sentiment_dissatisfied:
+                          Icons.tag_faces_outlined),
+                          SizedBox(width: 5,),
+                          Text(widget.rating! == "1"?"Bad":
+                          widget.rating! == "2"?"OK":
+                          widget.rating! == "3"?"Good":
+                          widget.rating! == "4"?"Amazing":"No reviews yet",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500
+                            ),),
+                        ],
+                      ),
+
+
+                      Row(
+                        children: [
+                          Text(widget.deliveryCharge!.isNotEmpty? 'Delivery:'+' '+widget.deliveryCharge!:"Delivery : ₹0",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500
+                            ),),
+                        ],
+                      ),
                     ],
                   )
               ),

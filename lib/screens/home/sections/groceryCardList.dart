@@ -27,16 +27,19 @@ class GroceryCardList extends StatefulWidget {
 
 class _GroceryCardListState extends State<GroceryCardList> {
 
+
+
   List<PopularRestModel> popularRestList = [];
   @override
   void initState() {
     getPopularRest();
     super.initState();
   }
+  CarouselController controller = CarouselController();
   @override
   Widget build(BuildContext context) {
     return
-      CarouselSlider(
+      CarouselSlider(carouselController:controller ,
         items: popularRestList.map((item) => GroceryCard(
       cardName: null!=item.merchantBranchName?item.merchantBranchName:"",
       cardTime: null!=item.merchantBranchOrderTime?item.merchantBranchOrderTime:"",
@@ -69,7 +72,7 @@ class _GroceryCardListState extends State<GroceryCardList> {
         }
       },
     )).toList(),
-          options: CarouselOptions(
+          options: CarouselOptions(enlargeStrategy: CenterPageEnlargeStrategy.scale,
             pageSnapping: true,
             height: 250,
             // enlargeStrategy: CenterPageEnlargeStrategy.scale,

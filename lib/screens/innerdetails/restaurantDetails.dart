@@ -560,7 +560,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                                                       .fill,
                                                                   filterQuality: FilterQuality
                                                                       .high,
-                                                                  imageUrl: itemModel
+
+                                                                   imageUrl: itemModel
                                                                       .itemImage!,
                                                                   errorWidget: (
                                                                       context,

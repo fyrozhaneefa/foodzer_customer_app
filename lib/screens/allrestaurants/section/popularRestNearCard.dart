@@ -153,29 +153,37 @@ class PopularRestNearCard extends StatelessWidget {
                 height: 8,
               ),
               Container(
-                  child: Row(
+                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(rating == "No reviews yet" || rating =="0"?
-                  Icons.sentiment_dissatisfied:
-                  Icons.tag_faces_outlined),
-                  SizedBox(
-                    width: 5,
+                  Row(
+                    children: [
+                      Icon(rating == "No reviews yet" || rating =="0"?
+                      Icons.sentiment_dissatisfied:
+                      Icons.tag_faces_outlined),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(rating == "1"?"Bad":
+                      rating == "2"?"OK":
+                      rating == "3"?"Good":
+                      rating == "4"?"Amazing":"No reviews yet",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w500),
+                      ),
+                    ],
                   ),
-                  Text(rating == "1"?"Bad":
-                  rating == "2"?"OK":
-                  rating == "3"?"Good":
-                  rating == "4"?"Amazing":"No reviews yet",
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(
-                    width: 25,
-                  ),
-                  Text(
-                    'Delivery:' + ' ' + deliveryCharge,
-                    style: TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w500),
-                  ),
+                  Row(children: [
+
+                    Text(
+                      'Delivery:' + ' ' + deliveryCharge,
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w500),
+                    ),
+
+                  ],)
+
+
+
                 ],
               )),
             ],
