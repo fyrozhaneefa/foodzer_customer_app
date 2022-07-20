@@ -687,13 +687,11 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600),
                               ),
-                              flexibleSpace: Stack(
-                                alignment: Alignment.center,
-                                clipBehavior: Clip.none,
-                                children:[
-                                  FlexibleSpaceBar(
-                                  collapseMode: CollapseMode.parallax,
-                                  background: Image.network(
+                              flexibleSpace: FlexibleSpaceBar(
+                              collapseMode: CollapseMode.parallax,
+                              background: Stack(fit: StackFit.expand,clipBehavior: Clip.none,
+                                children: [
+                                  Image.network(
                                     null !=
                                         provider
                                             .selectedRestModel
@@ -712,53 +710,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                     // 'https://cdn-prod.medicalnewstoday.com/content/images/articles/314/314819/delicious-buffet-foods.jpg',
                                     fit: BoxFit.fill,
                                   ),
-                                ),
                                   provider.selectedRestModel.branchDetails!
-                                      .openStatus == "Closed" ? Positioned(
-                                        bottom: -20,
-                                        child: AnimatorWidget(
-                                          definition: SwingAnimation(
-                                            preferences: AnimationPreferences(
-                                              magnitude: 2,
-                                              autoPlay: AnimationPlayStates.Loop,
-                                              duration: Duration(seconds: 4),
-                                              offset: Duration(seconds:2)
-                                            )
-                                          ),
-                                          child: Stack(
-                                            alignment:
-                                            Alignment.bottomCenter,
-                                            children: [
-                                              Image.asset(
-                                                "assets/images/virtual/banner-closed.png",
-                                                width: 140,
-                                              ),
-                                              Padding(
-                                                padding:
-                                                const EdgeInsets
-                                                    .only(
-                                                    bottom: 8),
-                                                child: Text(
-                                                    "Next available at " +
-                                                        provider
-                                                            .selectedRestModel
-                                                            .restNextAvilableDay
-                                                            .toString()+" "+ provider
-                                                        .selectedRestModel
-                                                        .restNextAvilableTime
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .white,
-                                                        fontSize: 8,fontWeight: FontWeight.w500)),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ) : provider.selectedRestModel
-                                      .branchDetails!.openStatus == "Busy"
-                                      ? Positioned(
-                                    bottom: -20,
+                                      .openStatus == "Closed" ? Align(alignment:Alignment.bottomCenter ,
                                     child: AnimatorWidget(
                                       definition: SwingAnimation(
                                           preferences: AnimationPreferences(
@@ -769,6 +722,48 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                           )
                                       ),
                                       child: Stack(
+                                        alignment:
+                                        Alignment.bottomCenter,
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/virtual/banner-closed.png",
+                                            width: 140,
+                                          ),
+                                          Padding(
+                                            padding:
+                                            const EdgeInsets
+                                                .only(
+                                                bottom: 8),
+                                            child: Text(
+                                                "Next available at " +
+                                                    provider
+                                                        .selectedRestModel
+                                                        .restNextAvilableDay
+                                                        .toString()+" "+ provider
+                                                    .selectedRestModel
+                                                    .restNextAvilableTime
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    color: Colors
+                                                        .white,
+                                                    fontSize: 8,fontWeight: FontWeight.w500)),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ) : provider.selectedRestModel
+                                      .branchDetails!.openStatus == "Busy"
+                                      ? Align(alignment: Alignment.bottomCenter,
+                                        child: AnimatorWidget(
+                                    definition: SwingAnimation(
+                                          preferences: AnimationPreferences(
+                                              magnitude: 2,
+                                              autoPlay: AnimationPlayStates.Loop,
+                                              duration: Duration(seconds: 4),
+                                              offset: Duration(seconds:2)
+                                          )
+                                    ),
+                                    child: Stack(
 
                                         alignment:
                                         Alignment.bottomCenter,
@@ -798,14 +793,14 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                                     fontSize:8,fontWeight: FontWeight.w500)),
                                           )
                                         ],
-                                      ),
                                     ),
-                                  )
+                                  ),
+                                      )
                                       : provider.selectedRestModel
                                       .branchDetails!.openStatus ==
                                       "No-service" ?
 
-                                  Positioned(bottom: -20,
+                                  Align(alignment: Alignment.bottomCenter,
                                     child: AnimatorWidget(
                                       definition: SwingAnimation(
                                           preferences: AnimationPreferences(
@@ -817,9 +812,11 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                       ),
                                       child: Image.asset(
                                         "assets/images/virtual/banner-unservice.png",width: 150,),
-                                    ),):Container(child: null,)
-                                ]
+                                    ),
+                                  ):Container(child: null,)
+                                ],
                               ),
+                                ),
                             );
                           },
                         ),
