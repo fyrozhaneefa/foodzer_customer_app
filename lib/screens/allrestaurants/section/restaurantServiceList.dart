@@ -20,7 +20,7 @@ class RestaurantServicesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(right: 10.0, bottom: 25.0),
+        padding: const EdgeInsets.only( bottom: 25.0),
         child: FutureBuilder(
             future: SpecialCategory().getSpecialCategory(),
             builder:

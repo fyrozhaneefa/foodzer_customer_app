@@ -21,6 +21,7 @@ class SingleRestModel {
     this.packageRating,
     this.deliveryRating,
     this.moneyRating,
+    this.todaysTime,
     this.restNextAvilableDay,
     this.restNextAvilableTime,
     this.numOfRows,
@@ -38,6 +39,7 @@ class SingleRestModel {
   int? packageRating;
   int? deliveryRating;
   int? moneyRating;
+  List<TodaysTime>? todaysTime;
   String? restNextAvilableDay;
   String? restNextAvilableTime;
   int? numOfRows;
@@ -73,6 +75,7 @@ class SingleRestModel {
         merchantBranchId: json["merchant_branch_id"],
         branchDetails: BranchDetails.fromJson(json["branch_details"]),
         branchCuisine: json["branch_cuisine"],
+        todaysTime: List<TodaysTime>.from(json["todays_time"].map((x) => TodaysTime.fromJson(x))),
         restNextAvilableDay: json["rest_next_avilable_day"],
         restNextAvilableTime: json["rest_next_avilable_time"],
       );
@@ -87,6 +90,7 @@ class SingleRestModel {
         "merchant_branch_id": merchantBranchId,
         "branch_details": branchDetails!.toJson(),
         "branch_cuisine": branchCuisine,
+        "todays_time": List<dynamic>.from(todaysTime!.map((x) => x.toJson())),
         "rest_next_avilable_day":restNextAvilableDay,
         "rest_next_avilable_time":restNextAvilableTime,
       };
@@ -789,6 +793,37 @@ class Timing {
         "monday": List<dynamic>.from(monday!.map((x) => x.toJson())),
       };
 }
+class TodaysTime {
+  TodaysTime({
+    this.restTimingDay,
+    this.restTimingRestId,
+    this.restTimingOpenTime,
+    this.restTimingCloseTime,
+    this.dayName,
+  });
+
+  String? restTimingDay;
+  String? restTimingRestId;
+  String? restTimingOpenTime;
+  String? restTimingCloseTime;
+  String? dayName;
+
+  factory TodaysTime.fromJson(Map<String, dynamic> json) => TodaysTime(
+    restTimingDay: json["rest_timing_day"],
+    restTimingRestId: json["rest_timing_rest_id"],
+    restTimingOpenTime: json["rest_timing_open_time"],
+    restTimingCloseTime: json["rest_timing_close_time"],
+    dayName: json["day_name"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "rest_timing_day": restTimingDay,
+    "rest_timing_rest_id": restTimingRestId,
+    "rest_timing_open_time": restTimingOpenTime,
+    "rest_timing_close_time": restTimingCloseTime,
+    "day_name": dayName,
+  };
+}
 
 class Monday {
   Monday({
@@ -820,4 +855,17 @@ class Monday {
         "rest_timing_close_time": restTimingCloseTime,
         "day_name": dayName,
       };
+
 }
+
+
+
+
+
+
+
+
+
+
+
+

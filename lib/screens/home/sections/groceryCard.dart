@@ -37,7 +37,7 @@ class _GroceryCardState extends State<GroceryCard> {
         onTap: widget.press,
         child: Container(
           // margin: EdgeInsets.only(bottom: 30),
-          width: Helper.getScreenWidth(context)*.95,
+          width: Helper.getScreenWidth(context)*.90,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -134,7 +134,7 @@ class _GroceryCardState extends State<GroceryCard> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Icon(Icons.access_time_outlined,
-                            color: Colors.deepOrange,
+                            color: Colors.black,
                             size: 20,),
                           SizedBox(width: 5,),
                           Text(

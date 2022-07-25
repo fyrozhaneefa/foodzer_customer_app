@@ -8,6 +8,7 @@ import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 // import 'package:foodzer_customer_app/Menu/Microfiles/splash.dart';
 import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:foodzer_customer_app/screens/AppProvider.dart';
 import 'package:foodzer_customer_app/screens/allFlowers/AllFlowersScreen.dart';
 import 'package:foodzer_customer_app/screens/allgroceries/AllGroceries.dart';
@@ -25,6 +26,11 @@ import 'Menu/Microfiles/MoreCategory/more_categories.dart';
 import 'screens/home/homeScreen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitUp,
+  ]);
 
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<ApplicationProvider>(

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
+import 'package:provider/provider.dart';
+
+import '../../blocs/application_bloc.dart';
 
 class RestaurantInfoScreen extends StatefulWidget {
   static const routeName = "/restaurantInfo";
@@ -31,7 +34,8 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
           ),
         ),
       ),
-      body: Padding(
+      body: Consumer<ApplicationProvider>(
+        builder: (context, provider, child) { return Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
@@ -132,7 +136,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                 ),
                 Container(
                     child: Text(
-                       widget._singleRestModel.branchDetails!.restaurantArea.toString(),
+                       provider.selectedRestModel.branchDetails!.restaurantArea.toString(),
                       style: TextStyle(
                           color: Colors.grey.shade700,
                           fontSize: 15
@@ -198,7 +202,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                 ),
                 Container(
                     child: Text(
-                        '${widget._singleRestModel.branchDetails!.merchantBranchOrderTime} mins',
+                        provider.selectedRestModel.branchDetails!.merchantBranchOrderTime.toString() +" Mins",
                       style: TextStyle(
                           color: Colors.grey.shade700,
                           fontSize: 15
@@ -344,7 +348,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
             ),
           ],
         ),
-      ),
-    );
+      );
+    }));
   }
 }

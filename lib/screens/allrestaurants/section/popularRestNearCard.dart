@@ -112,6 +112,7 @@ class PopularRestNearCard extends StatelessWidget {
                         ),
                       ],
                     ),
+
                     Container(
                       margin: EdgeInsets.only(right: 10),
                       child: Row(
@@ -174,10 +175,13 @@ class PopularRestNearCard extends StatelessWidget {
                   ),
                   Row(children: [
 
-                    Text(
-                      'Delivery:' + ' ' + deliveryCharge,
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w500),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Text(
+                        'Delivery:' + ' ' + deliveryCharge,
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w500),
+                      ),
                     ),
 
                   ],)

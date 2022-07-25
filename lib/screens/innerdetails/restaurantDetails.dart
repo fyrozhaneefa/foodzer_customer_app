@@ -33,6 +33,7 @@ class RestaurantDetailsScreen extends StatefulWidget {
   static const routeName = "/restaurantDetails";
   String? merchantBranchId, lat, lng;
 
+
   RestaurantDetailsScreen(this.merchantBranchId,
       this.lat,
       this.lng,);
@@ -393,6 +394,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                                 2.0),
                                             child: InkWell(
                                               onTap: () {
+
                                                 if (null ==
                                                     itemModel
                                                         .enteredQty ||
@@ -415,6 +417,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                                 // if (itemModel.isAddon == 1) {
                                                 //   getAddons();
                                                 // }
+
+
                                               },
                                               child: Column(
                                                 mainAxisAlignment:
@@ -552,56 +556,80 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                                           ),
                                                           Expanded(
                                                             child:
-                                                            Container(
-                                                              child: CachedNetworkImage(
-                                                                  height: 80,
-                                                                  width: 80,
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                  filterQuality: FilterQuality
-                                                                      .high,
+                                                            Stack(clipBehavior: Clip.none,
+                                                              children: [
 
-                                                                   imageUrl: itemModel
-                                                                      .itemImage!,
-                                                                  errorWidget: (
-                                                                      context,
-                                                                      url,
-                                                                      error) =>
-                                                                      Image
-                                                                          .asset(
-                                                                        Helper
-                                                                            .getAssetName(
-                                                                            "blank.jpg",
-                                                                            "virtual"),
-                                                                      )),
-                                                              // Image
-                                                              //     .network(
-                                                              //   // 'https://i5.peapod.com/c/NY/NYO1E.png',
-                                                              //   itemModel
-                                                              //       .itemImage!,
-                                                              //   height:
-                                                              //   80,
-                                                              //   width:
-                                                              //   80,
-                                                              //   fit: BoxFit
-                                                              //       .fill,
-                                                              //   loadingBuilder: (BuildContext context,
-                                                              //       Widget child,
-                                                              //       ImageChunkEvent? loadingProgress) {
-                                                              //     if (loadingProgress ==
-                                                              //         null)
-                                                              //       return child;
-                                                              //     return Center(
-                                                              //       child: CircularProgressIndicator(
-                                                              //         color: Colors.deepOrangeAccent,
-                                                              //         value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
-                                                              //       ),
-                                                              //     );
-                                                              //   },
-                                                              // ),
+                                                                CachedNetworkImage( colorBlendMode:BlendMode.color, color:  null !=
+                                                                    itemModel
+                                                                        .availableTime &&
+                                                                    itemModel
+                                                                        .availableTime!
+                                                                        .isNotEmpty
+                                                                    ? Colors.black.withOpacity(1):null,
+
+                                                                    height: 90,
+                                                                    width: 120,
+                                                                    fit: BoxFit
+                                                                        .fill,
+                                                                    filterQuality: FilterQuality
+                                                                        .high,
+                                                                    imageUrl: itemModel
+                                                                        .itemImage!,
+                                                                    errorWidget: (
+                                                                        context,
+                                                                        url,
+                                                                        error) =>
+                                                                        Image
+                                                                            .asset(
+                                                                          Helper
+                                                                              .getAssetName(
+                                                                              "blank.jpg",
+                                                                              "virtual"),
+                                                                        )),
+
+                                                                null !=
+                                                                    itemModel
+                                                                        .availableTime &&
+                                                                    itemModel
+                                                                        .availableTime!
+                                                                        .isNotEmpty
+                                                                    ? Positioned(
+                                                                  bottom: -10,
+                                                                  right: 8,
+                                                                  left: 8,
+                                                                  child: Container(
+                                                                    decoration: BoxDecoration(border: Border.all(width: .5,color: Colors.black.withOpacity(.4)),
+                                                                      borderRadius: BorderRadius
+                                                                          .circular(
+                                                                          10),
+                                                                      color: Colors
+                                                                          .white,
+                                                                    ),
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          2.0),
+                                                                      child: Text(
+                                                                        "    Next Avilable at\n" +
+                                                                            itemModel
+                                                                                .availableDay
+                                                                                .toString() +
+                                                                            " " +
+                                                                            itemModel
+                                                                                .availableTime
+                                                                                .toString(),
+                                                                        style: TextStyle(color: Colors.black.withOpacity(.4),
+                                                                            fontSize: 10),),
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                                    : Container()
+
+                                                              ],
                                                             ),
                                                             flex: 4,
                                                           )
+
                                                         ],
                                                       )),
                                                   // SizedBox(height:5),
@@ -676,12 +704,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                               centerTitle: true,
                               title: Text(
                                 null !=
-                                    provider.selectedRestModel
-                                        .branchDetails
-                                    ? provider
-                                    .selectedRestModel
-                                    .branchDetails!
-                                    .merchantBranchName!
+                                    provider
+                                        .selectedRestModel.branchDetails
+                                    ? provider.selectedRestModel
+                                    .branchDetails!.merchantBranchName!
                                     : "",
                                 style: TextStyle(
                                     color: Colors.black,
@@ -689,135 +715,179 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                     fontWeight: FontWeight.w600),
                               ),
                               flexibleSpace: FlexibleSpaceBar(
-                              collapseMode: CollapseMode.parallax,
-                              background: Stack(fit: StackFit.expand,clipBehavior: Clip.none,
-                                children: [
-                                  Image.network(
-                                    null !=
-                                        provider
-                                            .selectedRestModel
-                                            .branchDetails!
-                                            .merchantBranchCoverImage
-                                        ? provider
+                                collapseMode: CollapseMode.parallax,
+                                background: Stack(
+                                  fit: StackFit.expand,
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Image.network(
+                                      null !=
+                                          provider
+                                              .selectedRestModel
+                                              .branchDetails!
+                                              .merchantBranchCoverImage
+                                          ? provider
+                                          .selectedRestModel
+                                          .branchDetails!
+                                          .merchantBranchCoverImage!
+                                          : provider
+                                          .selectedRestModel
+                                          .branchDetails!
+                                          .merchantBranchImage!,
+
+                                      // _singleRestModel.branchDetails!.merchantBranchImage!,
+                                      // 'https://cdn-prod.medicalnewstoday.com/content/images/articles/314/314819/delicious-buffet-foods.jpg',
+                                      fit: BoxFit.fill,
+                                    ),
+                                    provider
                                         .selectedRestModel
                                         .branchDetails!
-                                        .merchantBranchCoverImage!
+                                        .openStatus ==
+                                        "Closed"
+                                        ? Align(
+                                      alignment:
+                                      Alignment.bottomCenter,
+                                      child: AnimatorWidget(
+                                        definition: SwingAnimation(
+                                            preferences:
+                                            AnimationPreferences(
+                                                magnitude: 2,
+                                                autoPlay:
+                                                AnimationPlayStates
+                                                    .Loop,
+                                                duration:
+                                                Duration(
+                                                    seconds:
+                                                    4),
+                                                offset: Duration(
+                                                    seconds: 2))),
+                                        child: Stack(
+                                          alignment:
+                                          Alignment.bottomCenter,
+                                          children: [
+                                            Image.asset(
+                                              "assets/images/virtual/banner-closed.png",
+                                              width: 140,
+                                            ),
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets
+                                                  .only(
+                                                  bottom: 8),
+                                              child: Text(
+                                                  "Next available at " +
+                                                      provider
+                                                          .selectedRestModel
+                                                          .restNextAvilableDay
+                                                          .toString() +
+                                                      " " +
+                                                      provider
+                                                          .selectedRestModel
+                                                          .restNextAvilableTime
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .white,
+                                                      fontSize: 8,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .w500)),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    )
                                         : provider
                                         .selectedRestModel
                                         .branchDetails!
-                                        .merchantBranchImage!,
-
-                                    // _singleRestModel.branchDetails!.merchantBranchImage!,
-                                    // 'https://cdn-prod.medicalnewstoday.com/content/images/articles/314/314819/delicious-buffet-foods.jpg',
-                                    fit: BoxFit.fill,
-                                  ),
-                                  provider.selectedRestModel.branchDetails!
-                                      .openStatus == "Closed" ? Align(alignment:Alignment.bottomCenter ,
-                                    child: AnimatorWidget(
-                                      definition: SwingAnimation(
-                                          preferences: AnimationPreferences(
-                                              magnitude: 2,
-                                              autoPlay: AnimationPlayStates.Loop,
-                                              duration: Duration(seconds: 4),
-                                              offset: Duration(seconds:2)
-                                          )
+                                        .openStatus ==
+                                        "Busy"
+                                        ? Align(
+                                      alignment:
+                                      Alignment.bottomCenter,
+                                      child: AnimatorWidget(
+                                        definition: SwingAnimation(
+                                            preferences: AnimationPreferences(
+                                                magnitude: 2,
+                                                autoPlay:
+                                                AnimationPlayStates
+                                                    .Loop,
+                                                duration:
+                                                Duration(
+                                                    seconds:
+                                                    4),
+                                                offset: Duration(
+                                                    seconds: 2))),
+                                        child: Stack(
+                                          alignment: Alignment
+                                              .bottomCenter,
+                                          children: [
+                                            Image.asset(
+                                              "assets/images/virtual/banner-busy.png",
+                                              width: 160,
+                                            ),
+                                            Padding(
+                                              padding:
+                                              const EdgeInsets
+                                                  .only(
+                                                  bottom: 8),
+                                              child: Text(
+                                                  "Next available at " +
+                                                      provider
+                                                          .selectedRestModel
+                                                          .restNextAvilableDay
+                                                          .toString() +
+                                                      " " +
+                                                      provider
+                                                          .selectedRestModel
+                                                          .restNextAvilableTime
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .white,
+                                                      fontSize: 8,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .w500)),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      child: Stack(
-                                        alignment:
-                                        Alignment.bottomCenter,
-                                        children: [
-                                          Image.asset(
-                                            "assets/images/virtual/banner-closed.png",
-                                            width: 140,
-                                          ),
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets
-                                                .only(
-                                                bottom: 8),
-                                            child: Text(
-                                                "Next available at " +
-                                                    provider
-                                                        .selectedRestModel
-                                                        .restNextAvilableDay
-                                                        .toString()+" "+ provider
-                                                    .selectedRestModel
-                                                    .restNextAvilableTime
-                                                    .toString(),
-                                                style: TextStyle(
-                                                    color: Colors
-                                                        .white,
-                                                    fontSize: 8,fontWeight: FontWeight.w500)),
-                                          )
-                                        ],
+                                    )
+                                        : provider
+                                        .selectedRestModel
+                                        .branchDetails!
+                                        .openStatus ==
+                                        "No-service"
+                                        ? Align(
+                                      alignment: Alignment
+                                          .bottomCenter,
+                                      child: AnimatorWidget(
+                                        definition: SwingAnimation(
+                                            preferences: AnimationPreferences(
+                                                magnitude: 2,
+                                                autoPlay:
+                                                AnimationPlayStates
+                                                    .Loop,
+                                                duration:
+                                                Duration(
+                                                    seconds:
+                                                    4),
+                                                offset: Duration(
+                                                    seconds:
+                                                    2))),
+                                        child: Image.asset(
+                                          "assets/images/virtual/banner-unservice.png",
+                                          width: 150,
+                                        ),
                                       ),
-                                    ),
-                                  ) : provider.selectedRestModel
-                                      .branchDetails!.openStatus == "Busy"
-                                      ? Align(alignment: Alignment.bottomCenter,
-                                        child: AnimatorWidget(
-                                    definition: SwingAnimation(
-                                          preferences: AnimationPreferences(
-                                              magnitude: 2,
-                                              autoPlay: AnimationPlayStates.Loop,
-                                              duration: Duration(seconds: 4),
-                                              offset: Duration(seconds:2)
-                                          )
-                                    ),
-                                    child: Stack(
-
-                                        alignment:
-                                        Alignment.bottomCenter,
-                                        children: [
-                                          Image.asset(
-                                            "assets/images/virtual/banner-busy.png",
-                                            width: 160,
-                                          ),
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets
-                                                .only(
-                                                bottom: 8),
-                                            child: Text(
-                                                "Next available at " +
-                                                    provider
-                                                        .selectedRestModel
-                                                        .restNextAvilableDay
-                                                        .toString() +" "+
-                                                    provider
-                                                        .selectedRestModel
-                                                        .restNextAvilableTime
-                                                        .toString(),
-                                                style: TextStyle(
-                                                    color: Colors
-                                                        .white,
-                                                    fontSize:8,fontWeight: FontWeight.w500)),
-                                          )
-                                        ],
-                                    ),
-                                  ),
-                                      )
-                                      : provider.selectedRestModel
-                                      .branchDetails!.openStatus ==
-                                      "No-service" ?
-
-                                  Align(alignment: Alignment.bottomCenter,
-                                    child: AnimatorWidget(
-                                      definition: SwingAnimation(
-                                          preferences: AnimationPreferences(
-                                              magnitude: 2,
-                                              autoPlay: AnimationPlayStates.Loop,
-                                              duration: Duration(seconds: 4),
-                                              offset: Duration(seconds:2)
-                                          )
-                                      ),
-                                      child: Image.asset(
-                                        "assets/images/virtual/banner-unservice.png",width: 150,),
-                                    ),
-                                  ):Container(child: null,)
-                                ],
-                              ),
+                                    )
+                                        : Container(
+                                      child: null,
+                                    )
+                                  ],
                                 ),
+                              ),
                             );
                           },
                         ),

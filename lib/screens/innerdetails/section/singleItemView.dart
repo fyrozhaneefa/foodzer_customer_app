@@ -18,6 +18,7 @@ import 'dart:convert' as convert;
 
 class SingleItemView extends StatefulWidget {
   Item itemModel;
+
   SingleItemView(this.itemModel);
 
   @override
@@ -27,6 +28,7 @@ class SingleItemView extends StatefulWidget {
 class _SingleItemViewState extends State<SingleItemView> {
   final addonKey = GlobalKey();
   final priceOnKey = GlobalKey();
+
   // List<bool> isChecked = List.generate(
   //     Provider.of<ApplicationProvider>(context, listen: false)
   //         .addonModelList
@@ -41,6 +43,7 @@ class _SingleItemViewState extends State<SingleItemView> {
   bool isChecked = false;
   List<Addons> addOnList = [];
   List<PriceOnItem> priceOnItemList = [];
+
   // List<Addons> mandatoryAddonList = [];
   int lastAddonIndex = -1;
   int lastPriceOnItemIndex = -1;
@@ -48,6 +51,7 @@ class _SingleItemViewState extends State<SingleItemView> {
   int? radioValue;
   bool isMandatory = false;
   bool isPOIMandatory = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -57,14 +61,13 @@ class _SingleItemViewState extends State<SingleItemView> {
     } else {
       totalPrice = widget.itemModel.itemPrice!;
     }
-    if (null != widget.itemModel.enteredQty && widget.itemModel.enteredQty! >0) {
+    if (null != widget.itemModel.enteredQty &&
+        widget.itemModel.enteredQty! > 0) {
       totalQty = widget.itemModel.enteredQty!;
       initialQty = widget.itemModel.enteredQty!;
     } else {
       totalQty = 1;
-      setState(() {
-
-      });
+      setState(() {});
     }
     if (widget.itemModel.isAddon == 1) {
       getAddons();
@@ -183,10 +186,12 @@ class _SingleItemViewState extends State<SingleItemView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(widget.itemModel.isPriceon == 0?
-                                    'INR ' +
-                                        widget.itemModel.itemPrice!
-                                            .toStringAsFixed(2):"Price on selection",
+                                Text(
+                                    widget.itemModel.isPriceon == 0
+                                        ? 'INR ' +
+                                            widget.itemModel.itemPrice!
+                                                .toStringAsFixed(2)
+                                        : "Price on selection",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 16)),
@@ -794,124 +799,161 @@ class _SingleItemViewState extends State<SingleItemView> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Container(
-                    height: 60,
-                    child: ElevatedButton(
-                      onPressed: () {
-
-                        UserPreference().setCurrentRestaurant( Provider.of<ApplicationProvider>(context, listen: false).selectedRestModel);
-
-                        if (null != widget.itemModel.isPriceon &&
-                            widget.itemModel.isPriceon == 1 &&
-                            lastPriceOnItemIndex == -1) {
-                          isPOIMandatory = true;
-                          scrollToPriceOn();
-                          setState(() {});
-                        } else if (null != widget.itemModel.isAddon &&
-                            widget.itemModel.isAddon == 1 &&
-                            addOnList
-                                    .where((element) =>
-                                        null != element.addonsType &&
-                                        element.addonsType! == 2)
-                                    .length >
-                                0 &&
-                            lastAddonIndex == -1) {
-                          isMandatory = true;
-                          scrollToAddon();
-                          setState(() {});
-                        } else if (Provider.of<ApplicationProvider>(context,
-                                    listen: false)
-                                .cartModelList
-                                .isEmpty ||
-                            Provider.of<ApplicationProvider>(context,
-                                        listen: false)
-                                    .cartModelList
-                                    .first
-                                    .itemMerchantBranch ==
+                    padding: const EdgeInsets.all(20.0),
+                    child: Container(
+                      height: 60,
+                      child: Consumer<ApplicationProvider>(
+                          builder: (context, provider, child) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            UserPreference().setCurrentRestaurant(
                                 Provider.of<ApplicationProvider>(context,
                                         listen: false)
-                                    .selectedRestModel
-                                    .merchantBranchId) {
-                          if (null != widget.itemModel.isAddon &&
-                              widget.itemModel.isAddon == 1) {
-                            Item item = new Item();
-                            // if (widget.isNewItem) {
-                            String kson =
-                                Item.toDataJson(widget.itemModel);
-                            var jsonData = json.decode(kson);
-                            item = Item.fromJson(jsonData);
-                            item.addonsList = addOnList
-                                .where((element) => element.isSelected == true)
-                                .toList();
-                            item.tempId = null;
-                            item.enteredQty = totalQty;
-                            if (null != widget.itemModel.isPriceon &&
-                                widget.itemModel.isPriceon == 1) {
-                              item.priceOnItemPrice =
-                                  selectedPriceOnItem.priceonItemPrice;
-                              item.priceOnId = selectedPriceOnItem.priceonId;
-                            }
+                                    .selectedRestModel);
 
-                            Provider.of<ApplicationProvider>(context,
-                                    listen: false)
-                                .updateProduct(item, true, false);
-                            Navigator.of(context)
-                                .pop(widget.itemModel.enteredQty);
-                          } else {
-                            Item item = new Item();
-                            // if (widget.isNewItem) {
-                            String kson =
-                                Item.toDataJson(widget.itemModel);
-                            var jsonData = json.decode(kson);
-                            item = Item.fromJson(jsonData);
-
-                            item.enteredQty = totalQty;
                             if (null != widget.itemModel.isPriceon &&
-                                widget.itemModel.isPriceon == 1) {
-                              item.priceOnItemPrice =
-                                  selectedPriceOnItem.priceonItemPrice;
-                              item.priceOnId = selectedPriceOnItem.priceonId;
+                                widget.itemModel.isPriceon == 1 &&
+                                lastPriceOnItemIndex == -1) {
+                              isPOIMandatory = true;
+                              scrollToPriceOn();
+                              setState(() {});
+                            } else if (null != widget.itemModel.isAddon &&
+                                widget.itemModel.isAddon == 1 &&
+                                addOnList
+                                        .where((element) =>
+                                            null != element.addonsType &&
+                                            element.addonsType! == 2)
+                                        .length >
+                                    0 &&
+                                lastAddonIndex == -1) {
+                              isMandatory = true;
+                              scrollToAddon();
+                              setState(() {});
+                            } else if (Provider.of<ApplicationProvider>(context,
+                                        listen: false)
+                                    .cartModelList
+                                    .isEmpty ||
+                                Provider.of<ApplicationProvider>(context,
+                                            listen: false)
+                                        .cartModelList
+                                        .first
+                                        .itemMerchantBranch ==
+                                    Provider.of<ApplicationProvider>(context,
+                                            listen: false)
+                                        .selectedRestModel
+                                        .merchantBranchId) {
+                              if (null != widget.itemModel.isAddon &&
+                                  widget.itemModel.isAddon == 1) {
+                                Item item = new Item();
+                                // if (widget.isNewItem) {
+                                String kson = Item.toDataJson(widget.itemModel);
+                                var jsonData = json.decode(kson);
+                                item = Item.fromJson(jsonData);
+                                item.addonsList = addOnList
+                                    .where(
+                                        (element) => element.isSelected == true)
+                                    .toList();
+                                item.tempId = null;
+                                item.enteredQty = totalQty;
+                                if (null != widget.itemModel.isPriceon &&
+                                    widget.itemModel.isPriceon == 1) {
+                                  item.priceOnItemPrice =
+                                      selectedPriceOnItem.priceonItemPrice;
+                                  item.priceOnId =
+                                      selectedPriceOnItem.priceonId;
+                                }
+
+                                Provider.of<ApplicationProvider>(context,
+                                        listen: false)
+                                    .updateProduct(item, true, false);
+                                Navigator.of(context)
+                                    .pop(widget.itemModel.enteredQty);
+                              } else {
+                                Item item = new Item();
+                                // if (widget.isNewItem) {
+                                String kson = Item.toDataJson(widget.itemModel);
+                                var jsonData = json.decode(kson);
+                                item = Item.fromJson(jsonData);
+
+                                item.enteredQty = totalQty;
+                                if (null != widget.itemModel.isPriceon &&
+                                    widget.itemModel.isPriceon == 1) {
+                                  item.priceOnItemPrice =
+                                      selectedPriceOnItem.priceonItemPrice;
+                                  item.priceOnId =
+                                      selectedPriceOnItem.priceonId;
+                                }
+                                Provider.of<ApplicationProvider>(context,
+                                        listen: false)
+                                    .updateProduct(
+                                        item, totalQty > initialQty, false);
+                                Navigator.of(context)
+                                    .pop(widget.itemModel.enteredQty);
+                              }
+                            } else {
+                              showAlertDialog(context);
                             }
-                            Provider.of<ApplicationProvider>(context,
-                                    listen: false)
-                                .updateProduct(
-                                    item, totalQty > initialQty, false);
-                            Navigator.of(context)
-                                .pop(widget.itemModel.enteredQty);
-                          }
-                        } else {
-                          showAlertDialog(context);
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            null != widget.itemModel.enteredQty &&
-                                    widget.itemModel.enteredQty! > 0
-                                ? 'Update basket'
-                                : 'Add to basket',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700),
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              provider.selectedRestModel.branchDetails!
+                                          .openStatus ==
+                                      "Closed"
+                                  ? Text(
+                                      "CLOSED",
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700),
+                                    )
+                                  : provider.selectedRestModel.branchDetails!
+                                              .openStatus ==
+                                          "No-service"
+                                      ? Text(
+                                          "UNSERVICEABLE",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700),
+                                        )
+                                      : provider.selectedRestModel
+                                                  .branchDetails!.openStatus ==
+                                              "Busy"
+                                          ? Text(
+                                              "BUSY",
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700),
+                                            )
+                                          : Text(
+                                              null !=
+                                                          widget.itemModel
+                                                              .enteredQty &&
+                                                      widget.itemModel
+                                                              .enteredQty! >
+                                                          0
+                                                  ? 'Update basket'
+                                                  : 'Add to basket',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                              Text(
+                                'INR ' + totalPrice.toStringAsFixed(2),
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w700),
+                              )
+                            ],
                           ),
-                          Text(
-                            'INR ' + totalPrice.toStringAsFixed(2),
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700),
-                          )
-                        ],
-                      ),
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.deepOrange,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12.0),
-                            // side: BorderSide(color: Colors.grey)
-                          )),
-                    ),
-                  ),
-                )
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.deepOrange,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                                // side: BorderSide(color: Colors.grey)
+                              )),
+                        );
+                      }),
+                    ))
               ],
             ),
           );
@@ -1169,7 +1211,9 @@ class _SingleItemViewState extends State<SingleItemView> {
               color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
         ),
         onPressed: () {
-          UserPreference().setCurrentRestaurant( Provider.of<ApplicationProvider>(context, listen: false).selectedRestModel);
+          UserPreference().setCurrentRestaurant(
+              Provider.of<ApplicationProvider>(context, listen: false)
+                  .selectedRestModel);
 
           if (null != widget.itemModel.isPriceon &&
               widget.itemModel.isPriceon == 1 &&
@@ -1232,9 +1276,7 @@ class _SingleItemViewState extends State<SingleItemView> {
                   .updateProduct(item, totalQty > initialQty, false);
               Navigator.of(context).pop(widget.itemModel.enteredQty);
               Navigator.pop(context);
-
             }
-
           }
         },
       ),

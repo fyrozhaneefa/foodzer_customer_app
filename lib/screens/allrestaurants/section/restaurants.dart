@@ -211,8 +211,8 @@ class _RestaurantsState extends State<Restaurants> {
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           12)),
-                                              width: 70,
-                                              height: 60,
+                                              width: 75,
+                                              height: 75,
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.only(),
@@ -253,8 +253,8 @@ class _RestaurantsState extends State<Restaurants> {
                                             ),
                                             restmodel.openStatus == "Closed"
                                                 ? Container(
-                                                    width: 70,
-                                                    height: 60,
+                                                    width: 75,
+                                                    height: 75,
                                                     decoration: BoxDecoration(
                                                       borderRadius:
                                                           BorderRadius.circular(
@@ -275,8 +275,8 @@ class _RestaurantsState extends State<Restaurants> {
                                                 : restmodel.openStatus ==
                                                         "No-Service"
                                                     ? Container(
-                                                        width: 70,
-                                                        height: 60,
+                                                        width: 75,
+                                                        height: 75,
                                                         decoration:
                                                             BoxDecoration(
                                                           borderRadius:
@@ -300,8 +300,8 @@ class _RestaurantsState extends State<Restaurants> {
                                                     : restmodel.merchantBranchBusy ==
                                                             "1"
                                                         ? Container(
-                                                            width: 70,
-                                                            height: 60,
+                                                            width: 75,
+                                                            height: 75,
                                                             decoration:
                                                                 BoxDecoration(
                                                               borderRadius:
@@ -551,7 +551,7 @@ class ProductDesc extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 3,
+            height:1,
           ),
           Text(
             null != restModel!.cuisines ? restModel!.cuisines.toString() : "",
@@ -562,14 +562,14 @@ class ProductDesc extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           SizedBox(
-            height: 8,
+            height: 3,
           ),
           Row(
             children: [
               Icon(
                 Icons.tag_faces,
                 color: Colors.orangeAccent,
-                size: 20,
+                size: 19,
               ),
               SizedBox(
                 width: 5,
@@ -588,13 +588,13 @@ class ProductDesc extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 5,
+            height: 2,
           ),
           Row(
             children: [
               Icon(
-                Icons.access_time,
-                size: 20,
+                Icons.access_time_outlined,color: Colors.black.withOpacity(.6),
+                size: 19,
               ),
               SizedBox(
                 width: 5,
@@ -606,7 +606,7 @@ class ProductDesc extends StatelessWidget {
                     restModel!.distance.toString() +
                     " km",
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 13,
                 ),
               ),
               SizedBox(
