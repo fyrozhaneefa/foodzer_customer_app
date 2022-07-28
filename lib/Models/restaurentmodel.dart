@@ -57,6 +57,7 @@ class RestaurentModel {
   OfferTag? offerTag;
   String? restNextAvilableDay;
   String? restNextAvilableTime;
+  String? deliveryCharge;
 
   RestaurentModel(
       {this.cuisines,
@@ -117,6 +118,7 @@ class RestaurentModel {
         this.offerTag,
         this.restNextAvilableDay,
         this.restNextAvilableTime,
+        this.deliveryCharge,
       });
 
   RestaurentModel.fromJson(Map<String, dynamic> json) {
@@ -170,6 +172,7 @@ class RestaurentModel {
     merchantBranchDeleteStatus = json['merchant_branch_delete_status'];
     restNextAvilableDay = json['rest_next_avilable_day'];
     restNextAvilableTime = json['rest_next_avilable_time'];
+    deliveryCharge = json['delivery_charge'];
     lat = json['lat'];
     lng = json['lng'];
     merchantBranchStat = json['merchant_branch_stat'];
@@ -235,6 +238,7 @@ class RestaurentModel {
     data['merchant_branch_delete_status'] = this.merchantBranchDeleteStatus;
     data['rest_next_avilable_day'] = this.restNextAvilableDay;
     data['rest_next_avilable_time'] = this.restNextAvilableTime;
+    data['delivery_charge'] = this.deliveryCharge;
     data['lat'] = this.lat;
     data['lng'] = this.lng;
     data['merchant_branch_stat'] = this.merchantBranchStat;

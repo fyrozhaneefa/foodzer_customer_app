@@ -10,8 +10,10 @@ import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/screens/home/sections/OtherCategoryCard.dart';
 import 'package:foodzer_customer_app/screens/innerdetails/restaurantDetails.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
+import '../../../blocs/application_bloc.dart';
 import '../../../utils/helper.dart';
 import 'groceryCard.dart';
 
@@ -38,37 +40,39 @@ class _OtherCategoryCardListState extends State<OtherCategoryCardList> {
   Widget build(BuildContext context) {
     return
 
-      CarouselSlider(
+      Consumer<ApplicationProvider>(builder: (context, provider, _) {
+
+        return CarouselSlider(
         items: widget.categoryItem.restaurantDetails!.map((item) => OtherCategoryCard(
-                  cardName: null!=item.merchantBranchName?item.merchantBranchName:"",
-                  cardTime: null!=item.merchantBranchOrderTime?item.merchantBranchOrderTime:"",
-                  cardType: null!=item.cuisines?item.cuisines:"",
-                  rating:null!=item.avgReview && item.avgReview =="0"?"No reviews yet":item.avgReview,
-                  deliveryCharge: '',
-                  bannerName: null!=item.merchantBranchCoverImage ? item.merchantBranchCoverImage :
-                      // "https://media.cntraveler.com/photos/5b22bfea9a9e466ba59f567a/master/w_4000,h_2857,c_limit/Pukka_Catherine-Hendry_2018_overhead-hands.jpg",
-                 item.merchantBranchImage ,
-                  discount: '',
-                  busy: item.merchantBranchBusy,
-                  press: (){
-                    if(item.merchantBranchBusy == "0") {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              RestaurantDetailsScreen(item.merchantBranchId,item.lat,item.lng)));
-                      // Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
-                    } else {
-                      Fluttertoast.showToast(
-                          msg: "Restaurant is busy!! Come back later...",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.SNACKBAR,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.red,
-                          fontSize: 16.0
-                      );
-                    }
-                  },
-                )).toList(),
+          cardName: null!=item.merchantBranchName?item.merchantBranchName:"",
+          cardTime: null!=item.merchantBranchOrderTime?item.merchantBranchOrderTime:"",
+          cardType: null!=item.cuisines?item.cuisines:"",
+          rating:null!=item.avgReview && item.avgReview =="0"?"No reviews yet":item.avgReview,
+          deliveryCharge: '',
+          bannerName: null!=item.merchantBranchCoverImage ? item.merchantBranchCoverImage :
+          // "https://media.cntraveler.com/photos/5b22bfea9a9e466ba59f567a/master/w_4000,h_2857,c_limit/Pukka_Catherine-Hendry_2018_overhead-hands.jpg",
+          item.merchantBranchImage ,
+          discount: '',
+          busy: item.merchantBranchBusy,
+          press: (){
+            if(item.merchantBranchBusy == "0") {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      RestaurantDetailsScreen(item.merchantBranchId,item.lat,item.lng)));
+              // Navigator.of(context).pushNamed(RestaurantDetailsScreen.routeName);
+            } else {
+              Fluttertoast.showToast(
+                  msg: "Restaurant is busy!! Come back later...",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.SNACKBAR,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.red,
+                  fontSize: 16.0
+              );
+            }
+          },
+        )).toList(),
 
         options: CarouselOptions(
           pageSnapping: true,
@@ -88,10 +92,11 @@ class _OtherCategoryCardListState extends State<OtherCategoryCardList> {
           scrollDirection: Axis.horizontal,
         ),
       );
+    }
 
 
 
-  }
+      );}
 
   getPopularRest() async {
     SharedPreferences prefs=await SharedPreferences.getInstance();

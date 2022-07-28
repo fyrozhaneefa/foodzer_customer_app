@@ -626,12 +626,12 @@ class ProductDesc extends StatelessWidget {
                 color: Colors.grey.shade900,
                 size: 20,
               ),
-              // Text(
-              //   'INR 0.0',
-              //   style: TextStyle(
-              //     fontSize: 12,
-              //   ),
-              // )
+              Text(
+                'INR '+restModel!.deliveryCharge.toString(),
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+              )
             ],
           ),
           restModel!.openStatus == "Closed"

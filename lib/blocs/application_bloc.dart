@@ -29,6 +29,7 @@ class ApplicationProvider with ChangeNotifier {
   List<PlaceSearch>? searchResults;
   String? currentAddress;
   List<Item> cartModelList = [];
+  List<TodaysTime>todaytime =[];
 
   List<Item> filteredLoadedProductModelList = [];
   // List<Item> filteredItemList = [];

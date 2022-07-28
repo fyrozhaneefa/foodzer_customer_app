@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/DetailSearch/detailsearch.dart';
@@ -394,8 +395,29 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                                 2.0),
                                             child: InkWell(
                                               onTap: () {
+                                                if(null !=
+                                                    itemModel.
+                                                    availableTime &&
+                                                    itemModel
+                                                        .availableTime!
+                                                        .isNotEmpty
+                                                    ){
+                                                  Fluttertoast.showToast(
+                                                      msg: " Next Avilable at\n" +
+                                                  itemModel
+                                                      .availableDay
+                                                      .toString() +
+                                                      " " +
+                                                      itemModel
+                                                          .availableTime
+                                                          .toString(), // message
+                                                      toastLength: Toast.LENGTH_SHORT, // length
+                                                      gravity: ToastGravity.SNACKBAR,    // location
+                                                     timeInSecForIosWeb: 1, backgroundColor: Colors.grey              // duration
+                                                  );
+                                                }
 
-                                                if (null ==
+                                                else if (null ==
                                                     itemModel
                                                         .enteredQty ||
                                                     itemModel
@@ -558,10 +580,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                                             child:
                                                             Stack(clipBehavior: Clip.none,
                                                               children: [
-
                                                                 CachedNetworkImage( colorBlendMode:BlendMode.color, color:  null !=
-                                                                    itemModel
-                                                                        .availableTime &&
+                                                                    itemModel.
+                                                                        availableTime &&
                                                                     itemModel
                                                                         .availableTime!
                                                                         .isNotEmpty
@@ -580,12 +601,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                                                         url,
                                                                         error) =>
                                                                         Image
-                                                                            .asset(
-                                                                          Helper
-                                                                              .getAssetName(
-                                                                              "blank.jpg",
-                                                                              "virtual"),
-                                                                        )),
+                                                                            .network(provider.selectedRestModel.branchDetails!.merchantBranchImage.toString(),
+                                                                        colorBlendMode:BlendMode.color,color: Colors.black.withOpacity(1), )),
 
                                                                 null !=
                                                                     itemModel

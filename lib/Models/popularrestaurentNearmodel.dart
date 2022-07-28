@@ -79,6 +79,7 @@ class PopularRest {
   String? merchantPackCharge;
   String? deliveryAreaDeliveryTime;
   String? distance;
+  String? deliveryCharge;
 
   PopularRest(
       {this.cuisines,
@@ -133,7 +134,8 @@ class PopularRest {
         this.merchantPackChargeType,
         this.merchantPackCharge,
         this.deliveryAreaDeliveryTime,
-        this.distance});
+        this.distance,
+        this.deliveryCharge,});
 
   PopularRest.fromJson(Map<String, dynamic> json) {
     cuisines = json['cuisines'];
@@ -190,6 +192,7 @@ class PopularRest {
     merchantPackCharge = json['merchant_pack_charge'];
     deliveryAreaDeliveryTime = json['delivery_area_delivery_time'];
     distance = json['distance'];
+    deliveryCharge = json['delivery_charge'];
   }
 
   Map<String, dynamic> toJson() {
@@ -248,6 +251,7 @@ class PopularRest {
     data['merchant_pack_charge'] = this.merchantPackCharge;
     data['delivery_area_delivery_time'] = this.deliveryAreaDeliveryTime;
     data['distance'] = this.distance;
+    data['delivery_charge'] = this.deliveryCharge;
     return data;
   }
 }

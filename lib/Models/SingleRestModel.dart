@@ -22,6 +22,9 @@ class SingleRestModel {
     this.deliveryRating,
     this.moneyRating,
     this.todaysTime,
+    this.todaysRestOpenTime,
+    this.todaysRestCloseTime,
+    this.todaysRestDay,
     this.restNextAvilableDay,
     this.restNextAvilableTime,
     this.numOfRows,
@@ -40,6 +43,9 @@ class SingleRestModel {
   int? deliveryRating;
   int? moneyRating;
   List<TodaysTime>? todaysTime;
+  String? todaysRestOpenTime;
+  String? todaysRestCloseTime;
+  String? todaysRestDay;
   String? restNextAvilableDay;
   String? restNextAvilableTime;
   int? numOfRows;
@@ -76,6 +82,9 @@ class SingleRestModel {
         branchDetails: BranchDetails.fromJson(json["branch_details"]),
         branchCuisine: json["branch_cuisine"],
         todaysTime: List<TodaysTime>.from(json["todays_time"].map((x) => TodaysTime.fromJson(x))),
+        todaysRestOpenTime: json["todays_rest_open_time"],
+        todaysRestCloseTime: json["todays_rest_close_time"],
+        todaysRestDay: json["todays_rest_day"],
         restNextAvilableDay: json["rest_next_avilable_day"],
         restNextAvilableTime: json["rest_next_avilable_time"],
       );
@@ -91,6 +100,9 @@ class SingleRestModel {
         "branch_details": branchDetails!.toJson(),
         "branch_cuisine": branchCuisine,
         "todays_time": List<dynamic>.from(todaysTime!.map((x) => x.toJson())),
+        "todays_rest_open_time": todaysRestOpenTime,
+         "todays_rest_close_time": todaysRestCloseTime,
+         "todays_rest_day": todaysRestDay,
         "rest_next_avilable_day":restNextAvilableDay,
         "rest_next_avilable_time":restNextAvilableTime,
       };
@@ -113,7 +125,6 @@ class BranchDetails {
       this.merchantBranchBusy,
       this.merchantBranchPaymnetMode,
       this.merchantBranchImage,
-
       this.merchantPackCharge,
       this.merchantPackChargeType,
       this.countryCurrency,
@@ -121,6 +132,7 @@ class BranchDetails {
       this.distance,
       this.openStatus,
       this.merchantBranchPaymnetList,
+        this.deliveryCharge,
       this.merchantBranchCoverImage,
       this.deliveryAreaDeliveryTime});
 
@@ -147,6 +159,7 @@ class BranchDetails {
   String? distance;
   String? openStatus;
   List<String>? merchantBranchPaymnetList;
+  String? deliveryCharge;
   String? merchantBranchCoverImage;
   String? deliveryAreaDeliveryTime;
 
@@ -175,6 +188,7 @@ class BranchDetails {
         distance: json["distance"],
         openStatus: json["open_status"],
         deliveryAreaDeliveryTime: json["delivery_area_delivery_time"],
+        deliveryCharge: json["delivery_charge"],
         merchantBranchPaymnetList: List<String>.from(
             json["merchant_branch_paymnet_list"].map((x) => x)),
       );
@@ -204,6 +218,7 @@ class BranchDetails {
         "distance": distance,
         "open_status": openStatus,
         "delivery_area_delivery_time": deliveryAreaDeliveryTime,
+        "delivery_charge": deliveryCharge,
         "merchant_branch_paymnet_list":
             List<dynamic>.from(merchantBranchPaymnetList!.map((x) => x)),
       };

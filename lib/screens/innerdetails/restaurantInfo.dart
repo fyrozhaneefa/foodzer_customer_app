@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
+import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
 
 import '../../blocs/application_bloc.dart';
@@ -88,11 +89,42 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                   child: Row(
                     children: [
                       Icon(
-                        Icons.tag_faces
+                        null !=
+                            provider.selectedRestModel
+                                .reviews!.numOfRows &&
+                            provider.selectedRestModel
+                                .reviews!.numOfRows ==
+                                0
+                            ? Icons.sentiment_dissatisfied
+                            : Icons.tag_faces,
+                        color: null !=
+                            provider.selectedRestModel
+                                .reviews!.numOfRows &&
+                            provider.selectedRestModel
+                                .reviews!.numOfRows ==
+                                0
+                            ? Colors.grey.shade700
+                            : Colors.grey.shade700,
+                        size: 25,
                       ),
                       SizedBox(width: 10,),
                       Text(
-                        'Very good',
+                          null !=
+                              provider
+                                  .selectedRestModel
+                                  .reviews!
+                                  .numOfRows &&
+                              provider
+                                  .selectedRestModel
+                                  .reviews!
+                                  .numOfRows ==
+                                  0
+                              ? "No review yet "
+                              : provider
+                              .selectedRestModel
+                              .reviews!
+                              .branchAvgRating
+                              .toString(),
                           style:TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 15
@@ -103,7 +135,9 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                 ),
                 Container(
                     child: Text(
-                  '${widget._singleRestModel.reviews!.numOfRows!} ratings',
+                  '${provider
+                      .selectedRestModel.reviews!
+                      .numOfRows} ratings',
                       style: TextStyle(
                         color: Colors.grey.shade700,
                         fontSize: 15
@@ -169,7 +203,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                 ),
                 Container(
                     child: Text(
-                        '7:00AM - 11:00PM',
+                       widget._singleRestModel.todaysRestOpenTime.toString()+" - "+widget._singleRestModel.todaysRestCloseTime.toString() ,
                       style: TextStyle(
                           color: Colors.grey.shade700,
                           fontSize: 15
@@ -268,7 +302,7 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                 ),
                 Container(
                     child: Text(
-                        '${widget._singleRestModel.branchDetails!.countryCurrency}.${widget._singleRestModel.branchDetails!.merchantPackCharge}',
+                        '${widget._singleRestModel.branchDetails!.countryCurrency}.${provider.selectedRestModel.branchDetails!.deliveryCharge.toString()}',
                       style: TextStyle(
                           color: Colors.grey.shade700,
                           fontSize: 15
@@ -335,17 +369,21 @@ class _RestaurantInfoScreenState extends State<RestaurantInfoScreen> {
                 Container(
                     child: Row(
                         children: [
-                          Icon(Icons.money),
+                          ClipRRect(child: Image(width: 30,height: 30,image: AssetImage("assets/images/virtual/mastercard.png")),),
                           SizedBox(width: 5,),
-                          Icon(Icons.payment),
+                          ClipRRect(child: Image(width: 30,height: 30,image: AssetImage("assets/images/real/visa2.png")),),
                           SizedBox(width: 5,),
-                          Icon(Icons.payment),
+                          ClipRRect(child: Image(width: 27,height: 27,image: AssetImage("assets/images/real/google-pay-logo-png-removebg-preview.png")),),
                           SizedBox(width: 5,),
-                          Icon(Icons.payment)
+                          ClipRRect(child: Image(width: 30,height: 30,image: AssetImage("assets/images/real/phonepayLogo2.png")),),
+
+
                         ],
-                    ))
+                    ),
+                ),
               ],
             ),
+
           ],
         ),
       );

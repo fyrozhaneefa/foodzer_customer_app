@@ -45,7 +45,7 @@ class _GroceryCardListState extends State<GroceryCardList> {
       cardTime: null!=item.merchantBranchOrderTime?item.merchantBranchOrderTime:"",
       cardType: null!=item.cuisines?item.cuisines:"",
       rating: null!=item.rating && item.rating!.isNotEmpty?item.rating:"No reviews yet",
-      deliveryCharge: '',
+      deliveryCharge: "",
       bannerName: null!=item.merchantBranchCoverImage?item.merchantBranchCoverImage:item.merchantBranchImage,
       discount: "",
       busy: null!=item.merchantBranchBusy?item.merchantBranchBusy:"",
