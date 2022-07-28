@@ -627,7 +627,7 @@ class ProductDesc extends StatelessWidget {
                 size: 20,
               ),
               Text(
-                'INR '+restModel!.deliveryCharge.toString(),
+                'INR ',
                 style: TextStyle(
                   fontSize: 12,
                 ),
