@@ -525,7 +525,7 @@ class ProductDesc extends StatelessWidget {
               Text(
                 restModel!.merchantBranchName.toString(),
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.black.withOpacity(.8),
                     fontWeight: FontWeight.bold,
                     fontSize: 15),
               ),
@@ -625,9 +625,9 @@ class ProductDesc extends StatelessWidget {
                 Icons.delivery_dining,
                 color: Colors.grey.shade900,
                 size: 20,
-              ),
+              ),SizedBox(width: 3,),
               Text(
-                'INR ',
+               "INR."+provider.selectedRestModel.branchDetails!.deliveryCharge.toString(),
                 style: TextStyle(
                   fontSize: 12,
                 ),
