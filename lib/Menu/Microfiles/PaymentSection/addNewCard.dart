@@ -6,6 +6,7 @@ import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/OrderPlaced/orderplaced.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
+import 'package:foodzer_customer_app/Models/orderlistmodel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
@@ -41,6 +42,7 @@ class _AddNewCardState extends State<AddNewCard> {
   bool isLoading = false;
   UserData userModel = new UserData();
   var _selectedApp;
+  OrderModel orderModel=new OrderModel();
 
   String? itemOrderId = "";
 
@@ -644,7 +646,12 @@ class _AddNewCardState extends State<AddNewCard> {
     setState(() {
       itemOrderId = jsonData["order_id"];
     });
-
+    orderModel.merchantLat=double.parse(provider.selectedRestModel.branchDetails!.lat!);
+    orderModel.merchantLng=double.parse(provider.selectedRestModel.branchDetails!.lng!);
+    orderModel.userLat=double.parse(provider.selectedAddressModel.addressLat!);
+    orderModel.userLng=double.parse(provider.selectedAddressModel.addressLng!);
+    orderModel.orderAddress=provider.selectedAddressModel.addressUser!;
+    orderModel.orderId=itemOrderId;
     if (jsonData['error_code'] == 0) {
       getPaymentToken();
     } else {
@@ -766,7 +773,7 @@ class _AddNewCardState extends State<AddNewCard> {
                 onPressed: () {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) =>
-                          OrderPlacedHome()), (Route<dynamic> route) => false);
+                          OrderPlacedHome(orderModel)), (Route<dynamic> route) => false);
                 },
                 child: Text(
                   "Ok",

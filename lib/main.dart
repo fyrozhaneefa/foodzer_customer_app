@@ -1,7 +1,7 @@
 
 
 import 'dart:async';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:foodzer_customer_app/Menu/Microfiles/CuisinesSection/cuisineshome.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
@@ -24,8 +24,10 @@ import 'package:provider/provider.dart';
 import './screens/landingScreen.dart';
 import 'Menu/Microfiles/MoreCategory/more_categories.dart';
 import 'screens/home/homeScreen.dart';
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   SystemChrome.setPreferredOrientations([
 
     DeviceOrientation.portraitDown,
