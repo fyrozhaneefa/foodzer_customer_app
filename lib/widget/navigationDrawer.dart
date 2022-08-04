@@ -6,7 +6,7 @@ import 'package:foodzer_customer_app/Menu/Microfiles/MyOrderSection//myAccountHo
 import 'package:foodzer_customer_app/Menu/Microfiles/MyOrderSection/myoders.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/OfferSection/offerHome.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
-import 'package:foodzer_customer_app/screens/home/components/test.dart';
+// import 'package:foodzer_customer_app/screens/home/components/test.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:foodzer_customer_app/screens/navigationdrawerpages/foodzerPay.dart';
 import 'package:foodzer_customer_app/screens/navigationdrawerpages/userOrders.dart';

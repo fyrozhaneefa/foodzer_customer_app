@@ -15,7 +15,9 @@ class OrderPlacedHome extends StatefulWidget {
 class _OrderPlacedHomeState extends State<OrderPlacedHome> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+return WillPopScope(
+    onWillPop: () async=> false,
+    child: Scaffold(
         body: Stack(
           children: [
             ListView(
@@ -64,34 +66,67 @@ class _OrderPlacedHomeState extends State<OrderPlacedHome> {
               ],
             ),
             Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: Helper.getScreenWidth(context),
-                padding: EdgeInsets.all(20),child: ElevatedButton(
-                onPressed: () {
-                  // Navigator.of(context).push(
-                  //     MaterialPageRoute(builder: (context) =>
-                  //         OrderTracking(Provider.of<ApplicationProvider>(context, listen: false)
-                  //             .currentOrderId!,true)));
-                },
-                child: Text(
-                  // "Track Your Order",
-                  "Track your order",
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  primary: Colors.orange,
-                  fixedSize: Size(155, 40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-// side: BorderSide(color: Colors.black.withOpacity(.3)),
-                  ),
-                ),
-              ),),
+                alignment: Alignment.bottomCenter,
+                child:Container(
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                      children : <Widget>[
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Navigator.of(context).push(
+                              //     MaterialPageRoute(builder: (context) =>
+                              //         OrderTracking(Provider.of<ApplicationProvider>(context, listen: false)
+                              //             .currentOrderId!,true)));
+                            },
+                            child: Text(
+                              // "Track Your Order",
+                              "Track your order",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              primary: Colors.orange,
+                              fixedSize: Size(155, 40),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 2,),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) =>
+                                    HomeScreen()));
+                            },
+                            child: Text(
+                              // "Track Your Order",
+                              "Back to home",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              primary: Colors.orange,
+                              fixedSize: Size(155, 40),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
+                )
+
             )
           ],
         )
-    );
+    ),
+   );
+
   }
 }

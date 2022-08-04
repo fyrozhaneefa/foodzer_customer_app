@@ -137,7 +137,7 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
           if (null == item.addonIds) {
             item.addonIds = "";
           }
-          item.addonIds = item.addonIds! + addon.itemAddonsSubtitleTblid! + ",";
+          item.addonIds = item.addonIds! + addon.itemAddonsSubtitleSubtitleId! + ",";
         }
         if (item.addonIds!.length > 0) {
           item.addonIds =

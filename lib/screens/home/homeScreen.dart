@@ -83,157 +83,160 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: NavigationDrawerWidget(),
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 3,
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-        title: InkWell(
-          onTap: () {
+    return WillPopScope(
+        onWillPop:  () async=> false,
+        child: Scaffold(
+          drawer: NavigationDrawerWidget(),
+          appBar: AppBar(
+            centerTitle: true,
+            elevation: 3,
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black),
+            title: InkWell(
+              onTap: () {
 
-            if (isLoggedIn) {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => ChangeAddressFromHome(true)));
-            } else {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))));
-            }
-          },
-          child: Column(
-            children: [
-              Container(
-                child: Text(
-                  "Delivering to",
-                  style: TextStyle(color: Colors.grey, fontSize: 14.0),
-                ),
+                if (isLoggedIn) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) => ChangeAddressFromHome(true)));
+                } else {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          GoogleMapScreen(new AddressModel(),isFromCart, LatLng(0, 0))));
+                }
+              },
+              child: Column(
+                children: [
+                  Container(
+                    child: Text(
+                      "Delivering to",
+                      style: TextStyle(color: Colors.grey, fontSize: 14.0),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      child: Text(
+                        null != finalAddress ? finalAddress : 'Select a location',
+                        style: TextStyle(color: Colors.deepOrange, fontSize: 16),
+                      ))
+                ],
               ),
-              SizedBox(
-                height: 10,
-              ),
-              Container(
-                  child: Text(
-                null != finalAddress ? finalAddress : 'Select a location',
-                style: TextStyle(color: Colors.deepOrange, fontSize: 16),
-              ))
-            ],
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Container(
-              width: 35.0,
-              alignment: Alignment.center,
-              child: GestureDetector(
-                onTap: () {
+            ),
+            actions: [
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Container(
+                  width: 35.0,
+                  alignment: Alignment.center,
+                  child: GestureDetector(
+                    onTap: () {
 
 
-                  if (Provider.of<ApplicationProvider>(context, listen: false)
+                      if (Provider.of<ApplicationProvider>(context, listen: false)
                           .cartModelList
                           .length >
-                      0) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => ItemBasketHome()));
-                  } else {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (BuildContext context) => MainSearchScreen()));
-                  }
-                },
-                child: Consumer<ApplicationProvider>(
-                    builder: (context, provider, child) {
-                  return Stack(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          null != provider.cartModelList &&
-                                  provider.cartModelList.length > 0
-                              ? Icons.shopping_basket_sharp
-                              : Icons.search,
-                          color: Colors.black,
-                        ),
-                        onPressed: null,
-                      ),
-                      provider.cartModelList.length == 0
-                          ? Container()
-                          : Positioned(
-                              top: 0,
-                              right: 0,
-                              child: Stack(
-                                children: <Widget>[
-                                  Container(
-                                    height: 20.0,
-                                    width: 20.0,
-                                    decoration: BoxDecoration(
-                                      color: Colors.deepOrange,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        provider.cartModelList.length
-                                            .toString(),
-                                        style: TextStyle(
-                                          fontSize: 11.0,
-                                          fontWeight: FontWeight.bold,
+                          0) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => ItemBasketHome()));
+                      } else {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => MainSearchScreen()));
+                      }
+                    },
+                    child: Consumer<ApplicationProvider>(
+                        builder: (context, provider, child) {
+                          return Stack(
+                            children: <Widget>[
+                              IconButton(
+                                icon: Icon(
+                                  null != provider.cartModelList &&
+                                      provider.cartModelList.length > 0
+                                      ? Icons.shopping_basket_sharp
+                                      : Icons.search,
+                                  color: Colors.black,
+                                ),
+                                onPressed: null,
+                              ),
+                              provider.cartModelList.length == 0
+                                  ? Container()
+                                  : Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Stack(
+                                  children: <Widget>[
+                                    Container(
+                                      height: 20.0,
+                                      width: 20.0,
+                                      decoration: BoxDecoration(
+                                        color: Colors.deepOrange,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          provider.cartModelList.length
+                                              .toString(),
+                                          style: TextStyle(
+                                            fontSize: 11.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                    ],
-                  );
-                }),
+                            ],
+                          );
+                        }),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-      body: isLoading
-          ? SingleChildScrollView(child:HomeShimmer())
-          : delNotDel == 0
+          body: isLoading
+              ? SingleChildScrollView(child:HomeShimmer())
+              : delNotDel == 0
               ? Body()
               : Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  Expanded(
-                    child: Container(
-                      width: Helper.getScreenWidth(context),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image:
-                              AssetImage("assets/images/real/nolocation1.jpg"),
+            Expanded(
+              child: Container(
+                width: Helper.getScreenWidth(context),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image:
+                    AssetImage("assets/images/real/nolocation1.jpg"),
+                  ),
+                ),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 40),
+                        child: Text(
+                          "We are not present at this location yet! We will let you know as\n\n                                     soon as we are here ",
+                          style: TextStyle(fontSize: 12),
                         ),
                       ),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 40),
-                              child: Text(
-                                "We are not present at this location yet! We will let you know as\n\n                                     soon as we are here ",
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {},
-                              child: Text(
-                                "CHANGE LOCATION",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 14),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.deepOrange,
-                                fixedSize: Size(200, 40),
-                              ),
-                            ),
-                          ]),
-                    ),
-                  )
-                ]),
-    );
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          "CHANGE LOCATION",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 14),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.deepOrange,
+                          fixedSize: Size(200, 40),
+                        ),
+                      ),
+                    ]),
+              ),
+            )
+          ]),
+        )
+      );
   }
 
   getDeliverableArea() async {
