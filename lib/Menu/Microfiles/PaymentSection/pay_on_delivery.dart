@@ -171,7 +171,6 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
 
     var response =
     await http.post(Uri.parse(ApiData.ORDER_CHECKOUT), body: body);
-
     setState(() {
       isLoading = false;
     });
@@ -181,13 +180,21 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
     setState(() {
       itemOrderId = jsonData["order_id"];
     });
-    orderModel.merchantLat=double.parse(provider.selectedRestModel.branchDetails!.lat!);
-    orderModel.merchantLng=double.parse(provider.selectedRestModel.branchDetails!.lng!);
-    orderModel.userLat=double.parse(provider.selectedAddressModel.addressLat!);
-    orderModel.userLng=double.parse(provider.selectedAddressModel.addressLng!);
-    orderModel.orderAddress=provider.selectedAddressModel.addressStreetName!+","+
-    provider.selectedAddressModel.currentAddressLine!;
-    orderModel.orderId=itemOrderId;
+    var dataList = jsonData['order_details'];
+    if (null != dataList && dataList.length > 0) {
+      orderModel =
+      new OrderModel.fromJson(dataList);
+      setState(() {});
+    }
+    orderModel.orderId = itemOrderId;
+    // orderModel.merchantLat=double.parse(provider.selectedRestModel.branchDetails!.lat!);
+    // orderModel.merchantLng=double.parse(provider.selectedRestModel.branchDetails!.lng!);
+    // orderModel.userLat=double.parse(provider.selectedAddressModel.addressLat!);
+    // orderModel.userLng=double.parse(provider.selectedAddressModel.addressLng!);
+    // orderModel.orderAddress=provider.selectedAddressModel.addressStreetName!+","+
+    //     provider.selectedAddressModel.currentAddressLine!;
+    // orderModel.orderId=itemOrderId;
+
     if (jsonData['error_code'] == 0) {
       UserPreference().clearCartPreference();
       Provider.of<ApplicationProvider>(context, listen: false).clearData();

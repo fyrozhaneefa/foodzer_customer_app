@@ -68,31 +68,88 @@ return WillPopScope(
                 ),
               ],
             ),
+//             Align(
+//               alignment: Alignment.bottomCenter,
+//               child: Container(
+//                 width: Helper.getScreenWidth(context),
+//                 padding: EdgeInsets.all(20),child: ElevatedButton(
+//                 onPressed: () {
+//                   Navigator.of(context).push(
+//                       MaterialPageRoute(builder: (context) =>
+//                           OrderTracking(widget.orderModel,true)));
+//                 },
+//                 child: Text(
+//                   // "Track Your Order",
+//                   "Track your order",
+//                   style: TextStyle(fontWeight: FontWeight.w600),
+//                 ),
+//                 style: ElevatedButton.styleFrom(
+//                   elevation: 0,
+//                   primary: Colors.orange,
+//                   fixedSize: Size(155, 40),
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(20),
+// // side: BorderSide(color: Colors.black.withOpacity(.3)),
+//                   ),
+//                 ),
+//               ),),
+//             )
             Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: Helper.getScreenWidth(context),
-                padding: EdgeInsets.all(20),child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
+                alignment: Alignment.bottomCenter,
+                child:Container(
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                      children : <Widget>[
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) =>
                           OrderTracking(widget.orderModel,true)));
-                },
-                child: Text(
-                  // "Track Your Order",
-                  "Track your order",
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  primary: Colors.orange,
-                  fixedSize: Size(155, 40),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-// side: BorderSide(color: Colors.black.withOpacity(.3)),
-                  ),
-                ),
-              ),),
+                            },
+                            child: Text(
+                              // "Track Your Order",
+                              "Track your order",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              primary: Colors.orange,
+                              fixedSize: Size(155, 40),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 2,),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(builder: (context) =>
+                                      HomeScreen()));
+                            },
+                            child: Text(
+                              // "Track Your Order",
+                              "Back to home",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              primary: Colors.orange,
+                              fixedSize: Size(155, 40),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
+                )
+
             )
           ],
         )

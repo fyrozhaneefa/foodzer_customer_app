@@ -646,12 +646,19 @@ class _AddNewCardState extends State<AddNewCard> {
     setState(() {
       itemOrderId = jsonData["order_id"];
     });
-    orderModel.merchantLat=double.parse(provider.selectedRestModel.branchDetails!.lat!);
-    orderModel.merchantLng=double.parse(provider.selectedRestModel.branchDetails!.lng!);
-    orderModel.userLat=double.parse(provider.selectedAddressModel.addressLat!);
-    orderModel.userLng=double.parse(provider.selectedAddressModel.addressLng!);
-    orderModel.orderAddress=provider.selectedAddressModel.addressUser!;
-    orderModel.orderId=itemOrderId;
+    var dataList = jsonData['order_details'];
+    if (null != dataList && dataList.length > 0) {
+      orderModel =
+      new OrderModel.fromJson(dataList);
+      setState(() {});
+    }
+    orderModel.orderId = itemOrderId;
+    // orderModel.merchantLat=double.parse(provider.selectedRestModel.branchDetails!.lat!);
+    // orderModel.merchantLng=double.parse(provider.selectedRestModel.branchDetails!.lng!);
+    // orderModel.userLat=double.parse(provider.selectedAddressModel.addressLat!);
+    // orderModel.userLng=double.parse(provider.selectedAddressModel.addressLng!);
+    // orderModel.orderAddress=provider.selectedAddressModel.addressUser!;
+    // orderModel.orderId=itemOrderId;
     if (jsonData['error_code'] == 0) {
       getPaymentToken();
     } else {
