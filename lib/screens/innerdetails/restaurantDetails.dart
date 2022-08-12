@@ -962,6 +962,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                     Row(
                                       children: [
                                         Icon(
+
                                           null !=
                                               provider.selectedRestModel
                                                   .reviews!.numOfRows &&

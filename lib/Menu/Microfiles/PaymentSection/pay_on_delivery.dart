@@ -6,6 +6,7 @@ import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/OrderPlaced/orderplaced.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
+import 'package:foodzer_customer_app/Models/orderlistmodel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
@@ -29,6 +30,7 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
   UserData userModel = new UserData();
   bool isLoading = false;
   String? itemOrderId = "";
+  OrderModel orderModel=new OrderModel();
   @override
   void initState() {
     super.initState();
@@ -137,7 +139,7 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
           if (null == item.addonIds) {
             item.addonIds = "";
           }
-          item.addonIds = item.addonIds! + addon.itemAddonsSubtitleTblid! + ",";
+          item.addonIds = item.addonIds! + addon.itemAddonsSubtitleSubtitleId! + ",";
         }
         if (item.addonIds!.length > 0) {
           item.addonIds =
@@ -166,9 +168,9 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
     String body = json.encode(map);
 
     print('body is $body');
+
     var response =
     await http.post(Uri.parse(ApiData.ORDER_CHECKOUT), body: body);
-
     setState(() {
       isLoading = false;
     });
@@ -178,6 +180,20 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
     setState(() {
       itemOrderId = jsonData["order_id"];
     });
+    var dataList = jsonData['order_details'];
+    if (null != dataList && dataList.length > 0) {
+      orderModel =
+      new OrderModel.fromJson(dataList);
+      setState(() {});
+    }
+    orderModel.orderId = itemOrderId;
+    // orderModel.merchantLat=double.parse(provider.selectedRestModel.branchDetails!.lat!);
+    // orderModel.merchantLng=double.parse(provider.selectedRestModel.branchDetails!.lng!);
+    // orderModel.userLat=double.parse(provider.selectedAddressModel.addressLat!);
+    // orderModel.userLng=double.parse(provider.selectedAddressModel.addressLng!);
+    // orderModel.orderAddress=provider.selectedAddressModel.addressStreetName!+","+
+    //     provider.selectedAddressModel.currentAddressLine!;
+    // orderModel.orderId=itemOrderId;
 
     if (jsonData['error_code'] == 0) {
       UserPreference().clearCartPreference();
@@ -236,7 +252,7 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
                 onPressed: () {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (context) =>
-                          OrderPlacedHome()), (Route<dynamic> route) => false);
+                          OrderPlacedHome(orderModel)), (Route<dynamic> route) => false);
                 },
                 child: Text(
                   "Ok",

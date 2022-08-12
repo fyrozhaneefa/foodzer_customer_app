@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/FiltterSection/applybutton.dart';
 import 'package:foodzer_customer_app/Models/offermodel.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
-import 'package:http/http.dart ' as http;
+import 'package:http/http.dart' as http;
 
 import '../FavoriteSection/itemCard.dart';
 

@@ -75,9 +75,10 @@ class SingleRestModel {
         deliveryRating: json["delivery_rating"],
         moneyRating: json["money_rating"],
         numOfRows: json["num_of_rows"],
-        reviews: json.containsKey("reviews")
-            ? Reviews.fromJson(json["reviews"])
-            : new Reviews(),
+        // reviews: json.containsKey("reviews")
+        //     ? Reviews.fromJson(json["reviews"])
+        //     : new Reviews(),
+        reviews: Reviews.fromJson(json["reviews"]),
         merchantBranchId: json["merchant_branch_id"],
         branchDetails: BranchDetails.fromJson(json["branch_details"]),
         branchCuisine: json["branch_cuisine"],
@@ -768,28 +769,125 @@ class Addons {
       };
 }
 
+
 class Reviews {
   Reviews({
     this.numOfRows,
     this.result,
+    this.avgQuality,
+    this.packageRating,
+    this.deliveryRating,
+    this.moneyRating,
     this.branchAvgRating,
   });
 
   int? numOfRows;
-  List<dynamic>? result;
-  int? branchAvgRating;
+  List<Result>? result;
+  double? avgQuality;
+  double? packageRating;
+  double? deliveryRating;
+  double? moneyRating;
+  double? branchAvgRating;
 
   factory Reviews.fromJson(Map<String, dynamic> json) => Reviews(
-        numOfRows: json["num_of_rows"],
-        result: List<dynamic>.from(json["result"].map((x) => x)),
-        branchAvgRating: json["branch_avg_rating"],
-      );
+    numOfRows: json["num_of_rows"] == null ? null :json["num_of_rows"],
+    result: List<Result>.from(json["result"].map((x) => Result.fromJson(x))),
+    avgQuality: json["avg_quality"] == null ? null :json["avg_quality"].toDouble(),
+    packageRating: json["package_rating"] == null ? null :json["package_rating"].toDouble(),
+    deliveryRating: json["delivery_rating"] == null ? null : json["delivery_rating"].toDouble(),
+    moneyRating: json["money_rating"] == null ? null :json["money_rating"].toDouble(),
+    branchAvgRating: json["branch_avg_rating"] == null ? null :json["branch_avg_rating"].toDouble(),
+  );
 
   Map<String, dynamic> toJson() => {
-        "num_of_rows": numOfRows,
-        "result": List<dynamic>.from(result!.map((x) => x)),
-        "branch_avg_rating": branchAvgRating,
-      };
+    "num_of_rows": numOfRows,
+    "result": List<dynamic>.from(result!.map((x) => x.toJson())),
+    "avg_quality": avgQuality,
+    "package_rating": packageRating,
+    "delivery_rating": deliveryRating,
+    "money_rating": moneyRating,
+    "branch_avg_rating": branchAvgRating,
+  };
+}
+
+class Result {
+  Result({
+    this.reviewId,
+    this.reviewStatus,
+    this.reviewOrderId,
+    this.reviewRatingMerchant,
+    this.reviewRestaurantId,
+    this.reviewUserRegistrationId,
+    this.reviewQualityRating,
+    this.reviewOrderRating,
+    this.reviewDeliveryRating,
+    this.reviewMoneyRating,
+    this.reviewAvgRating,
+    this.reviewComment,
+    this.reviewAddedDatetime,
+    this.reviewEdittedBy,
+    this.reviewEdittedDatetime,
+    this.registerFirstname,
+    this.merchantBranchName,
+  });
+
+  String? reviewId;
+  String? reviewStatus;
+  String? reviewOrderId;
+  String? reviewRatingMerchant;
+  String? reviewRestaurantId;
+  String? reviewUserRegistrationId;
+  String? reviewQualityRating;
+  String? reviewOrderRating;
+  String? reviewDeliveryRating;
+  String? reviewMoneyRating;
+  String? reviewAvgRating;
+  String? reviewComment;
+  String? reviewAddedDatetime;
+  String? reviewEdittedBy;
+  String? reviewEdittedDatetime;
+  String? registerFirstname;
+  String? merchantBranchName;
+
+  factory Result.fromJson(Map<String, dynamic> json) => Result(
+    reviewId: json["review_id"],
+    reviewStatus: json["review_status"],
+    reviewOrderId: json["review_order_id"],
+    reviewRatingMerchant: json["review_rating_merchant"],
+    reviewRestaurantId: json["review_restaurant_id"],
+    reviewUserRegistrationId: json["review_user_registration_id"],
+    reviewQualityRating: json["review_quality_rating"],
+    reviewOrderRating: json["review_order_rating"],
+    reviewDeliveryRating: json["review_delivery_rating"],
+    reviewMoneyRating: json["review_money_rating"],
+    reviewAvgRating: json["review_avg_rating"],
+    reviewComment: json["review_comment"],
+    reviewAddedDatetime: json["review_added_datetime"],
+    reviewEdittedBy: json["review_editted_by"],
+    reviewEdittedDatetime: json["review_editted_datetime"],
+    registerFirstname: json["register_firstname"],
+    merchantBranchName: json["merchant_branch_name"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "review_id": reviewId,
+    "review_status": reviewStatus,
+    "review_order_id": reviewOrderId,
+    "review_rating_merchant": reviewRatingMerchant,
+    "review_restaurant_id": reviewRestaurantId,
+    "review_user_registration_id": reviewUserRegistrationId,
+    "review_quality_rating": reviewQualityRating,
+    "review_order_rating": reviewOrderRating,
+    "review_delivery_rating": reviewDeliveryRating,
+    "review_money_rating": reviewMoneyRating,
+    "review_avg_rating": reviewAvgRating,
+    "review_comment": reviewComment,
+    "review_added_datetime": reviewAddedDatetime,
+    "review_editted_by": reviewEdittedBy,
+    "review_editted_datetime": reviewEdittedDatetime,
+    "register_firstname": registerFirstname,
+    "merchant_branch_name": merchantBranchName,
+  };
 }
 
 class Timing {

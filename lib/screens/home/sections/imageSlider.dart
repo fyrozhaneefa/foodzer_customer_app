@@ -29,7 +29,7 @@ class _ImageSliderState extends State<ImageSlider> {
   @override
   Widget build(BuildContext context) {
     return
-       Column(
+      slider.length>0? Column(
          children: [
            Container(
              margin: EdgeInsets.only(bottom: 25),
@@ -97,6 +97,12 @@ class _ImageSliderState extends State<ImageSlider> {
               ),
            ),
          ],
+       ):Container(
+        height: 135,
+         width: Helper.getScreenWidth(context),
+         child: Center(
+          child: Text("NO ADVERTISEMENTS AVAILABLE"),
+      ),
        );
 
 
