@@ -153,8 +153,7 @@ class _RestaurantsState extends State<Restaurants> {
                         ],
                       );
                     })
-                : (null != provider.filteredRestaurantList &&
-                        provider.filteredRestaurantList.length > 0)
+                : (provider.filteredRestaurantList.length > 0)
                     ? ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -627,7 +626,7 @@ class ProductDesc extends StatelessWidget {
                 size: 20,
               ),SizedBox(width: 3,),
               Text(
-               "INR."+provider.selectedRestModel.branchDetails!.deliveryCharge.toString(),
+               "INR "+provider.selectedRestModel.branchDetails!.deliveryCharge.toString(),
                 style: TextStyle(
                   fontSize: 12,
                 ),
