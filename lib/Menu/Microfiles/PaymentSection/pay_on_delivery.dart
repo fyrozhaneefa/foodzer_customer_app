@@ -93,13 +93,14 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
 
               ),
               Visibility(
-                visible: _value,
+                visible: _value &&!isLoading,
                 child: Container(
                   width: Helper.getScreenWidth(context),
                   padding: EdgeInsets.only(left: 20,right: 20),
                   child:  isLoading?Center(
                     child: CircularProgressIndicator(color: Colors.deepOrangeAccent,),
                   ):ElevatedButton(
+
                     onPressed: (){
                       orderCheckout();
                     },
