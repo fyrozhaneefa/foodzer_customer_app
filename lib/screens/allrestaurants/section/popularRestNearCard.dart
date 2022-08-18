@@ -65,27 +65,6 @@ class PopularRestNearCard extends StatelessWidget {
                             Helper.getAssetName("blank.jpg", "virtual"),
                           )
                   ),
-                  // Image.network(
-                  //   bannerName,
-                  //   fit: BoxFit.fill,
-                  //   loadingBuilder: (BuildContext context, Widget child,
-                  //       ImageChunkEvent? loadingProgress) {
-                  //     if (loadingProgress == null) return child;
-                  //     return Center(
-                  //       child: CircularProgressIndicator(
-                  //         color: Colors.deepOrangeAccent,
-                  //         value: loadingProgress.expectedTotalBytes != null
-                  //             ? loadingProgress.cumulativeBytesLoaded /
-                  //             loadingProgress.expectedTotalBytes!
-                  //             : null,
-                  //       ),
-                  //
-                  //     );
-                  //   },
-                  //   height: double.infinity,
-                  //   width: double.infinity,
-                  //   alignment: Alignment.center,
-                  // ),
                 ),
               ),
               Container(
@@ -100,7 +79,7 @@ class PopularRestNearCard extends StatelessWidget {
                           width: Helper.getScreenWidth(context) * 0.45,
                           child: Text(
                             cardName,
-                            maxLines: 2,
+                            maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               height: 1.5,
@@ -164,10 +143,11 @@ class PopularRestNearCard extends StatelessWidget {
                       SizedBox(
                         width: 5,
                       ),
-                      Text(rating == "1"?"Bad":
-                      rating == "2"?"OK":
-                      rating == "3"?"Good":
-                      rating == "4"?"Amazing":"No reviews yet",
+                      Text(rating =="0"?"No reviews yet":rating,
+                      //   rating == "1"?"Bad":
+                      // rating == "2"?"OK":
+                      // rating == "3"?"Good":
+                      // rating == "4"?"Amazing":"No reviews yet",
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.w500),
                       ),

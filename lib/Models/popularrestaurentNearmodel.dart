@@ -1,32 +1,32 @@
-class PopularrestNearModel {
-  int? errorCode;
-  List<PopularRest>? popularRest;
-
-  PopularrestNearModel({this.errorCode, this.popularRest});
-
-  PopularrestNearModel.fromJson(Map<String, dynamic> json) {
-    errorCode = json['error_code'];
-    if (json['popular_rest'] != null) {
-      popularRest = <PopularRest>[];
-      json['popular_rest'].forEach((v) {
-        popularRest!.add(new PopularRest.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['error_code'] = this.errorCode;
-    if (this.popularRest != null) {
-      data['popular_rest'] = this.popularRest!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
+// class PopularrestNearModel {
+//   int? errorCode;
+//   List<PopularRest>? popularRest;
+//
+//   PopularrestNearModel({this.errorCode, this.popularRest});
+//
+//   PopularrestNearModel.fromJson(Map<String, dynamic> json) {
+//     errorCode = json['error_code'];
+//     if (json['popular_rest'] != null) {
+//       popularRest = <PopularRest>[];
+//       json['popular_rest'].forEach((v) {
+//         popularRest!.add(new PopularRest.fromJson(v));
+//       });
+//     }
+//   }
+//
+//   Map<String, dynamic> toJson() {
+//     final Map<String, dynamic> data = new Map<String, dynamic>();
+//     data['error_code'] = this.errorCode;
+//     if (this.popularRest != null) {
+//       data['popular_rest'] = this.popularRest!.map((v) => v.toJson()).toList();
+//     }
+//     return data;
+//   }
+// }
 
 class PopularRest {
   String? cuisines;
-  Null? reviewAvgRating;
+  String? reviewAvgRating;
   String? reviewCount;
   String? avgReview;
   String? merchantBranchId;
