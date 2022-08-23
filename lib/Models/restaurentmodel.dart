@@ -52,9 +52,11 @@ class RestaurentModel {
   String? merchantPackChargeType;
   String? merchantPackCharge;
   String? distance;
+
   int? newTag;
   String? openStatus;
   OfferTag? offerTag;
+  
   String? restNextAvilableDay;
   String? restNextAvilableTime;
 
@@ -112,6 +114,7 @@ class RestaurentModel {
         this.merchantPackChargeType,
         this.merchantPackCharge,
         this.distance,
+
         this.newTag,
         this.openStatus,
         this.offerTag,
@@ -178,6 +181,7 @@ class RestaurentModel {
     merchantPackChargeType = json['merchant_pack_charge_type'];
     merchantPackCharge = json['merchant_pack_charge'];
     distance = json['distance'];
+
     newTag = json['new_tag'];
     openStatus = json['open_status'];
     offerTag = json['offer_tag'] != null
@@ -244,6 +248,7 @@ class RestaurentModel {
     data['merchant_pack_charge_type'] = this.merchantPackChargeType;
     data['merchant_pack_charge'] = this.merchantPackCharge;
     data['distance'] = this.distance;
+
     data['new_tag'] = this.newTag;
     data['open_status'] = this.openStatus;
     if (this.offerTag != null) {
