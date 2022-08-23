@@ -25,5 +25,6 @@ class ApiData{
   static String ITEM_PRICEON = API_URL+"priceon_popup/";
   static String DELETE_ADDRESS = API_URL+"delete_address/";
   static String EDIT_ADDRESS = API_URL+"add_address/";
+  static String CHECK_DISTANCE_FROM_RESTAURANT = API_URL+"get_delivery_charge_distance/";
 
 }

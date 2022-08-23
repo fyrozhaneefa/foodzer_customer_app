@@ -32,9 +32,9 @@ class _MyOrdersState extends State<MyOrders> {
     UserPreference().getUserData().then((value) {
       userModel = value;
       setState(() {});
-  if(null!=userModel.userId && userModel.userId!.isNotEmpty){
-    getOrderList();
-  }
+    if(null!=userModel.userId && userModel.userId!.isNotEmpty){
+      getOrderList();
+    }
     });
     super.initState();
   }
@@ -137,16 +137,19 @@ class _MyOrdersState extends State<MyOrders> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  orderList[index]
-                                      .itemDetails![position]
-                                      .itemName
-                                      .toString() + "  x" + orderList[index]
-                                      .itemDetails![position]
-                                      .orderDetailsQty
-                                      .toString(),
-                                  style: TextStyle(
-                                      fontSize: 13, color: Colors.grey.shade700),
+                                Container(
+                                  width:Helper.getScreenWidth(context)/2,
+                                  child: Text(
+                                    orderList[index]
+                                        .itemDetails![position]
+                                        .itemName
+                                        .toString() + "  x" + orderList[index]
+                                        .itemDetails![position]
+                                        .orderDetailsQty
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontSize: 13, color: Colors.grey.shade700),
+                                  ),
                                 ),
                                 Text( orderList[index].orderPaymentStatus == "0"?
                                   "Payment Failed":"",
@@ -203,15 +206,8 @@ class _MyOrdersState extends State<MyOrders> {
                               Padding(
                                 padding: EdgeInsets.only( top: 10),
                                 child: Text(
-                                  "You haven't rated",
-                                  style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only( top: 10),
-                                child: Text(
-                                  "this delivery yet",
-                                  style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                                  "You haven't rated\nthis delivery yet",
+                                  style: TextStyle(fontSize: 11, color: Colors.grey.shade600,height: 1.6),
                                 ),
                               ),
                             ],
@@ -302,27 +298,19 @@ class _MyOrdersState extends State<MyOrders> {
     };
     var response =
         await http.post(Uri.parse(ApiData.GET_ORDER_LIST), body: map);
+
     setState(() {
       isLoading = false;
     });
     var jsonData = json.decode(response.body);
-    if (response.statusCode == 200) {
+
       List dataList = jsonData['order_list'];
       if (null != dataList && dataList.length > 0) {
         orderList =
             dataList.map((items) => new OrderModel.fromJson(items)).toList();
         setState(() {});
       }
-    } else {
-      Fluttertoast.showToast(
-          msg: "Please retry",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
-    }
+
     setState(() {});
   }
 }

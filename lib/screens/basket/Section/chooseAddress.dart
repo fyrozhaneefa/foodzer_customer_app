@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/Constants/sapperator.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
@@ -10,7 +11,7 @@ import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-
+import 'package:http/http.dart' as http;
 
 
 class ChooseAddress extends StatefulWidget {
@@ -24,7 +25,9 @@ class ChooseAddress extends StatefulWidget {
 
 class _ChooseAddressState extends State<ChooseAddress> {
   String? data="";
-
+  bool isLoading = false;
+  String? deliverFromRestaurant;
+  AddressModel selectedAddressModel = new AddressModel();
   @override
   void initState() {
     super.initState();
@@ -68,9 +71,8 @@ class _ChooseAddressState extends State<ChooseAddress> {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: (){
-                    Provider.of<ApplicationProvider>(context, listen: false)
-                        .setAddressModel(widget.getAddressList[index]);
-                    Navigator.of(context).pop();
+                    selectedAddressModel = widget.getAddressList[index];
+                    getDeliverableAreaFromRest(widget.getAddressList[index].addressLat.toString(),widget.getAddressList[index].addressLng.toString());
                   },
                   child: ListTile(
                     leading: Container(
@@ -157,5 +159,38 @@ class _ChooseAddressState extends State<ChooseAddress> {
     );
   }
 
+  getDeliverableAreaFromRest(String lat,String lng) async {
+    isLoading = true;
+    setState(() {
 
+    });
+    var map = new Map<String, dynamic>();
+    map['merchant_branch_id'] = Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.branchDetails!.merchantBranchId;
+    map['lat'] = lat;
+    map['lng'] = lng;
+
+    var response =
+    await http.post(Uri.parse(ApiData.CHECK_DISTANCE_FROM_RESTAURANT), body: map);
+    var json = jsonDecode(response.body);
+    isLoading =false;
+    setState(() {
+      deliverFromRestaurant = json['status'];
+    });
+    if(deliverFromRestaurant == "0"){
+      Provider.of<ApplicationProvider>(context, listen: false)
+          .setAddressModel(selectedAddressModel);
+      Navigator.of(context).pop();
+    } else{
+      AddressModel addressModel = new AddressModel();
+      Provider.of<ApplicationProvider>(context, listen: false)
+          .setAddressModel(addressModel);
+      Fluttertoast.showToast(
+          msg: "Selected location is too far from restaurant.",
+          gravity: ToastGravity.CENTER,
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: 14,
+          backgroundColor: Colors.grey.shade300,
+          textColor: Colors.red);
+    }
+  }
 }

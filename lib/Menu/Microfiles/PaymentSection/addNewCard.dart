@@ -57,7 +57,6 @@ class _AddNewCardState extends State<AddNewCard> {
       userModel = value;
       setState(() {});
     });
-
     super.initState();
   }
 
@@ -421,13 +420,7 @@ class _AddNewCardState extends State<AddNewCard> {
       ),
     );
   }
-   getUPIApps() async{
-    await CashfreePGSDK.getUPIApps().then((value) => {
-      if(value != null && value.length > 0) {
-        _selectedApp = value[0]
-      }
-    });
-  }
+
   // Future<void> seamlessUPIIntent() async {
   //   //Replace with actual values
   //   String orderId = "ORDER_ID";
@@ -480,7 +473,7 @@ class _AddNewCardState extends State<AddNewCard> {
 
     String? orderId = itemOrderId;
     String? orderAmount = Provider.of<ApplicationProvider>(context, listen: false)
-        .toPayAmt.toString();
+        .toPayAmt.toStringAsFixed(2);
     String? stage = "PROD";
     String? tokenData = token;
     String? customerName = userModel.userName;
@@ -653,12 +646,7 @@ class _AddNewCardState extends State<AddNewCard> {
       setState(() {});
     }
     orderModel.orderId = itemOrderId;
-    // orderModel.merchantLat=double.parse(provider.selectedRestModel.branchDetails!.lat!);
-    // orderModel.merchantLng=double.parse(provider.selectedRestModel.branchDetails!.lng!);
-    // orderModel.userLat=double.parse(provider.selectedAddressModel.addressLat!);
-    // orderModel.userLng=double.parse(provider.selectedAddressModel.addressLng!);
-    // orderModel.orderAddress=provider.selectedAddressModel.addressUser!;
-    // orderModel.orderId=itemOrderId;
+
     if (jsonData['error_code'] == 0) {
       getPaymentToken();
     } else {
@@ -681,7 +669,7 @@ class _AddNewCardState extends State<AddNewCard> {
     var map = new Map<String, dynamic>();
     map['amount'] = Provider.of<ApplicationProvider>(context, listen: false)
         .toPayAmt
-        .toString();
+        .toStringAsFixed(2);
     map['order_id'] = itemOrderId;
 
     var response =

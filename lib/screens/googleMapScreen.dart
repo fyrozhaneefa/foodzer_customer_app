@@ -49,6 +49,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   String? _currentAddress;
   String? locality;
   int? delNotDel;
+  String? deliverFromRestaurant;
   LatLng latLongCurrent = LatLng(0, 0);
   LatLng latLong = new LatLng(0, 0);
   LatLng myLatLng = LatLng(0,0);
@@ -499,7 +500,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             // UserPreference().setDeliveryAddress(_currentAddress!);
-                            if(delNotDel == 0){
+                            if(deliverFromRestaurant == "0"){
                               locationDetails(context,locality);
                               setState(() {
 
@@ -509,14 +510,14 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                           child: isLoading?CircularProgressIndicator(
                             color: Colors.deepOrangeAccent,
                           ):Container(
-                            child:  Text(delNotDel == 0?"CONFIRM LOCATION":"Sorry, we don't deliver here",
+                            child:  Text(deliverFromRestaurant == "0"?"CONFIRM LOCATION":"Sorry, we don't deliver here",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600
                               ),),
                           ),
                           style: ElevatedButton.styleFrom(
-                              primary:delNotDel == 0?Colors.deepOrange : Colors.deepOrange.shade100,
+                              primary:deliverFromRestaurant == "0"?Colors.deepOrange : Colors.deepOrange.shade100,
                               elevation: 0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0),
@@ -530,20 +531,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                 ):Container(),
               ],
             ),
-
-          // Positioned(
-          //   bottom: 100,
-          //     right: 20,
-          //     child: Container(
-          //       child: Text(
-          //     "Icon"
-          //     ),
-          //       decoration: BoxDecoration(
-          //         color: Colors.white,
-          //        shape: BoxShape.circle
-          //       ),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -608,7 +595,12 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       } else {
         _mapController?.moveCamera(CameraUpdate.newLatLng(latLongCurrent));
       }
-      getDeliverableArea(latLongCurrent.latitude.toString(), latLongCurrent.longitude.toString());
+      if(widget.isFromCart){
+        getDeliverableAreaFromRest(latLongCurrent.latitude.toString(), latLongCurrent.longitude.toString());
+      } else{
+        getDeliverableArea(latLongCurrent.latitude.toString(), latLongCurrent.longitude.toString());
+      }
+
       setState(() {
 
         _currentAddress = place.addressLine;
@@ -626,6 +618,24 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       print(e);
     }
   }
+  getDeliverableAreaFromRest(String lat,String lng) async {
+    isLoading = true;
+    setState(() {
+
+    });
+    var map = new Map<String, dynamic>();
+    map['merchant_branch_id'] = Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.branchDetails!.merchantBranchId;
+    map['lat'] = lat;
+    map['lng'] = lng;
+
+    var response =
+    await http.post(Uri.parse(ApiData.CHECK_DISTANCE_FROM_RESTAURANT), body: map);
+    var json = jsonDecode(response.body);
+    isLoading =false;
+    setState(() {
+      deliverFromRestaurant = json['status'];
+    });
+  }
   getDeliverableArea(String lat,String lng) async {
 isLoading = true;
 setState(() {
@@ -638,6 +648,7 @@ setState(() {
     var response =
     await http.post(Uri.parse(ApiData.GET_DELIVERABLE_AREA), body: map);
     var json = jsonDecode(response.body);
+
     isLoading =false;
     setState(() {
       delNotDel = json;

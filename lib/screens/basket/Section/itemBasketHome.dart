@@ -54,11 +54,19 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
   bool isLoggedIn = false;
   bool customTip = false;
   var _selectedApp;
+  SingleRestModel selectedRestDetails = new SingleRestModel();
   @override
   void initState() {
     WidgetsBinding.instance?.addObserver(this);
     getMerchantTaxPercentage();
+    UserPreference().getCurrentRestaurant().then((value) {
+      if(null!=value.merchantBranchId && value.merchantBranchId!.isNotEmpty) {
+        selectedRestDetails = value;
+      }
+      setState(() {});
+    });
     UserPreference().getUserData().then((value) {
+
       if (null != value.userId && value.userId!.isNotEmpty) {
         userModel = value;
         getUserAddress();
@@ -71,7 +79,6 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
         });
       }
     });
-
     super.initState();
   }
 
@@ -95,8 +102,11 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                       icon: Icon(Icons.keyboard_backspace_outlined,
                           color: Colors.black.withOpacity(.5), size: 30)),
                   title: Text(
-                    provider.selectedRestModel.branchDetails!.merchantBranchName
-                        .toString(),
+                      null!=selectedRestDetails.branchDetails?
+                      selectedRestDetails.branchDetails!.merchantBranchName.toString():"",
+                    // null!=provider.selectedRestModel.branchDetails!.merchantBranchName
+                    //     && provider.selectedRestModel.branchDetails!.merchantBranchName!.isNotEmpty? provider.selectedRestModel.branchDetails!.merchantBranchName
+                    //     .toString():"",
                     style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -443,16 +453,6 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                                 }
                               }
 
-                              // if(index == 3){
-                              //   customTip= true;
-                              //   setState(() {
-                              //
-                              //   });
-                              // }else{
-                              //   setState(() {
-                              //     customTip = false;
-                              //   });
-                              // }
                               Provider.of<ApplicationProvider>(context,
                                       listen: false)
                                   .setTipValue(tipValue);
@@ -705,7 +705,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                 ),
                 Padding(
                   padding: EdgeInsets.only(right: 15, top: 20),
-                  child: Text('₹${provider.toPayAmt}',
+                  child: Text('₹${provider.toPayAmt.toStringAsFixed(2)}',
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Colors.black.withOpacity(.6))),
@@ -789,7 +789,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                 padding: const EdgeInsets.only(
                     bottom: 15.0, left: 15.0, right: 15.0),
                 child: Text(
-                  'Restaurant GST : ₹${Provider.of<ApplicationProvider>(context, listen: false).taxData['totalTaxAmt']}',
+                  'Restaurant GST : ₹${Provider.of<ApplicationProvider>(context, listen: false).taxData['totalTaxAmt'].toStringAsFixed(2)}',
                   style: TextStyle(fontSize: 14, color: Colors.grey),
                 ),
               ),
@@ -986,44 +986,52 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                 height: 45,
                 child: ElevatedButton(
                   onPressed: () {
-
-                    if (null !=
-                            Provider.of<ApplicationProvider>(context,
-                                    listen: false)
-                                .categoryList &&
-                        Provider.of<ApplicationProvider>(context, listen: false)
-                                .categoryList
-                                .length >
-                            0 && null !=
-                        Provider.of<ApplicationProvider>(context,
-                            listen: false)
-                            .cartModelList &&
-                        Provider.of<ApplicationProvider>(context, listen: false)
-                            .cartModelList
-                            .length > 0  &&  Provider.of<ApplicationProvider>(context, listen: false)
-                        .cartModelList[0].itemMerchantBranch== Provider.of<ApplicationProvider>(context, listen: false)
-                        .selectedRestModel.merchantBranchId) {
-                      
-                      Navigator.of(context).pop();
-                    } else {
-
-
-                      UserPreference().getCurrentRestaurant().then((value) {
-                        if (null != value.merchantBranchId &&
-                            value.merchantBranchId!.isNotEmpty) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  RestaurantDetailsScreen(
-                                      value.branchDetails!.merchantBranchId,
-                                      value.branchDetails!.lat,
-                                      value.branchDetails!.lng)));
-                        }else{
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  HomeScreen()));
-                        }
-                      });
+                    if(null!= selectedRestDetails && selectedRestDetails.merchantBranchId!.isNotEmpty){
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    RestaurantDetailsScreen(
+                                        selectedRestDetails.merchantBranchId,
+                                        selectedRestDetails.branchDetails!.lat,
+                                        selectedRestDetails.branchDetails!.lng)));
                     }
+                    // if (null !=
+                    //         Provider.of<ApplicationProvider>(context,
+                    //                 listen: false)
+                    //             .categoryList &&
+                    //     Provider.of<ApplicationProvider>(context, listen: false)
+                    //             .categoryList
+                    //             .length >
+                    //         0 && null !=
+                    //     Provider.of<ApplicationProvider>(context,
+                    //         listen: false)
+                    //         .cartModelList &&
+                    //     Provider.of<ApplicationProvider>(context, listen: false)
+                    //         .cartModelList
+                    //         .length > 0  &&  Provider.of<ApplicationProvider>(context, listen: false)
+                    //     .cartModelList[0].itemMerchantBranch== Provider.of<ApplicationProvider>(context, listen: false)
+                    //     .selectedRestModel.merchantBranchId) {
+                    //
+                    //   Navigator.of(context).pop();
+                    // } else {
+                    //
+                    //
+                    //   UserPreference().getCurrentRestaurant().then((value) {
+                    //
+                    //     if (null != value.merchantBranchId &&
+                    //         value.merchantBranchId!.isNotEmpty) {
+                    //       Navigator.of(context).push(MaterialPageRoute(
+                    //           builder: (BuildContext context) =>
+                    //               RestaurantDetailsScreen(
+                    //                   value.branchDetails!.merchantBranchId,
+                    //                   value.branchDetails!.lat,
+                    //                   value.branchDetails!.lng)));
+                    //     }else{
+                    //       Navigator.of(context).push(MaterialPageRoute(
+                    //           builder: (BuildContext context) =>
+                    //               HomeScreen()));
+                    //     }
+                    //   });
+                    // }
                   },
                   child: Text(
                     "Add Items",

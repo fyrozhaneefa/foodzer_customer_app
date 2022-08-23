@@ -78,9 +78,10 @@ class SingleRestModel {
         // reviews: json.containsKey("reviews")
         //     ? Reviews.fromJson(json["reviews"])
         //     : new Reviews(),
-        reviews: Reviews.fromJson(json["reviews"]),
+
+        reviews:null!=json["reviews"]? Reviews.fromJson(json["reviews"]): new Reviews(),
         merchantBranchId: json["merchant_branch_id"],
-        branchDetails: BranchDetails.fromJson(json["branch_details"]),
+        branchDetails: null!=json["branch_details"]?BranchDetails.fromJson(json["branch_details"]):new BranchDetails(),
         branchCuisine: json["branch_cuisine"],
         todaysTime: List<TodaysTime>.from(json["todays_time"].map((x) => TodaysTime.fromJson(x))),
         todaysRestOpenTime: json["todays_rest_open_time"],
@@ -176,7 +177,7 @@ class BranchDetails {
         merchantBranchBusyEndTime: json["merchant_branch_busy_end_time"],
         merchantBranchId: json["merchant_branch_id"],
         merchantBranchAddress: json["merchant_branch_address"],
-        merchantBranchName: json["merchant_branch_name"],
+        merchantBranchName: json["merchant_branch_name"] ,
         merchantBranchBusy: json["merchant_branch_busy"],
         merchantBranchPaymnetMode: json["merchant_branch_paymnet_mode"],
         merchantBranchImage: json["merchant_branch_image"],

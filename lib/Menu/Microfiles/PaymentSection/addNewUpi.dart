@@ -224,7 +224,7 @@ class _AddNewUpiState extends State<AddNewUpi> {
     });
     var map = new Map<String, dynamic>();
     map['amount'] = Provider.of<ApplicationProvider>(context, listen: false)
-        .totalWithoutTax
+        .toPayAmt
         .toString();
     map['order_id'] = itemOrderId;
 
@@ -254,7 +254,7 @@ class _AddNewUpiState extends State<AddNewUpi> {
 
     String? orderId = itemOrderId;
     String? orderAmount = Provider.of<ApplicationProvider>(context, listen: false)
-        .toPayAmt.toString();
+        .toPayAmt.toStringAsFixed(2);
     String? stage = "PROD";
     String? tokenData = token;
     String? customerName = userModel.userName;

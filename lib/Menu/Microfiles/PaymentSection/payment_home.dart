@@ -21,20 +21,13 @@ class PaymentSection extends StatefulWidget {
 }
 
 class _PaymentSectionState extends State<PaymentSection> {
-  // var _selectedApp;
+
   @override
   void initState() {
-    // getUPIApps();
+
     super.initState();
   }
-  //
-  // void getUPIApps() {
-  //   CashfreePGSDK.getUPIApps().then((value) => {
-  //     if(value != null && value.length > 0) {
-  //       _selectedApp = value[0]
-  //     }
-  //   });
-  // }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationProvider>(builder: (context, provider, child) {

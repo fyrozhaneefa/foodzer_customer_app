@@ -60,6 +60,7 @@ class UserPreference {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jsonSting = prefs.getString('deliveryAddress');
     if (null != jsonSting && jsonSting.isNotEmpty) {
+
       return AddressModel.fromJson(jsonDecode(jsonSting));
     } else {
       return new AddressModel();

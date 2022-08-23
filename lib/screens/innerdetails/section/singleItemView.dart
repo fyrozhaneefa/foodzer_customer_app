@@ -806,11 +806,6 @@ class _SingleItemViewState extends State<SingleItemView> {
                           builder: (context, provider, child) {
                         return ElevatedButton(
                           onPressed: () {
-                            UserPreference().setCurrentRestaurant(
-                                Provider.of<ApplicationProvider>(context,
-                                        listen: false)
-                                    .selectedRestModel);
-
                             if (null != widget.itemModel.isPriceon &&
                                 widget.itemModel.isPriceon == 1 &&
                                 lastPriceOnItemIndex == -1) {
@@ -866,6 +861,11 @@ class _SingleItemViewState extends State<SingleItemView> {
                                 Provider.of<ApplicationProvider>(context,
                                         listen: false)
                                     .updateProduct(item, true, false);
+                                UserPreference().setCurrentRestaurant(
+                                    Provider.of<ApplicationProvider>(context,
+                                        listen: false)
+                                        .selectedRestModel);
+
                                 Navigator.of(context)
                                     .pop(widget.itemModel.enteredQty);
                               } else {
@@ -887,6 +887,11 @@ class _SingleItemViewState extends State<SingleItemView> {
                                         listen: false)
                                     .updateProduct(
                                         item, totalQty > initialQty, false);
+                                UserPreference().setCurrentRestaurant(
+                                    Provider.of<ApplicationProvider>(context,
+                                        listen: false)
+                                        .selectedRestModel);
+
                                 Navigator.of(context)
                                     .pop(widget.itemModel.enteredQty);
                               }
@@ -1211,9 +1216,7 @@ class _SingleItemViewState extends State<SingleItemView> {
               color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
         ),
         onPressed: () {
-          UserPreference().setCurrentRestaurant(
-              Provider.of<ApplicationProvider>(context, listen: false)
-                  .selectedRestModel);
+
 
           if (null != widget.itemModel.isPriceon &&
               widget.itemModel.isPriceon == 1 &&
@@ -1257,6 +1260,9 @@ class _SingleItemViewState extends State<SingleItemView> {
 
               Provider.of<ApplicationProvider>(context, listen: false)
                   .updateProduct(item, true, false);
+              UserPreference().setCurrentRestaurant(
+                  Provider.of<ApplicationProvider>(context, listen: false)
+                      .selectedRestModel);
               Navigator.of(context).pop(widget.itemModel.enteredQty);
               Navigator.pop(context);
             } else {
@@ -1274,6 +1280,9 @@ class _SingleItemViewState extends State<SingleItemView> {
               }
               Provider.of<ApplicationProvider>(context, listen: false)
                   .updateProduct(item, totalQty > initialQty, false);
+              UserPreference().setCurrentRestaurant(
+                  Provider.of<ApplicationProvider>(context, listen: false)
+                      .selectedRestModel);
               Navigator.of(context).pop(widget.itemModel.enteredQty);
               Navigator.pop(context);
             }

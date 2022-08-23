@@ -90,10 +90,16 @@ class OrderModel {
     orderPaymentStatus = json['order_payment_status'];
     orderDeliveryTime = json['order_delivery_time'];
     orderDeclineReason = json['order_decline_reason'];
-    merchantLat = double.parse(json['merchant_lat'].toString());
-    merchantLng = double.parse(json['merchant_lng'].toString());
-    userLat = double.parse(json['user_lat'].toString());
-    userLng = double.parse(json['user_lng'].toString());
+    merchantLat = double.parse(null!=json['merchant_lat']?json['merchant_lat']:"0");
+    // merchantLat = double.parse("10.97601757");
+    merchantLng = double.parse(null!=json['merchant_lng']?json['merchant_lng']:"0");
+
+    // merchantLng = double.parse("76.22320538");
+    userLat = double.parse(null!=json['user_lat']?json['user_lat']:"0");
+    // userLat=double.parse("10.97603570");
+    userLng = double.parse(null!=json['user_lng']?json['user_lng']:"0");
+    // userLng = double.parse("76.22544300");
+
 
     if (json['item_details'] != null) {
       itemDetails = <ItemDetails>[];
@@ -157,7 +163,7 @@ class ItemDetails {
   String? orderDetailTotalPrice;
   String? orderDetailItemTax;
   String? orderDetailsDate;
-  Null? orderDetailsAreaDeliveryCharge;
+  String? orderDetailsAreaDeliveryCharge;
   String? orderDetailsTimestamp;
   String? orderDetailsSpecialNote;
   String? addonsSubTitlePrice;

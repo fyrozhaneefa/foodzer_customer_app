@@ -362,6 +362,5 @@ bool isFromCart = false;
     var resendResponse= await http.post(Uri.parse(ApiData.RESEND_OTP),body:map);
     var resendJson = jsonDecode(resendResponse.body);
     startTimer();
-
   }
 }
