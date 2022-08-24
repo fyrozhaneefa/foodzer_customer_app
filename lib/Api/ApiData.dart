@@ -26,5 +26,6 @@ class ApiData{
   static String DELETE_ADDRESS = API_URL+"delete_address/";
   static String EDIT_ADDRESS = API_URL+"add_address/";
   static String CHECK_DISTANCE_FROM_RESTAURANT = API_URL+"get_delivery_charge_distance/";
-
+  static String GET_WALLET_LIST = API_URL+"wallet_list/";
+  static String GET_NETBANKING_LIST = API_URL+"popular_bank_list/";
 }

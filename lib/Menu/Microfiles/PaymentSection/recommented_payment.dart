@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RecommededPayments extends StatelessWidget {
   const RecommededPayments({Key? key}) : super(key: key);
@@ -20,11 +21,21 @@ class RecommededPayments extends StatelessWidget {
           padding: const EdgeInsets.only(top:7),
           child: Column(children: [
             ListTile(
+              onTap: (){
+                Fluttertoast.showToast(
+                    msg: "Currently not available",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.deepOrangeAccent,
+                    textColor: Colors.white,
+                    fontSize: 14.0);
+              },
                 title: Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Text(
                     "Foodzer Pay",
-                    style: TextStyle(fontWeight: FontWeight.w600),
+                    style: TextStyle(fontWeight: FontWeight.w600,color: Colors.grey),
                   ),
                 ),
                 leading: Container(

@@ -235,7 +235,7 @@ class _PaymentSectionState extends State<PaymentSection> {
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                 ),
-                MorePayment(),
+                MorePayment(widget.delType),
                 SizedWidget(),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10),
