@@ -71,7 +71,9 @@ class _ChooseAddressState extends State<ChooseAddress> {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: (){
-                    selectedAddressModel = widget.getAddressList[index];
+                    setState(() {
+                      selectedAddressModel = widget.getAddressList[index];
+                    });
                     getDeliverableAreaFromRest(widget.getAddressList[index].addressLat.toString(),widget.getAddressList[index].addressLng.toString());
                   },
                   child: ListTile(
@@ -180,10 +182,13 @@ class _ChooseAddressState extends State<ChooseAddress> {
       Provider.of<ApplicationProvider>(context, listen: false)
           .setAddressModel(selectedAddressModel);
       Navigator.of(context).pop();
+      setState(() {
+
+      });
     } else{
-      AddressModel addressModel = new AddressModel();
-      Provider.of<ApplicationProvider>(context, listen: false)
-          .setAddressModel(addressModel);
+      // AddressModel addressModel = new AddressModel();
+      // Provider.of<ApplicationProvider>(context, listen: false)
+      //     .setAddressModel(addressModel);
       Fluttertoast.showToast(
           msg: "Selected location is too far from restaurant.",
           gravity: ToastGravity.CENTER,

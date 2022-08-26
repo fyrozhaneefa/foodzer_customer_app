@@ -570,22 +570,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
   }
 
   Widget summaryView() {
-    double totalAmt = 0;
-    double deliveryTip = 0;
-
-    var taxData = {};
     return Consumer<ApplicationProvider>(builder: (context, provider, child) {
-      // if(null!=provider.selectedAddressModel.addressId && provider.selectedAddressModel.addressId!.isNotEmpty){
-      //   getDeliveryCharge();
-      // }
-      // provider.calculateTotal();
-      // for (Item item in provider.cartModelList) {
-      //   totalAmt = totalAmt + item.totalPrice!;
-      //   provider.setItemTotal(totalAmt);
-      // }
-      // taxData = provider.calculateTax(taxPercentage, totalAmt, false);
-      // toPayAmt = taxData['totalAmtWithTax']+tipValue+provider.deliveryFee;
-      // provider.setTotalCartPrice(toPayAmt);
       return Container(
         height: 270,
         width: Helper.getScreenWidth(context) * 1,
@@ -685,7 +670,8 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                 Padding(
                   padding: EdgeInsets.only(right: 15, top: 15),
                   child: Text(
-                      '₹${provider.taxData['totalTaxAmt'].toStringAsFixed(2)}'),
+                      '₹${null!=provider.taxData['totalTaxAmt']?
+                      provider.taxData['totalTaxAmt'].toStringAsFixed(2):"0.00"}'),
                 ),
               ],
             ),
@@ -920,7 +906,8 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                                             return ChooseAddress(
                                                 isFromCart, getAddressList);
                                           }).then((value) {
-                                        //qty will be incremented from cart
+                                            print("Valeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee${value}");
+                                        getUserAddress();
                                         Provider.of<ApplicationProvider>(
                                                 context,
                                                 listen: false)
@@ -1169,6 +1156,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
     var response =
         await http.post(Uri.parse(ApiData.GET_USER_ADDRESS), body: map);
     var json = convert.jsonDecode(response.body);
+
     List dataList = json['address_list'];
     isLoading = false;
     setState(() {});

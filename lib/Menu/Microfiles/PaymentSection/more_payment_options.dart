@@ -63,6 +63,35 @@ class _MorePaymentState extends State<MorePayment> {
               MySeparator(),
               ListTile(
                 onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => NetBanking(widget.delType)));
+                },
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Text(
+                    "Netbanking",
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                leading: Container(
+                  height: 33,
+                  width: 45,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Card(
+                      child: Image(
+                          image: NetworkImage(
+                              "https://d338t8kmirgyke.cloudfront.net/icons/icon_pngs/000/001/780/original/bank.png"))),
+                ),
+                subtitle: Text(
+                  "Select from a list of banks",
+                  style: TextStyle(fontSize: 11),
+                ),
+                trailing: Icon(Icons.arrow_forward_ios_rounded,size: 15,), ),
+              MySeparator(),
+              ListTile(
+                onTap: (){
                   Fluttertoast.showToast(
                       msg: "Currently not available",
                       toastLength: Toast.LENGTH_SHORT,
@@ -99,35 +128,7 @@ class _MorePaymentState extends State<MorePayment> {
               trailing: Icon(Icons.arrow_forward_ios_rounded,size: 15,),
               ),
               MySeparator(),
-              ListTile(
-                onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => NetBanking(widget.delType)));
-                },
-                  title: Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      "Netbanking",
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  leading: Container(
-                    height: 33,
-                    width: 45,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Card(
-                        child: Image(
-                            image: NetworkImage(
-                                "https://d338t8kmirgyke.cloudfront.net/icons/icon_pngs/000/001/780/original/bank.png"))),
-                  ),
-                  subtitle: Text(
-                    "Select from a list of banks",
-                    style: TextStyle(fontSize: 11),
-                  ),
-                trailing: Icon(Icons.arrow_forward_ios_rounded,size: 15,), ),
-              MySeparator(),
+
               ListTile(
                 onTap: (){
                   Fluttertoast.showToast(

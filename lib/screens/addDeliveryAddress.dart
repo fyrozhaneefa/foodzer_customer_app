@@ -28,6 +28,8 @@ class AddDeliveryAddress extends StatefulWidget {
 }
 
 class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
+
+  TextEditingController streetController = new TextEditingController();
   TextEditingController addressController = new TextEditingController();
   TextEditingController placeController = new TextEditingController();
   TextEditingController directionController = new TextEditingController();
@@ -40,7 +42,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
 
   @override
   void initState() {
-
+print("asdhajsgdhjasgdhjasgdjhgasd${widget.locality},${widget.currentAddress}");
     if(null!=widget.addressModel.addressId && widget.addressModel.addressId!.isNotEmpty){
       addressController.text=widget.addressModel.addressBuilding!;
       placeController.text=widget.addressModel.adressApartmentNo!;
@@ -166,6 +168,30 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                       ),
                       SizedBox(
                         height: 25,
+                      ),
+                      Visibility(
+                        visible: null==widget.locality,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              textInputAction: TextInputAction.next,
+                              controller: streetController,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.zero,
+                                  fillColor: Colors.white,
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: const BorderSide(
+                                        color: Colors.deepOrangeAccent, width: 2.0),
+                                  ),
+                                  labelText: 'STREET NAME',
+                                  labelStyle:
+                                  TextStyle(fontSize: 12, color: Colors.grey)),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                          ],
+                        ),
                       ),
                       TextFormField(
                         textInputAction: TextInputAction.next,
@@ -338,14 +364,24 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                   ? Center(child: CircularProgressIndicator())
                   : ElevatedButton(
                 onPressed: () {
-                  if (addressController.text.length > 0 &&
-                      addressController.text.isNotEmpty &&
-                      null != addressType) {
-                    saveAddress();
+                  if(null!=widget.locality && widget.locality!.isNotEmpty){
+                    if (addressController.text.length > 0 &&
+                        addressController.text.isNotEmpty &&
+                        null != addressType) {
+                      saveAddress();
+                    }
+                  } else{
+                    if (streetController.text.isNotEmpty && addressController.text.length > 0 &&
+                        addressController.text.isNotEmpty &&
+                        null != addressType) {
+                      saveAddress();
+                    }
                   }
+
                 },
                 child: Container(
                   child: Text(
+                    null==widget.locality&&streetController.text.isEmpty?"Enter Street Name":
                     null!=widget.addressModel.addressId && widget.addressModel.addressId!.isNotEmpty?
                         "UPDATE ADDRESS":
                     addressController.text.length > 0 &&
@@ -386,7 +422,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
       map['submit_type'] = "edit";
       map['property_type'] = "1";
       map['address_title'] = addressType;
-      map['street'] = widget.locality;
+      map['street'] = null!=widget.locality?widget.locality:streetController.text;
       map['floor'] = "";
       map['building'] = addressController.text;
       map['apartment_no'] = placeController.text;
@@ -402,7 +438,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
       map['submit_type'] = "add";
       map['property_type'] = "1";
       map['address_title'] = addressType;
-      map['street'] = widget.locality;
+      map['street'] = null!=widget.locality?widget.locality:streetController.text;
       map['floor'] = "";
       map['building'] = addressController.text;
       map['apartment_no'] = placeController.text;
@@ -444,6 +480,9 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
             textColor: Colors.white,
             fontSize: 15.0);
       }
+      setState(() {
+
+      });
     }
   }
 }
