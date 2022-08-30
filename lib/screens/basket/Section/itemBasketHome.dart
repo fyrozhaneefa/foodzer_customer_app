@@ -57,7 +57,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
   SingleRestModel selectedRestDetails = new SingleRestModel();
   @override
   void initState() {
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     getMerchantTaxPercentage();
     UserPreference().getCurrentRestaurant().then((value) {
       if(null!=value.merchantBranchId && value.merchantBranchId!.isNotEmpty) {

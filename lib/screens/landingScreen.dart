@@ -1,6 +1,7 @@
-
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:new_version_plus/new_version_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
@@ -8,6 +9,7 @@ import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/googleMapScreen.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '/screens/loginScreen.dart';
 import '../utils/helper.dart';
 
@@ -25,9 +27,91 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    checkUpdate();
     super.initState();
   }
+  checkUpdate() async {
+    final newVersion = NewVersionPlus();
+    var status = await newVersion.getVersionStatus();
+    if(status!.canUpdate){
+      showUpdateDialog(context: context, versionStatus: status,
+          allowDismissal: false);
+    }
+
+  }
+  static void showUpdateDialog({
+    required BuildContext context,
+    required VersionStatus versionStatus,
+    String dialogTitle = 'Update Available',
+    String? dialogText,
+    String updateButtonText = 'Update',
+    bool allowDismissal = true,
+    String dismissButtonText = 'Maybe Later',
+    VoidCallback? dismissAction,
+  }) async {
+    final dialogTitleWidget = Text(dialogTitle);
+    final dialogTextWidget = Text(
+      dialogText ??
+          'You can now update this app from ${versionStatus.localVersion} to ${versionStatus.storeVersion}',
+    );
+    final updateButtonTextWidget = Text(updateButtonText);
+
+    List<Widget> actions = [
+      Platform.isAndroid
+          ? TextButton(
+        onPressed: () async {
+          await launchUrl(Uri.parse(versionStatus.appStoreLink),
+              mode: LaunchMode.externalApplication);
+        },
+        child: updateButtonTextWidget,
+      )
+          : CupertinoDialogAction(
+        onPressed: () async {
+          await launchUrl(Uri.parse(versionStatus.appStoreLink),
+              mode: LaunchMode.externalApplication);
+        },
+        child: updateButtonTextWidget,
+      ),
+    ];
+
+    if (allowDismissal) {
+      final dismissButtonTextWidget = Text(dismissButtonText);
+      dismissAction = dismissAction ??
+              () => Navigator.of(context, rootNavigator: true).pop();
+      actions.add(
+        Platform.isAndroid
+            ? TextButton(
+          onPressed: dismissAction,
+          child: dismissButtonTextWidget,
+        )
+            : CupertinoDialogAction(
+          onPressed: dismissAction,
+          child: dismissButtonTextWidget,
+        ),
+      );
+    }
+
+    await showDialog(
+      context: context,
+      barrierDismissible: allowDismissal,
+      builder: (BuildContext context) {
+        return WillPopScope(
+            child: Platform.isAndroid
+                ? AlertDialog(
+              title: dialogTitleWidget,
+              content: dialogTextWidget,
+              actions: actions,
+            )
+                : CupertinoAlertDialog(
+              title: dialogTitleWidget,
+              content: dialogTextWidget,
+              actions: actions,
+            ),
+            onWillPop: () => Future.value(allowDismissal));
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,26 +1,12 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-// import 'package:foodzer_customer_app/Menu/Microfiles/CuisinesSection/cuisineshome.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
-// import 'package:foodzer_customer_app/Menu/Microfiles/splash.dart';
-import 'package:foodzer_customer_app/Services/geolocator_service.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:flutter/services.dart';
-import 'package:foodzer_customer_app/screens/AppProvider.dart';
-import 'package:foodzer_customer_app/screens/allFlowers/AllFlowersScreen.dart';
-import 'package:foodzer_customer_app/screens/allgroceries/AllGroceries.dart';
-import 'package:foodzer_customer_app/screens/allrestaurants/allRestaurants.dart';
-// import 'package:foodzer_customer_app/screens/basket/itemBasket.dart';
-import 'package:foodzer_customer_app/screens/innerdetails/restaurantInfo.dart';
-import 'package:foodzer_customer_app/screens/navigationdrawerpages/foodzerPay.dart';
-import 'package:foodzer_customer_app/screens/navigationdrawerpages/userOrders.dart';
-import 'package:foodzer_customer_app/screens/navigationdrawerpages/userSettings.dart';
-import 'package:foodzer_customer_app/screens/otpValidation.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
 import './screens/landingScreen.dart';
-import 'Menu/Microfiles/MoreCategory/more_categories.dart';
 import 'screens/home/homeScreen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,10 +24,7 @@ Future<void> main() async {
   ], child: MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'Foodzer',
-
-
     home: SignInDemo(),
-
     theme: ThemeData(
         fontFamily: 'Metropolis',
         scaffoldBackgroundColor: Colors.white,
@@ -83,6 +66,7 @@ class SignInDemoState extends State<SignInDemo>
   @override
   void initState() {
     super.initState();
+
     animationController = new AnimationController(
       vsync: this,
       duration: new Duration(seconds: 2),
@@ -97,8 +81,8 @@ class SignInDemoState extends State<SignInDemo>
       _visible = !_visible;
     });
     startTime();
-
   }
+
   @override
   void dispose() {
     animationController!.dispose();
@@ -114,11 +98,6 @@ class SignInDemoState extends State<SignInDemo>
             width: Helper.getScreenWidth(context),
             height: Helper.getScreenHeight(context),
             color:  Color(0xFFF15E22),
-            // child: Image.asset(
-            //   Helper.getAssetName('splashIcon.png', 'virtual'),
-            //   fit: BoxFit.fill,
-            //   color: Colors.deepOrange,
-            // ),
           ),
           Align(
               alignment: Alignment.center,
