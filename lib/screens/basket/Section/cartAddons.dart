@@ -168,10 +168,10 @@ class _CartAddonsState extends State<CartAddons> {
                                     ),
                                   );
                                 }),
-                            Divider(
+                            null!=addonModelList && addonModelList!.length >0?Divider(
                                 height: 15,
                                 thickness: 6,
-                                color: Colors.grey.shade300)
+                                color: Colors.grey.shade300):Container()
                           ],
                         )
                         : Container(),
@@ -369,11 +369,11 @@ class _CartAddonsState extends State<CartAddons> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text('Choose items from the list',
+                    null!=addonModelList && addonModelList!.length >0? Text('Choose items from the list',
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Colors.grey,
-                            fontSize: 14)),
+                            fontSize: 14)):Container(),
                     SizedBox(
                       height: 20,
                     ),

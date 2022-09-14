@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cashfree_pg/cashfree_pg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -565,6 +567,7 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
       UserPreference().setCartItems(
           Provider.of<ApplicationProvider>(context, listen: false)
               .cartModelList);
+
     }
     return BasketHeader();
   }

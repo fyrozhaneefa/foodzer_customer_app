@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:foodzer_customer_app/blocs/application_bloc.dart';
+import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:new_version_plus/new_version_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
@@ -23,8 +25,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert' as convert;
-import '../../blocs/application_bloc.dart';
-import '../../utils/helper.dart';
+
+
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "/homeScreen";
@@ -44,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     checkUpdate();
+
     UserPreference().getCurrentAddress().then((value) {
       finalAddress = value!;
       setState(() {});

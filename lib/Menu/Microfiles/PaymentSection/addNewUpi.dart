@@ -145,6 +145,10 @@ class _AddNewUpiState extends State<AddNewUpi> {
     Provider.of<ApplicationProvider>(context, listen: false);
     String itemJson = "";
     for (Item item in provider.cartModelList) {
+      if(null == item.priceonid){
+        item.priceonid = "";
+      }
+      item.priceonid = null!=item.priceOnId?item.priceOnId:"0";
       if (null != item.addonsList && item.addonsList!.length > 0) {
         for (Addons addon in item.addonsList!) {
           if (null == item.addonIds) {

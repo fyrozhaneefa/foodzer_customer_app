@@ -322,6 +322,7 @@ class Item {
       this.enteredQty,
       this.addonsList,
       this.addonIds,
+      this.priceonid,
       this.tempId,
       this.lastItemTempId,
       this.priceOnId,
@@ -391,6 +392,7 @@ class Item {
   double? totalPrice;
   List<Addons>? addonsList;
   String? addonIds;
+  String? priceonid;
   String? priceOnId;
   double? priceOnItemPrice;
 
@@ -479,13 +481,14 @@ class Item {
       isPriceon: json["is_priceon"],
       isAddon: json["is_addon"],
       addonIds: "",
+      priceonid:"",
     );
   }
   static String ToJson(Item model) {
     Map<String, dynamic> map() => {
           "item_id": model.itemId,
           "special_request": "",
-          "price_on_id": 0,
+          "price_on_id": model.priceonid,
           "qty": model.enteredQty,
           "addons_id": model.addonIds,
         };

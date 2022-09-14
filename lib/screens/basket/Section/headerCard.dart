@@ -104,7 +104,7 @@ class _BasketHeaderState extends State<BasketHeader> {
                                 style: TextStyle(fontSize: 12,color: Colors.grey),):Container(height: 0,),
                                 SizedBox(height: 5,),
                                 null != provider.cartModelList[index].isAddon &&
-                                    provider.cartModelList[index].isAddon == 1
+                                    provider.cartModelList[index].isAddon == 1 ||provider.cartModelList[index].isPriceon ==1
                                     ? InkWell(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,

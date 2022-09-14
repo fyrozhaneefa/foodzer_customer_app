@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:flutter/services.dart';
+import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
+import 'package:foodzer_customer_app/screens/landingScreen.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:provider/provider.dart';
-import './screens/landingScreen.dart';
-import 'screens/home/homeScreen.dart';
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -66,7 +68,6 @@ class SignInDemoState extends State<SignInDemo>
   @override
   void initState() {
     super.initState();
-
     animationController = new AnimationController(
       vsync: this,
       duration: new Duration(seconds: 2),

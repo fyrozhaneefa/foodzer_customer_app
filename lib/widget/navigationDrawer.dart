@@ -222,7 +222,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   }
   getUserName(){
     UserPreference().getUserData().then((value)=>{
-      userName = value.userName!,
+      userName = null!=value?value.userName!:"",
       setState(() {
 
       })

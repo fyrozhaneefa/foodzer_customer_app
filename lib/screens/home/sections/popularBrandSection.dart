@@ -63,8 +63,10 @@ class _PopularBrandSectionState extends State<PopularBrandSection> {
     map['lng'] = prefs.getString('longitude');
     var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
     var jsonData = json.decode(response.body);
+
     if(jsonData['error_code'] == 0){
       List dataList = jsonData['popular_barands'];
+
       if(null!= dataList && dataList.length >0){
         popularBrandList =dataList.map((spacecraft) => new PopularBrandsModel.fromJson(spacecraft)).toList();
       }
@@ -74,7 +76,6 @@ class _PopularBrandSectionState extends State<PopularBrandSection> {
     } else{
       print("some error occured!!!");
     }
-
 
   }
 }

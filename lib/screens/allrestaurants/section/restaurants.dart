@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/Menu/Microfiles/ReviewSection/dividersection.dart';
 import 'package:foodzer_customer_app/Models/cuisinesmodel.dart';
@@ -626,7 +628,7 @@ class ProductDesc extends StatelessWidget {
                 size: 20,
               ),SizedBox(width: 3,),
               Text(
-               "INR "+provider.selectedRestModel.branchDetails!.deliveryCharge.toString(),
+               "INR ${restModel!.deliveryCharge}",
                 style: TextStyle(
                   fontSize: 12,
                 ),

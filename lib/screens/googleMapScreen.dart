@@ -7,6 +7,7 @@ import 'package:flutter_geocoder/geocoder.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
+import 'package:foodzer_customer_app/Models/place.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
 import 'package:foodzer_customer_app/Services/places_service.dart';
@@ -14,15 +15,16 @@ import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/addDeliveryAddress.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
 import 'package:foodzer_customer_app/screens/home/homeScreen.dart';
+import 'package:foodzer_customer_app/utils/helper.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 // import 'package:flutter_geocoder/geocoder.dart' as geoCo;
 // import 'package:flutter_bloc/flutter_bloc.dart';
-import '../Models/place.dart';
+
 import '../Services/geolocator_service.dart';
-import '../utils/helper.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
@@ -253,6 +255,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                     children: [
                      // !widget.isFromCart?
                      FloatingActionButton(
+                        heroTag: "btn1",
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.black,
                         child: map
@@ -278,6 +281,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                       ),
                       // !widget.isFromCart?
                       FloatingActionButton(
+                        heroTag: "btn2",
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.black,
                         child: const Icon(
