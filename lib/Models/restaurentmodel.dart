@@ -51,7 +51,7 @@ class RestaurentModel {
   String? merchantBranchStat;
   String? merchantPackChargeType;
   String? merchantPackCharge;
-  int? distance;
+  String? distance;
   String? deliveryCharge;
   int? newTag;
   String? openStatus;
@@ -181,7 +181,7 @@ class RestaurentModel {
     merchantPackChargeType = json['merchant_pack_charge_type'];
     merchantPackCharge = json['merchant_pack_charge'];
     distance = json['distance'];
-    deliveryCharge = json['delivery_charge'];
+    deliveryCharge = json['delivery_charge'].toString();
     newTag = json['new_tag'];
     openStatus = json['open_status'];
     offerTag = json['offer_tag'] != null

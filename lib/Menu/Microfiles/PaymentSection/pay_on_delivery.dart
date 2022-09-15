@@ -183,7 +183,7 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
     print(response.statusCode);
     print('response ${response.body}');
     var jsonData = json.decode(response.body);
-    debugger();
+
     setState(() {
       itemOrderId = jsonData["order_id"];
     });
