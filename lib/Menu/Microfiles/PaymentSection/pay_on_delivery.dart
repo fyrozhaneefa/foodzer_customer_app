@@ -194,6 +194,7 @@ class _PayOnDeliveryState extends State<PayOnDelivery> {
       setState(() {});
     }
     orderModel.orderId = itemOrderId;
+    debugger();
     // orderModel.merchantLat=double.parse(provider.selectedRestModel.branchDetails!.lat!);
     // orderModel.merchantLng=double.parse(provider.selectedRestModel.branchDetails!.lng!);
     // orderModel.userLat=double.parse(provider.selectedAddressModel.addressLat!);

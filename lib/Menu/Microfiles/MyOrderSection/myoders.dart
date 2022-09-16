@@ -184,7 +184,7 @@ class _MyOrdersState extends State<MyOrders> {
                                       orderList[index].orderStatus == "1" ||  orderList[index].orderStatus == "3"){
                                     Navigator.of(context).push(
                                         MaterialPageRoute(builder: (context) =>
-                                            OrderTracking(orderList[index], true)));
+                                            OrderTracking(orderList[index], true,false)));
                                   }
                                 },
                                 child: Text(orderList[index].orderStatus == "0"
