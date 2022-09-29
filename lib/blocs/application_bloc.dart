@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
+import 'package:foodzer_customer_app/Models/couponModel.dart';
 import 'package:foodzer_customer_app/Models/itemAddonModel.dart';
 import 'package:foodzer_customer_app/Models/place_search.dart';
 import 'package:foodzer_customer_app/Models/restaurentmodel.dart';
@@ -48,6 +50,7 @@ class ApplicationProvider with ChangeNotifier {
   String? currentOrderId = "";
   double totalAmt = 0;
   double toPayAmt = 0;
+  double couponAmount = 0;
   int deliveryBoyTip = 0;
   int deliveryType = 0;
   var taxData = {};
@@ -63,11 +66,21 @@ class ApplicationProvider with ChangeNotifier {
   List<RestaurentModel> restaurantList=[];
   List<RestaurentModel> filteredRestaurantList=[];
   List<CuisinesModel> cuisinesModelList=[];
+  List<CouponModelList> couponModelList= [];
+  CouponModelList couponList = new CouponModelList();
   // List<PopularrestNearModel>poplarResList=[];
 
 
 
-
+  setCoupons(List<CouponModelList> list){
+    couponModelList=list;
+    notifyListeners();
+  }
+  setCouponToJson(CouponModelList couponSingleList ,double amount){
+    this.couponList = couponSingleList;
+    this.couponAmount = amount;
+    notifyListeners();
+  }
   setCuisineChecked(int index,bool isChecked){
     cuisinesModelList[index].isChecked=isChecked;
     notifyListeners();
@@ -485,7 +498,7 @@ class ApplicationProvider with ChangeNotifier {
     }
 
     taxData = calculateTax(setTexPercentage, totalAmt, false);
-    toPayAmt = taxData['totalAmtWithTax'] + deliveryBoyTip + deliveryFee;
+    toPayAmt = taxData['totalAmtWithTax'] + deliveryBoyTip + deliveryFee - couponAmount;
     totalWithoutTax = totalAmt;
     notifyListeners();
   }
@@ -512,8 +525,9 @@ class ApplicationProvider with ChangeNotifier {
       totalAmt = totalAmt + item.totalPrice!;
     }
     this.setItemTotal(totalAmt);
+
     taxData = calculateTax(setTexPercentage, totalAmt, false);
-    toPayAmt = taxData['totalAmtWithTax'] + deliveryBoyTip + deliveryFee;
+      toPayAmt = taxData['totalAmtWithTax'] + deliveryBoyTip + deliveryFee - couponAmount;
     totalWithoutTax = totalAmt;
     notifyListeners();
 

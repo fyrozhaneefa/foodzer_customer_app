@@ -46,11 +46,11 @@ class CouponList {
   String? couponAddedBy;
   String? couponCountry;
   String? couponCity;
-  Null? couponFullDiscountAmount;
-  Null? merchantName;
-  Null? merchantId;
-  Null? merchantBranchId;
-  Null? merchantBranchName;
+  String? couponFullDiscountAmount;
+  String? merchantName;
+  String? merchantId;
+  String? merchantBranchId;
+  String? merchantBranchName;
 
   CouponList(
       {this.couponId,

@@ -11,12 +11,14 @@ import 'package:foodzer_customer_app/Menu/Microfiles/PaymentSection/payment_home
 import 'package:foodzer_customer_app/Models/SingleRestModel.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
 import 'package:foodzer_customer_app/Models/AddressModel.dart';
+import 'package:foodzer_customer_app/Models/couponModel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/blocs/application_bloc.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/chooseAddress.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/deliveryInstructions.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/headerCard.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/moneycard.dart';
+import 'package:foodzer_customer_app/screens/basket/Section/offers.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/proceedToPay.dart';
 
 import 'package:foodzer_customer_app/screens/basket/Section/savedcontainer.dart';
@@ -114,42 +116,42 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                         fontWeight: FontWeight.bold,
                         fontSize: 16),
                   ),
-                  //     bottom:null!=provider.selectedRestModel.offerDetails? PreferredSize(
-                  //       preferredSize: Size.fromHeight(80.0),
-                  //       child: Padding(
-                  //         padding: const EdgeInsets.all(8.0),
-                  //         child: Container(
-                  //           width: Helper.getScreenWidth(context),
-                  //           decoration: BoxDecoration(
-                  //             color: Colors.deepOrange.shade100,
-                  //             borderRadius: BorderRadius.circular(20)
-                  //           ),
-                  //           child: Padding(
-                  //             padding: const EdgeInsets.all(12.0),
-                  //             child: Column(
-                  //               crossAxisAlignment: CrossAxisAlignment.start,
-                  //               children: [
-                  //                 Text(
-                  //                   'Rs.131 total savings',
-                  //                   style: TextStyle(
-                  //                     color: Colors.deepOrange,
-                  //                     fontSize: 20,
-                  //                     fontWeight: FontWeight.w600
-                  //                   ),
-                  //                 ),
-                  //                 SizedBox(height: 7,),
-                  //                 Text('indluding Rs.100 with WELCOME50 coupon',
-                  //                 style: TextStyle(
-                  //                   color: Colors.deepOrangeAccent,
-                  //                   fontSize: 13,
-                  //                   fontWeight: FontWeight.w500
-                  //                 ),)
-                  //               ],
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ) ):PreferredSize(
-                  // preferredSize: Size.fromHeight(0.0), child: Container(),),
+                      bottom:null!= provider.couponList.couponCode? PreferredSize(
+                        preferredSize: Size.fromHeight(80.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: Helper.getScreenWidth(context),
+                            decoration: BoxDecoration(
+                              color: Colors.deepOrange.shade100,
+                              borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Rs.${provider.couponList.couponPrice.toString()} total savings',
+                                    style: TextStyle(
+                                      color: Colors.deepOrange,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600
+                                    ),
+                                  ),
+                                  SizedBox(height: 7,),
+                                  Text('${provider.couponList.couponCode.toString()} coupon',
+                                  style: TextStyle(
+                                    color: Colors.deepOrangeAccent,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500
+                                  ),)
+                                ],
+                              ),
+                            ),
+                          ),
+                        ) ):PreferredSize(
+                  preferredSize: Size.fromHeight(0.0), child: Container(),),
                 )
               : AppBar(
                   backgroundColor: Colors.white,
@@ -305,12 +307,48 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                                   left: 20, right: 20, top: 10, bottom: 10),
                               child: SavedContainer(
                                 child: ListTile(
+                                  onTap: (){
+                                    if(null!= provider.couponList.couponCode){
+                                      // CouponModelList couponList = new CouponModelList();
+                                      // provider.setCouponToJson(couponList ,0);
+                                      // Provider.of<ApplicationProvider>(
+                                      //     context,
+                                      //     listen: false)
+                                      //     .calculateTotal();
+                                    }else{
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              Offers()));
+                                    }
+
+                                  },
                                   title: Text(
-                                    "Apply Coupon",
+                                   null!= provider.couponList.couponCode?provider.couponList.couponCode.toString():"Apply Coupon",
                                     style:
                                         TextStyle(fontWeight: FontWeight.w600),
                                   ),
-                                  trailing: Icon(
+                                  subtitle: Text(
+                                    null!= provider.couponList.couponCode?"Coupon added":"",
+                                    style: TextStyle(
+                                      fontSize: 12.0
+                                    ),
+                                  ),
+                                  trailing: null!= provider.couponList.couponCode?InkWell(
+                                    onTap: (){
+                                      CouponModelList couponList = new CouponModelList();
+                                      provider.setCouponToJson(couponList ,0);
+                                      Provider.of<ApplicationProvider>(
+                                          context,
+                                          listen: false)
+                                          .calculateTotal();
+                                    },
+                                    child: Text('Remove',
+                                    style: TextStyle(
+                                      color: Colors.deepOrangeAccent,
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.w600
+                                    ),),
+                                  ):Icon(
                                       Icons.arrow_forward_ios_rounded,
                                       size: 15),
                                 ),
@@ -597,6 +635,36 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
                 )
               ],
             ),
+            null!=provider.couponList.couponCode && provider.couponList.couponPrice!.isNotEmpty? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 15, top: 15),
+                  child: InkWell(
+                    onTap: () {
+                      itemDiscountDialog(context);
+                    },
+                    child: Text('Item Discount',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          color: Colors.deepOrangeAccent,
+                        )),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 15, top: 15),
+                  child: Text(
+                      '-₹${
+                      provider.couponList.couponPrice}',
+                  style: TextStyle(
+                    color:Colors.deepOrange,
+                    fontWeight: FontWeight.w600
+
+                  ),),
+                ),
+              ],
+            ):Container(),
             Column(
               children: [
                 Row(
@@ -788,7 +856,46 @@ class _ItemBasketHomeState extends State<ItemBasketHome>
       },
     );
   }
-
+  itemDiscountDialog(BuildContext context) {
+    showDialog(
+      barrierColor: Colors.transparent,
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          insetPadding: EdgeInsets.only(top: 170, left: 50, right: 50),
+          titlePadding: EdgeInsets.zero,
+          elevation: 5,
+          contentPadding: EdgeInsets.all(40),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                  bottomRight: Radius.circular(15))),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Text(
+                  'Total discount breakup',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    bottom: 15.0, left: 15.0, right: 15.0),
+                child: Text(
+                  'Coupon Discount : -₹${Provider.of<ApplicationProvider>(context, listen: false).couponList.couponPrice}',
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
   Widget proceedToPay() {
     return Consumer<ApplicationProvider>(builder: (context, provider, child) {
       // for(Item item in provider.cartModelList){
