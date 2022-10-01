@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cashfree_pg/cashfree_pg.dart';
@@ -249,6 +250,7 @@ class _UpiSectionState extends State<UpiSection> {
     print(response.statusCode);
     print('response ${response.body}');
     var jsonData = json.decode(response.body);
+    debugger();
     setState(() {
       itemOrderId = jsonData["order_id"];
     });
@@ -292,6 +294,7 @@ class _UpiSectionState extends State<UpiSection> {
       isLoading = false;
     });
     var json = jsonDecode(response.body);
+    debugger();
     if (json['status'] == "OK") {
       proceedPayment(json['cftoken']);
       print("token genrated");
@@ -351,6 +354,7 @@ class _UpiSectionState extends State<UpiSection> {
      isLoading = false;
      setState(() {});
      if (value!['txStatus'] == "SUCCESS") {
+       debugger();
        UserPreference().clearCartPreference();
        Provider.of<ApplicationProvider>(context, listen: false).clearData();
        Provider.of<ApplicationProvider>(context, listen: false).setOrderId(itemOrderId.toString());
@@ -377,18 +381,26 @@ class _UpiSectionState extends State<UpiSection> {
     });
   }
   onPaymentSuccess(String orderId, signature, refNo, paymentMode, orderAmount) async {
-    var map = {
-      "order_id": orderId,
-      "signature": signature,
-      "ref_no": refNo,
-      "payment_mode": paymentMode,
-      "order_status": "1",
-      "order_amount": orderAmount,
-    };
-    String body = json.encode(map);
-    print('body is $body');
+    var map = new Map<String, dynamic>();
+    map['order_id'] = orderId;
+    map['signature'] = signature;
+    map['ref_no'] = refNo;
+    map['payment_mode'] = paymentMode;
+    map['order_status'] = '1';
+    map['order_amount'] = orderAmount;
+    // var map = {
+    //   "order_id": orderId,
+    //   "signature": signature,
+    //   "ref_no": refNo,
+    //   "payment_mode": paymentMode,
+    //   "order_status": "1",
+    //   "order_amount": orderAmount,
+    // };
+    // String body = json.encode(map);
+    // print('body is $body');
+    debugger();
     var response =
-    await http.post(Uri.parse(ApiData.ORDER_SUCCESS), body: body);
+    await http.post(Uri.parse(ApiData.ORDER_SUCCESS), body: map);
     print(response.statusCode);
     if(response.statusCode == 200){
       print('response ${response.body}');

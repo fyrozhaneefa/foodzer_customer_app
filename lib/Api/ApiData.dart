@@ -29,6 +29,7 @@ class ApiData{
   static String GET_WALLET_LIST = API_URL+"wallet_list/";
   static String GET_NETBANKING_LIST = API_URL+"popular_bank_list/";
   static String GET_OFFERS_LIST = API_URL+"admin_offers_and_deals/";
-  static String CHECK_ACTIVE_COUPON = API_URL+"get_admin_coupon_details/";
+  static String ENTER_OFFER_COUPON = API_URL+"admin_offers_and_deals_bycode/";
+
 
 }

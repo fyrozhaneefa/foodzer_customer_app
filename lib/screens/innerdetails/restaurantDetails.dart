@@ -526,9 +526,16 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                                                                             height:
                                                                                 5,
                                                                           ),
-                                                                          Text(
+                                                                         Text(
                                                                               itemModel.isPriceon == 0 ? 'INR ${itemModel.itemPrice}' : "Price on selection",
-                                                                              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
+                                                                              style: TextStyle(color:itemModel.itemOfferStatus == "1"?Colors.grey:Colors.black,
+                                                                                  fontWeight: FontWeight.w500, fontSize: 16,decoration:  itemModel.isPriceon == 0 && itemModel.itemOfferStatus == "1"?
+                                                                              TextDecoration.lineThrough:TextDecoration.none)),
+                                                                          itemModel.isPriceon == 0 && itemModel.itemOfferStatus == "1"?
+                                                                              Text("INR ${itemModel.itemOfferPrice.toString()}",
+                                                                              style: TextStyle(
+                                                                                fontWeight: FontWeight.w500, fontSize: 16,
+                                                                              ),):Container()
                                                                         ],
                                                                       ),
                                                                       flex: 9,

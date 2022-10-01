@@ -183,12 +183,12 @@ class _BasketHeaderState extends State<BasketHeader> {
                                   padding: EdgeInsets.only(left: 5,right: 4),
                                   child: InkWell(
                                     onTap: () {
-                                      if (null !=
+                                      if ((null !=
                                               provider.cartModelList[index]
                                                   .isAddon &&
                                           provider.cartModelList[index]
                                                   .isAddon ==
-                                              1) {
+                                              1) || provider.cartModelList[index].isPriceon == 1) {
 
                                         addDuplicateItem(context,provider.cartModelList[index]);
 

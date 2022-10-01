@@ -319,18 +319,15 @@ class _AddNewUpiState extends State<AddNewUpi> {
   }
 
   onPaymentSuccess(String orderId, signature, refNo, paymentMode, orderAmount) async {
-    var map = {
-      "order_id": orderId,
-      "signature": signature,
-      "ref_no": refNo,
-      "payment_mode": paymentMode,
-      "order_status": "1",
-      "order_amount": orderAmount,
-    };
-    String body = json.encode(map);
-    print('body is $body');
+    var map = new Map<String, dynamic>();
+    map['order_id'] = orderId;
+    map['signature'] = signature;
+    map['ref_no'] = refNo;
+    map['payment_mode'] = paymentMode;
+    map['order_status'] = '1';
+    map['order_amount'] = orderAmount;
     var response =
-    await http.post(Uri.parse(ApiData.ORDER_SUCCESS), body: body);
+    await http.post(Uri.parse(ApiData.ORDER_SUCCESS), body: map);
     print(response.statusCode);
     if(response.statusCode == 200){
       print('response ${response.body}');

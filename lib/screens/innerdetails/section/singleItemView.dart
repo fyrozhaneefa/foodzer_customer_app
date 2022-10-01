@@ -55,6 +55,11 @@ class _SingleItemViewState extends State<SingleItemView> {
   @override
   void initState() {
     // TODO: implement initState
+    // if(widget.itemModel.itemOfferStatus == "1"){
+    //   totalPrice = double.parse(widget.itemModel.itemOfferPrice.toString());
+    // }else if(null != widget.itemModel.enteredQty && widget.itemModel.itemOfferStatus == "1"){
+    //   totalPrice = double.parse(widget.itemModel.itemOfferPrice.toString()) * widget.itemModel.enteredQty!;
+    // } else
     if (null != widget.itemModel.enteredQty &&
         null != widget.itemModel.itemPrice) {
       totalPrice = widget.itemModel.itemPrice! * widget.itemModel.enteredQty!;

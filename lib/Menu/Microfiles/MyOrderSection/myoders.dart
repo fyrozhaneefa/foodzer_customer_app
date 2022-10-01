@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -41,7 +42,7 @@ class _MyOrdersState extends State<MyOrders> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading?Scaffold(body: Center(child: CircularProgressIndicator(color: Colors.deepOrangeAccent,),),) :Scaffold(
       appBar: AppBar(
           title: Text(
             "MY ORDER",
@@ -299,12 +300,12 @@ class _MyOrdersState extends State<MyOrders> {
     var response =
         await http.post(Uri.parse(ApiData.GET_ORDER_LIST), body: map);
 
-    setState(() {
-      isLoading = false;
-    });
     var jsonData = json.decode(response.body);
 
       List dataList = jsonData['order_list'];
+    setState(() {
+      isLoading = false;
+    });
       if (null != dataList && dataList.length > 0) {
         orderList =
             dataList.map((items) => new OrderModel.fromJson(items)).toList();

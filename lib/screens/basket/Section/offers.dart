@@ -17,6 +17,7 @@ class Offers extends StatefulWidget {
 }
 
 class _OffersState extends State<Offers> {
+  TextEditingController couponController = new TextEditingController();
   bool isLoading = false;
   UserData userModel = new UserData();
   @override
@@ -80,26 +81,28 @@ class _OffersState extends State<Offers> {
           actions: [],
           elevation: .5,
         ),
-        // bottomNavigationBar: BottomAppBar(
-        //   child: Container(
-        //     child: Row(
-        //       mainAxisAlignment: MainAxisAlignment.center,
-        //       children: [
-        //         ElevatedButton(
-        //           onPressed: (){},
-        //             child:Text("Apply"),
-        //           style: ElevatedButton.styleFrom(
-        //             padding: EdgeInsets.symmetric(horizontal: 50),
-        //             shape: RoundedRectangleBorder(
-        //               borderRadius: BorderRadius.circular(12),
-        //             ),
-        //             primary: Colors.deepOrange
-        //           ),
-        //         )
-        //       ],
-        //     ),
-        //   ),
-        // ),
+        bottomNavigationBar: BottomAppBar(
+          child: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: (){
+                    enterOfferCoupons();
+                  },
+                    child:Text("Apply"),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    primary: Colors.deepOrange
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
 backgroundColor: Colors.grey.shade50,
 body: SingleChildScrollView(
   child:   Padding(
@@ -107,34 +110,35 @@ body: SingleChildScrollView(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(
-        //   'Enter a Voucher Code',
-        //   style: TextStyle(
-        //     color: Colors.deepOrangeAccent,
-        //     fontSize: 18.0,
-        //     fontWeight: FontWeight.w600
-        //   ),
-        // ),
-        // Container(
-        //   width: double.infinity,
-        //   margin: EdgeInsets.only(top: 10, bottom: 10),
-        //   decoration:BoxDecoration(
-        //     color: Colors.white,
-        //     borderRadius: BorderRadius.circular(5.0),
-        //   ),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        //       Expanded(child: TextFormField(
-        //         decoration: InputDecoration(
-        //           hintText: 'Voucher Code',
-        //           contentPadding: EdgeInsets.all(10),
-        //         ),
-        //       ),),
-        //     ],
-        //   ),
-        // ),
-
+        Text(
+          'Enter a Voucher Code',
+          style: TextStyle(
+            color: Colors.deepOrangeAccent,
+            fontSize: 18.0,
+            fontWeight: FontWeight.w600
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          margin: EdgeInsets.only(top: 10, bottom: 10),
+          decoration:BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(child: TextFormField(
+                controller: couponController,
+                decoration: InputDecoration(
+                  hintText: 'Voucher Code',
+                  contentPadding: EdgeInsets.all(10),
+                ),
+              ),),
+            ],
+          ),
+        ),
+        SizedBox(height: 20,),
         Text(
           'More offers',
           style: TextStyle(
@@ -234,5 +238,21 @@ body: SingleChildScrollView(
         setState(() {});
       }
     }
+  }
+  enterOfferCoupons() async {
+    isLoading = true;
+    setState(() {});
+    var map = new Map<String, dynamic>();
+    map['code'] = couponController.text;
+    map['amount'] =   Provider.of<ApplicationProvider>(context ,listen: false).toPayAmt.toStringAsFixed(2);
+    map['branch_id'] = Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.merchantBranchId;
+    map['user_id'] = userModel.userId;
+    debugger();
+    var response =
+    await http.post(Uri.parse(ApiData.ENTER_OFFER_COUPON),body: map);
+    var json = convert.jsonDecode(response.body);
+    isLoading = false;
+    setState(() {});
+
   }
 }
