@@ -55,15 +55,16 @@ class _SingleItemViewState extends State<SingleItemView> {
   @override
   void initState() {
     // TODO: implement initState
-    // if(widget.itemModel.itemOfferStatus == "1"){
-    //   totalPrice = double.parse(widget.itemModel.itemOfferPrice.toString());
-    // }else if(null != widget.itemModel.enteredQty && widget.itemModel.itemOfferStatus == "1"){
-    //   totalPrice = double.parse(widget.itemModel.itemOfferPrice.toString()) * widget.itemModel.enteredQty!;
-    // } else
-    if (null != widget.itemModel.enteredQty &&
-        null != widget.itemModel.itemPrice) {
+ if(null != widget.itemModel.enteredQty && widget.itemModel.itemOfferStatus == "1"){
+      totalPrice = double.parse(widget.itemModel.itemOfferPrice.toString()) * widget.itemModel.enteredQty!;
+    } else  if(widget.itemModel.itemOfferStatus == "1"){
+   totalPrice = double.parse(widget.itemModel.itemOfferPrice.toString());
+ }
+
+ if (null != widget.itemModel.enteredQty &&
+        null != widget.itemModel.itemPrice && widget.itemModel.itemOfferStatus == "0") {
       totalPrice = widget.itemModel.itemPrice! * widget.itemModel.enteredQty!;
-    } else {
+    } else if(widget.itemModel.itemOfferStatus == "0"){
       totalPrice = widget.itemModel.itemPrice!;
     }
     if (null != widget.itemModel.enteredQty &&
@@ -197,9 +198,9 @@ class _SingleItemViewState extends State<SingleItemView> {
                                             widget.itemModel.itemPrice!
                                                 .toStringAsFixed(2)
                                         : "Price on selection",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16)),
+                                    style: TextStyle(color:widget.itemModel.itemOfferStatus == "1"?Colors.grey:Colors.black,
+                                        fontWeight: FontWeight.w500, fontSize: 16,decoration:  widget.itemModel.isPriceon == 0 && widget.itemModel.itemOfferStatus == "1"?
+                                        TextDecoration.lineThrough:TextDecoration.none)),
                                 Container(
                                   decoration: new BoxDecoration(
                                     color: Colors.white,
@@ -316,6 +317,11 @@ class _SingleItemViewState extends State<SingleItemView> {
                                 ),
                               ],
                             ),
+                            widget.itemModel.isPriceon == 0 && widget.itemModel.itemOfferStatus == "1"?
+                            Text("INR ${widget.itemModel.itemOfferPrice.toString()}",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 16,
+                              ),):Container(),
                           ],
                         )),
                       ),
@@ -977,7 +983,9 @@ class _SingleItemViewState extends State<SingleItemView> {
         widget.itemModel.isPriceon == 1 &&
         null != selectedPriceOnItem.priceonItemPrice) {
       itemPrice = selectedPriceOnItem.priceonItemPrice!;
-    } else {
+    } else if(widget.itemModel.itemOfferStatus == "1"){
+      itemPrice = double.parse(widget.itemModel.itemOfferPrice!);
+    }else{
       itemPrice = widget.itemModel.itemPrice!;
     }
     itemPrice = itemPrice * totalQty;
