@@ -83,12 +83,12 @@ class SingleRestModel {
         merchantBranchId: json["merchant_branch_id"],
         branchDetails: null!=json["branch_details"]?BranchDetails.fromJson(json["branch_details"]):new BranchDetails(),
         branchCuisine: json["branch_cuisine"],
-        todaysTime: List<TodaysTime>.from(json["todays_time"].map((x) => TodaysTime.fromJson(x))),
-        todaysRestOpenTime: json["todays_rest_open_time"],
-        todaysRestCloseTime: json["todays_rest_close_time"],
-        todaysRestDay: json["todays_rest_day"],
-        restNextAvilableDay: json["rest_next_avilable_day"],
-        restNextAvilableTime: json["rest_next_avilable_time"],
+        // todaysTime: List<TodaysTime>.from(json["todays_time"].map((x) => TodaysTime.fromJson(x))),
+        // todaysRestOpenTime: json["todays_rest_open_time"],
+        // todaysRestCloseTime: json["todays_rest_close_time"],
+        // todaysRestDay: json["todays_rest_day"],
+        // restNextAvilableDay: json["rest_next_avilable_day"],
+        // restNextAvilableTime: json["rest_next_avilable_time"],
       );
   //
   Map<String, dynamic> toJson() => {
@@ -101,12 +101,12 @@ class SingleRestModel {
         "merchant_branch_id": merchantBranchId,
         "branch_details": branchDetails!.toJson(),
         "branch_cuisine": branchCuisine,
-        "todays_time": List<dynamic>.from(todaysTime!.map((x) => x.toJson())),
-        "todays_rest_open_time": todaysRestOpenTime,
-         "todays_rest_close_time": todaysRestCloseTime,
-         "todays_rest_day": todaysRestDay,
-        "rest_next_avilable_day":restNextAvilableDay,
-        "rest_next_avilable_time":restNextAvilableTime,
+        // "todays_time": List<dynamic>.from(todaysTime!.map((x) => x.toJson())),
+        // "todays_rest_open_time": todaysRestOpenTime,
+        //  "todays_rest_close_time": todaysRestCloseTime,
+        //  "todays_rest_day": todaysRestDay,
+        // "rest_next_avilable_day":restNextAvilableDay,
+        // "rest_next_avilable_time":restNextAvilableTime,
       };
 }
 

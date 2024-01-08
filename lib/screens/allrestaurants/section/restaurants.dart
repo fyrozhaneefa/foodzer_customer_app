@@ -492,6 +492,7 @@ class _RestaurantsState extends State<Restaurants> {
     });
     isloading = false;
     setState(() {});
+
     final json = jsonDecode(response.body);
     if (json['results'] != null) {
       List<RestaurentModel> list = [];

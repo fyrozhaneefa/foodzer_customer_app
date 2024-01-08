@@ -42,7 +42,7 @@ class PopularBrandCard extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   child:CachedNetworkImage(
                     repeat: ImageRepeat.noRepeat,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.cover,
                     filterQuality: FilterQuality.high,
                     imageUrl:logo!,
                       errorWidget:

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:foodzer_customer_app/screens/allrestaurants/section/shimmer/shimmerwidget.dart';
 import 'package:foodzer_customer_app/utils/helper.dart';
@@ -25,10 +26,22 @@ class RestaurantServices extends StatelessWidget {
               alignment: Alignment.topCenter,
                 child: Stack(
                   children: [
-                    Image.network(serviceImage!,
+                    CachedNetworkImage(
+                        repeat: ImageRepeat.noRepeat,
                         fit: BoxFit.fill,
-                      height: 110,width: 90,
+                        filterQuality: FilterQuality.high,
+                        imageUrl:serviceImage!,
+                        height: 110,width: 90,
+                        errorWidget:
+                            (context, url, error) =>
+                            Image.asset(
+                              Helper.getAssetName("blank.jpg", "virtual"),
+                            )
                     ),
+                    // Image.network(serviceImage!,
+                    //     fit: BoxFit.fill,
+                    //   height: 110,width: 90,
+                    // ),
                     SizedBox(height: 10,),
                     Positioned(bottom: 10,left: 5,right: 5,
                       child: Center(

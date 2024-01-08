@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Services/myGlobalsService.dart';
@@ -116,6 +118,7 @@ class _ImageSliderState extends State<ImageSlider> {
     map['lat'] = prefs.getString('latitude');
     map['lng'] = prefs.getString('longitude');
     var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
+
     var jsonData = convert.jsonDecode(response.body);
     if(jsonData['error_code'] == 0){
       List dataList = jsonData['advertisements'];

@@ -52,7 +52,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
        <meta-data android:name="com.google.android.geo.API_KEY"
-           android:value="AIzaSyCzJV498CgnaMfwp1CdVkl6INwAy_ekPQI"/>
+           android:value="AIzaSyBAktbgEHsO_aqLMPhutWuZUha7TImC3lc"/>
 
 
        <!--Only add it if you need Auto OTP reading feature is enabled-->

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
   String? _currentAddress;
   String? locality;
   int? delNotDel;
-  String? deliverFromRestaurant;
+  int? deliverFromRestaurant;
   LatLng latLongCurrent = LatLng(0, 0);
   LatLng latLong = new LatLng(0, 0);
   LatLng myLatLng = LatLng(0,0);
@@ -504,7 +505,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             // UserPreference().setDeliveryAddress(_currentAddress!);
-                            if(deliverFromRestaurant == "0"){
+                            if(deliverFromRestaurant == 0){
                               locationDetails(context,locality);
                               setState(() {
 
@@ -514,14 +515,14 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                           child: isLoading?CircularProgressIndicator(
                             color: Colors.deepOrangeAccent,
                           ):Container(
-                            child:  Text(deliverFromRestaurant == "0"?"CONFIRM LOCATION":"Sorry, we don't deliver here",
+                            child:  Text(deliverFromRestaurant == 0 ?"CONFIRM LOCATION":"Sorry, we don't deliver here",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600
                               ),),
                           ),
                           style: ElevatedButton.styleFrom(
-                              primary:deliverFromRestaurant == "0"?Colors.deepOrange : Colors.deepOrange.shade100,
+                              primary:deliverFromRestaurant == 0?Colors.deepOrange : Colors.deepOrange.shade100,
                               elevation: 0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0),
@@ -547,6 +548,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
     });
     bool serviceEnabled;
     LocationPermission permission;
+
     try {
       serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
@@ -579,8 +581,10 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         longitude = position.longitude;
       }
       final cords = Coordinates(latitude, longitude);
-      List<Address> placemarks=   await Geocoder.google("AIzaSyCzJV498CgnaMfwp1CdVkl6INwAy_ekPQI")
+
+      List<Address> placemarks=   await Geocoder.google("AIzaSyBAktbgEHsO_aqLMPhutWuZUha7TImC3lc")
               .findAddressesFromCoordinates(cords);
+
       // List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
 
       print(placemarks[0]);
@@ -606,7 +610,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       }
 
       setState(() {
-
         _currentAddress = place.addressLine;
         locality= place.locality;
         // "${place.name},${place.locality}, ${place.postalCode}, ${place
@@ -634,10 +637,12 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
 
     var response =
     await http.post(Uri.parse(ApiData.CHECK_DISTANCE_FROM_RESTAURANT), body: map);
+
     var json = jsonDecode(response.body);
     isLoading =false;
     setState(() {
-      deliverFromRestaurant = json['status'];
+      // deliverFromRestaurant = json['status'];
+      deliverFromRestaurant = json;
     });
   }
   getDeliverableArea(String lat,String lng) async {
@@ -651,6 +656,7 @@ setState(() {
 
     var response =
     await http.post(Uri.parse(ApiData.GET_DELIVERABLE_AREA), body: map);
+
     var json = jsonDecode(response.body);
 
     isLoading =false;

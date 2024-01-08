@@ -1,7 +1,8 @@
 
 class ApiData{
 
-  static String API_URL="https://www.foodzer.com/Mob_food_new/";
+  // static String API_URL="https://www.foodzer.com/Mob_food_new/";
+  static String API_URL="https://opineinfotech.com/foodzer/foodzer_test/Mob_food_new/";
 
   static String CHECKMOBILE=API_URL+"check_user";
   static String GET_USER_DETAILS=API_URL+"user_details";

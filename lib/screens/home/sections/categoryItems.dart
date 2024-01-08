@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
@@ -94,6 +96,7 @@ class _CategoryItemsState extends State<CategoryItems> {
     map['lat'] = prefs.getString('latitude');
     map['lng'] = prefs.getString('longitude');
     var response= await http.post(Uri.parse(ApiData.HOME_PAGE),body:map);
+
     var json = convert.jsonDecode(response.body);
     if(json['error_code'] == 0){
 

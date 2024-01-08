@@ -1,6 +1,7 @@
 
 
 import 'dart:convert';
+import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:foodzer_customer_app/Api/ApiData.dart';
 import 'package:foodzer_customer_app/Models/UserModel.dart';
@@ -177,6 +178,7 @@ bool isLoading = false;
       "mobile": mobileController.text
     });
     var response = await Dio().post(ApiData.CHECKMOBILE, data: formData);
+
     if(response.statusCode == 200){
       setState(() {
         isLoading = false;

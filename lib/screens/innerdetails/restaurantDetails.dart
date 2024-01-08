@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -226,7 +228,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
                 children: [
                   !isRestContainItems
                       ? Center(child: Text("No item found"))
-                      : VerticalScrollableTabView(
+                      :
+                  VerticalScrollableTabView(
                           tabController: tabController!,
                           listItemData: provider.categoryList,
                           verticalScrollPosition: VerticalScrollPosition.begin,
@@ -1446,6 +1449,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
   }
 
   getRestDetails() async {
+
     isLoading = true;
     setState(() {});
     var map = new Map<String, dynamic>();
@@ -1453,7 +1457,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen>
     map['lat'] = widget.lat;
     map['lng'] = widget.lng;
     var response = await http.post(Uri.parse(ApiData.SINGLE_REST), body: map);
+
     var json = convert.jsonDecode(response.body);
+
     if (json['error_code'] == 0) {
       SingleRestModel _singleRestModel = new SingleRestModel();
       _singleRestModel = SingleRestModel.fromJson(json);

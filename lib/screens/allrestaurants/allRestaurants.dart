@@ -260,7 +260,7 @@ class _AllRestaurantsScreenState extends State<AllRestaurantsScreen> {
         child: Column(
           children: [
             RestaurantServicesList(),
-            PopularRestNearSection(),
+            // PopularRestNearSection(),
             Restaurants()
           ],
         ),

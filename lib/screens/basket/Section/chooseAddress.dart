@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -26,7 +27,7 @@ class ChooseAddress extends StatefulWidget {
 class _ChooseAddressState extends State<ChooseAddress> {
   String? data="";
   bool isLoading = false;
-  String? deliverFromRestaurant;
+  int? deliverFromRestaurant;
   AddressModel selectedAddressModel = new AddressModel();
   @override
   void initState() {
@@ -73,6 +74,12 @@ class _ChooseAddressState extends State<ChooseAddress> {
                   onTap: (){
                     setState(() {
                       selectedAddressModel = widget.getAddressList[index];
+
+                // newly added only for demo remove these 2 lines and enable the below getDeliverableAreaFromRest() to get the delivery charge
+
+                      // Provider.of<ApplicationProvider>(context, listen: false)
+                      //     .setAddressModel(selectedAddressModel);
+                      // Navigator.of(context).pop();
                     });
                     getDeliverableAreaFromRest(widget.getAddressList[index].addressLat.toString(),widget.getAddressList[index].addressLng.toString());
                   },
@@ -173,12 +180,14 @@ class _ChooseAddressState extends State<ChooseAddress> {
 
     var response =
     await http.post(Uri.parse(ApiData.CHECK_DISTANCE_FROM_RESTAURANT), body: map);
+
     var json = jsonDecode(response.body);
     isLoading =false;
     setState(() {
-      deliverFromRestaurant = json['status'];
+      // deliverFromRestaurant = json['status'];
+      deliverFromRestaurant = json;
     });
-    if(deliverFromRestaurant == "0"){
+    if(deliverFromRestaurant == 0){
       Provider.of<ApplicationProvider>(context, listen: false)
           .setAddressModel(selectedAddressModel);
       Navigator.of(context).pop();

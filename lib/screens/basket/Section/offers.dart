@@ -247,7 +247,7 @@ body: SingleChildScrollView(
     map['amount'] =   Provider.of<ApplicationProvider>(context ,listen: false).toPayAmt.toStringAsFixed(2);
     map['branch_id'] = Provider.of<ApplicationProvider>(context ,listen: false).selectedRestModel.merchantBranchId;
     map['user_id'] = userModel.userId;
-    debugger();
+
     var response =
     await http.post(Uri.parse(ApiData.ENTER_OFFER_COUPON),body: map);
     var json = convert.jsonDecode(response.body);

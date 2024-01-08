@@ -1,4 +1,5 @@
 import 'dart:convert' as convert;
+import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -110,10 +111,10 @@ class _PopularRestNearListState extends State<PopularRestNearList> {
     map['lng'] =  prefs.getString('longitude');
     map['delivery_type'] = "delivery";
     var response= await http.post(Uri.parse(ApiData.All_Restaurent),body:map);
+
     var json = convert.jsonDecode(response.body);
     isLoading = false;
     setState(() {
-
     });
     if(json['error_code'] == 0){
       List dataList = json['popular_rest'];

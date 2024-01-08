@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:foodzer_customer_app/Models/AddressModel.dart';
 import 'package:foodzer_customer_app/Preferences/Preferences.dart';
 import 'package:foodzer_customer_app/screens/basket/Section/itemBasketHome.dart';
@@ -266,6 +267,7 @@ bool isFromCart = false;
     var formData =
         FormData.fromMap({"otp": otpController.text, "mobile": widget.mobileNumber});
     var response = await Dio().post(ApiData.VERIFY_OTP, data: formData);
+
     final responsebody = json.decode(response.data.toString());
     if(response.statusCode == 200){
       setState(() {
@@ -282,10 +284,11 @@ bool isFromCart = false;
                 textColor: Colors.white,
                 fontSize: 16.0
             );
+            checkUserAvailable();
             // if(widget.fromCart){
             //
             // }else{
-              checkUserAvailable();
+
 
             // }
 
@@ -326,6 +329,7 @@ bool isFromCart = false;
       "mobile": widget.mobileNumber
     });
     var response = await Dio().post(ApiData.GET_USER_DETAILS, data: formData);
+
     if(response.statusCode == 200){
       setState(() {
         isLoading = false;

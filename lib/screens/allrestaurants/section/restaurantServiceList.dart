@@ -71,6 +71,7 @@ class RestaurantServicesList extends StatelessWidget {
                                   snapshot.data!.elementAt(index);
                               return RestaurantServices(
                                 serviceImage: restaurentdata.categoryImage,
+                                // serviceImage: "https://appinventiv.com/wp-content/uploads/sites/1/2016/06/Restaurant-App-Development-Benefits-Of-Online-Food-Ordering-Services.png",
                                 serviceName: restaurentdata.categoryName,
                               );
                             }))

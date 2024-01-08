@@ -234,6 +234,7 @@ class ApplicationProvider with ChangeNotifier {
 
   setCurrentLocation() async {
     currentLocation = await geoLocatorService.getCurrentLocation();
+
     notifyListeners();
   }
 
